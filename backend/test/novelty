@@ -1,0 +1,26 @@
+buffer_memory ( 10 recent_conversation , rest are summarized ) + parent_memory + retrival_memory + 
+
+
+
+Real Benefits ✅
+Clarity - LLM knows exactly which topic you're discussing
+Efficiency - Only relevant context sent to LLM
+Scalability - Handle complex, multi-topic conversations
+User Control - Jump between topics seamlessly
+
+
+
+[Root: Main Chat]
+├── Node 1: "Moon Landing Discussion" 
+│   ├── Buffer: [moon landing context only]
+│   └── Child: "Astronaut Training"
+└── Node 2: "Cooking Pasta"
+    └── Buffer: [cooking context only]
+
+
+his solves exactly what you described:
+
+✅ No more "What temperature?" confusion
+✅ Isolated memory per topic
+✅ Efficient token usage
+✅ Scalable multi-topic conversations

@@ -1,0 +1,64 @@
+# ============================================================================
+# HIERARCHICAL CHAT BACKEND - STREAMLINED DEPENDENCIES
+# ============================================================================
+# Simplified requirements for reliable installation
+# ============================================================================
+
+# Core FastAPI Framework
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+python-multipart>=0.0.6
+
+# Database & ORM
+sqlalchemy>=2.0.0
+psycopg2-binary>=2.9.0
+alembic>=1.12.0
+
+# Configuration & Environment
+pydantic>=2.5.0
+pydantic-settings>=2.0.0
+python-dotenv>=1.0.0
+
+# LLM API Clients
+openai>=1.0.0
+groq>=0.4.0
+
+# HTTP & Async
+httpx>=0.25.0
+aiofiles>=23.0.0
+
+# Data Processing (simplified)
+numpy>=1.21.0
+pandas>=2.0.0
+
+# Logging
+loguru>=0.7.0
+
+# Testing
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+
+# Security
+passlib[bcrypt]>=1.7.0
+
+# Vector Store (simplified installation)
+chromadb>=0.4.0
+sentence-transformers>=2.2.0
+
+# Text Processing
+tiktoken>=0.5.0
+
+# Development
+black>=23.0.0
+isort>=5.12.0
+
+# Production
+gunicorn>=21.0.0
+
+# File Processing
+PyPDF2>=3.0.0
+python-docx>=1.1.0
+
+# Utilities
+python-dateutil>=2.8.0
+pyyaml>=6.0.0

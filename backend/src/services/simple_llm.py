@@ -57,7 +57,7 @@ class SimpleLLMClient:
             'role': 'user',
             'content': user_message
         })
-
+        print('*******************context*********************\n',context_messages)
         # Try to use Groq API if client is available
         if self.groq_client:
             try:

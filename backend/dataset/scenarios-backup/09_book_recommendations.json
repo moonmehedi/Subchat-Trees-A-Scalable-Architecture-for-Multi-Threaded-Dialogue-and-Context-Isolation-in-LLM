@@ -1,0 +1,106 @@
+{
+  "scenario_name": "Book Recommendations & Reading List",
+  "description": "Tests retrieval of specific book titles, authors, and reading preferences",
+  "tree_type": "main",
+  "conversations": [
+    {
+      "step": 1,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "My all-time favorite book is 'Dune' by Frank Herbert",
+      "expected_response_contains": ["Dune", "Frank Herbert", "favorite"]
+    },
+    {
+      "step": 2,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "I've read the entire Dune series - all 6 books",
+      "expected_response_contains": ["6 books", "series"]
+    },
+    {
+      "step": 3,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "I love science fiction, especially hard sci-fi with realistic physics",
+      "expected_response_contains": ["science fiction", "hard sci-fi", "physics"]
+    },
+    {
+      "step": 4,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "I recently finished 'The Three-Body Problem' by Liu Cixin - it was mind-blowing",
+      "expected_response_contains": ["Three-Body Problem", "Liu Cixin", "mind-blowing"]
+    },
+    {
+      "step": 5,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "I'm currently reading 'Foundation' by Isaac Asimov",
+      "expected_response_contains": ["Foundation", "Isaac Asimov", "reading"]
+    },
+    {
+      "step": 6,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "My goal is to read 50 books this year, I'm at 32 so far",
+      "expected_response_contains": ["50 books", "32", "goal"]
+    },
+    {
+      "step": 7,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "For non-fiction, I love 'Sapiens' by Yuval Noah Harari",
+      "expected_response_contains": ["Sapiens", "Yuval Noah Harari", "non-fiction"]
+    },
+    {
+      "step": 8,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "I also enjoyed 'Atomic Habits' by James Clear - changed my life",
+      "expected_response_contains": ["Atomic Habits", "James Clear", "life"]
+    },
+    {
+      "step": 9,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "My favorite mystery novel is 'The Silent Patient' by Alex Michaelides",
+      "expected_response_contains": ["Silent Patient", "Alex Michaelides", "mystery"]
+    },
+    {
+      "step": 10,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "What's my all-time favorite book?",
+      "expected_response_contains": ["Dune", "Frank Herbert"],
+      "should_retrieve": true,
+      "expected_retrieval": ["Dune", "Frank Herbert"]
+    },
+    {
+      "step": 11,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "How many books is my reading goal this year?",
+      "expected_response_contains": ["50"],
+      "should_retrieve": true,
+      "expected_retrieval": ["50 books"]
+    },
+    {
+      "step": 12,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "Which book am I currently reading?",
+      "expected_response_contains": ["Foundation", "Asimov"],
+      "should_retrieve": true,
+      "expected_retrieval": ["Foundation", "Isaac Asimov"]
+    },
+    {
+      "step": 13,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "What's my favorite non-fiction book?",
+      "expected_response_contains": ["Sapiens"],
+      "should_retrieve": true,
+      "expected_retrieval": ["Sapiens"]
+    }
+  ]
+}

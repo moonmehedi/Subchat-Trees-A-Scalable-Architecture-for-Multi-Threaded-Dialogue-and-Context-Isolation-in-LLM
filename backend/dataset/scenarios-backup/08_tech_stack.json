@@ -1,0 +1,122 @@
+{
+  "scenario_name": "Tech Stack & Development Tools",
+  "description": "Tests retrieval of specific technologies and tool preferences",
+  "tree_type": "main_with_subchats",
+  "conversations": [
+    {
+      "step": 1,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "I'm a full-stack developer specializing in the MERN stack",
+      "expected_response_contains": ["full-stack", "MERN", "developer"]
+    },
+    {
+      "step": 2,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "My primary languages are JavaScript, TypeScript, and Python",
+      "expected_response_contains": ["JavaScript", "TypeScript", "Python"]
+    },
+    {
+      "step": 3,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "I use VS Code with Vim keybindings as my main editor",
+      "expected_response_contains": ["VS Code", "Vim", "editor"]
+    },
+    {
+      "step": 4,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "My favorite VS Code extensions are GitHub Copilot, ESLint, and Prettier",
+      "expected_response_contains": ["GitHub Copilot", "ESLint", "Prettier"]
+    },
+    {
+      "step": 5,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "I deploy all my apps on AWS using EC2 and S3",
+      "expected_response_contains": ["AWS", "EC2", "S3"]
+    },
+    {
+      "step": 6,
+      "action": "create_subchat",
+      "parent_node": "main",
+      "subchat_name": "Database Preferences",
+      "message": "For databases, I prefer PostgreSQL for relational data",
+      "expected_response_contains": ["PostgreSQL", "relational", "database"]
+    },
+    {
+      "step": 7,
+      "action": "send_message",
+      "node_type": "subchat_1",
+      "message": "I use MongoDB for NoSQL when I need flexible schemas",
+      "expected_response_contains": ["MongoDB", "NoSQL", "flexible"]
+    },
+    {
+      "step": 8,
+      "action": "send_message",
+      "node_type": "subchat_1",
+      "message": "I also use Redis for caching and session management",
+      "expected_response_contains": ["Redis", "caching", "session"]
+    },
+    {
+      "step": 9,
+      "action": "send_message",
+      "node_type": "subchat_1",
+      "message": "My ORM of choice is Prisma for TypeScript projects",
+      "expected_response_contains": ["Prisma", "ORM", "TypeScript"]
+    },
+    {
+      "step": 10,
+      "action": "create_subchat",
+      "parent_node": "main",
+      "subchat_name": "Testing Tools",
+      "message": "For testing, I use Jest for unit tests",
+      "expected_response_contains": ["Jest", "unit tests", "testing"]
+    },
+    {
+      "step": 11,
+      "action": "send_message",
+      "node_type": "subchat_2",
+      "message": "I use Cypress for end-to-end testing",
+      "expected_response_contains": ["Cypress", "end-to-end", "e2e"]
+    },
+    {
+      "step": 12,
+      "action": "send_message",
+      "node_type": "subchat_2",
+      "message": "For API testing, I prefer Postman and Insomnia",
+      "expected_response_contains": ["Postman", "Insomnia", "API"]
+    },
+    {
+      "step": 13,
+      "action": "switch_to_node",
+      "node_type": "main",
+      "message": "What's my primary tech stack?",
+      "expected_response_contains": ["MERN"],
+      "should_retrieve": true,
+      "expected_retrieval": ["MERN stack"],
+      "should_not_contain": ["PostgreSQL", "Jest", "Redis"]
+    },
+    {
+      "step": 14,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "Which cloud provider do I use?",
+      "expected_response_contains": ["AWS"],
+      "should_retrieve": true,
+      "expected_retrieval": ["AWS"]
+    },
+    {
+      "step": 15,
+      "action": "switch_to_node",
+      "node_type": "subchat_1",
+      "message": "What's my preferred ORM?",
+      "expected_response_contains": ["Prisma"],
+      "should_retrieve": true,
+      "expected_retrieval": ["Prisma"],
+      "should_not_contain": ["MERN", "AWS", "Jest"]
+    }
+  ]
+}

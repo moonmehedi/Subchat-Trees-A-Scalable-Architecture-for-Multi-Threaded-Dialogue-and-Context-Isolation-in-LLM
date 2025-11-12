@@ -1,0 +1,106 @@
+{
+  "scenario_name": "Music Preferences & Concert Experiences",
+  "description": "Tests retrieval of music tastes and concert memories",
+  "tree_type": "main",
+  "conversations": [
+    {
+      "step": 1,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "My favorite music genre is progressive rock",
+      "expected_response_contains": ["progressive rock", "favorite", "genre"]
+    },
+    {
+      "step": 2,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "My top 3 bands are Pink Floyd, Tool, and Dream Theater",
+      "expected_response_contains": ["Pink Floyd", "Tool", "Dream Theater"]
+    },
+    {
+      "step": 3,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "I've been to 47 concerts in my lifetime",
+      "expected_response_contains": ["47 concerts", "lifetime"]
+    },
+    {
+      "step": 4,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "The best concert I ever attended was Pink Floyd's reunion tour in 2005",
+      "expected_response_contains": ["Pink Floyd", "2005", "best concert"]
+    },
+    {
+      "step": 5,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "I play guitar and have a collection of 8 guitars",
+      "expected_response_contains": ["guitar", "8 guitars", "collection"]
+    },
+    {
+      "step": 6,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "My most expensive guitar is a Gibson Les Paul Custom that cost $4,500",
+      "expected_response_contains": ["Gibson Les Paul", "$4,500", "expensive"]
+    },
+    {
+      "step": 7,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "I practice guitar for at least 2 hours every day",
+      "expected_response_contains": ["practice", "2 hours", "every day"]
+    },
+    {
+      "step": 8,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "My favorite Pink Floyd album is 'The Dark Side of the Moon'",
+      "expected_response_contains": ["Dark Side of the Moon", "Pink Floyd", "album"]
+    },
+    {
+      "step": 9,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "I'm learning to play 'Comfortably Numb' solo perfectly",
+      "expected_response_contains": ["Comfortably Numb", "solo", "learning"]
+    },
+    {
+      "step": 10,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "What's my favorite music genre?",
+      "expected_response_contains": ["progressive rock"],
+      "should_retrieve": true,
+      "expected_retrieval": ["progressive rock"]
+    },
+    {
+      "step": 11,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "How many concerts have I been to?",
+      "expected_response_contains": ["47"],
+      "should_retrieve": true,
+      "expected_retrieval": ["47 concerts"]
+    },
+    {
+      "step": 12,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "What's my most expensive guitar?",
+      "expected_response_contains": ["Gibson Les Paul", "$4,500"],
+      "should_retrieve": true,
+      "expected_retrieval": ["Gibson Les Paul", "$4,500"]
+    },
+    {
+      "step": 13,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "Which solo am I learning to play?",
+      "expected_response_contains": ["Comfortably Numb"],
+      "should_retrieve": true,
+      "expected_retrieval": ["Comfortably Numb"]
+    }
+  ]
+}

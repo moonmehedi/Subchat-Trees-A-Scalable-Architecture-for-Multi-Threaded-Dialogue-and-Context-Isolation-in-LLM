@@ -1,0 +1,109 @@
+{
+  "scenario_name": "Travel Stories & Experiences",
+  "description": "Tests retrieval of specific facts from travel experiences",
+  "tree_type": "main_with_subchats",
+  "conversations": [
+    {
+      "step": 1,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "I visited Japan in 2023 and it was an amazing experience",
+      "expected_response_contains": ["Japan", "2023", "amazing"]
+    },
+    {
+      "step": 2,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "My favorite city was Kyoto, especially the bamboo forest in Arashiyama",
+      "expected_response_contains": ["Kyoto", "bamboo", "Arashiyama"]
+    },
+    {
+      "step": 3,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "I tried authentic ramen and sushi, which was life-changing",
+      "expected_response_contains": ["ramen", "sushi", "authentic"]
+    },
+    {
+      "step": 4,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "I also climbed Mount Fuji, which took 7 hours to reach the summit",
+      "expected_response_contains": ["Mount Fuji", "7 hours", "summit"]
+    },
+    {
+      "step": 5,
+      "action": "create_subchat",
+      "parent_node": "main",
+      "subchat_name": "Italy Trip Plans",
+      "message": "I'm planning to visit Italy next summer in 2026",
+      "expected_response_contains": ["Italy", "2026", "summer"]
+    },
+    {
+      "step": 6,
+      "action": "send_message",
+      "node_type": "subchat_1",
+      "message": "I want to visit Rome, Venice, and Florence",
+      "expected_response_contains": ["Rome", "Venice", "Florence"]
+    },
+    {
+      "step": 7,
+      "action": "send_message",
+      "node_type": "subchat_1",
+      "message": "My budget is around $4000 for two weeks",
+      "expected_response_contains": ["$4000", "budget", "two weeks"]
+    },
+    {
+      "step": 8,
+      "action": "send_message",
+      "node_type": "subchat_1",
+      "message": "I especially want to try authentic Italian pizza and gelato",
+      "expected_response_contains": ["pizza", "gelato", "Italian"]
+    },
+    {
+      "step": 9,
+      "action": "switch_to_node",
+      "node_type": "main",
+      "message": "I stayed in a traditional ryokan in Hakone with onsen hot springs",
+      "expected_response_contains": ["ryokan", "Hakone", "onsen"],
+      "should_not_contain": ["Italy", "Rome", "pizza"]
+    },
+    {
+      "step": 10,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "Which country did I visit in 2023?",
+      "expected_response_contains": ["Japan"],
+      "should_retrieve": true,
+      "expected_retrieval": ["Japan in 2023"]
+    },
+    {
+      "step": 11,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "What was my favorite city in Japan?",
+      "expected_response_contains": ["Kyoto"],
+      "should_retrieve": true,
+      "expected_retrieval": ["Kyoto"]
+    },
+    {
+      "step": 12,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "How long did it take me to climb Mount Fuji?",
+      "expected_response_contains": ["7 hours"],
+      "should_retrieve": true,
+      "expected_retrieval": ["7 hours"]
+    },
+    {
+      "step": 13,
+      "action": "switch_to_node",
+      "node_type": "subchat_1",
+      "message": "What's my budget for the Italy trip?",
+      "expected_response_contains": ["$4000"],
+      "should_retrieve": true,
+      "expected_retrieval": ["$4000"],
+      "should_not_contain": ["Japan", "Kyoto"]
+    }
+  ]
+}

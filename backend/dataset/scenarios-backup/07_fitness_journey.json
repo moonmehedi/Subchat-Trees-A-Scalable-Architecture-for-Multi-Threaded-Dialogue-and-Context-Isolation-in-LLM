@@ -1,0 +1,107 @@
+{
+  "scenario_name": "Fitness Journey & Goals",
+  "description": "Tests tracking of fitness metrics and personal goals over time",
+  "tree_type": "main_with_subchats",
+  "conversations": [
+    {
+      "step": 1,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "I started my fitness journey 6 months ago weighing 185 pounds",
+      "expected_response_contains": ["fitness", "6 months", "185 pounds"]
+    },
+    {
+      "step": 2,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "My goal is to reach 165 pounds by next March",
+      "expected_response_contains": ["goal", "165 pounds", "March"]
+    },
+    {
+      "step": 3,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "I do strength training 4 times a week - Monday, Tuesday, Thursday, Friday",
+      "expected_response_contains": ["strength training", "4 times", "week"]
+    },
+    {
+      "step": 4,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "My current bench press max is 225 pounds",
+      "expected_response_contains": ["bench press", "225 pounds"]
+    },
+    {
+      "step": 5,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "I can do 15 pull-ups in a row now, up from just 3 when I started",
+      "expected_response_contains": ["15 pull-ups", "3"]
+    },
+    {
+      "step": 6,
+      "action": "create_subchat",
+      "parent_node": "main",
+      "subchat_name": "Nutrition Plan",
+      "message": "I follow a high protein diet with 180 grams of protein daily",
+      "expected_response_contains": ["protein", "180 grams", "diet"]
+    },
+    {
+      "step": 7,
+      "action": "send_message",
+      "node_type": "subchat_1",
+      "message": "I eat 6 meals a day, every 3 hours",
+      "expected_response_contains": ["6 meals", "3 hours"]
+    },
+    {
+      "step": 8,
+      "action": "send_message",
+      "node_type": "subchat_1",
+      "message": "My breakfast is always 4 eggs, oatmeal, and a protein shake",
+      "expected_response_contains": ["4 eggs", "oatmeal", "protein shake"]
+    },
+    {
+      "step": 9,
+      "action": "send_message",
+      "node_type": "subchat_1",
+      "message": "I take creatine monohydrate 5 grams daily and fish oil supplements",
+      "expected_response_contains": ["creatine", "5 grams", "fish oil"]
+    },
+    {
+      "step": 10,
+      "action": "switch_to_node",
+      "node_type": "main",
+      "message": "I also do cardio on Wednesdays and Saturdays - usually 30 minutes running",
+      "expected_response_contains": ["cardio", "Wednesday", "Saturday", "30 minutes"],
+      "should_not_contain": ["protein", "180 grams", "meals"]
+    },
+    {
+      "step": 11,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "What was my starting weight?",
+      "expected_response_contains": ["185 pounds"],
+      "should_retrieve": true,
+      "expected_retrieval": ["185 pounds"]
+    },
+    {
+      "step": 12,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "How many pull-ups could I do when I started?",
+      "expected_response_contains": ["3"],
+      "should_retrieve": true,
+      "expected_retrieval": ["just 3"]
+    },
+    {
+      "step": 13,
+      "action": "switch_to_node",
+      "node_type": "subchat_1",
+      "message": "How much protein do I eat daily?",
+      "expected_response_contains": ["180 grams"],
+      "should_retrieve": true,
+      "expected_retrieval": ["180 grams"],
+      "should_not_contain": ["185 pounds", "bench press"]
+    }
+  ]
+}

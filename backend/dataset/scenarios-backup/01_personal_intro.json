@@ -1,0 +1,76 @@
+{
+  "scenario_name": "Personal Introduction & Hobbies",
+  "description": "Tests basic context retention and retrieval of personal information",
+  "tree_type": "main",
+  "conversations": [
+    {
+      "step": 1,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "Hi! My name is Alex Rodriguez",
+      "expected_response_contains": ["Alex", "Rodriguez", "name", "nice"]
+    },
+    {
+      "step": 2,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "I'm 28 years old and I live in Barcelona",
+      "expected_response_contains": ["28", "Barcelona"]
+    },
+    {
+      "step": 3,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "My biggest hobby is playing football. I've been playing since I was 7 years old",
+      "expected_response_contains": ["football", "hobby"]
+    },
+    {
+      "step": 4,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "I support FC Barcelona and I play as a midfielder in my local club",
+      "expected_response_contains": ["Barcelona", "midfielder"]
+    },
+    {
+      "step": 5,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "I also love cooking paella and tapas on weekends",
+      "expected_response_contains": ["cooking", "paella"]
+    },
+    {
+      "step": 6,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "My dream is to visit every football stadium in Europe",
+      "expected_response_contains": ["dream", "stadium", "Europe"]
+    },
+    {
+      "step": 7,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "What's my name?",
+      "expected_response_contains": ["Alex", "Rodriguez"],
+      "should_retrieve": true,
+      "expected_retrieval": ["My name is Alex Rodriguez"]
+    },
+    {
+      "step": 8,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "What position do I play in football?",
+      "expected_response_contains": ["midfielder"],
+      "should_retrieve": true,
+      "expected_retrieval": ["midfielder"]
+    },
+    {
+      "step": 9,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "What's my favorite food to cook?",
+      "expected_response_contains": ["paella", "tapas"],
+      "should_retrieve": true,
+      "expected_retrieval": ["paella", "tapas"]
+    }
+  ]
+}

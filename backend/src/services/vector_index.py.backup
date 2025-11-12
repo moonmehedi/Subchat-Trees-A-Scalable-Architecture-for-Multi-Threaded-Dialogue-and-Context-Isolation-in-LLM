@@ -1,0 +1,317 @@
+"""
+Global Vector Index for long-term conversation memory.
+Auto-archives messages when they're evicted from LocalBuffer.
+"""
+
+import chromadb
+from chromadb.config import Settings
+from typing import List, Dict, Optional, Any
+import os
+from pathlib import Path
+import time
+
+
+class GlobalVectorIndex:
+    """
+    Vector storage for archived conversation messages.
+    Messages are automatically added when evicted from LocalBuffer (10+ messages old).
+    Enables semantic search across long conversation history.
+    """
+    
+    def __init__(self, persist_dir: str = "./chroma_db"):
+        """
+        Initialize vector index with ChromaDB.
+        
+        🧹 RESEARCH MODE: Clears all old data on startup for clean testing.
+        Every server restart starts with fresh, empty vector storage.
+        
+        Args:
+            persist_dir: Directory to persist vector database
+        """
+        # 🧹 CLEAR OLD DATA - Fresh start for each test run
+        import shutil
+        if Path(persist_dir).exists():
+            try:
+                # Try to cleanly delete using ChromaDB's reset first
+                temp_client = chromadb.PersistentClient(
+                    path=persist_dir,
+                    settings=Settings(anonymized_telemetry=False, allow_reset=True)
+                )
+                temp_client.reset()
+                del temp_client
+                print(f"🧹 Cleared old vector data (research mode - fresh start)")
+            except Exception as e:
+                # If that fails, force delete the directory
+                try:
+                    shutil.rmtree(persist_dir)
+                    print(f"🧹 Force-cleared old vector data: {e}")
+                except Exception as e2:
+                    print(f"⚠️  Warning: Could not fully clear old data: {e2}")
+        
+        # Create fresh directory
+        Path(persist_dir).mkdir(parents=True, exist_ok=True)
+        
+        # Initialize ChromaDB client with persistence
+        self.client = chromadb.PersistentClient(
+            path=persist_dir,
+            settings=Settings(
+                anonymized_telemetry=False,
+                allow_reset=True
+            )
+        )
+        
+        # Create new collection (always fresh)
+        self.collection = self.client.create_collection(
+            name="conversation_archive",
+            metadata={"description": "Archived conversation messages beyond buffer"}
+        )
+        print(f"✅ Created fresh vector collection (0 messages)")
+        
+        self.persist_dir = persist_dir
+    
+    def index_message(self, node_id: str, message: str, metadata: Dict[str, Any]):
+        """
+        Archive a message to vector storage.
+        Called automatically when message is evicted from LocalBuffer.
+        
+        Args:
+            node_id: ID of conversation node
+            message: Message text to archive
+            metadata: Additional metadata (role, timestamp, etc.)
+        """
+        try:
+            # Create unique ID for this message
+            message_id = f"{node_id}_{metadata.get('timestamp', time.time())}"
+            
+            # Prepare metadata for ChromaDB
+            chroma_metadata = {
+                "node_id": node_id,
+                "role": metadata.get("role", "unknown"),
+                "timestamp": float(metadata.get("timestamp", time.time())),
+                "archived": True  # Mark as archived (not in buffer)
+            }
+            
+            # Add to collection
+            self.collection.add(
+                documents=[message],
+                metadatas=[chroma_metadata],
+                ids=[message_id]
+            )
+            
+            print(f"📦 Archived message: {message[:60]}... (ID: {message_id})")
+            
+        except Exception as e:
+            print(f"⚠️  Failed to archive message: {e}")
+    
+    def retrieve_relevant(
+        self,
+        query: str,
+        top_k: int = 3,
+        node_id: Optional[str] = None,
+        exclude_buffer_cutoff: Optional[float] = None
+    ) -> List[Dict[str, Any]]:
+        """
+        Retrieve relevant archived messages (not in current buffer).
+        
+        Args:
+            query: Search query (user's message or question)
+            top_k: Number of results to retrieve
+            node_id: Limit search to specific conversation node
+            exclude_buffer_cutoff: Don't retrieve messages newer than this timestamp
+                                   (i.e., messages still in buffer)
+        
+        Returns:
+            List of retrieved messages with metadata and relevance scores
+        """
+        try:
+            # Check if collection is empty
+            if self.collection.count() == 0:
+                print("ℹ️  Vector index is empty - no archived messages yet")
+                return []
+            
+            # Build where clause for filtering (ChromaDB requires $and operator for multiple conditions)
+            where_clause = None
+            if node_id:
+                # Use $and operator for multiple conditions
+                where_clause = {
+                    "$and": [
+                        {"archived": {"$eq": True}},
+                        {"node_id": {"$eq": node_id}}
+                    ]
+                }
+            else:
+                # Single condition
+                where_clause = {"archived": {"$eq": True}}
+            
+            # 🔍 DEBUG: Show collection stats
+            total_in_db = self.collection.count()
+            print(f"📊 Database has {total_in_db} total messages")
+            if exclude_buffer_cutoff:
+                print(f"   Excluding messages newer than timestamp: {exclude_buffer_cutoff}")
+            
+            # Query the collection
+            results = self.collection.query(
+                query_texts=[query],
+                n_results=min(top_k * 2, self.collection.count()),  # Get more to filter
+                where=where_clause if where_clause else None
+            )
+            
+            # Parse results
+            retrieved = []
+            excluded_by_cutoff = 0
+            if results and results['documents'] and results['documents'][0]:
+                for i, doc in enumerate(results['documents'][0]):
+                    metadata = results['metadatas'][0][i] if results['metadatas'] else {}
+                    distance = results['distances'][0][i] if results['distances'] else 1.0
+                    
+                    # Filter by timestamp if cutoff provided
+                    if exclude_buffer_cutoff:
+                        msg_timestamp = metadata.get('timestamp', 0)
+                        if msg_timestamp >= exclude_buffer_cutoff:
+                            excluded_by_cutoff += 1
+                            continue  # Skip messages still in buffer
+                    
+                    retrieved.append({
+                        "text": doc,
+                        "score": 1.0 - distance,  # Convert distance to similarity score
+                        "metadata": metadata
+                    })
+            
+            # � DEBUG: Show filtering stats
+            if exclude_buffer_cutoff and excluded_by_cutoff > 0:
+                print(f"   Excluded {excluded_by_cutoff} messages (still in buffer)")
+            
+            # �📊 DEBUG: Show BEFORE re-ranking
+            if retrieved:
+                print(f"\n📋 BEFORE re-ranking ({len(retrieved)} messages):")
+                for i, item in enumerate(retrieved[:5], 1):  # Show first 5
+                    msg_preview = item['text'][:200] + ('...' if len(item['text']) > 200 else '')
+                    score = item['score']
+                    role = item['metadata'].get('role', 'unknown')
+                    print(f"   {i}. [Score: {score:.3f}] [{role.upper()}]")
+                    print(f"       {msg_preview}")
+            
+            # Return top_k results
+            retrieved = retrieved[:top_k]
+            
+            # 📊 DEBUG: Show AFTER filtering to top_k
+            if retrieved:
+                print(f"\n✅ AFTER filtering to top_{top_k} ({len(retrieved)} messages):")
+                for i, item in enumerate(retrieved, 1):
+                    msg_preview = item['text'][:200] + ('...' if len(item['text']) > 200 else '')
+                    score = item['score']
+                    role = item['metadata'].get('role', 'unknown')
+                    print(f"   {i}. [Score: {score:.3f}] [{role.upper()}]")
+                    print(f"       {msg_preview}")
+            
+            return retrieved
+            
+        except Exception as e:
+            print(f"⚠️  Failed to retrieve from vector index: {e}")
+            return []
+    
+    def get_stats(self) -> Dict[str, Any]:
+        """Get statistics about archived messages"""
+        try:
+            total_count = self.collection.count()
+            
+            # Get all metadata to analyze
+            if total_count > 0:
+                results = self.collection.get(
+                    limit=total_count,
+                    include=["metadatas"]
+                )
+                
+                # Count by node
+                nodes = {}
+                for metadata in results['metadatas']:
+                    node_id = metadata.get('node_id', 'unknown')
+                    nodes[node_id] = nodes.get(node_id, 0) + 1
+                
+                return {
+                    "total_archived_messages": total_count,
+                    "unique_conversations": len(nodes),
+                    "messages_per_conversation": nodes,
+                    "persist_dir": self.persist_dir
+                }
+            
+            return {
+                "total_archived_messages": 0,
+                "unique_conversations": 0,
+                "messages_per_conversation": {},
+                "persist_dir": self.persist_dir
+            }
+            
+        except Exception as e:
+            return {"error": str(e)}
+    
+    def clear(self):
+        """Clear all archived messages (for testing)"""
+        try:
+            self.client.delete_collection("conversation_archive")
+            self.collection = self.client.create_collection(
+                name="conversation_archive",
+                metadata={"description": "Archived conversation messages beyond buffer"}
+            )
+            print("🗑️  Cleared vector index")
+        except Exception as e:
+            print(f"⚠️  Failed to clear vector index: {e}")
+
+
+# Testing
+
+
+
+
+
+
+
+
+
+if __name__ == "__main__":
+    print("🧪 Testing GlobalVectorIndex...")
+    
+    # Create index
+    index = GlobalVectorIndex(persist_dir="./test_chroma_db")
+    
+    # Test 1: Index some messages
+    print("\n--- Test 1: Indexing messages ---")
+    index.index_message(
+        node_id="test_node_1",
+        message="Python is a high-level programming language",
+        metadata={"role": "assistant", "timestamp": time.time() - 100}
+    )
+    
+    index.index_message(
+        node_id="test_node_1",
+        message="Python snakes are non-venomous constrictors",
+        metadata={"role": "assistant", "timestamp": time.time() - 50}
+    )
+    
+    index.index_message(
+        node_id="test_node_1",
+        message="Decorators in Python allow modifying function behavior",
+        metadata={"role": "assistant", "timestamp": time.time() - 25}
+    )
+    
+    # Test 2: Retrieve relevant messages
+    print("\n--- Test 2: Retrieving relevant messages ---")
+    results = index.retrieve_relevant(
+        query="Tell me about Python programming",
+        top_k=2,
+        node_id="test_node_1"
+    )
+    
+    print(f"\nQuery: 'Tell me about Python programming'")
+    for i, result in enumerate(results, 1):
+        print(f"{i}. {result['text']} (score: {result['score']:.3f})")
+    
+    # Test 3: Get statistics
+    print("\n--- Test 3: Statistics ---")
+    stats = index.get_stats()
+    print(f"Total archived: {stats['total_archived_messages']}")
+    print(f"Unique conversations: {stats['unique_conversations']}")
+    
+    # Clean up
+    index.clear()
+    print("\n✅ All tests passed!")

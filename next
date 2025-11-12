@@ -1,0 +1,108 @@
+progress is good front-edn creates sub cha that
+error line no session fix this in university i might need to undresatnd the frontend as well rather than vibe code it
+
+
+
+
+
+        streaming_response = self.groq_client.chat.completions.create(
+                        model="llama-3.3-70b-versatile",
+                        messages=context_messages,
+                        stream=True,
+                        max_tokens=1000,
+                        temperature=0.7
+                    )
+                    
+
+
+
+
+
+
+
+                    {
+  "scenario_name": "POPULATE: Quantum Computing Project Idea",
+  "description": "Populates vector store with deep technical content retrieval and project details (no tests)",
+  "tree_type": "main",
+  "conversations": [
+    {
+      "step": 1,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "I want to build a quantum computing simulator as my next project"
+    },
+    {
+      "step": 2,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "It should be able to simulate 8 qubits with quantum gates"
+    },
+    {
+      "step": 3,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "I want to implement Grover's algorithm and Shor's algorithm"
+    },
+    {
+      "step": 4,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "The tech stack will be Python with NumPy and Qiskit libraries"
+    },
+    {
+      "step": 5,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "I'll add a visualization dashboard using Plotly for quantum state visualization"
+    },
+    {
+      "step": 6,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "The target completion date is December 2025"
+    },
+    {
+      "step": 7,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "I want to publish it on GitHub and write a research paper about it"
+    },
+    {
+      "step": 8,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "What was my project idea?"
+    },
+    {
+      "step": 9,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "How many qubits did I mention?"
+    },
+    {
+      "step": 10,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "What algorithms will I implement?"
+    },
+    {
+      "step": 11,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "What's my tech stack for this project?"
+    }
+  ],
+  "scenario_type": "population"
+}
+
+
+SEE THE POPULATION DATASET HERE I SEE A QUESTION
+
+What's my tech stack for this 
+
+WHY THIS TYPE OF QUESTION BEING ASKED HERE IT SHOULD BE IN THE TESING FILES
+
+
+ALSO I DONT UNDRESTAND WHY FILE 11 AND 12 NAMED MUSIC_PREFERENCES.JSON
+
+AND 12_CODING_CHALLENGES.JSON

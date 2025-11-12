@@ -1,0 +1,92 @@
+{
+  "scenario_name": "Quantum Computing Project Idea",
+  "description": "Tests deep technical content retrieval and project details",
+  "tree_type": "main",
+  "conversations": [
+    {
+      "step": 1,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "I want to build a quantum computing simulator as my next project",
+      "expected_response_contains": ["quantum", "simulator", "project", "interesting"]
+    },
+    {
+      "step": 2,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "It should be able to simulate 8 qubits with quantum gates",
+      "expected_response_contains": ["8 qubits", "quantum gates"]
+    },
+    {
+      "step": 3,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "I want to implement Grover's algorithm and Shor's algorithm",
+      "expected_response_contains": ["Grover", "Shor", "algorithm"]
+    },
+    {
+      "step": 4,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "The tech stack will be Python with NumPy and Qiskit libraries",
+      "expected_response_contains": ["Python", "NumPy", "Qiskit"]
+    },
+    {
+      "step": 5,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "I'll add a visualization dashboard using Plotly for quantum state visualization",
+      "expected_response_contains": ["visualization", "Plotly", "dashboard"]
+    },
+    {
+      "step": 6,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "The target completion date is December 2025",
+      "expected_response_contains": ["December", "2025"]
+    },
+    {
+      "step": 7,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "I want to publish it on GitHub and write a research paper about it",
+      "expected_response_contains": ["GitHub", "research paper", "publish"]
+    },
+    {
+      "step": 8,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "What was my project idea?",
+      "expected_response_contains": ["quantum", "simulator"],
+      "should_retrieve": true,
+      "expected_retrieval": ["quantum computing simulator"]
+    },
+    {
+      "step": 9,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "How many qubits did I mention?",
+      "expected_response_contains": ["8", "qubits"],
+      "should_retrieve": true,
+      "expected_retrieval": ["8 qubits"]
+    },
+    {
+      "step": 10,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "What algorithms will I implement?",
+      "expected_response_contains": ["Grover", "Shor"],
+      "should_retrieve": true,
+      "expected_retrieval": ["Grover's algorithm", "Shor's algorithm"]
+    },
+    {
+      "step": 11,
+      "action": "send_message",
+      "node_type": "main",
+      "message": "What's my tech stack for this project?",
+      "expected_response_contains": ["Python", "NumPy", "Qiskit"],
+      "should_retrieve": true,
+      "expected_retrieval": ["Python", "NumPy", "Qiskit"]
+    }
+  ]
+}

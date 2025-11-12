@@ -133,12 +133,19 @@ class MetricsTestRunner:
             self.log(f"❌ Failed to create conversation: {e}", "ERROR")
             return None
     
-    def create_subchat(self, parent_id: str, title: str) -> Optional[str]:
-        """Create subchat, return node_id"""
+    def create_subchat(self, parent_id: str, title: str, selected_text: Optional[str] = None) -> Optional[str]:
+        """Create subchat with optional follow-up context, return node_id"""
         try:
+            payload = {"title": title}
+            
+            # Add follow-up context if selected_text is provided
+            if selected_text:
+                payload["selected_text"] = selected_text
+                payload["context_type"] = "follow_up"
+            
             response = requests.post(
                 f"{self.base_url}/api/conversations/{parent_id}/subchats",
-                json={"title": title}
+                json=payload
             )
             response.raise_for_status()
             return response.json().get("node_id")
@@ -315,21 +322,16 @@ class MetricsTestRunner:
             # Handle subchat creation
             if action == "create_subchat":
                 subchat_title = step_data.get("subchat_title", f"{context} discussion")
-                subchat_id = self.create_subchat(main_id, subchat_title)
+                selected_text = step_data.get("selected_text")  # Get selected text for follow-up
+                
+                subchat_id = self.create_subchat(main_id, subchat_title, selected_text)
                 
                 if subchat_id:
                     node_map[node_type] = subchat_id
-                    self.log(f"  🌿 Created subchat: {node_type}", "INFO", "system")
-                    
-                    # Send context-setting message if provided
-                    context_message = step_data.get("subchat_context_message")
-                    if context_message:
-                        self.log(f"  📌 Setting subchat context: {context_message}", "INFO", "system")
-                        context_response = self.send_message(subchat_id, context_message, disable_rag=False)
-                        if context_response:
-                            self.log(f"  ✅ Context established", "INFO", "system")
-                        else:
-                            self.log(f"  ⚠️  Failed to set context", "WARN", "system")
+                    if selected_text:
+                        self.log(f"  🌿 Created follow-up subchat: {node_type} (selected: '{selected_text}')", "INFO", "system")
+                    else:
+                        self.log(f"  🌿 Created subchat: {node_type}", "INFO", "system")
                 else:
                     self.log(f"  ❌ Failed to create subchat: {node_type}", "ERROR", "system")
             
@@ -523,19 +525,41 @@ class MetricsTestRunner:
             f.write("| Metric | Baseline System | Our System | Improvement |\n")
             f.write("|--------|----------------|------------|-------------|\n")
             
-            for metric in ["avg_input_tokens", "avg_output_tokens", "avg_total_tokens", "avg_latency"]:
+            # Token metrics
+            for metric in ["avg_input_tokens", "avg_output_tokens", "avg_total_tokens"]:
                 baseline_val = table3["baseline"][metric]
                 system_val = table3["system"][metric]
                 improvement = table3["improvements"][metric]
                 
                 f.write(f"| **{metric.replace('_', ' ').title()}** | ")
-                
-                if "tokens" in metric:
-                    f.write(f"{baseline_val:.0f} | {system_val:.0f} | ")
-                else:
-                    f.write(f"{baseline_val:.2f}s | {system_val:.2f}s | ")
-                
+                f.write(f"{baseline_val:.0f} | {system_val:.0f} | ")
                 f.write(f"**{improvement:+.1f}%** |\n")
+            
+            # Latency
+            baseline_lat = table3["baseline"]["avg_latency"]
+            system_lat = table3["system"]["avg_latency"]
+            lat_improvement = table3["improvements"]["avg_latency"]
+            f.write(f"| **Avg Latency** | {baseline_lat:.2f}s | {system_lat:.2f}s | **{lat_improvement:+.1f}%** |\n")
+            
+            # Token Compression Rate
+            baseline_total = table3["baseline"]["avg_total_tokens"]
+            system_total = table3["system"]["avg_total_tokens"]
+            compression_rate = ((baseline_total - system_total) / baseline_total) * 100
+            compression_ratio = baseline_total / system_total
+            f.write(f"| **Token Compression Rate** | 0% | {compression_rate:.1f}% | **{compression_ratio:.2f}x compression** |\n")
+            
+            # Cost metrics (using OpenAI GPT OSS 20B pricing: $0.075/1K input, $0.30/1K output)
+            baseline_input = table3["baseline"]["avg_input_tokens"]
+            baseline_output = table3["baseline"]["avg_output_tokens"]
+            system_input = table3["system"]["avg_input_tokens"]
+            system_output = table3["system"]["avg_output_tokens"]
+            
+            baseline_cost = (baseline_input * 0.075 + baseline_output * 0.30) / 1000
+            system_cost = (system_input * 0.075 + system_output * 0.30) / 1000
+            cost_improvement = ((baseline_cost - system_cost) / baseline_cost) * 100
+            
+            f.write(f"| **Cost per Query** | ${baseline_cost:.6f} | ${system_cost:.6f} | **{cost_improvement:+.1f}%** |\n")
+            f.write(f"| **Cost per 1M Queries** | ${baseline_cost*1000000:.0f} | ${system_cost*1000000:.0f} | **-${(baseline_cost-system_cost)*1000000:.0f} savings** |\n")
         
         self.log("✅ Generated TABLE_3_SYSTEM_PERFORMANCE.md", "INFO")
     

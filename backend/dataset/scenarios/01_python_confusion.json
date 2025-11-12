@@ -6,7 +6,7 @@
       "step": 1,
       "context": "programming or snake",
       "message": "we will discuss about python snake and python programming language ",
-      "expected": "Should explain Python programming language",
+      "expected": "Should explain Python programming language and python snake both",
       "node_type": "main",
       "action": ""
     },
@@ -18,7 +18,7 @@
       "node_type": "subchat_1",
       "action": "create_subchat",
       "subchat_title": "Python Snake Discussion",
-      "subchat_context_message": "Let's discuss about python snakes (the reptile), not the programming language."
+      "selected_text": "snake"
     },
     {
       "step": 3,

@@ -2,10 +2,10 @@
 
 | Metric | Baseline System | Our System | Improvement |
 |--------|----------------|------------|-------------|
-| **Avg Input Tokens** | 1049 | 145 | **-86.1%** |
-| **Avg Output Tokens** | 631 | 272 | **-56.8%** |
-| **Avg Total Tokens** | 1679 | 417 | **-75.1%** |
-| **Avg Latency** | 4.21s | 3.35s | **-20.4%** |
-| **Token Compression Rate** | 0% | 75.1% | **4.02x compression** |
-| **Cost per Query** | $0.267836 | $0.092539 | **+65.4%** |
-| **Cost per 1M Queries** | $267836 | $92539 | **-$175296 savings** |
+| **Avg Input Tokens** | 3088 | 2651 | **-14.2%** |
+| **Avg Output Tokens** | 953 | 948 | **-0.5%** |
+| **Avg Total Tokens** | 4041 | 3599 | **-10.9%** |
+| **Avg Latency** | 22.38s | 18.63s | **-16.8%** |
+| **Token Compression Rate** | 0% | 10.9% | **1.12x compression** |
+| **Cost per Query** | $0.517410 | $0.483290 | **+6.6%** |
+| **Cost per 1M Queries** | $517410 | $483290 | **-$34120 savings** |

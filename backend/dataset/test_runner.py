@@ -324,14 +324,18 @@ class MetricsTestRunner:
                 subchat_title = step_data.get("subchat_title", f"{context} discussion")
                 selected_text = step_data.get("selected_text")  # Get selected text for follow-up
                 
-                subchat_id = self.create_subchat(main_id, subchat_title, selected_text)
+                # ✅ FIX: Support nested subchats by looking up parent from node_map
+                parent_node_type = step_data.get("parent_node_type", "main")
+                parent_id = node_map.get(parent_node_type, main_id)
+                
+                subchat_id = self.create_subchat(parent_id, subchat_title, selected_text)
                 
                 if subchat_id:
                     node_map[node_type] = subchat_id
                     if selected_text:
-                        self.log(f"  🌿 Created follow-up subchat: {node_type} (selected: '{selected_text}')", "INFO", "system")
+                        self.log(f"  🌿 Created follow-up subchat: {node_type} under {parent_node_type} (selected: '{selected_text}')", "INFO", "system")
                     else:
-                        self.log(f"  🌿 Created subchat: {node_type}", "INFO", "system")
+                        self.log(f"  🌿 Created subchat: {node_type} under {parent_node_type}", "INFO", "system")
                 else:
                     self.log(f"  ❌ Failed to create subchat: {node_type}", "ERROR", "system")
             
@@ -651,5 +655,5 @@ if __name__ == "__main__":
     
     # Run with Python confusion dataset
     runner.run_full_evaluation([
-        "01_python_confusion.json"
+        "02_nested_depth_test.json"
     ])

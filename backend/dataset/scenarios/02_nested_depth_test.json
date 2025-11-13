@@ -1,0 +1,164 @@
+{
+  "scenario_name": "Nested Depth Test: 4-Layer Subchat Hierarchy",
+  "description": "Tests deep nesting: main -> subchat_1 -> subchat_1_1 -> subchat_1_1_1. Includes traversal between main and various child nodes to verify proper context isolation and parent-child relationships.",
+  "conversations": [
+    {
+      "step": 1,
+      "context": "python types",
+      "message": "Tell me about different types of Python snakes found around the world.",
+      "expected": "Should list major python species (Ball Python, Burmese Python, African Rock Python, Indian Python, etc.)",
+      "node_type": "main",
+      "action": ""
+    },
+    
+    {
+      "step": 2,
+      "context": "python types",
+      "message": "Which ones are commonly kept as pets?",
+      "expected": "Should mention Ball Python as most common pet, maybe Carpet Python.",
+      "node_type": "main",
+      "action": ""
+    },
+    
+    {
+      "step": 3,
+      "context": "indian python",
+      "message": "Tell me detailed facts about the Indian Python species.",
+      "expected": "Should focus on Indian Python (Python molurus): habitat, size, behavior, conservation status.",
+      "node_type": "subchat_1",
+      "action": "create_subchat",
+      "parent_node_type": "main",
+      "subchat_title": "Indian Python Species",
+      "selected_text": "Indian Python"
+    },
+    
+    {
+      "step": 4,
+      "context": "indian python",
+      "message": "What is the typical size and weight of an adult Indian Python?",
+      "expected": "Should provide specific measurements (length, weight ranges).",
+      "node_type": "subchat_1",
+      "action": ""
+    },
+    
+    {
+      "step": 5,
+      "context": "indian python habitat",
+      "message": "Describe the natural habitat and geographic distribution.",
+      "expected": "Should discuss India, Sri Lanka, Bangladesh habitats; forests, wetlands.",
+      "node_type": "subchat_1_1",
+      "action": "create_subchat",
+      "parent_node_type": "subchat_1",
+      "subchat_title": "Indian Python Habitat",
+      "selected_text": "habitat"
+    },
+    
+    {
+      "step": 6,
+      "context": "indian python habitat",
+      "message": "How does deforestation affect their population?",
+      "expected": "Should discuss conservation threats, habitat loss impacts.",
+      "node_type": "subchat_1_1",
+      "action": ""
+    },
+    
+    {
+      "step": 7,
+      "context": "conservation efforts",
+      "message": "What conservation programs exist to protect Indian Pythons?",
+      "expected": "Should mention wildlife sanctuaries, legal protections, breeding programs.",
+      "node_type": "subchat_1_1_1",
+      "action": "create_subchat",
+      "parent_node_type": "subchat_1_1",
+      "subchat_title": "Conservation Programs",
+      "selected_text": "conservation"
+    },
+    
+    {
+      "step": 8,
+      "context": "conservation efforts",
+      "message": "Are there any successful breeding programs in captivity?",
+      "expected": "Should discuss zoo programs, captive breeding success rates.",
+      "node_type": "subchat_1_1_1",
+      "action": ""
+    },
+    
+    {
+      "step": 9,
+      "context": "python types",
+      "message": "Now tell me about African Rock Python instead.",
+      "expected": "Should switch context back to main, discuss African Rock Python (different from Indian Python).",
+      "node_type": "main",
+      "action": ""
+    },
+    
+    {
+      "step": 10,
+      "context": "african python",
+      "message": "Give me detailed facts about African Rock Python.",
+      "expected": "Should focus on African Rock Python: habitat (Sub-Saharan Africa), size (larger than Indian), behavior.",
+      "node_type": "subchat_2",
+      "action": "create_subchat",
+      "parent_node_type": "main",
+      "subchat_title": "African Rock Python",
+      "selected_text": "African Rock Python"
+    },
+    
+    {
+      "step": 11,
+      "context": "african python",
+      "message": "Is the African Rock Python more aggressive than other python species?",
+      "expected": "Should discuss temperament differences, defensive behavior.",
+      "node_type": "subchat_2",
+      "action": ""
+    },
+    
+    {
+      "step": 12,
+      "context": "indian python",
+      "message": "Going back to Indian Python - what do they typically eat in the wild?",
+      "expected": "Should return to Indian Python context, discuss diet (rodents, birds, small mammals).",
+      "node_type": "subchat_1",
+      "action": ""
+    },
+    
+    {
+      "step": 13,
+      "context": "indian python habitat",
+      "message": "What is the climate like in their natural habitat?",
+      "expected": "Should discuss tropical/subtropical climate of Indian subcontinent.",
+      "node_type": "subchat_1_1",
+      "action": ""
+    },
+    
+    {
+      "step": 14,
+      "context": "wildlife corridors",
+      "message": "Explain the importance of wildlife corridors for python migration.",
+      "expected": "Should discuss connectivity between habitats, gene flow, population health.",
+      "node_type": "subchat_1_1_1_1",
+      "action": "create_subchat",
+      "parent_node_type": "subchat_1_1_1",
+      "subchat_title": "Wildlife Corridors",
+      "selected_text": "wildlife"
+    },
+    
+    {
+      "step": 15,
+      "context": "wildlife corridors",
+      "message": "How do roads and urban development disrupt these corridors?",
+      "expected": "Should discuss fragmentation, road mortality, barriers to movement.",
+      "node_type": "subchat_1_1_1_1",
+      "action": ""
+    },
+    
+    {
+      "step": 16,
+      "context": "python types",
+      "message": "Summarize the key differences between all python types we discussed.",
+      "expected": "Should provide comparison: Indian vs African Rock Python, referencing earlier main conversation.",
+      "node_type": "main",
+      "action": ""
+    }
+  ]
+}

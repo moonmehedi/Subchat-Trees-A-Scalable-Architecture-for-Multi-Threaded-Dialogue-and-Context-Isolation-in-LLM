@@ -1,0 +1,253 @@
+{
+  "scenario_name": "Pizza Regional Variants Comparison",
+  "description": "Tests ability to maintain distinct characteristics of three pizza styles. Baseline will conflate Neapolitan, New York, and Chicago pizza attributes.",
+  "steps": [
+    {
+      "step": 1,
+      "context": "pizza_intro",
+      "message": "Let's compare three pizza styles: Neapolitan, New York, and Chicago deep-dish",
+      "expected": "Neapolitan (Naples, Italy), New York style (thin crust), Chicago deep-dish (thick, casserole-like) - three distinct regional variations",
+      "node_type": "main",
+      "action": "",
+      "linear_failure_risk": "none - establishing comparison"
+    },
+    {
+      "step": 2,
+      "context": "neapolitan",
+      "message": "What defines authentic Neapolitan pizza?",
+      "expected": "Soft, thin crust with charred bubbles. Wood-fired at 485°C (905°F) for 60-90 seconds. Simple toppings: San Marzano tomatoes, mozzarella di bufala, basil, olive oil. Protected by EU Traditional Speciality Guaranteed certification",
+      "node_type": "subchat_1",
+      "action": "create_subchat",
+      "selected_text": "Neapolitan",
+      "linear_failure_risk": "low - first pizza style details"
+    },
+    {
+      "step": 3,
+      "context": "newyork",
+      "message": "What characterizes New York style pizza?",
+      "expected": "Large thin crust, crispy bottom, foldable slices. Baked in gas ovens at 500-550°F. High-gluten dough. Mozzarella and tomato sauce. Sold by the slice, typically 18-inch pies cut into 8 slices",
+      "node_type": "subchat_2",
+      "action": "create_subchat",
+      "selected_text": "New York",
+      "linear_failure_risk": "moderate - baseline may start mixing crust types"
+    },
+    {
+      "step": 4,
+      "context": "chicago",
+      "message": "Describe Chicago deep-dish pizza",
+      "expected": "Thick, high-edge crust (2-3 inches deep) resembling pie. Reverse layered: cheese on bottom, toppings, then chunky tomato sauce on top. Baked 30-45 minutes. Eaten with fork and knife. Invented at Pizzeria Uno in 1943",
+      "node_type": "subchat_3",
+      "action": "create_subchat",
+      "selected_text": "Chicago deep-dish",
+      "linear_failure_risk": "moderate - three pizza styles now in context"
+    },
+    {
+      "step": 5,
+      "context": "neapolitan",
+      "message": "What flour is used for Neapolitan pizza dough?",
+      "expected": "Type 00 (doppio zero) flour - finely ground, low protein (8-12%). Creates soft, elastic, easily digestible dough. Often mixed with Type 0 flour",
+      "node_type": "subchat_1",
+      "action": "switch_node",
+      "linear_failure_risk": "moderate - returning to Neapolitan after other styles discussed"
+    },
+    {
+      "step": 6,
+      "context": "newyork",
+      "message": "What kind of flour is in New York pizza dough?",
+      "expected": "High-gluten bread flour (12-14% protein) for crispy, chewy texture. Creates structure that allows folding without breaking",
+      "node_type": "subchat_2",
+      "action": "switch_node",
+      "linear_failure_risk": "high - baseline may confuse Type 00 with high-gluten flour"
+    },
+    {
+      "step": 7,
+      "context": "chicago",
+      "message": "What's in Chicago deep-dish dough?",
+      "expected": "All-purpose or bread flour with butter or oil added to dough for rich, flaky texture. Similar to pie crust. Higher fat content than other pizza doughs",
+      "node_type": "subchat_3",
+      "action": "switch_node",
+      "linear_failure_risk": "high - three different flour types now discussed, baseline mixing them"
+    },
+    {
+      "step": 8,
+      "context": "neapolitan",
+      "message": "How long does Neapolitan pizza bake?",
+      "expected": "60-90 seconds at 485°C (905°F) in wood-fired oven",
+      "node_type": "subchat_1",
+      "action": "switch_node",
+      "linear_failure_risk": "high - recalling step 2 baking temperature, baseline may mix with other styles"
+    },
+    {
+      "step": 9,
+      "context": "newyork",
+      "message": "What's the cooking time for New York pizza?",
+      "expected": "12-15 minutes at 500-550°F in gas deck oven",
+      "node_type": "subchat_2",
+      "action": "switch_node",
+      "linear_failure_risk": "critical - baseline may confuse 60-90 seconds with 12-15 minutes"
+    },
+    {
+      "step": 10,
+      "context": "chicago",
+      "message": "How long to bake Chicago deep-dish?",
+      "expected": "30-45 minutes at 425-450°F due to thick crust and dense toppings",
+      "node_type": "subchat_3",
+      "action": "switch_node",
+      "linear_failure_risk": "critical - baseline buffer at capacity, three cooking times now mixed"
+    },
+    {
+      "step": 11,
+      "context": "neapolitan",
+      "message": "What cheese is traditional on Neapolitan pizza?",
+      "expected": "Mozzarella di bufala (buffalo mozzarella) or fior di latte (cow's milk mozzarella). Fresh, not low-moisture",
+      "node_type": "subchat_1",
+      "action": "switch_node",
+      "linear_failure_risk": "critical - step 2 Neapolitan details now at buffer edge"
+    },
+    {
+      "step": 12,
+      "context": "newyork",
+      "message": "What cheese goes on New York pizza?",
+      "expected": "Low-moisture, whole-milk mozzarella. Shredded or sliced. Creates stretchy, slightly oily texture when melted",
+      "node_type": "subchat_2",
+      "action": "switch_node",
+      "linear_failure_risk": "catastrophic - baseline buffer overflowed, step 3 New York details evicted"
+    },
+    {
+      "step": 13,
+      "context": "chicago",
+      "message": "What cheese is used in Chicago deep-dish?",
+      "expected": "Mozzarella cheese sliced and layered on bottom (reverse of normal pizza). Often mixed with Parmesan or other Italian cheeses",
+      "node_type": "subchat_3",
+      "action": "switch_node",
+      "linear_failure_risk": "catastrophic - baseline lost track of cheese types across three styles"
+    },
+    {
+      "step": 14,
+      "context": "neapolitan",
+      "message": "What toppings are allowed on authentic Neapolitan?",
+      "expected": "Margherita: tomato, mozzarella, basil. Marinara: tomato, garlic, oregano, no cheese. Very limited toppings per Traditional Speciality rules",
+      "node_type": "subchat_1",
+      "action": "switch_node",
+      "linear_failure_risk": "catastrophic - step 2/5/8/11 Neapolitan context heavily fragmented in baseline"
+    },
+    {
+      "step": 15,
+      "context": "newyork",
+      "message": "What are popular New York pizza toppings?",
+      "expected": "Pepperoni (most popular), sausage, mushrooms, peppers, onions, olives. More generous and diverse than Neapolitan. Often combined toppings",
+      "node_type": "subchat_2",
+      "action": "switch_node",
+      "linear_failure_risk": "catastrophic - baseline mixing Margherita simplicity with NYC variety"
+    },
+    {
+      "step": 16,
+      "context": "chicago",
+      "message": "What toppings go in Chicago deep-dish?",
+      "expected": "Sausage, pepperoni, bell peppers, onions, mushrooms. Loaded heavily due to deep dish capacity. Sauce on top prevents toppings from burning",
+      "node_type": "subchat_3",
+      "action": "switch_node",
+      "linear_failure_risk": "catastrophic - three topping philosophies completely mixed in baseline"
+    },
+    {
+      "step": 17,
+      "context": "neapolitan",
+      "message": "Recall the oven temperature for Neapolitan pizza",
+      "expected": "485°C (905°F)",
+      "node_type": "subchat_1",
+      "action": "switch_node",
+      "linear_failure_risk": "catastrophic - explicit recall of step 2 temperature, now 15 messages back"
+    },
+    {
+      "step": 18,
+      "context": "newyork",
+      "message": "What temperature did I mention for New York pizza?",
+      "expected": "500-550°F",
+      "node_type": "subchat_2",
+      "action": "switch_node",
+      "linear_failure_risk": "catastrophic - baseline will confuse 485°C/905°F with 500-550°F"
+    },
+    {
+      "step": 19,
+      "context": "chicago",
+      "message": "What's the baking temperature for Chicago deep-dish?",
+      "expected": "425-450°F",
+      "node_type": "subchat_3",
+      "action": "switch_node",
+      "linear_failure_risk": "catastrophic - three different temperatures mixed in baseline buffer"
+    },
+    {
+      "step": 20,
+      "context": "crust_comparison",
+      "message": "Compare the crust thickness of all three styles",
+      "expected": "Neapolitan: thin and soft (charred edges). New York: thin and crispy (foldable). Chicago: thick, 2-3 inches deep (pie-like)",
+      "node_type": "subchat_comparison_1",
+      "action": "create_subchat",
+      "parent_node_type": "main",
+      "selected_text": "three pizza styles crust",
+      "linear_failure_risk": "catastrophic - requires synthesizing crust info from steps 2, 3, 4, all evicted from baseline"
+    },
+    {
+      "step": 21,
+      "context": "cooking_comparison",
+      "message": "Compare cooking times for all three",
+      "expected": "Neapolitan: 60-90 seconds (fastest). New York: 12-15 minutes. Chicago: 30-45 minutes (longest)",
+      "node_type": "subchat_comparison_2",
+      "action": "create_subchat",
+      "parent_node_type": "main",
+      "selected_text": "cooking times",
+      "linear_failure_risk": "catastrophic - requires recall of steps 8, 9, 10 cooking times, all evicted"
+    },
+    {
+      "step": 22,
+      "context": "cheese_comparison",
+      "message": "What are the cheese differences?",
+      "expected": "Neapolitan: fresh buffalo or fior di latte mozzarella. New York: low-moisture whole-milk mozzarella. Chicago: sliced mozzarella layered on bottom",
+      "node_type": "subchat_comparison_3",
+      "action": "create_subchat",
+      "parent_node_type": "main",
+      "selected_text": "cheese types",
+      "linear_failure_risk": "catastrophic - requires steps 11, 12, 13 cheese info, baseline completely lost"
+    },
+    {
+      "step": 23,
+      "context": "flour_comparison",
+      "message": "Compare the flour types used in each",
+      "expected": "Neapolitan: Type 00 flour (soft, low protein). New York: high-gluten bread flour (chewy, crispy). Chicago: all-purpose/bread flour with butter (flaky)",
+      "node_type": "subchat_comparison_4",
+      "action": "create_subchat",
+      "parent_node_type": "main",
+      "selected_text": "flour",
+      "linear_failure_risk": "catastrophic - requires steps 5, 6, 7 flour details, baseline mixed them long ago"
+    },
+    {
+      "step": 24,
+      "context": "origin_comparison",
+      "message": "Where did each style originate?",
+      "expected": "Neapolitan: Naples, Italy (centuries old, EU protected). New York: NYC Italian-American immigrants (early 1900s). Chicago: Pizzeria Uno, Chicago, 1943",
+      "node_type": "subchat_comparison_5",
+      "action": "create_subchat",
+      "parent_node_type": "main",
+      "selected_text": "origins",
+      "linear_failure_risk": "catastrophic - requires synthesizing steps 2, 3, 4 origin info, baseline completely polluted with 23 messages"
+    },
+    {
+      "step": 25,
+      "context": "pizza_intro",
+      "message": "Which style is closest to original Italian pizza?",
+      "expected": "Neapolitan is the original authentic Italian pizza, protected by Traditional Speciality Guaranteed. New York and Chicago are American adaptations",
+      "node_type": "main",
+      "action": "switch_node",
+      "linear_failure_risk": "catastrophic - requires understanding step 2 EU certification and comparing to American variants"
+    },
+    {
+      "step": 26,
+      "context": "pizza_intro",
+      "message": "Summarize the key differences between all three styles",
+      "expected": "Neapolitan: thin soft crust, 60-90sec at 905°F, buffalo mozzarella, simple toppings, wood-fired. New York: thin crispy, 12-15min at 500°F, low-moisture mozzarella, diverse toppings, gas oven, sold by slice. Chicago: thick 2-3in, 30-45min at 425°F, reverse layered, heavy toppings, fork and knife",
+      "node_type": "main",
+      "action": "switch_node",
+      "linear_failure_risk": "catastrophic - ultimate synthesis of all 25 steps, baseline has completely lost ability to separate the three pizza styles"
+    }
+  ]
+}

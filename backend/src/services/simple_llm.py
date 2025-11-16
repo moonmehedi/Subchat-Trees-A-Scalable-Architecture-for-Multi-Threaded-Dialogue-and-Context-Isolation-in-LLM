@@ -65,7 +65,7 @@ class SimpleLLMClient:
                     model=settings.model_base,
                     messages=context_messages,
                     max_tokens=1000,  # Increased for longer responses
-                    temperature=0.7,
+                    temperature=0.0,  # Deterministic for reproducible testing
                     stream=False  # Non-streaming version
                 )
                 # Store usage data for retrieval
@@ -124,7 +124,7 @@ class SimpleLLMClient:
                     model=settings.model_base,
                     messages=context_messages,
                     max_tokens=1000,
-                    temperature=0.7,
+                    temperature=0.0,  # Deterministic for reproducible testing
                     stream=True  # Enable streaming
                 )
                 
@@ -199,7 +199,7 @@ class SimpleLLMClient:
                     tool_choice="auto",  # LLM decides
                     stream=False,  # Need complete response to check for tool calls
                     max_tokens=1000,
-                    temperature=0.7
+                    temperature=0.0  # Deterministic for reproducible testing
                 )
                 
                 # Check if LLM wants to use tools
@@ -256,7 +256,7 @@ class SimpleLLMClient:
                         messages=context_messages,
                         stream=True,
                         max_tokens=1000,
-                        temperature=0.7
+                        temperature=0.0  # Deterministic for reproducible testing
                     )
                     
                     for chunk in final_response:
@@ -273,7 +273,7 @@ class SimpleLLMClient:
                         messages=context_messages,
                         stream=True,
                         max_tokens=1000,
-                        temperature=0.7
+                        temperature=0.0  # Deterministic for reproducible testing
                     )
                     
                     for chunk in streaming_response:
@@ -393,7 +393,7 @@ Retrieval memory is for remembering, not researching.
                     tool_choice="auto",  # LLM decides based on CoT guidance
                     stream=False,
                     max_tokens=1000,
-                    temperature=0.7
+                    temperature=0.0  # Deterministic for reproducible testing
                 )
                 
                 # Log CoT thinking
@@ -474,7 +474,7 @@ Retrieval memory is for remembering, not researching.
                         messages=context_messages,
                         stream=True,
                         max_tokens=1000,
-                        temperature=0.7
+                        temperature=0.0  # Deterministic for reproducible testing
                     )
                     
                     for chunk in final_response:
@@ -504,7 +504,7 @@ Retrieval memory is for remembering, not researching.
                         messages=context_messages,
                         stream=True,
                         max_tokens=1000,
-                        temperature=0.7
+                        temperature=0.0  # Deterministic for reproducible testing
                     )
                     
                     for chunk in streaming_response:

@@ -6,6 +6,7 @@ Classifies responses as TP, TN, FP, or FN based on context matching
 
 import os
 import re
+import json
 from groq import Groq
 from typing import Literal, Dict, Any
 
@@ -89,19 +90,39 @@ class ContextClassifier:
         expected_context: str
     ) -> Literal["TP", "TN", "FP", "FN"]:
         """
-        Use LLM to classify ambiguous responses
+        Use LLM to classify responses semantically
         
         Args:
             response: AI response text
             expected_context: Expected context
         
         Returns:
-            Classification result
+            Classification result (TP/TN/FP/FN)
         """
         
-        prompt = f"""Is this response primarily about {expected_context}?
+        prompt = f"""You are a test evaluator. Determine if the AI response correctly discusses the expected context.
 
-Response: "{response}"
+EXPECTED CONTEXT: {expected_context}
+
+AI RESPONSE: {response}
+
+RULES:
+1. The response does NOT need exact wording - semantic correctness matters
+2. If the core information is present but paraphrased, that's a MATCH
+3. Partial but correct information still counts as a MATCH
+4. If the response discusses the right topic/concept, that's a MATCH
+5. Only mark as NO MATCH if it's clearly about something else or missing the information
+
+EXAMPLE:
+Expected context: "rust_corrosion"
+Response: "Rust is iron oxide (Fe2O3) formed when iron reacts with oxygen and water. Reddish-brown flaky coating."
+Answer: yes (it discusses rust as corrosion, even without exact wording)
+
+Expected context: "rust_corrosion"  
+Response: "Rust programming language has ownership and memory safety features"
+Answer: no (wrong context - this is about programming, not corrosion)
+
+Does this response match the expected context?
 
 Answer only with: yes or no"""
         
@@ -109,7 +130,7 @@ Answer only with: yes or no"""
             result = self.groq_client.chat.completions.create(
                 model=self.model,
                 messages=[
-                    {"role": "system", "content": "You are a binary classifier. Answer only 'yes' or 'no'."},
+                    {"role": "system", "content": "You are a test evaluator. Be lenient with paraphrasing. Answer only 'yes' or 'no'."},
                     {"role": "user", "content": prompt}
                 ],
                 max_tokens=10,

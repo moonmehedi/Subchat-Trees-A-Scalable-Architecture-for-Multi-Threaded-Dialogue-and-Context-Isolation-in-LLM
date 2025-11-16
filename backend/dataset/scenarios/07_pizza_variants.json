@@ -1,7 +1,7 @@
 {
   "scenario_name": "Pizza Regional Variants Comparison",
   "description": "Tests ability to maintain distinct characteristics of three pizza styles. Baseline will conflate Neapolitan, New York, and Chicago pizza attributes.",
-  "steps": [
+  "conversations": [
     {
       "step": 1,
       "context": "pizza_intro",

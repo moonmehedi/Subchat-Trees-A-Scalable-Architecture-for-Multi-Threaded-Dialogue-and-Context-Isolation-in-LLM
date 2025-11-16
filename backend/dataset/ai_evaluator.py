@@ -16,13 +16,13 @@ from groq import Groq
 class AIEvaluator:
     """Evaluates test responses using AI for semantic understanding."""
     
-    def __init__(self, model: str = "llama-3.1-8b-instant", temperature: float = 0.1):
+    def __init__(self, model: str = "llama-3.1-8b-instant", temperature: float = 0.0):
         """
         Initialize the AI Evaluator.
         
         Args:
             model: The model to use for evaluation (via GROQ API)
-            temperature: Temperature for model responses (lower = more deterministic)
+            temperature: Temperature for model responses (0.0 = fully deterministic for reproducibility)
         """
         self.model = model
         self.temperature = temperature

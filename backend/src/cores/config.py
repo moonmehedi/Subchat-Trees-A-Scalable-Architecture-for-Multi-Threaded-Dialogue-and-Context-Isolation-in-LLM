@@ -22,7 +22,7 @@ class Setting(BaseModel):
     
     # Model configurations - centralized model names
     model_tool_calling: str = 'llama-3.3-70b-versatile'  # For tool/function calling decisions
-    model_base: str = 'openai/gpt-oss-20b'  # For conversation, reasoning, and response generation
+    model_base: str = 'llama-3.1-8b-instant'  # For conversation, reasoning, and response generation
 
     #chip: llama-3.1-8b-instant base:openai/gpt-oss-20b toolcalling:llama-3.3-70b-versatile
     def __init__(self, **kwargs):

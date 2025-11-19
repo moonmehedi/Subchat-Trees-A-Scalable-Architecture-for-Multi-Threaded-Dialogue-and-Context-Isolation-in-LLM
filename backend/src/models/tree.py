@@ -120,12 +120,6 @@ class LocalBuffer:
         - Msg 20: Summarize m6-m10 (oldest in buffer [m6...m20]) + previous summary
         - Msg 25: Summarize m11-m15 (oldest in buffer [m11...m25]) + previous summary
         """
-        print(f"🔍 DEBUG: llm_client type = {type(self.llm_client)}, value = {self.llm_client}")
-        if self.llm_client:
-            print(f"🔍 DEBUG: Has groq_client? {hasattr(self.llm_client, 'groq_client')}")
-            if hasattr(self.llm_client, 'groq_client'):
-                print(f"🔍 DEBUG: groq_client value = {self.llm_client.groq_client}")
-        
         if not self.llm_client:
             print("⚠️  No LLM client available - skipping summarization")
             return
@@ -260,6 +254,38 @@ Summary:"""
     def get_buffer_messages(self) -> List[str]:
         """Get list of message texts currently in buffer (for debugging/comparison)"""
         return [msg['text'] for msg in self.turns]
+    
+    def get_context_messages(self, include_summary: bool = True) -> List[Dict[str, Any]]:
+        """
+        Get context messages for LLM (buffer + optional summary).
+        
+        This builds the conversation context that gets sent to the LLM,
+        optionally including the rolling summary of archived messages.
+        
+        Args:
+            include_summary: Whether to include rolling summary as first message
+            
+        Returns:
+            List of message dicts with 'role' and 'content' keys, in chronological order.
+            If summary exists and include_summary=True, it appears first as a system message.
+        """
+        messages = []
+        
+        # 1. Add rolling summary as system message (if available and requested)
+        if include_summary and self.summary:
+            messages.append({
+                "role": "system",
+                "content": f"📋 CONVERSATION SUMMARY (older archived context):\n{self.summary}\n\n---\nRecent messages in buffer follow below:"
+            })
+        
+        # 2. Add all current buffer messages in chronological order
+        for msg in self.turns:
+            messages.append({
+                "role": msg["role"],
+                "content": msg["text"]
+            })
+        
+        return messages
     
     def clear(self, n: int = None):
         """Clear last n messages from buffer, or all if n is None."""

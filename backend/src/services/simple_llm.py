@@ -44,13 +44,9 @@ class SimpleLLMClient:
                 'content': f"FOLLOW-UP CONTEXT: {follow_up_prompt}"
             })
 
-        # Add recent messages from current node
-        recent = node.buffer.get_recent(10)
-        for msg in recent:
-            context_messages.append({
-                'role': msg['role'],
-                'content': msg['text']
-            })
+        # ✅ GET BUFFER MESSAGES WITH SUMMARY (for non-streaming too!)
+        buffer_messages = node.buffer.get_context_messages(include_summary=True)
+        context_messages.extend(buffer_messages)
 
         # Add current user message
         context_messages.append({
@@ -102,13 +98,9 @@ class SimpleLLMClient:
                 'content': f"FOLLOW-UP CONTEXT: {follow_up_prompt}"
             })
 
-        # Add recent messages from current node
-        recent = node.buffer.get_recent(10)
-        for msg in recent:
-            context_messages.append({
-                'role': msg['role'],
-                'content': msg['text']
-            })
+        # ✅ GET BUFFER MESSAGES WITH SUMMARY (for baseline too!)
+        buffer_messages = node.buffer.get_context_messages(include_summary=True)
+        context_messages.extend(buffer_messages)
 
         # Add current user message
         # context_messages.append({
@@ -344,13 +336,20 @@ Never mention tools or searching.
                 'content': f"FOLLOW-UP CONTEXT: {follow_up_prompt}"
             })
 
-        # Add recent messages from current node
-        recent = node.buffer.get_recent(10)
-        for msg in recent:
-            context_messages.append({
-                'role': msg['role'],
-                'content': msg['text']
-            })
+        # ✅ GET BUFFER MESSAGES WITH SUMMARY!
+        # This now includes the rolling summary as first message (if it exists)
+        buffer_messages = node.buffer.get_context_messages(include_summary=True)
+        context_messages.extend(buffer_messages)
+        
+        # Debug: Check if summary is in context
+        summary_msg = next((msg for msg in context_messages if "CONVERSATION SUMMARY" in msg.get("content", "")), None)
+        if summary_msg:
+            summary_length = len(summary_msg['content'])
+            summary_preview = summary_msg['content'][:150].replace('\n', ' ')
+            print(f"✅ Summary included in context ({summary_length} chars)")
+            print(f"   Preview: {summary_preview}...")
+        else:
+            print(f"ℹ️  No summary in context (buffer has {len(buffer_messages)} messages)")
         
         # # Add current user message
         # context_messages.append({

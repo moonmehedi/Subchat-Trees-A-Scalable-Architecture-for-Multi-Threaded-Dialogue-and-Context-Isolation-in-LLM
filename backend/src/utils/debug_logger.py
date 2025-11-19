@@ -147,9 +147,9 @@ class DebugLogger:
                     f.write(f"   {text}\n")
                     f.write(f"   {'-'*76}\n\n")
     
-    def log_buffer(self, node_id: str, buffer_messages: List[Dict[str, Any]], max_turns: int):
+    def log_buffer(self, node_id: str, buffer_messages: List[Dict[str, Any]], max_turns: int, summary: str = ""):
         """
-        Log all messages currently in the buffer.
+        Log all messages currently in the buffer plus rolling summary.
         """
         mode = 'a' if self.append_mode else 'w'
         with open(self.buffer_log, mode, encoding='utf-8') as f:
@@ -165,6 +165,14 @@ class DebugLogger:
             
             f.write(f"📍 NODE: {node_id}\n")
             f.write(f"📊 BUFFER SIZE: {len(buffer_messages)}/{max_turns}\n")
+            
+            # Add summary section if exists
+            if summary:
+                f.write(f"\n{'='*80}\n")
+                f.write(f"📝 ROLLING SUMMARY ({len(summary)} chars):\n")
+                f.write(f"{'='*80}\n")
+                f.write(f"{summary}\n")
+            
             f.write(f"\n{'='*80}\n")
             f.write(f"ALL BUFFER MESSAGES ({len(buffer_messages)} total):\n")
             f.write(f"{'='*80}\n\n")

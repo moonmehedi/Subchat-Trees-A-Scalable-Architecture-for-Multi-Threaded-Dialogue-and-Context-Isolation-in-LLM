@@ -673,9 +673,9 @@ class SimpleChat:
         from .chat_manager import ChatGraphManager
         from .forest import Forest
 
-        self.chat_manager = ChatGraphManager()
-        self.forest = Forest()
         self.llm = SimpleLLMClient(enable_vector_index=enable_rag)
+        self.chat_manager = ChatGraphManager(llm_client=self.llm)  # Pass LLM client for summarization
+        self.forest = Forest()
         self.enable_rag = enable_rag
         
         # Update chat_manager to use vector index

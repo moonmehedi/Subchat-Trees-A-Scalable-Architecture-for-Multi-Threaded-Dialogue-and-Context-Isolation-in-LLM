@@ -306,55 +306,33 @@ class SimpleLLMClient:
         # ✅ Chain-of-Thought: Concise reasoning framework
         context_messages.append({
             'role': 'system',
-            'content': """When answering questions, follow this reasoning process:
+            'content': """Use retrieval ONLY when the user explicitly says:
+“that I have previously mentioned”
+(or a direct statement that they want info from earlier conversations).
 
-🧠 OPTIMIZED DECISION FRAMEWORK FOR RETRIEVAL MEMORY
+Otherwise never use retrieval.
 
-⚙️ DEFAULT BEHAVIOR
-Do NOT use the search tool by default.
-First, check the last 10 messages (buffer).
-Only trigger retrieval when the answer cannot be found in the buffer
-and it clearly concerns the user’s past info or older discussions.
+Do NOT retrieve if:
 
-✅ USE THE TOOL ONLY IF ALL CONDITIONS ARE TRUE:
-1. The question is about the user’s personal info
-   (e.g., name, age, job, studies, hobbies, preferences)
-   OR it asks about something previously discussed (in older conversations).
-2. The information is not in the recent buffer (last ~10 messages).
-3. You are certain the info was shared earlier (not guessing).
+The answer is already there.
 
-📘 GOOD USE EXAMPLES:
-- “What’s my name again?”
-- “Where do I study/work?”
-- “What project was I working on last month?”
-- “What did we discuss about France last week?”
-- “Earlier you mentioned my research topic — what was it?”
+The question is general knowledge, follow-up, or chit-chat. 
 
-🚫 NEVER USE FOR THESE:
-- General knowledge: “What is quantum computing?”, “What is Python?”
-- Current context or follow-up: “Tell me more”, “Can you explain that?”
-- Chit-chat: “Hi”, “How are you?”, “Thanks”
-- General advice or goals: “How can I be successful?”, “Where should I travel this summer?”
-- Any question clearly answerable from the current buffer
+You are unsure the info exists.
 
-⚠️ SPECIAL RULES:
-- If you’re unsure, DO NOT use the tool.
-- If retrieval returns irrelevant or mismatched results, ignore them completely and answer from reasoning.
-- Never mention searching, memory, or tools — respond as if you remembered naturally.
-- Retrieval should feel like authentic recall, not database lookup.
+Retrieve ONLY if ALL are true:
 
-🔍 QUICK DECISION CHECKLIST (Yes = Use)
-| Condition | Example | Decision |
-|------------|----------|----------|
-| Asking about user’s past info | “What did I tell you about my pet?” | ✅ |
-| Refers to older topic | “What was my last project?” | ✅ |
-| Info is in recent buffer | “You said I like cats?” | ❌ |
-| General/world knowledge | “What is AI?” | ❌ |
-| Uncertain or vague | “Tell me about success” | ❌ |
+User explicitly indicates they want past info (e.g., “that I mentioned before”).
 
-🧭 CORE PRINCIPLE
-When in doubt, don’t use the tool.
-Retrieval memory is for remembering, not researching.
+Info is not in the recent buffer.
+
+You are sure the info was shared earlier.
+
+If retrieval returns irrelevant results: ignore them.
+
+IF confused then dont use retrieval 
+
+Never mention tools or searching.
 """
         })
 

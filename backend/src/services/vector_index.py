@@ -10,6 +10,7 @@ ENHANCED WITH:
 
 import chromadb
 from chromadb.config import Settings
+from chromadb.utils import embedding_functions
 from typing import List, Dict, Optional, Any, Set
 import os
 from pathlib import Path
@@ -319,12 +320,19 @@ class GlobalVectorIndex:
             )
         )
         
-        # Create new collection (always fresh)
+        # 🔥 Use better embedding model for improved semantic search
+        # Options: 'all-mpnet-base-v2' (best), 'multi-qa-mpnet-base-dot-v1' (QA-optimized), 'all-MiniLM-L12-v2' (faster)
+        embedding_function = embedding_functions.SentenceTransformerEmbeddingFunction(
+            model_name="all-mpnet-base-v2"  # 🔥 UPGRADE: Much better than default all-MiniLM-L6-v2
+        )
+        
+        # Create new collection (always fresh) with better embeddings
         self.collection = self.client.create_collection(
             name="conversation_archive",
-            metadata={"description": "Archived conversation messages beyond buffer"}
+            metadata={"description": "Archived conversation messages beyond buffer"},
+            embedding_function=embedding_function
         )
-        print(f"✅ Created fresh vector collection (0 messages)")
+        print(f"✅ Created fresh vector collection with all-mpnet-base-v2 embeddings (0 messages)")
         
         self.persist_dir = persist_dir
         
@@ -332,6 +340,7 @@ class GlobalVectorIndex:
         try:
             self.query_decomposer = QueryDecomposer()
             self.context_retriever = ContextWindowRetriever(self.collection)
+            # Note: Cross-encoder re-ranking disabled - embedding similarity (all-mpnet-base-v2) works better for conversational context
             print(f"✅ Initialized multi-query decomposition + context windows")
         except Exception as e:
             print(f"⚠️  Failed to initialize enhanced retrieval: {e}")
@@ -484,6 +493,7 @@ class GlobalVectorIndex:
             # PHASE 2: Retrieve with each sub-query
             all_results = []
             seen_message_ids: Set[str] = set()
+            seen_texts: Set[str] = set()  # 🆕 Track seen message texts for deduplication
             sub_query_results = {}  # Track results per sub-query for logging
             
             for i, sub_query in enumerate(sub_queries, 1):
@@ -503,26 +513,24 @@ class GlobalVectorIndex:
                 else:
                     where_clause = {"archived": {"$eq": True}}
                 
-                # Query collection
+                # Query collection - fetch more results to ensure we get enough unique ones
                 results = self.collection.query(
                     query_texts=[sub_query],
-                    n_results=min(5, self.collection.count()),  # Get top 5 per sub-query
+                    n_results=min(20, self.collection.count()),  # Fetch 20 to find 5 unique
                     where=where_clause if where_clause else None
                 )
                 
-                # Parse results
+                # Parse results and deduplicate by text
+                unique_count = 0  # Track unique results for this sub-query
                 if results and results['documents'] and results['documents'][0]:
                     for j, doc in enumerate(results['documents'][0]):
+                        # Stop if we already have 5 unique results for this sub-query
+                        if unique_count >= 5:
+                            break
+                        
                         metadata = results['metadatas'][0][j] if results['metadatas'] else {}
                         distance = results['distances'][0][j] if results['distances'] else 1.0
-                        score = 1.0 - distance  # Convert distance to similarity
-                        
-                        # Store result for this sub-query (for logging)
-                        sub_query_results[sub_query].append({
-                            "text": doc,
-                            "score": score,
-                            "metadata": metadata
-                        })
+                        score = max(0.0, 1.0 - distance)  # Fix: Clamp negative scores to 0
                         
                         # Filter by timestamp if cutoff provided
                         if exclude_buffer_cutoff:
@@ -531,11 +539,20 @@ class GlobalVectorIndex:
                                 print(f"   ⏭️  Skipped (in buffer): {doc[:80]}...")
                                 continue  # Skip messages still in buffer
                         
-                        # Create unique ID for deduplication
+                        # 🆕 Check for duplicate text (normalize for comparison)
+                        normalized_text = doc.strip().lower()
+                        if normalized_text in seen_texts:
+                            print(f"   ⏭️  Skipped duplicate: {doc[:80]}...")
+                            continue  # Skip duplicate, search for next unique
+                        
+                        # Create unique ID for deduplication by message ID
                         msg_id = f"{metadata.get('node_id', '')}_{metadata.get('timestamp', 0)}"
                         
                         if msg_id not in seen_message_ids:
+                            # First time seeing this text and message ID - keep it
                             seen_message_ids.add(msg_id)
+                            seen_texts.add(normalized_text)  # 🆕 Track text
+                            unique_count += 1  # Increment unique counter
                             
                             all_results.append({
                                 "text": doc,
@@ -543,6 +560,13 @@ class GlobalVectorIndex:
                                 "metadata": metadata,
                                 "sub_query": sub_query,  # Track which sub-query found this
                                 "message_id": msg_id
+                            })
+                            
+                            # ✅ Store result for this sub-query AFTER deduplication (for logging)
+                            sub_query_results[sub_query].append({
+                                "text": doc,
+                                "score": score,
+                                "metadata": metadata
                             })
                             
                             print(f"   ✓ Found: {doc[:80]}... (score: {score:.3f})")
@@ -592,9 +616,17 @@ class GlobalVectorIndex:
                 print(f"   ✓ Expanded to {len(expanded_results)} messages (including context)")
                 all_results = expanded_results
             
-            # PHASE 4: Sort by score and timestamp, then return top_k
-            all_results.sort(key=lambda x: (x['score'], -x['metadata'].get('timestamp', 0)), reverse=True)
+            # PHASE 4: Re-Ranking
+            print(f"\n{'='*80}")
+            print(f"🎯 RE-RANKING ({len(all_results)} candidates)")
+            print(f"{'='*80}")
+            
+            # Sort by embedding similarity score (all-mpnet-base-v2 is quite good!)
+            # Higher scores are better (similarity scores), recent timestamps as tiebreaker
+            all_results.sort(key=lambda x: (x['score'], x['metadata'].get('timestamp', 0)), reverse=True)
             final_results = all_results[:top_k]
+            
+            print(f"✅ Selected top {len(final_results)} results by embedding similarity")
             
             # Log retrieval to BOTH loggers
             logger_overwrite = get_debug_logger(append_mode=False)  # For user viewing

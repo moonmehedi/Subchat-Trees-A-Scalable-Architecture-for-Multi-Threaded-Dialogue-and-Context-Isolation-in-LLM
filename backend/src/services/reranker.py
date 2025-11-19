@@ -22,13 +22,14 @@ class SimpleReranker:
             # Try to import sentence-transformers for re-ranking
             from sentence_transformers import CrossEncoder
             
-            # Use a lightweight cross-encoder model for re-ranking
-            # This model is specifically trained for semantic similarity
-            model_name = "cross-encoder/ms-marco-MiniLM-L-6-v2"
+            # Use MS MARCO cross-encoder (trained on 500k query-passage pairs)
+            # Despite negative logits, it DOES understand query→answer relationships
+            # Higher (less negative) scores = more relevant
+            model_name = "cross-encoder/ms-marco-MiniLM-L-12-v2"  # Larger, more accurate than L-6
             
             print(f"🔄 Loading re-ranker model: {model_name}")
             self.model = CrossEncoder(model_name)
-            print(f"✅ Re-ranker loaded successfully")
+            print(f"✅ Re-ranker loaded successfully (outputs logits, higher=better)")
             
         except ImportError:
             print("⚠️  sentence-transformers not installed - re-ranking disabled")

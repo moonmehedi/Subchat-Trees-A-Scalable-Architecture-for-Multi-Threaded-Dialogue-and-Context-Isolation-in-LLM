@@ -12,10 +12,11 @@ class Forest:
 
     def create_tree(self,title:str = "Root Conversations",chat_manager:Optional[ChatGraphManager]=None)->TreeNode:
         """ create new root-level conversation tree and coordinate with chat manager. """
-        # Get vector_index from chat_manager if available
+        # Get vector_index and llm_client from chat_manager if available
         vector_index = chat_manager.vector_index if chat_manager else None
+        llm_client = chat_manager.llm_client if chat_manager else None
         
-        root = TreeNode(title=title, vector_index=vector_index)
+        root = TreeNode(title=title, vector_index=vector_index, llm_client=llm_client)
         self.trees_map[root.node_id]=root
         self.active_tree_id = root.node_id
 

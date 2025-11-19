@@ -3,10 +3,11 @@ from ..models.tree import TreeNode
 
 class ChatGraphManager:
     """ Manages the entire chat graph with nodes and navigation """
-    def __init__(self):
+    def __init__(self, llm_client=None):
         self.node_map:Dict[str,TreeNode] = {}
         self.active_node_id:Optional[str] = None
         self.vector_index = None  # Will be set by SimpleChat if RAG enabled
+        self.llm_client = llm_client  # For summarization in buffers
 
     def create_node(self, title: str, parent_id: Optional[str] = None, 
                    selected_text: str = None, follow_up_context: str = None, 
@@ -14,7 +15,7 @@ class ChatGraphManager:
         """Create new node with optional parent and follow-up context."""
 
         parent = self.node_map.get(parent_id) if parent_id else None
-        node = TreeNode(title=title, parent=parent, vector_index=self.vector_index)
+        node = TreeNode(title=title, parent=parent, vector_index=self.vector_index, llm_client=self.llm_client)
 
         # If this is a follow-up subchat, set the context information
         if parent and context_type == "follow_up":

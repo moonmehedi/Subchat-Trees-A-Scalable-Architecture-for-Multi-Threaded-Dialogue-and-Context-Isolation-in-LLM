@@ -5,13 +5,21 @@ from collections import deque
 from src.utils.debug_logger import get_debug_logger
 
 class LocalBuffer:
-    """Fixed-size message buffer per conversation node with auto-archiving."""
+    """Fixed-size message buffer per conversation node with auto-archiving and rolling summarization."""
 
-    def __init__(self, max_turns: int = 50, vector_index=None, node_id: str = None):
+    def __init__(self, max_turns: int = 50, vector_index=None, node_id: str = None, llm_client=None):
         self.turns: deque[Dict[str, Any]] = deque(maxlen=max_turns)
         self.vector_index = vector_index  # Reference to global vector index
         self.node_id = node_id  # Node ID for archiving
         self.max_turns = max_turns
+        self.llm_client = llm_client  # For generating summaries
+        
+        # Summarization tracking
+        self.summary: str = ""  # Rolling summary of old messages
+        self.summary_max_tokens: int = 500  # Max summary length
+        self.messages_processed_count: int = 0  # Total messages ever added to this buffer
+        self.summarization_interval: int = 5  # Summarize every 5 messages
+        self.summarization_start_threshold: int = 15  # Start summarizing after 15 messages
 
     def add_message(self, role: str, text: str, auto_archive: bool = True):
         """
@@ -57,7 +65,14 @@ class LocalBuffer:
             'timestamp': msg_timestamp  # ← Use SAME timestamp!
         })
         
-        # 4. Log buffer state to BOTH loggers
+        # Track total messages for summarization
+        self.messages_processed_count += 1
+        
+        # 3.5 Check if we need to create/update rolling summary
+        if self._should_summarize():
+            self._create_rolling_summary()
+        
+        # 4. Log buffer state to BOTH loggers (now includes summary)
         logger_overwrite = get_debug_logger(append_mode=False)  # For user viewing
         logger_append = get_debug_logger(append_mode=True)      # For full debugging
         
@@ -65,7 +80,8 @@ class LocalBuffer:
             logger.log_buffer(
                 node_id=self.node_id,
                 buffer_messages=list(self.turns),
-                max_turns=self.max_turns
+                max_turns=self.max_turns,
+                summary=self.summary  # Pass summary to logger
             )
         
         # 5. Show brief buffer state in terminal (last 3 messages)
@@ -74,6 +90,124 @@ class LocalBuffer:
         for i, msg in enumerate(recent_3, 1):
             msg_preview = msg['text'][:50] + ('...' if len(msg['text']) > 50 else '')
             print(f"   {i}. [{msg['role']}] {msg_preview}")
+    
+    def _should_summarize(self) -> bool:
+        """
+        Check if we should create/update summary.
+        
+        Summarization triggers:
+        - At message 15 (first time) - summarize messages 1-5 (oldest 5)
+        - At message 20 - summarize messages 6-10 (oldest 5 after 1-5 evicted)
+        - At message 25 - summarize messages 11-15 (oldest 5 after 6-10 evicted)
+        - Continue every 5 messages...
+        """
+        if self.messages_processed_count < self.summarization_start_threshold:
+            return False  # Not enough messages yet (need 15 first)
+        
+        # After reaching 15, check if we're at a 5-message interval
+        messages_since_first_summary = self.messages_processed_count - self.summarization_start_threshold
+        return messages_since_first_summary % self.summarization_interval == 0
+    
+    def _create_rolling_summary(self):
+        """
+        Create/update rolling summary of conversation.
+        
+        Summarizes the 5 OLDEST messages currently in buffer (FIFO order).
+        Each summary is appended to previous summary for rolling context.
+        
+        Timeline example:
+        - Msg 15: Summarize m1-m5 (oldest in buffer [m1...m15])
+        - Msg 20: Summarize m6-m10 (oldest in buffer [m6...m20]) + previous summary
+        - Msg 25: Summarize m11-m15 (oldest in buffer [m11...m25]) + previous summary
+        """
+        print(f"🔍 DEBUG: llm_client type = {type(self.llm_client)}, value = {self.llm_client}")
+        if self.llm_client:
+            print(f"🔍 DEBUG: Has groq_client? {hasattr(self.llm_client, 'groq_client')}")
+            if hasattr(self.llm_client, 'groq_client'):
+                print(f"🔍 DEBUG: groq_client value = {self.llm_client.groq_client}")
+        
+        if not self.llm_client:
+            print("⚠️  No LLM client available - skipping summarization")
+            return
+        
+        if len(self.turns) < 5:
+            print("⚠️  Not enough messages in buffer to summarize")
+            return
+        
+        # Get the 5 OLDEST messages from buffer (FIFO = first 5)
+        oldest_5_messages = list(self.turns)[:5]
+        
+        # Calculate which message numbers we're summarizing
+        start_msg_num = self.messages_processed_count - len(self.turns) + 1
+        end_msg_num = start_msg_num + 4
+        
+        # Format messages for LLM
+        conversation_text = "\n".join([
+            f"{msg['role'].upper()}: {msg['text']}" 
+            for msg in oldest_5_messages
+        ])
+        
+        # Build prompt
+        if self.summary:
+            # Re-summarize with previous summary (rolling update)
+            prompt = f"""You are maintaining a rolling summary of a conversation.
+
+PREVIOUS SUMMARY:
+{self.summary}
+
+NEW MESSAGES TO ADD (messages {start_msg_num}-{end_msg_num}):
+{conversation_text}
+
+Create an updated summary that:
+1. Includes key information from the previous summary
+2. Adds important details from the new messages (main topics, user info, preferences, facts)
+3. Removes redundant or less important information
+4. Stays concise (under {self.summary_max_tokens} tokens)
+
+Updated summary:"""
+        else:
+            # First summary (messages 1-5)
+            prompt = f"""Summarize the following conversation messages concisely.
+Focus on: main topics discussed, user information/preferences, key facts, important decisions.
+Keep under {self.summary_max_tokens} tokens.
+
+MESSAGES (messages {start_msg_num}-{end_msg_num}):
+{conversation_text}
+
+Summary:"""
+        
+        try:
+            # Call LLM to generate summary
+            response = self.llm_client.groq_client.chat.completions.create(
+                model="llama-3.3-70b-versatile",
+                messages=[{"role": "user", "content": prompt}],
+                max_tokens=self.summary_max_tokens,
+                temperature=0.3  # Lower temperature for consistent summarization
+            )
+            
+            new_summary = response.choices[0].message.content.strip()
+            old_summary_len = len(self.summary) if self.summary else 0
+            
+            self.summary = new_summary
+            
+            print(f"📝 Summary updated: {old_summary_len} → {len(new_summary)} chars (summarized messages {start_msg_num}-{end_msg_num})")
+            print(f"   Summary preview: {new_summary[:100]}{'...' if len(new_summary) > 100 else ''}")
+            
+        except Exception as e:
+            print(f"⚠️  Summarization failed: {e}")
+            import traceback
+            traceback.print_exc()
+    
+    def inherit_summary(self, parent_summary: str):
+        """
+        Called when creating a child node - inherit parent's accumulated knowledge.
+        Child starts with parent's summary and builds on top of it.
+        """
+        if parent_summary:
+            self.summary = parent_summary
+            summary_len = len(parent_summary)
+            print(f"📝 Inherited summary from parent ({summary_len} chars)")
+            print(f"   Preview: {parent_summary[:100]}{'...' if len(parent_summary) > 100 else ''}")
     
     def _archive_message(self, message: Dict[str, Any]):
         """
@@ -143,13 +277,18 @@ class LocalBuffer:
 class TreeNode:
     """Hierarchical conversation node."""
 
-    def __init__(self, node_id: Optional[str] = None, title: str = 'Untitled', parent: Optional['TreeNode'] = None, vector_index=None):
+    def __init__(self, node_id: Optional[str] = None, title: str = 'Untitled', parent: Optional['TreeNode'] = None, vector_index=None, llm_client=None):
         self.node_id: str = node_id if node_id else str(uuid.uuid4())
         self.title: str = title
         self.parent: Optional['TreeNode'] = parent
         self.children: List['TreeNode'] = []
-        self.buffer: LocalBuffer = LocalBuffer(max_turns=10, vector_index=vector_index, node_id=self.node_id)
+        self.buffer: LocalBuffer = LocalBuffer(max_turns=15, vector_index=vector_index, node_id=self.node_id, llm_client=llm_client)
         self.metadata: Dict[str, Any] = {}
+        self.llm_client = llm_client  # Store for child node creation
+        
+        # Inherit summary from parent if this is a child node
+        if parent and parent.buffer.summary:
+            self.buffer.inherit_summary(parent.buffer.summary)
         
         # Follow-up context fields - store information about what this subchat focuses on
         self.follow_up_context: Optional[Dict[str, Any]] = {

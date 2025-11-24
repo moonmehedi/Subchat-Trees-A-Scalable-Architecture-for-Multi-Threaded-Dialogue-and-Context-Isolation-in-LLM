@@ -1,5 +1,6 @@
 {
   "scenario_name": "Python Species Variants Confusion",
+  "conversation_title": "Python Species: Indian, African Rock, Reticulated",
   "description": "Tests ability to maintain distinct characteristics of Indian Python, African Rock Python, and Reticulated Python across 25 steps. Baseline will conflate sizes, habitats, and behaviors.",
   "conversations": [
     {

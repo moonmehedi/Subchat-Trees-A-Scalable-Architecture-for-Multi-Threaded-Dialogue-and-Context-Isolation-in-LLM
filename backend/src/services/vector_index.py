@@ -413,7 +413,7 @@ class GlobalVectorIndex:
         Args:
             node_id: ID of conversation node
             message: Message text to archive
-            metadata: Additional metadata (role, timestamp, etc.)
+            metadata: Additional metadata (role, timestamp, conversation_title, etc.)
         """
         try:
             # Create unique ID for this message
@@ -424,6 +424,7 @@ class GlobalVectorIndex:
                 "node_id": node_id,
                 "role": metadata.get("role", "unknown"),
                 "timestamp": float(metadata.get("timestamp", time.time())),
+                "conversation_title": metadata.get("conversation_title", "Untitled"),  # Store title
                 "archived": True  # Mark as archived (not in buffer)
             }
             
@@ -441,6 +442,61 @@ class GlobalVectorIndex:
             
         except Exception as e:
             print(f"⚠️  Failed to archive message: {e}")
+    
+    def update_conversation_title(self, node_id: str, new_title: str) -> int:
+        """
+        Update conversation_title metadata for all messages of a given node_id.
+        
+        This is called when auto_generate_title_if_needed() changes a title from "New Chat"
+        to an AI-generated title. It ensures all previously-indexed messages get the new title.
+        
+        Args:
+            node_id: The conversation node ID to update
+            new_title: The new title to set
+            
+        Returns:
+            Number of messages updated
+        """
+        try:
+            # Get all messages for this node_id
+            results = self.collection.get(
+                where={"node_id": node_id},
+                include=["metadatas", "documents", "embeddings"]
+            )
+            
+            if not results or not results['ids']:
+                print(f"⚠️  No messages found for node_id: {node_id}")
+                return 0
+            
+            # Update metadata for each message
+            # ChromaDB doesn't support in-place metadata updates, so we delete and re-add
+            updated_count = 0
+            for i, msg_id in enumerate(results['ids']):
+                metadata = results['metadatas'][i]
+                metadata['conversation_title'] = new_title
+                
+                # Delete old message
+                self.collection.delete(ids=[msg_id])
+                
+                # Re-add with updated metadata
+                self.collection.add(
+                    ids=[msg_id],
+                    documents=[results['documents'][i]],
+                    metadatas=[metadata],
+                    embeddings=[results['embeddings'][i]]
+                )
+                updated_count += 1
+            
+            print(f"✅ Updated {updated_count} messages with new title: '{new_title}'")
+            
+            # Refresh logs to show updated titles
+            self._print_all_indexed_messages()
+            
+            return updated_count
+            
+        except Exception as e:
+            print(f"⚠️  Failed to update conversation title: {e}")
+            return 0
     
     def retrieve_with_multi_query(
         self,

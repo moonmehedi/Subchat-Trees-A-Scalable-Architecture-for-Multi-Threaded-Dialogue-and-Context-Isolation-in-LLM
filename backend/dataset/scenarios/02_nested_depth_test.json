@@ -1,5 +1,6 @@
 {
   "scenario_name": "Nested Depth Test: 4-Layer Subchat Hierarchy",
+  "conversation_title": "Python Snake Species: 4-Layer Nested Discussion",
   "description": "Tests deep nesting: main -> subchat_1 -> subchat_1_1 -> subchat_1_1_1. Includes traversal between main and various child nodes to verify proper context isolation and parent-child relationships.",
   "conversations": [
     {

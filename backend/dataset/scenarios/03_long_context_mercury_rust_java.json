@@ -1,5 +1,6 @@
 {
   "scenario_name": "Semantic Confusion: Mercury, Rust, Java Cross-Context Chaos",
+  "conversation_title": "Mercury, Rust, Java: Multi-Meaning Semantic Confusion",
   "description": "Tests LLM's ability to handle SEMANTIC CONFUSION with randomized context switches. Humans can easily identify which meaning is asked, but baseline LLMs mix contexts due to overlapping vocabulary and random jumping between topics. Questions use ambiguous phrasing that requires tracking conversation history.",
   "conversations": [
     {

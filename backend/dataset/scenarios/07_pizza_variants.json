@@ -1,5 +1,6 @@
 {
   "scenario_name": "Pizza Regional Variants Comparison",
+  "conversation_title": "Pizza Styles: Neapolitan, New York, Chicago Deep-Dish",
   "description": "Tests ability to maintain distinct characteristics of three pizza styles. Baseline will conflate Neapolitan, New York, and Chicago pizza attributes.",
   "conversations": [
     {

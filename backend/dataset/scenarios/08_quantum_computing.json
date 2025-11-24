@@ -1,5 +1,6 @@
 {
   "scenario_name": "Quantum Computing Parallel Threads",
+  "conversation_title": "Quantum Computing: Qubits, Superposition, Entanglement, Algorithms",
   "description": "Tests ability to maintain 4 parallel quantum computing discussion threads: qubits, superposition, entanglement, and quantum algorithms. Baseline will mix concepts across domains.",
   "conversations": [
     {

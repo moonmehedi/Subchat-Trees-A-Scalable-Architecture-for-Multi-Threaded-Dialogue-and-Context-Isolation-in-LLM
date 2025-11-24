@@ -1,5 +1,6 @@
 {
   "scenario_name": "Jaguar Multi-Domain Ambiguity",
+  "conversation_title": "Jaguar: Animal, Car Brand, Console, Maya God",
   "description": "Tests ability to distinguish Jaguar the animal, Jaguar the car brand, Jaguar the Atari console, and Jaguar the Maya god across 25 steps with cross-domain queries.",
   "conversations": [
     {

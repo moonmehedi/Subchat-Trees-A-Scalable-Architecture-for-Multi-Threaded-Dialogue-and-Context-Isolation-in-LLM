@@ -46,8 +46,11 @@ class DebugLogger:
                 return
             
             for node_id, messages in messages_by_node.items():
+                # Get conversation title from first message metadata
+                conversation_title = messages[0]['metadata'].get('conversation_title', 'Untitled') if messages else 'Untitled'
+                
                 f.write(f"\n{'='*80}\n")
-                f.write(f"🗂️  Conversation: {node_id} ({len(messages)} messages)\n")
+                f.write(f"🗂️  Conversation: {node_id} ({len(messages)} messages) - {conversation_title}\n")
                 f.write(f"{'='*80}\n\n")
                 
                 for i, msg in enumerate(messages, 1):
@@ -147,7 +150,7 @@ class DebugLogger:
                     f.write(f"   {text}\n")
                     f.write(f"   {'-'*76}\n\n")
     
-    def log_buffer(self, node_id: str, buffer_messages: List[Dict[str, Any]], max_turns: int, summary: str = ""):
+    def log_buffer(self, node_id: str, buffer_messages: List[Dict[str, Any]], max_turns: int, summary: str = "", conversation_title: str = "Untitled"):
         """
         Log all messages currently in the buffer plus rolling summary.
         """
@@ -164,6 +167,7 @@ class DebugLogger:
             f.write("="*80 + "\n\n")
             
             f.write(f"📍 NODE: {node_id}\n")
+            f.write(f"💬 TITLE: {conversation_title}\n")
             f.write(f"📊 BUFFER SIZE: {len(buffer_messages)}/{max_turns}\n")
             
             # Add summary section if exists

@@ -1,5 +1,6 @@
 {
   "scenario_name": "Python Confusion: Programming vs Snake",
+  "conversation_title": "Python: Programming Language vs Snake Animal",
   "description": "Highly ambiguous questions that test context isolation - baseline will confuse snake and programming contexts",
   "conversations": [
     {

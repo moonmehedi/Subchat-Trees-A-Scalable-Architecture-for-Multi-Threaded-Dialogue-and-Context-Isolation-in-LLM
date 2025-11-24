@@ -7,10 +7,11 @@ from src.utils.debug_logger import get_debug_logger
 class LocalBuffer:
     """Fixed-size message buffer per conversation node with auto-archiving and rolling summarization."""
 
-    def __init__(self, max_turns: int = 50, vector_index=None, node_id: str = None, llm_client=None):
+    def __init__(self, max_turns: int = 50, vector_index=None, node_id: str = None, llm_client=None, node_title: str = None):
         self.turns: deque[Dict[str, Any]] = deque(maxlen=max_turns)
         self.vector_index = vector_index  # Reference to global vector index
         self.node_id = node_id  # Node ID for archiving
+        self.node_title = node_title  # Node title for display in logs
         self.max_turns = max_turns
         self.llm_client = llm_client  # For generating summaries
         
@@ -46,7 +47,8 @@ class LocalBuffer:
                     metadata={
                         'role': role,
                         'timestamp': msg_timestamp,  # ← Use SAME timestamp!
-                        'indexed_immediately': True  # Flag for debugging
+                        'indexed_immediately': True,  # Flag for debugging
+                        'conversation_title': self.node_title or 'Untitled'  # Add title for logging
                     }
                 )
                 print(f"💾 Indexed: [{role}] {text[:40]}{'...' if len(text) > 40 else ''}")
@@ -81,7 +83,8 @@ class LocalBuffer:
                 node_id=self.node_id,
                 buffer_messages=list(self.turns),
                 max_turns=self.max_turns,
-                summary=self.summary  # Pass summary to logger
+                summary=self.summary,  # Pass summary to logger
+                conversation_title=self.node_title  # Pass conversation title
             )
         
         # 5. Show brief buffer state in terminal (last 3 messages)
@@ -308,7 +311,7 @@ class TreeNode:
         self.title: str = title
         self.parent: Optional['TreeNode'] = parent
         self.children: List['TreeNode'] = []
-        self.buffer: LocalBuffer = LocalBuffer(max_turns=15, vector_index=vector_index, node_id=self.node_id, llm_client=llm_client)
+        self.buffer: LocalBuffer = LocalBuffer(max_turns=15, vector_index=vector_index, node_id=self.node_id, llm_client=llm_client, node_title=title)
         self.metadata: Dict[str, Any] = {}
         self.llm_client = llm_client  # Store for child node creation
         
@@ -368,10 +371,19 @@ class TreeNode:
         
         return " ".join(context_parts)
 
-    def auto_generate_title_if_needed(self, llm_client, user_message: str) -> bool:
+    def auto_generate_title_if_needed(self, llm_client, user_message: str):
         """🎯 SIMPLE: Generate title if node still has default 'New Chat' title."""
         if self.title == "New Chat":
             self.title = llm_client.generate_title_from_question(user_message)
+            self.buffer.node_title = self.title  # Update buffer's title reference
+            
+            # Update vector store metadata for all previously-indexed messages
+            if self.buffer.vector_index:
+                self.buffer.vector_index.update_conversation_title(
+                    self.node_id, 
+                    self.title
+                )
+            
             print(f"✅ Auto-generated title: '{self.title}'")
             return True
         return False

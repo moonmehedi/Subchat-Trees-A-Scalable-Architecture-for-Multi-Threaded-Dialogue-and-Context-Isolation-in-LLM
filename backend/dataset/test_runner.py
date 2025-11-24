@@ -207,6 +207,7 @@ class MetricsTestRunner:
             step = step_data["step"]
             context = step_data["context"]
             message = step_data["message"]
+            expected = step_data["expected"]
             
             # Use the same conversation for all messages
             node_id = main_node_id
@@ -236,7 +237,7 @@ class MetricsTestRunner:
             # Classify response
             classification_details = self.classifier.get_classification_details(
                 ai_message,
-                context
+                expected
             )
             
             classification = classification_details["classification"]
@@ -316,6 +317,7 @@ class MetricsTestRunner:
             step = step_data["step"]
             context = step_data["context"]
             message = step_data["message"]
+            expected = step_data["expected"]
             node_type = step_data.get("node_type", "main")
             action = step_data.get("action", "")
             
@@ -368,7 +370,7 @@ class MetricsTestRunner:
             # Classify response
             classification_details = self.classifier.get_classification_details(
                 ai_message,
-                context
+                expected
             )
             
             classification = classification_details["classification"]

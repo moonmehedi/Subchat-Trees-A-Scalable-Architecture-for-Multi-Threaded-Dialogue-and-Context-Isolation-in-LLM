@@ -90,39 +90,48 @@ class ContextClassifier:
         expected_context: str
     ) -> Literal["TP", "TN", "FP", "FN"]:
         """
-        Use LLM to classify responses semantically
+        Use LLM to classify responses with strict prefix checking
         
         Args:
             response: AI response text
-            expected_context: Expected context
+            expected_context: Expected context or strict prefix requirement
         
         Returns:
             Classification result (TP/TN/FP/FN)
         """
         
-        prompt = f"""You are a test evaluator. Determine if the AI response correctly discusses the expected context.
+        prompt = f"""You are a strict test evaluator checking AI RESPONSE topic  matches with  REQUIREMENT topic .
 
-EXPECTED CONTEXT: {expected_context}
+REQUIREMENT: {expected_context}
 
 AI RESPONSE: {response}
 
 RULES:
-1. The response does NOT need exact wording - semantic correctness matters
-2. If the core information is present but paraphrased, that's a MATCH
-3. Partial but correct information still counts as a MATCH
-4. If the response discusses the right topic/concept, that's a MATCH
-5. Only mark as NO MATCH if it's clearly about something else or missing the information
+1. Check IF both Topic matches and AI RESPONSE and REQUIREMENT relates to the same topic
+2. The very first word(s) in AI RESPONSE define the topic name, match this with Requirement
+3. If AI RESPONSE topic matches with starts with ANY of the rejected prefixes or topics , return NO
+4. Ignore everything after the prefix - we only care about the START
+5. Be STRICT - wrong prefix = NO, even if content is correct
 
-EXAMPLE:
-Expected context: "rust_corrosion"
-Response: "Rust is iron oxide (Fe2O3) formed when iron reacts with oxygen and water. Reddish-brown flaky coating."
-Answer: yes (it discusses rust as corrosion, even without exact wording)
+EXAMPLES:
 
-Expected context: "rust_corrosion"  
-Response: "Rust programming language has ownership and memory safety features"
-Answer: no (wrong context - this is about programming, not corrosion)
+Requirement: "Response must start with 'by_length:' (not odd_count:, not move_one_ball:)"
+Response: "by_length: Here is the solution..."
+Answer: yes
 
-Does this response match the expected context?
+Requirement: "Response must start with 'by_length:' (not odd_count:, not move_one_ball:)"
+Response: "odd_count: To solve by_length..."
+Answer: no (starts with wrong prefix odd_count:)
+
+Requirement: "Response must start with 'Python:' (not Java:, not C++:)"
+Response: "Python: Here's how to use lists..."
+Answer: yes
+
+Requirement: "Response must start with 'Python:' (not Java:, not C++:)"
+Response: "Java: You can use ArrayList..."
+Answer: no (starts with wrong prefix Java:)
+
+Does the response satisfy the requirement?
 
 Answer only with: yes or no"""
         
@@ -130,7 +139,7 @@ Answer only with: yes or no"""
             result = self.groq_client.chat.completions.create(
                 model=self.model,
                 messages=[
-                    {"role": "system", "content": "You are a test evaluator. Be lenient with paraphrasing. Answer only 'yes' or 'no'."},
+                    {"role": "system", "content": "You are a strict test evaluator. Check if the response contain the right topic name at the beginning. Answer only 'yes' or 'no'."},
                     {"role": "user", "content": prompt}
                 ],
                 max_tokens=10,
@@ -138,6 +147,8 @@ Answer only with: yes or no"""
             )
             
             answer = result.choices[0].message.content.strip().lower()
+
+            print('****************** The answer from LLm***************',answer,prompt)
             
             if "yes" in answer:
                 return "TP"

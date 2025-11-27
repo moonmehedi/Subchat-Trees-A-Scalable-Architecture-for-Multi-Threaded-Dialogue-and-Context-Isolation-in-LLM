@@ -1,35 +1,3 @@
-{
-  "movies": [{
-    "prefix": "movie_search",
-    "annotations": [
-      "name.movie",
-      "genre",
-      "name.theater",
-      "location.theater",
-      "time.start",
-      "time.end. ",
-      "price.ticket",
-      "type.screening",
-      "audience_rating",
-      "critic_rating",
-      "movie_rating",
-      "release_date",
-      "runtime",
-      "real_person",
-      "character",
-      "synopsis",
-      "streaming_service",
-      "other_description"
-    ]
-  }, {
-    "prefix": "movie_ticket",
-    "annotations": [
-      "name.movie",
-      "name.theater",
-      "num.tickets",
-      "time.start",
-      "type.screening",
-      "seating ticket_booking"
-    ]
-  }]
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:8403283526bb314e871850b98bb86a7987ef0af6fbbe4fb5a089ee9498584476
+size 671

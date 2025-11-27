@@ -1,26 +1,3 @@
-{
-  "restaurant_search": [{
-    "prefix": "restaurant",
-    "annotations": [
-      "name.restaurant",
-      "location",
-      "sub-location",
-      "type.food",
-      "menu_item",
-      "type.meal",
-      "rating ",
-      "price_range",
-      "business_hours",
-      "other_description"]
-  }, {
-    "prefix": "restaurant_reservation",
-    "annotations": [
-      "name.restaurant",
-      "name.reservation",
-      "num.guests",
-      "time.reservation",
-      "date.reservation",
-      "type.seating"
-    ]
-  }]
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:c9ead7985695b3feba1fb955e8407d806e4095f5459485adc5448ae89989e609
+size 512

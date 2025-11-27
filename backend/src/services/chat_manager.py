@@ -64,6 +64,13 @@ class ChatGraphManager:
         '''get all nodes'''
         return self.node_map
     
+    def get_all_roots(self) -> List[TreeNode]:
+        """Get all root nodes (nodes without parents)."""
+        roots = []
+        for node in self.node_map.values():
+            if node.parent is None:
+                roots.append(node)
+        return roots
     
     ##implement hirarchical get children later 
     """

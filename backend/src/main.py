@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from .api.endpoints import router
+from .api.tree_routes import router as tree_router
 from .cores.config import settings
 from pathlib import Path
 import time
@@ -52,6 +54,12 @@ app.add_middleware(
 
 # Include API routes
 app.include_router(router, prefix="/api")
+app.include_router(tree_router, prefix="/api")  # Tree visualization routes
+
+# Mount static files for tree visualization
+backend_dir = Path(__file__).parent.parent
+logs_dir = backend_dir / "logs"
+app.mount("/logs", StaticFiles(directory=str(logs_dir)), name="logs")
 
 @app.get("/")
 async def root():

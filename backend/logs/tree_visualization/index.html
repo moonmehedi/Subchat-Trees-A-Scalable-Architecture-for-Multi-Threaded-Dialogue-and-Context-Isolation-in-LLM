@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversation Tree Visualization</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            color: #667eea;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 16px;
+            margin-bottom: 25px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .stat-value {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.9;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .btn-secondary:hover {
+            background: #f0f4ff;
+        }
+
+        .auto-refresh-toggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-left: auto;
+            padding: 8px 16px;
+            background: white;
+            border-radius: 8px;
+            border: 2px solid #e0e0e0;
+        }
+
+        .auto-refresh-toggle span {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 26px;
+            background: #ccc;
+            border-radius: 13px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .toggle-switch.active {
+            background: #667eea;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.3s;
+        }
+
+        .toggle-switch.active .toggle-slider {
+            transform: translateX(24px);
+        }
+
+        .tree-container {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        #treeCanvas {
+            width: 100%;
+            height: 800px;
+            cursor: grab;
+            border-radius: 8px;
+        }
+
+        #treeCanvas:active {
+            cursor: grabbing;
+        }
+
+        .node circle {
+            stroke-width: 3px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .node circle:hover {
+            stroke-width: 4px;
+            filter: brightness(1.1);
+        }
+
+        .node text {
+            font-size: 14px;
+            font-weight: 600;
+            pointer-events: none;
+            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+        }
+
+        .node.root text {
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .link {
+            fill: none;
+            stroke: #999;
+            stroke-width: 2px;
+            stroke-opacity: 0.6;
+        }
+
+        .badge {
+            font-size: 11px;
+            font-weight: 700;
+            fill: white;
+        }
+
+        #loading {
+            text-align: center;
+            padding: 40px;
+            color: #667eea;
+            font-size: 18px;
+        }
+
+        #error {
+            display: none;
+            padding: 20px;
+            background: #fee;
+            border: 2px solid #fcc;
+            border-radius: 8px;
+            color: #c00;
+            margin: 20px;
+        }
+
+        .zoom-controls {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            z-index: 10;
+        }
+
+        .zoom-btn {
+            width: 40px;
+            height: 40px;
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            color: #667eea;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s;
+        }
+
+        .zoom-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .last-updated {
+            text-align: center;
+            margin-top: 15px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            color: #666;
+            font-size: 13px;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .loading-pulse {
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>
+                <span>🌳</span>
+                <span>Conversation Tree Visualization</span>
+            </h1>
+            <p class="subtitle">Real-time hierarchical view of multi-threaded conversations</p>
+
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-value" id="totalConversations">0</div>
+                    <div class="stat-label">Total Conversations</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="totalNodes">0</div>
+                    <div class="stat-label">Total Nodes</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="maxDepth">0</div>
+                    <div class="stat-label">Max Depth</div>
+                </div>
+            </div>
+
+            <div class="controls">
+                <button class="btn-primary" onclick="refreshTree()">
+                    <span>🔄</span>
+                    <span>Refresh</span>
+                </button>
+                <button class="btn-secondary" onclick="exportPNG()">
+                    <span>📷</span>
+                    <span>Export PNG</span>
+                </button>
+                <button class="btn-secondary" onclick="exportSVG()">
+                    <span>💾</span>
+                    <span>Export SVG</span>
+                </button>
+                <button class="btn-secondary" onclick="viewASCII()">
+                    <span>📝</span>
+                    <span>View ASCII</span>
+                </button>
+                <button class="btn-secondary" onclick="downloadJSON()">
+                    <span>📊</span>
+                    <span>Download JSON</span>
+                </button>
+                <div class="auto-refresh-toggle">
+                    <span>Auto-refresh:</span>
+                    <div class="toggle-switch" onclick="toggleAutoRefresh()">
+                        <div class="toggle-slider"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tree-container">
+            <div id="loading" class="loading-pulse">Loading conversation tree...</div>
+            <div id="error"></div>
+            <div class="zoom-controls">
+                <button class="zoom-btn" onclick="zoomIn()">+</button>
+                <button class="zoom-btn" onclick="zoomOut()">−</button>
+                <button class="zoom-btn" onclick="resetZoom()" title="Reset View">⟲</button>
+            </div>
+            <svg id="treeCanvas"></svg>
+            <div class="last-updated" id="lastUpdated">Last updated: Never</div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = window.location.origin;
+        let autoRefreshEnabled = false;
+        let autoRefreshInterval = null;
+        let treeData = null;
+        let lastDataHash = '';
+        
+        // D3 variables
+        let svg, g, zoom, currentTransform;
+        const width = window.innerWidth - 80;
+        const height = 800;
+        
+        // Tree layout configuration
+        const nodeRadius = 8;
+        const nodeSpacing = {
+            horizontal: 200, // Space between parent and child (vertical tree)
+            vertical: 100    // Space between siblings
+        };
+
+        // Initialize SVG
+        function initializeSVG() {
+            svg = d3.select('#treeCanvas')
+                .attr('width', width)
+                .attr('height', height);
+
+            // Clear any existing content
+            svg.selectAll('*').remove();
+
+            // Create zoom behavior
+            zoom = d3.zoom()
+                .scaleExtent([0.1, 4])
+                .on('zoom', (event) => {
+                    currentTransform = event.transform;
+                    g.attr('transform', event.transform);
+                });
+
+            svg.call(zoom);
+
+            // Create main group for all tree elements
+            g = svg.append('g');
+
+            // Set initial transform (centered)
+            currentTransform = d3.zoomIdentity.translate(width / 2, 50).scale(0.8);
+            svg.call(zoom.transform, currentTransform);
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeSVG();
+            refreshTree();
+        });
+
+        // Zoom controls
+        function zoomIn() {
+            svg.transition().duration(300).call(zoom.scaleBy, 1.3);
+        }
+
+        function zoomOut() {
+            svg.transition().duration(300).call(zoom.scaleBy, 0.7);
+        }
+
+        function resetZoom() {
+            const resetTransform = d3.zoomIdentity.translate(width / 2, 50).scale(0.8);
+            svg.transition().duration(500).call(zoom.transform, resetTransform);
+        }
+
+        async function refreshTree() {
+            try {
+                document.getElementById('loading').style.display = 'block';
+                document.getElementById('error').style.display = 'none';
+
+                const response = await fetch(`${API_BASE}/api/tree/structure`);
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                
+                const data = await response.json();
+                treeData = data;
+                
+                renderTree(data);
+                updateStats(data);
+                
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('lastUpdated').textContent = 
+                    `Last updated: ${new Date().toLocaleString()}`;
+            } catch (error) {
+                console.error('Error fetching tree:', error);
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('error').style.display = 'block';
+                document.getElementById('error').textContent = 
+                    `Error loading tree: ${error.message}. Make sure the backend is running.`;
+            }
+        }
+
+        function renderTree(data) {
+            if (!data || !data.conversations || data.conversations.length === 0) {
+                g.selectAll('*').remove();
+                g.append('text')
+                    .attr('x', 0)
+                    .attr('y', 0)
+                    .attr('text-anchor', 'middle')
+                    .attr('font-size', '18px')
+                    .attr('fill', '#999')
+                    .text('No conversations yet. Start chatting to see the tree!');
+                return;
+            }
+
+            // Clear previous tree
+            g.selectAll('*').remove();
+
+            let xOffset = 0;
+            const treeSeparation = 400; // Horizontal separation between trees
+
+            // Render each conversation tree
+            data.conversations.forEach((conversation, index) => {
+                // Extract the actual tree data from the wrapped structure
+                const treeData = conversation.tree || conversation;
+                const treeWidth = renderSingleTree(treeData, xOffset, index);
+                xOffset += treeWidth + treeSeparation;
+            });
+        }
+
+        function renderSingleTree(conversationData, xOffset, treeIndex) {
+            // Create hierarchical data structure
+            const root = d3.hierarchy(conversationData);
+
+            // Calculate tree dimensions based on node count
+            const nodeCount = root.descendants().length;
+            const treeWidth = Math.max(300, nodeCount * 80);
+            const treeHeight = 400;
+            
+            // Create tree layout (vertical: top-to-bottom)
+            const treeLayout = d3.tree()
+                .size([treeWidth, treeHeight])
+                .separation((a, b) => {
+                    // More separation for nodes at same level
+                    return (a.parent === b.parent ? 1 : 1.2);
+                });
+
+            // Generate tree
+            treeLayout(root);
+
+            // Create a separate group for this tree (for independent dragging)
+            const treeGroup = g.append('g')
+                .attr('class', `tree-group tree-${treeIndex}`)
+                .attr('data-x', xOffset)
+                .attr('data-y', 50)
+                .attr('transform', `translate(${xOffset}, 50)`);
+
+            // Add drag behavior to the tree group
+            const drag = d3.drag()
+                .on('start', function(event) {
+                    d3.select(this).raise().style('cursor', 'grabbing');
+                    event.sourceEvent.stopPropagation(); // Prevent zoom from triggering
+                })
+                .on('drag', function(event) {
+                    const el = d3.select(this);
+                    let x = parseFloat(el.attr('data-x')) || 0;
+                    let y = parseFloat(el.attr('data-y')) || 0;
+                    
+                    x += event.dx;
+                    y += event.dy;
+                    
+                    el.attr('data-x', x);
+                    el.attr('data-y', y);
+                    el.attr('transform', `translate(${x}, ${y})`);
+                })
+                .on('end', function() {
+                    d3.select(this).style('cursor', 'grab');
+                });
+
+            treeGroup.call(drag).style('cursor', 'grab');
+
+            // Adjust positions for vertical layout
+            root.descendants().forEach(d => {
+                const temp = d.x;
+                d.x = d.y; // depth becomes vertical position
+                d.y = temp; // spread becomes horizontal position
+            });
+
+            // Center the tree horizontally within its allocated space
+            const minY = d3.min(root.descendants(), d => d.y);
+            const maxY = d3.max(root.descendants(), d => d.y);
+            const centerOffset = (treeWidth - (maxY - minY)) / 2 - minY;
+            root.descendants().forEach(d => {
+                d.y += centerOffset;
+            });
+
+            // Draw links (connections between nodes)
+            treeGroup.selectAll(`.link-${conversationData.id}`)
+                .data(root.links())
+                .join('path')
+                .attr('class', `link link-${conversationData.id}`)
+                .attr('d', d3.linkVertical()
+                    .x(d => d.y)
+                    .y(d => d.x)
+                )
+                .attr('stroke', '#b0b0b0')
+                .attr('stroke-width', 2)
+                .attr('fill', 'none')
+                .attr('opacity', 0.6);
+
+            // Draw nodes
+            const nodes = treeGroup.selectAll(`.node-${conversationData.id}`)
+                .data(root.descendants())
+                .join('g')
+                .attr('class', d => `node node-${conversationData.id} ${d.depth === 0 ? 'root' : ''}`)
+                .attr('data-x', d => d.y)
+                .attr('data-y', d => d.x)
+                .attr('transform', d => `translate(${d.y},${d.x})`);
+
+            // Add drag behavior to each node
+            const nodeDrag = d3.drag()
+                .on('start', function(event) {
+                    event.sourceEvent.stopPropagation(); // Prevent tree drag
+                    d3.select(this).raise().style('cursor', 'grabbing');
+                })
+                .on('drag', function(event, d) {
+                    event.sourceEvent.stopPropagation(); // Prevent tree drag
+                    const el = d3.select(this);
+                    let x = parseFloat(el.attr('data-x')) || d.y;
+                    let y = parseFloat(el.attr('data-y')) || d.x;
+                    
+                    x += event.dx;
+                    y += event.dy;
+                    
+                    el.attr('data-x', x);
+                    el.attr('data-y', y);
+                    el.attr('transform', `translate(${x}, ${y})`);
+                    
+                    // Update the node's position in data for link updates
+                    d.y = x;
+                    d.x = y;
+                    
+                    // Update connected links
+                    updateLinks();
+                })
+                .on('end', function() {
+                    d3.select(this).style('cursor', 'move');
+                });
+
+            nodes.call(nodeDrag).style('cursor', 'move');
+
+            // Function to update links when nodes move
+            function updateLinks() {
+                treeGroup.selectAll(`.link-${conversationData.id}`)
+                    .attr('d', d3.linkVertical()
+                        .x(d => d.y)
+                        .y(d => d.x)
+                    );
+            }
+
+            // Node circles with colors based on depth
+            nodes.append('circle')
+                .attr('r', d => d.depth === 0 ? 12 : 8)
+                .attr('fill', d => {
+                    if (d.depth === 0) return '#667eea'; // Root
+                    if (d.depth === 1) return '#764ba2'; // Level 1
+                    if (d.depth === 2) return '#f093fb'; // Level 2
+                    return '#4facfe'; // Deeper levels
+                })
+                .attr('stroke', '#fff')
+                .attr('stroke-width', 3)
+                .on('click', (event, d) => {
+                    event.stopPropagation(); // Prevent drag when clicking
+                    alert(`Title: ${d.data.title}\nMessages: ${d.data.message_count}\nChildren: ${d.data.children.length}`);
+                });
+
+            // Node labels
+            nodes.append('text')
+                .attr('dy', -18)
+                .attr('text-anchor', 'middle')
+                .attr('font-size', d => d.depth === 0 ? '15px' : '13px')
+                .attr('font-weight', d => d.depth === 0 ? '700' : '600')
+                .attr('fill', '#333')
+                .text(d => {
+                    const maxLength = 25;
+                    const title = d.data.title || 'Untitled';
+                    return title.length > maxLength ? title.substring(0, maxLength) + '...' : title;
+                })
+                .style('pointer-events', 'none');
+
+            // Message count badge
+            nodes.filter(d => d.data.message_count > 0)
+                .append('text')
+                .attr('dy', 4)
+                .attr('text-anchor', 'middle')
+                .attr('font-size', '10px')
+                .attr('font-weight', '700')
+                .attr('fill', 'white')
+                .attr('class', 'badge')
+                .text(d => d.data.message_count)
+                .style('pointer-events', 'none');
+
+            // Return the width of this tree for horizontal spacing
+            return treeWidth;
+        }
+
+        function updateStats(data) {
+            // Stats are in root-level metadata object
+            const metadata = data.metadata || {};
+            document.getElementById('totalConversations').textContent = metadata.total_conversations || data.conversations?.length || 0;
+            document.getElementById('totalNodes').textContent = metadata.total_nodes || 0;
+            
+            // Calculate max depth from conversations if not in metadata
+            let maxDepth = metadata.max_depth || 0;
+            if (!maxDepth && data.conversations) {
+                data.conversations.forEach(conv => {
+                    const tree = conv.tree || conv;
+                    const convMaxDepth = conv.metadata?.max_depth || calculateMaxDepth(tree);
+                    maxDepth = Math.max(maxDepth, convMaxDepth);
+                });
+            }
+            document.getElementById('maxDepth').textContent = maxDepth;
+        }
+        
+        function calculateMaxDepth(node, currentDepth = 0) {
+            if (!node.children || node.children.length === 0) return currentDepth;
+            return Math.max(...node.children.map(child => calculateMaxDepth(child, currentDepth + 1)));
+        }
+
+        function toggleAutoRefresh() {
+            autoRefreshEnabled = !autoRefreshEnabled;
+            const toggle = document.querySelector('.toggle-switch');
+            
+            if (autoRefreshEnabled) {
+                toggle.classList.add('active');
+                startAutoRefresh();
+            } else {
+                toggle.classList.remove('active');
+                stopAutoRefresh();
+            }
+        }
+
+        function startAutoRefresh() {
+            if (autoRefreshInterval) clearInterval(autoRefreshInterval);
+            if (autoRefreshEnabled) {
+                autoRefreshInterval = setInterval(async () => {
+                    try {
+                        const response = await fetch(`${API_BASE}/api/tree/structure`);
+                        const data = await response.json();
+                        const currentHash = JSON.stringify(data);
+                        
+                        // Only refresh if data actually changed
+                        if (currentHash !== lastDataHash) {
+                            console.log('Data changed, refreshing tree...');
+                            lastDataHash = currentHash;
+                            treeData = data;
+                            renderTree(data);
+                            updateStats(data);
+                            document.getElementById('lastUpdated').textContent = 
+                                `Last updated: ${new Date().toLocaleString()}`;
+                        }
+                    } catch (error) {
+                        console.error('Error checking for updates:', error);
+                    }
+                }, 3000); // Check every 3 seconds
+            }
+        }
+
+        function stopAutoRefresh() {
+            if (autoRefreshInterval) {
+                clearInterval(autoRefreshInterval);
+                autoRefreshInterval = null;
+            }
+        }
+
+        async function exportPNG() {
+            const svgElement = document.getElementById('treeCanvas');
+            const svgData = new XMLSerializer().serializeToString(svgElement);
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const img = new Image();
+            
+            canvas.width = width;
+            canvas.height = height;
+            
+            const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+            const url = URL.createObjectURL(svgBlob);
+            
+            img.onload = () => {
+                ctx.fillStyle = 'white';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.drawImage(img, 0, 0);
+                
+                canvas.toBlob(blob => {
+                    const downloadUrl = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = downloadUrl;
+                    a.download = `conversation-tree-${Date.now()}.png`;
+                    a.click();
+                    URL.revokeObjectURL(downloadUrl);
+                });
+                URL.revokeObjectURL(url);
+            };
+            
+            img.src = url;
+        }
+
+        async function exportSVG() {
+            const svgElement = document.getElementById('treeCanvas');
+            const svgData = new XMLSerializer().serializeToString(svgElement);
+            const blob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `conversation-tree-${Date.now()}.svg`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        async function viewASCII() {
+            try {
+                const response = await fetch(`${API_BASE}/api/tree/ascii`);
+                const text = await response.text();
+                const newWindow = window.open('', '_blank');
+                newWindow.document.write(`
+                    <html>
+                    <head>
+                        <title>ASCII Tree View</title>
+                        <style>
+                            body { 
+                                font-family: 'Courier New', monospace; 
+                                padding: 20px; 
+                                background: #1e1e1e; 
+                                color: #d4d4d4; 
+                            }
+                            pre { 
+                                white-space: pre-wrap; 
+                                line-height: 1.6;
+                            }
+                        </style>
+                    </head>
+                    <body><pre>${text}</pre></body>
+                    </html>
+                `);
+            } catch (error) {
+                alert('Error loading ASCII view: ' + error.message);
+            }
+        }
+
+        async function downloadJSON() {
+            if (!treeData) {
+                alert('No data available. Please refresh first.');
+                return;
+            }
+            
+            const blob = new Blob([JSON.stringify(treeData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `conversation-tree-${Date.now()}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            if (treeData) {
+                initializeSVG();
+                renderTree(treeData);
+            }
+        });
+    </script>
+</body>
+</html>

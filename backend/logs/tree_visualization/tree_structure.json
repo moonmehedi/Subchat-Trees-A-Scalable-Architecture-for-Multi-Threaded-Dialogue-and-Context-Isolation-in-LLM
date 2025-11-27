@@ -1,0 +1,241 @@
+{
+  "conversations": [
+    {
+      "tree": {
+        "id": "22713828-0bee-47ac-890a-3fecd678a9ea",
+        "title": "Casual Greeting Exchange Begins",
+        "depth": 0,
+        "path": [
+          "Casual Greeting Exchange Begins"
+        ],
+        "message_count": 4,
+        "has_summary": false,
+        "children": [
+          {
+            "id": "f03c2953-5f0a-468e-aa45-ff7423249aae",
+            "title": "Language with Complex Syntax",
+            "depth": 1,
+            "path": [
+              "Casual Greeting Exchange Begins",
+              "Language with Complex Syntax"
+            ],
+            "message_count": 6,
+            "has_summary": false,
+            "children": [],
+            "metadata": {
+              "created_at": "unknown",
+              "is_subchat": true,
+              "follow_up_context": {
+                "selected_text": "Easy-to-learn syntax",
+                "follow_up_intent": "explore this topic in detail",
+                "context_type": "follow_up"
+              }
+            }
+          },
+          {
+            "id": "a2b31e8d-53b3-4227-a411-39c82db22501",
+            "title": "Clarifying the Situation Details",
+            "depth": 1,
+            "path": [
+              "Casual Greeting Exchange Begins",
+              "Clarifying the Situation Details"
+            ],
+            "message_count": 6,
+            "has_summary": false,
+            "children": [
+              {
+                "id": "e0b970e0-b59c-423b-91bd-8f6f41d508a5",
+                "title": "Sharing Programming Code Examples",
+                "depth": 2,
+                "path": [
+                  "Casual Greeting Exchange Begins",
+                  "Clarifying the Situation Details",
+                  "Sharing Programming Code Examples"
+                ],
+                "message_count": 8,
+                "has_summary": false,
+                "children": [],
+                "metadata": {
+                  "created_at": "unknown",
+                  "is_subchat": true,
+                  "follow_up_context": {
+                    "selected_text": "TensorFlow: A libr",
+                    "follow_up_intent": "explore this topic in detail",
+                    "context_type": "follow_up"
+                  }
+                }
+              },
+              {
+                "id": "bb3824c7-5c3c-4174-a0a2-4c85401ca9fc",
+                "title": "Sharing Programming Code Examples",
+                "depth": 2,
+                "path": [
+                  "Casual Greeting Exchange Begins",
+                  "Clarifying the Situation Details",
+                  "Sharing Programming Code Examples"
+                ],
+                "message_count": 8,
+                "has_summary": false,
+                "children": [],
+                "metadata": {
+                  "created_at": "unknown",
+                  "is_subchat": true,
+                  "follow_up_context": {
+                    "selected_text": "Keras: A",
+                    "follow_up_intent": "explore this topic in detail",
+                    "context_type": "follow_up"
+                  }
+                }
+              },
+              {
+                "id": "3129241d-710c-4e27-af21-a817e9f6f825",
+                "title": "Code Snippet Request Clarified",
+                "depth": 2,
+                "path": [
+                  "Casual Greeting Exchange Begins",
+                  "Clarifying the Situation Details",
+                  "Code Snippet Request Clarified"
+                ],
+                "message_count": 8,
+                "has_summary": false,
+                "children": [],
+                "metadata": {
+                  "created_at": "unknown",
+                  "is_subchat": true,
+                  "follow_up_context": {
+                    "selected_text": "Scikit-learn",
+                    "follow_up_intent": "explore this topic in detail",
+                    "context_type": "follow_up"
+                  }
+                }
+              }
+            ],
+            "metadata": {
+              "created_at": "unknown",
+              "is_subchat": true,
+              "follow_up_context": {
+                "selected_text": "Web development",
+                "follow_up_intent": "explore this topic in detail",
+                "context_type": "follow_up"
+              }
+            }
+          },
+          {
+            "id": "9fb8d293-7f31-4716-848a-da020f93056d",
+            "title": "The Future of Artificial Intelligence",
+            "depth": 1,
+            "path": [
+              "Casual Greeting Exchange Begins",
+              "The Future of Artificial Intelligence"
+            ],
+            "message_count": 6,
+            "has_summary": false,
+            "children": [],
+            "metadata": {
+              "created_at": "unknown",
+              "is_subchat": true,
+              "follow_up_context": {
+                "selected_text": "Artificial intelligence and machine learning (e.g., TensorFlow, Keras)",
+                "follow_up_intent": "explore this topic in detail",
+                "context_type": "follow_up"
+              }
+            }
+          }
+        ],
+        "metadata": {
+          "created_at": "unknown",
+          "is_subchat": false,
+          "follow_up_context": {
+            "selected_text": null,
+            "follow_up_intent": null,
+            "context_type": "general"
+          }
+        }
+      },
+      "metadata": {
+        "generated_at": "2025-11-25T13:30:46.824446",
+        "total_nodes": 7,
+        "max_depth": 2,
+        "root_id": "22713828-0bee-47ac-890a-3fecd678a9ea",
+        "root_title": "Casual Greeting Exchange Begins"
+      }
+    },
+    {
+      "tree": {
+        "id": "d5626324-7569-4cd8-a5e9-967980cf0fe6",
+        "title": "The Legend of Suhrawardy Uddyan",
+        "depth": 0,
+        "path": [
+          "The Legend of Suhrawardy Uddyan"
+        ],
+        "message_count": 2,
+        "has_summary": false,
+        "children": [
+          {
+            "id": "13832338-e634-4f08-89dc-a9bc98b88c6e",
+            "title": "Author's Narrative Intentions",
+            "depth": 1,
+            "path": [
+              "The Legend of Suhrawardy Uddyan",
+              "Author's Narrative Intentions"
+            ],
+            "message_count": 4,
+            "has_summary": false,
+            "children": [],
+            "metadata": {
+              "created_at": "unknown",
+              "is_subchat": true,
+              "follow_up_context": {
+                "selected_text": "famous story in Bangladesh is the tale of ",
+                "follow_up_intent": "explore this topic in detail",
+                "context_type": "follow_up"
+              }
+            }
+          },
+          {
+            "id": "4d2ef16e-0c38-4c9c-9c47-755b6ac32f41",
+            "title": "Definition of a Term",
+            "depth": 1,
+            "path": [
+              "The Legend of Suhrawardy Uddyan",
+              "Definition of a Term"
+            ],
+            "message_count": 4,
+            "has_summary": false,
+            "children": [],
+            "metadata": {
+              "created_at": "unknown",
+              "is_subchat": true,
+              "follow_up_context": {
+                "selected_text": "Joy Bangla",
+                "follow_up_intent": "explore this topic in detail",
+                "context_type": "follow_up"
+              }
+            }
+          }
+        ],
+        "metadata": {
+          "created_at": "unknown",
+          "is_subchat": false,
+          "follow_up_context": {
+            "selected_text": null,
+            "follow_up_intent": null,
+            "context_type": "general"
+          }
+        }
+      },
+      "metadata": {
+        "generated_at": "2025-11-25T13:30:46.824474",
+        "total_nodes": 3,
+        "max_depth": 1,
+        "root_id": "d5626324-7569-4cd8-a5e9-967980cf0fe6",
+        "root_title": "The Legend of Suhrawardy Uddyan"
+      }
+    }
+  ],
+  "metadata": {
+    "generated_at": "2025-11-25T13:30:46.824478",
+    "total_conversations": 2,
+    "total_nodes": 10
+  }
+}

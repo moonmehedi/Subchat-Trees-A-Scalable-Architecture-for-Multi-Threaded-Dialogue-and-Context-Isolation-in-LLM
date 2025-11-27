@@ -19,6 +19,16 @@ async def create_conversation(request: CreateConversationRequest):
 
     # Create with default title "New Chat"
     tree = chat_service.start_new_conversation(request.title)
+    
+    # Auto-save tree visualization
+    from ..utils.tree_visualizer import get_tree_visualizer
+    try:
+        visualizer = get_tree_visualizer()
+        all_roots = chat_service.chat_manager.get_all_roots()
+        visualizer.save_all_trees(all_roots, mode='overwrite')
+    except Exception as e:
+        print(f"Warning: Failed to update tree visualization: {e}")
+    
     return ConversationNode(
         node_id=tree.node_id,
         title=tree.title,
@@ -42,6 +52,15 @@ async def send_message(node_id: str, request: MessageRequest):
         
         # Get actual usage data from LLM service
         usage = chat_service.llm.get_last_usage()
+        
+        # 🔄 Update tree visualization after every message
+        from ..utils.tree_visualizer import get_tree_visualizer
+        try:
+            visualizer = get_tree_visualizer()
+            all_roots = chat_service.chat_manager.get_all_roots()
+            visualizer.save_all_trees(all_roots, mode='overwrite')
+        except Exception as e:
+            print(f"Warning: Failed to update tree visualization: {e}")
         
         return MessageResponse(
             response=response,
@@ -77,6 +96,15 @@ async def send_message_stream(node_id: str, request: MessageRequest):
                     if updated_node.title != "New Chat":
                         yield f"data: {json.dumps({'type': 'title', 'content': updated_node.title})}\n\n"
                 
+                # 🔄 Update tree visualization after streaming message
+                from ..utils.tree_visualizer import get_tree_visualizer
+                try:
+                    visualizer = get_tree_visualizer()
+                    all_roots = chat_service.chat_manager.get_all_roots()
+                    visualizer.save_all_trees(all_roots, mode='overwrite')
+                except Exception as e:
+                    print(f"Warning: Failed to update tree visualization: {e}")
+                
                 # Send completion signal
                 yield f"data: {json.dumps({'type': 'done', 'content': ''})}\n\n"
                 
@@ -110,6 +138,15 @@ async def create_subchat(parent_id: str, request: CreateSubchatRequest):
             follow_up_context=request.follow_up_context,
             context_type=request.context_type or "follow_up"
         )
+        
+        # Auto-save tree visualization
+        from ..utils.tree_visualizer import get_tree_visualizer
+        try:
+            visualizer = get_tree_visualizer()
+            all_roots = chat_service.chat_manager.get_all_roots()
+            visualizer.save_all_trees(all_roots, mode='overwrite')
+        except Exception as e:
+            print(f"Warning: Failed to update tree visualization: {e}")
         
         return ConversationNode(
             node_id=subchat.node_id,

@@ -11,11 +11,19 @@ class ChatGraphManager:
 
     def create_node(self, title: str, parent_id: Optional[str] = None, 
                    selected_text: str = None, follow_up_context: str = None, 
-                   context_type: str = "general") -> TreeNode:
+                   context_type: str = "general", buffer_size: int = 15) -> TreeNode:
         """Create new node with optional parent and follow-up context."""
 
         parent = self.node_map.get(parent_id) if parent_id else None
-        node = TreeNode(title=title, parent=parent, vector_index=self.vector_index, llm_client=self.llm_client)
+        
+        # 🔧 Pass buffer_size to TreeNode
+        node = TreeNode(
+            title=title, 
+            parent=parent, 
+            vector_index=self.vector_index, 
+            llm_client=self.llm_client,
+            buffer_size=buffer_size  # ← NEW: Accept buffer_size parameter
+        )
 
         # If this is a follow-up subchat, set the context information
         if parent and context_type == "follow_up":

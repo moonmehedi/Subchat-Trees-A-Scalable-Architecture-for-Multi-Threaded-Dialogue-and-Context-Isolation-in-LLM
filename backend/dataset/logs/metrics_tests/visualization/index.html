@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buffer Size Comparison - Subchat Trees</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        h2 {
+            color: #667eea;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        .chart-container {
+            position: relative;
+            height: 350px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .chart-container.full-width {
+            grid-column: 1 / -1;
+            height: 400px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Buffer Size Comparison Analysis</h1>
+        <p class="subtitle">Subchat Trees: Multi-Threaded Dialogue and Context Isolation</p>
+        
+        <h2>📊 Context Isolation Metrics</h2>
+        <div class="charts-grid">
+            <div class="chart-container">
+                <canvas id="precisionChart"></canvas>
+            </div>
+            
+            <div class="chart-container">
+                <canvas id="recallChart"></canvas>
+            </div>
+            
+            <div class="chart-container">
+                <canvas id="f1Chart"></canvas>
+            </div>
+            
+            <div class="chart-container">
+                <canvas id="accuracyChart"></canvas>
+            </div>
+            
+            <div class="chart-container">
+                <canvas id="pollutionChart"></canvas>
+            </div>
+        </div>
+        
+        <h2>⚡ Performance Metrics</h2>
+        <div class="charts-grid">
+            <div class="chart-container full-width">
+                <canvas id="tokensChart"></canvas>
+            </div>
+            
+            <div class="chart-container">
+                <canvas id="latencyChart"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const bufferSizes = [5, 10, 20, 40, 80, 160];
+        
+        const chartConfig = {
+            type: 'line',
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        };
+        
+        // Precision Chart
+        new Chart(document.getElementById('precisionChart'), {
+            ...chartConfig,
+            data: {
+                labels: bufferSizes,
+                datasets: [{
+                    label: 'Baseline Precision',
+                    data: [100.0, 100.0, 100.0, 100.0, 0, 0],
+                    borderColor: 'rgb(255, 99, 132)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                }, {
+                    label: 'System Precision',
+                    data: [100.0, 100.0, 100.0, 0, 0, 0],
+                    borderColor: 'rgb(75, 192, 192)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                }]
+            },
+            options: {
+                ...chartConfig.options,
+                plugins: {
+                    ...chartConfig.options.plugins,
+                    title: {
+                        display: true,
+                        text: 'Precision vs Buffer Size (%)'
+                    }
+                }
+            }
+        });
+        
+        // Recall Chart
+        new Chart(document.getElementById('recallChart'), {
+            ...chartConfig,
+            data: {
+                labels: bufferSizes,
+                datasets: [{
+                    label: 'Baseline Recall',
+                    data: [29.411764705882355, 11.76470588235294, 23.52941176470588, 5.88235294117647, 0.0, 0.0],
+                    borderColor: 'rgb(255, 99, 132)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                }, {
+                    label: 'System Recall',
+                    data: [50.0, 70.58823529411765, 85.29411764705883, 0.0, 0.0, 0.0],
+                    borderColor: 'rgb(75, 192, 192)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                }]
+            },
+            options: {
+                ...chartConfig.options,
+                plugins: {
+                    ...chartConfig.options.plugins,
+                    title: {
+                        display: true,
+                        text: 'Recall vs Buffer Size (%)'
+                    }
+                }
+            }
+        });
+        
+        // F1 Score Chart
+        new Chart(document.getElementById('f1Chart'), {
+            ...chartConfig,
+            data: {
+                labels: bufferSizes,
+                datasets: [{
+                    label: 'Baseline F1 Score',
+                    data: [45.45454545454545, 21.052631578947366, 38.095238095238095, 11.11111111111111, 0, 0],
+                    borderColor: 'rgb(255, 99, 132)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                }, {
+                    label: 'System F1 Score',
+                    data: [66.66666666666666, 82.75862068965517, 92.06349206349206, 0, 0, 0],
+                    borderColor: 'rgb(75, 192, 192)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                }]
+            },
+            options: {
+                ...chartConfig.options,
+                plugins: {
+                    ...chartConfig.options.plugins,
+                    title: {
+                        display: true,
+                        text: 'F1 Score vs Buffer Size (%)'
+                    }
+                }
+            }
+        });
+        
+        // Accuracy Chart
+        new Chart(document.getElementById('accuracyChart'), {
+            ...chartConfig,
+            data: {
+                labels: bufferSizes,
+                datasets: [{
+                    label: 'Baseline Accuracy',
+                    data: [29.411764705882355, 11.76470588235294, 23.52941176470588, 5.88235294117647, 0.0, 0.0],
+                    borderColor: 'rgb(255, 99, 132)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                }, {
+                    label: 'System Accuracy',
+                    data: [50.0, 70.58823529411765, 85.29411764705883, 0.0, 0.0, 0.0],
+                    borderColor: 'rgb(75, 192, 192)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                }]
+            },
+            options: {
+                ...chartConfig.options,
+                plugins: {
+                    ...chartConfig.options.plugins,
+                    title: {
+                        display: true,
+                        text: 'Accuracy vs Buffer Size (%)'
+                    }
+                }
+            }
+        });
+        
+        // Pollution Rate Chart
+        new Chart(document.getElementById('pollutionChart'), {
+            ...chartConfig,
+            data: {
+                labels: bufferSizes,
+                datasets: [{
+                    label: 'Baseline Pollution Rate',
+                    data: [70.58823529411765, 88.23529411764706, 76.47058823529412, 94.11764705882352, 100.0, 100.0],
+                    borderColor: 'rgb(255, 99, 132)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                }, {
+                    label: 'System Pollution Rate',
+                    data: [50.0, 29.411764705882355, 14.705882352941178, 100.0, 100.0, 100.0],
+                    borderColor: 'rgb(75, 192, 192)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                }]
+            },
+            options: {
+                ...chartConfig.options,
+                plugins: {
+                    ...chartConfig.options.plugins,
+                    title: {
+                        display: true,
+                        text: 'Pollution Rate vs Buffer Size (%) - Lower is Better'
+                    }
+                }
+            }
+        });
+        
+        // Tokens Chart - BAR CHART
+        new Chart(document.getElementById('tokensChart'), {
+            type: 'bar',
+            data: {
+                labels: bufferSizes,
+                datasets: [{
+                    label: 'Baseline Avg Tokens',
+                    data: [1469.6470588235295, 2787.764705882353, 3014.970588235294, 192.14705882352942, 21.0, 21.0],
+                    backgroundColor: 'rgba(255, 99, 132, 0.7)',
+                    borderColor: 'rgb(255, 99, 132)',
+                    borderWidth: 1
+                }, {
+                    label: 'System Avg Tokens',
+                    data: [444.0, 1848.5882352941176, 2005.735294117647, 91.61764705882354, 91.61764705882354, 91.61764705882354],
+                    backgroundColor: 'rgba(75, 192, 192, 0.7)',
+                    borderColor: 'rgb(75, 192, 192)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Average Tokens per Query vs Buffer Size',
+                        font: {
+                            size: 16
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Tokens'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Buffer Size'
+                        }
+                    }
+                }
+            }
+        });
+        
+        // Latency Chart
+        new Chart(document.getElementById('latencyChart'), {
+            ...chartConfig,
+            data: {
+                labels: bufferSizes,
+                datasets: [{
+                    label: 'Baseline Avg Latency (s)',
+                    data: [12.28944974085864, 24.240395370651694, 25.540170010398416, 1.1865317050148458, 2.0595936985576855, 2.0056949222789093],
+                    borderColor: 'rgb(255, 99, 132)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderWidth: 3,
+                    tension: 0.1
+                }, {
+                    label: 'System Avg Latency (s)',
+                    data: [1.3271178007125854, 15.004400575862212, 16.58490259507123, 6.020203723626978, 6.302571240593405, 6.184800870278302],
+                    borderColor: 'rgb(75, 192, 192)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderWidth: 3,
+                    tension: 0.1
+                }]
+            },
+            options: {
+                ...chartConfig.options,
+                plugins: {
+                    ...chartConfig.options.plugins,
+                    title: {
+                        display: true,
+                        text: 'Average Latency vs Buffer Size (seconds)',
+                        font: {
+                            size: 16
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

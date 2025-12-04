@@ -19,8 +19,10 @@ class LocalBuffer:
         self.summary: str = ""  # Rolling summary of old messages
         self.summary_max_tokens: int = 500  # Max summary length
         self.messages_processed_count: int = 0  # Total messages ever added to this buffer
-        self.summarization_interval: int = 5  # Summarize every 5 messages
-        self.summarization_start_threshold: int = 15  # Start summarizing after 15 messages
+        
+        # 🔧 DYNAMIC SUMMARIZATION: Triggered when buffer fills (at n, 2n, 3n...)
+        # No hardcoded thresholds - adapts to any buffer size
+        print(f"📊 Buffer size: {max_turns} messages | Summarization will trigger every {max_turns} messages")
 
     def add_message(self, role: str, text: str, auto_archive: bool = True):
         """
@@ -98,77 +100,88 @@ class LocalBuffer:
         """
         Check if we should create/update summary.
         
-        Summarization triggers:
-        - At message 15 (first time) - summarize messages 1-5 (oldest 5)
-        - At message 20 - summarize messages 6-10 (oldest 5 after 1-5 evicted)
-        - At message 25 - summarize messages 11-15 (oldest 5 after 6-10 evicted)
-        - Continue every 5 messages...
-        """
-        if self.messages_processed_count < self.summarization_start_threshold:
-            return False  # Not enough messages yet (need 15 first)
+        🎯 NEW STRATEGY: Summarize when buffer is completely full
         
-        # After reaching 15, check if we're at a 5-message interval
-        messages_since_first_summary = self.messages_processed_count - self.summarization_start_threshold
-        return messages_since_first_summary % self.summarization_interval == 0
+        Triggers at: n, 2n, 3n, 4n... where n = buffer size (max_turns)
+        
+        Examples:
+        - Buffer=10: Summarize at messages 10, 20, 30, 40...
+        - Buffer=20: Summarize at messages 20, 40, 60, 80...
+        - Buffer=40: Summarize at messages 40, 80, 120, 160...
+        
+        This ensures:
+        - No race conditions with buffer eviction
+        - Scales perfectly with any buffer size
+        - Summarizes ALL messages in buffer (maximum information retention)
+        """
+        if self.messages_processed_count == 0:
+            return False
+        
+        # Trigger every time we've processed a full buffer's worth of messages
+        return self.messages_processed_count % self.max_turns == 0
     
     def _create_rolling_summary(self):
         """
         Create/update rolling summary of conversation.
         
-        Summarizes the 5 OLDEST messages currently in buffer (FIFO order).
-        Each summary is appended to previous summary for rolling context.
+        🎯 NEW STRATEGY: Summarize ALL current buffer messages
         
-        Timeline example:
-        - Msg 15: Summarize m1-m5 (oldest in buffer [m1...m15])
-        - Msg 20: Summarize m6-m10 (oldest in buffer [m6...m20]) + previous summary
-        - Msg 25: Summarize m11-m15 (oldest in buffer [m11...m25]) + previous summary
+        Timeline example (buffer=10):
+        - Msg 10: Buffer full [1-10] → Summarize all 10 messages → Summary_1
+        - Msg 20: Buffer full [11-20] → Summarize all 10 messages → Summary_2 = Summary_1 + new_summary(11-20)
+        - Msg 30: Buffer full [21-30] → Summarize all 10 messages → Summary_3 = Summary_2 + new_summary(21-30)
+        
+        Benefits:
+        - Perfect alignment with buffer size
+        - No information loss (summarizes ALL buffer messages)
+        - Works for any buffer size (5, 10, 20, 40, 80, 160...)
         """
         if not self.llm_client:
             print("⚠️  No LLM client available - skipping summarization")
             return
         
-        if len(self.turns) < 5:
-            print("⚠️  Not enough messages in buffer to summarize")
+        if len(self.turns) == 0:
+            print("⚠️  Empty buffer - skipping summarization")
             return
         
-        # Get the 5 OLDEST messages from buffer (FIFO = first 5)
-        oldest_5_messages = list(self.turns)[:5]
+        # 🔥 KEY CHANGE: Get ALL messages currently in buffer (not just oldest 5)
+        all_buffer_messages = list(self.turns)
         
         # Calculate which message numbers we're summarizing
-        start_msg_num = self.messages_processed_count - len(self.turns) + 1
-        end_msg_num = start_msg_num + 4
+        start_msg_num = self.messages_processed_count - len(all_buffer_messages) + 1
+        end_msg_num = self.messages_processed_count
         
-        # Format messages for LLM
+        # Format ALL buffer messages for LLM
         conversation_text = "\n".join([
             f"{msg['role'].upper()}: {msg['text']}" 
-            for msg in oldest_5_messages
+            for msg in all_buffer_messages
         ])
         
-        # Build prompt
+        # Build prompt (updated to reflect ALL buffer messages)
         if self.summary:
-            # Re-summarize with previous summary (rolling update)
+            # Rolling update: combine old summary + new buffer messages
             prompt = f"""You are maintaining a rolling summary of a conversation.
 
-PREVIOUS SUMMARY:
+PREVIOUS SUMMARY (messages 1-{start_msg_num-1}):
 {self.summary}
 
-NEW MESSAGES TO ADD (messages {start_msg_num}-{end_msg_num}):
+NEW MESSAGES TO SUMMARIZE (messages {start_msg_num}-{end_msg_num}, total: {len(all_buffer_messages)} messages):
 {conversation_text}
 
 Create an updated summary that:
-1. Includes key information from the previous summary
-2. Adds important details from the new messages (main topics, user info, preferences, facts)
-3. Removes redundant or less important information
+1. Preserves key information from the previous summary
+2. Adds important details from the new messages (topics, facts, decisions, preferences)
+3. Removes redundant information
 4. Stays concise (under {self.summary_max_tokens} tokens)
 
 Updated summary:"""
         else:
-            # First summary (messages 1-5)
+            # First summary - summarizing first full buffer
             prompt = f"""Summarize the following conversation messages concisely.
-Focus on: main topics discussed, user information/preferences, key facts, important decisions.
+Focus on: main topics, user information, key facts, important decisions.
 Keep under {self.summary_max_tokens} tokens.
 
-MESSAGES (messages {start_msg_num}-{end_msg_num}):
+MESSAGES (messages {start_msg_num}-{end_msg_num}, total: {len(all_buffer_messages)} messages):
 {conversation_text}
 
 Summary:"""
@@ -187,7 +200,8 @@ Summary:"""
             
             self.summary = new_summary
             
-            print(f"📝 Summary updated: {old_summary_len} → {len(new_summary)} chars (summarized messages {start_msg_num}-{end_msg_num})")
+            print(f"📝 Summary updated: {old_summary_len} → {len(new_summary)} chars")
+            print(f"   Summarized messages {start_msg_num}-{end_msg_num} ({len(all_buffer_messages)} messages in buffer)")
             print(f"   Summary preview: {new_summary[:100]}{'...' if len(new_summary) > 100 else ''}")
             
         except Exception as e:
@@ -306,12 +320,21 @@ Summary:"""
 class TreeNode:
     """Hierarchical conversation node."""
 
-    def __init__(self, node_id: Optional[str] = None, title: str = 'Untitled', parent: Optional['TreeNode'] = None, vector_index=None, llm_client=None):
+    def __init__(self, node_id: Optional[str] = None, title: str = 'Untitled', parent: Optional['TreeNode'] = None, vector_index=None, llm_client=None, buffer_size: int = 15):
         self.node_id: str = node_id if node_id else str(uuid.uuid4())
         self.title: str = title
         self.parent: Optional['TreeNode'] = parent
         self.children: List['TreeNode'] = []
-        self.buffer: LocalBuffer = LocalBuffer(max_turns=15, vector_index=vector_index, node_id=self.node_id, llm_client=llm_client, node_title=title)
+        
+        # 🔧 DYNAMIC BUFFER SIZE: Accept as parameter (default 15 for backward compatibility)
+        self.buffer: LocalBuffer = LocalBuffer(
+            max_turns=buffer_size,  # ← Use parameter instead of hardcoded 15
+            vector_index=vector_index, 
+            node_id=self.node_id, 
+            llm_client=llm_client, 
+            node_title=title
+        )
+        
         self.metadata: Dict[str, Any] = {}
         self.llm_client = llm_client  # Store for child node creation
         

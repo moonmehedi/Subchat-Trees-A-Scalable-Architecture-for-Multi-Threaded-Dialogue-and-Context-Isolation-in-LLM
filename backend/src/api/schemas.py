@@ -18,6 +18,7 @@ class MessageResponse(BaseModel):
 
 class CreateConversationRequest(BaseModel):
     title: str = "New Chat"
+    buffer_size: Optional[int] = 15  # ← NEW: Buffer size parameter
 
 class CreateSubchatRequest(BaseModel):
     title: str
@@ -25,6 +26,7 @@ class CreateSubchatRequest(BaseModel):
     selected_text: Optional[str] = None        # Text user selected from parent chat
     follow_up_context: Optional[str] = None    # Description of what user wants to explore
     context_type: Optional[str] = "follow_up"  # Type of subchat (follow_up, new_topic, etc.)
+    buffer_size: Optional[int] = 15            # ← NEW: Buffer size parameter
 
 class ConversationNode(BaseModel):
     node_id: str

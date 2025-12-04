@@ -61,6 +61,10 @@ backend_dir = Path(__file__).parent.parent
 logs_dir = backend_dir / "logs"
 app.mount("/logs", StaticFiles(directory=str(logs_dir)), name="logs")
 
+# Mount dataset logs for metrics visualization
+dataset_logs_dir = backend_dir / "dataset" / "logs"
+app.mount("/dataset-logs", StaticFiles(directory=str(dataset_logs_dir)), name="dataset-logs")
+
 @app.get("/")
 async def root():
     return {"message": f"Welcome to {settings.app_name} v{settings.version}"}

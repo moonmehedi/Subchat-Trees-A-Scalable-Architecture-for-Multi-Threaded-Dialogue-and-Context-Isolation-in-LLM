@@ -15,10 +15,10 @@ router = APIRouter()
 
 @router.post("/conversations", response_model=ConversationNode)
 async def create_conversation(request: CreateConversationRequest):
-    """Create a new conversation tree with default title."""
+    """Create a new conversation tree with default title and configurable buffer size."""
 
-    # Create with default title "New Chat"
-    tree = chat_service.start_new_conversation(request.title)
+    # Create with title and buffer_size from request
+    tree = chat_service.start_new_conversation(request.title, buffer_size=request.buffer_size)
     
     # Auto-save tree visualization
     from ..utils.tree_visualizer import get_tree_visualizer
@@ -126,17 +126,18 @@ async def send_message_stream(node_id: str, request: MessageRequest):
 
 @router.post("/conversations/{parent_id}/subchats", response_model=ConversationNode)
 async def create_subchat(parent_id: str, request: CreateSubchatRequest):
-    """Create a subchat under a parent node with optional follow-up context."""
+    """Create a subchat under a parent node with optional follow-up context and configurable buffer size."""
     try:
         chat_service.chat_manager.switch_node(parent_id)
         
-        # Create subchat with follow-up context information
+        # Create subchat with follow-up context information and buffer_size
         subchat = chat_service.chat_manager.create_node(
             title=request.title,
             parent_id=parent_id,
             selected_text=request.selected_text,
             follow_up_context=request.follow_up_context,
-            context_type=request.context_type or "follow_up"
+            context_type=request.context_type or "follow_up",
+            buffer_size=request.buffer_size  # ← NEW: Pass buffer_size
         )
         
         # Auto-save tree visualization

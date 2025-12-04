@@ -10,19 +10,26 @@ class Forest:
         self.trees_map:Dict[str,TreeNode] = {}
         self.active_tree_id:Optional[str] = None
 
-    def create_tree(self,title:str = "Root Conversations",chat_manager:Optional[ChatGraphManager]=None)->TreeNode:
+    def create_tree(self, title: str = "Root Conversations", chat_manager: Optional[ChatGraphManager] = None, buffer_size: int = 15) -> TreeNode:
         """ create new root-level conversation tree and coordinate with chat manager. """
         # Get vector_index and llm_client from chat_manager if available
         vector_index = chat_manager.vector_index if chat_manager else None
         llm_client = chat_manager.llm_client if chat_manager else None
         
-        root = TreeNode(title=title, vector_index=vector_index, llm_client=llm_client)
-        self.trees_map[root.node_id]=root
+        # 🔧 Pass buffer_size to TreeNode
+        root = TreeNode(
+            title=title, 
+            vector_index=vector_index, 
+            llm_client=llm_client,
+            buffer_size=buffer_size  # ← NEW: Accept buffer_size parameter
+        )
+        
+        self.trees_map[root.node_id] = root
         self.active_tree_id = root.node_id
 
         #auto-sync with chat manager if provided
         if chat_manager:
-            chat_manager.node_map[root.node_id]=root
+            chat_manager.node_map[root.node_id] = root
             chat_manager.active_node_id = root.node_id
 
         return root

@@ -50,6 +50,9 @@ class MetricsTestRunner:
         self.baseline_results = []
         self.system_results = []
         
+        # Buffer size tracking for current run
+        self.current_buffer_size = 15
+        
     def log(self, message: str, level: str = "INFO", test_type: Optional[str] = None):
         """Log with timestamp to test-specific log file only"""
         timestamp = datetime.now().strftime("%H:%M:%S")
@@ -88,6 +91,62 @@ class MetricsTestRunner:
         self.log("❌ Server not responding!", "ERROR")
         return False
     
+    def restart_server_auto(self):
+        """Automatically restart server and clear ChromaDB"""
+        self.log("🔄 Restarting server to clear ChromaDB...", "INFO")
+        
+        # Kill existing server process
+        try:
+            self.log("  🛑 Stopping server...", "INFO")
+            result = subprocess.run(
+                ["pkill", "-f", "uvicorn.*src.main:app"],
+                capture_output=True,
+                text=True
+            )
+            time.sleep(2)  # Wait for process to die
+            self.log("  ✅ Server stopped", "INFO")
+        except Exception as e:
+            self.log(f"  ⚠️  Warning during server stop: {e}", "WARN")
+        
+        # Clear ChromaDB
+        try:
+            self.log("  🗑️  Clearing ChromaDB...", "INFO")
+            chroma_db_path = Path(__file__).parent.parent / "chroma_db"
+            if chroma_db_path.exists():
+                import shutil
+                shutil.rmtree(chroma_db_path)
+                self.log("  ✅ ChromaDB cleared", "INFO")
+        except Exception as e:
+            self.log(f"  ⚠️  Warning during ChromaDB clear: {e}", "WARN")
+        
+        # Start server
+        try:
+            self.log("  🚀 Starting server...", "INFO")
+            backend_dir = Path(__file__).parent.parent
+            
+            # Start server in background
+            process = subprocess.Popen(
+                ["python", "-m", "src.main"],
+                cwd=backend_dir,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True
+            )
+            
+            # Wait for server to be ready
+            time.sleep(5)  # Initial wait
+            
+            if self.wait_for_server_ready():
+                self.log("  ✅ Server restarted successfully!", "INFO")
+                return True
+            else:
+                self.log("  ❌ Server failed to start", "ERROR")
+                return False
+                
+        except Exception as e:
+            self.log(f"  ❌ Failed to start server: {e}", "ERROR")
+            return False
+    
     def prompt_restart_server(self, test_type: str):
         """Prompt user to manually restart server to clear ChromaDB"""
         self.log("="*80, "WARN")
@@ -120,12 +179,12 @@ class MetricsTestRunner:
         with open(scenario_path, 'r') as f:
             return json.load(f)
     
-    def create_conversation(self, title: str = "Test Chat") -> Optional[str]:
-        """Create new conversation, return node_id"""
+    def create_conversation(self, title: str = "Test Chat", buffer_size: int = 15) -> Optional[str]:
+        """Create new conversation with configurable buffer size, return node_id"""
         try:
             response = requests.post(
                 f"{self.base_url}/api/conversations",
-                json={"title": title}
+                json={"title": title, "buffer_size": buffer_size}
             )
             response.raise_for_status()
             return response.json().get("node_id")
@@ -133,10 +192,10 @@ class MetricsTestRunner:
             self.log(f"❌ Failed to create conversation: {e}", "ERROR")
             return None
     
-    def create_subchat(self, parent_id: str, title: str, selected_text: Optional[str] = None) -> Optional[str]:
-        """Create subchat with optional follow-up context, return node_id"""
+    def create_subchat(self, parent_id: str, title: str, selected_text: Optional[str] = None, buffer_size: int = 15) -> Optional[str]:
+        """Create subchat with optional follow-up context and configurable buffer size, return node_id"""
         try:
-            payload = {"title": title}
+            payload = {"title": title, "buffer_size": buffer_size}
             
             # Add follow-up context if selected_text is provided
             if selected_text:
@@ -181,20 +240,20 @@ class MetricsTestRunner:
             self.log(f"❌ Failed to send message: {e}", "ERROR")
             return None
     
-    def run_baseline_test(self, scenario: Dict) -> List[Dict]:
+    def run_baseline_test(self, scenario: Dict, buffer_size: int = 15) -> List[Dict]:
         """
         Run BASELINE test: ONE conversation for ALL contexts (NO subchats)
         Simulates traditional chatbots like ChatGPT/Claude where all topics are mixed
         """
         self.log("="*80, "INFO", "baseline")
-        self.log(f"🔵 BASELINE TEST: {scenario['scenario_name']}", "INFO", "baseline")
+        self.log(f"🔵 BASELINE TEST: {scenario['scenario_name']} (buffer_size={buffer_size})", "INFO", "baseline")
         self.log("   Strategy: Single conversation for all topics (traditional chatbot)", "INFO", "baseline")
         self.log("="*80, "INFO", "baseline")
         
         results = []
         
-        # Create ONE conversation for all contexts
-        main_node_id = self.create_conversation("Baseline - All Topics")
+        # Create ONE conversation for all contexts with specified buffer_size
+        main_node_id = self.create_conversation("Baseline - All Topics", buffer_size=buffer_size)
         if not main_node_id:
             self.log("❌ Failed to create baseline conversation", "ERROR", "baseline")
             return results
@@ -289,13 +348,13 @@ class MetricsTestRunner:
         
         return results
     
-    def run_system_test(self, scenario: Dict) -> List[Dict]:
+    def run_system_test(self, scenario: Dict, buffer_size: int = 15) -> List[Dict]:
         """
         Run SYSTEM test: Main chat + subchats architecture (OUR SYSTEM)
         Uses Subchat Trees for context isolation
         """
         self.log("="*80, "INFO", "system")
-        self.log(f"🟢 SYSTEM TEST: {scenario['scenario_name']}", "INFO", "system")
+        self.log(f"🟢 SYSTEM TEST: {scenario['scenario_name']} (buffer_size={buffer_size})", "INFO", "system")
         self.log("   Strategy: Main chat + subchats for topic isolation", "INFO", "system")
         self.log("="*80, "INFO", "system")
         
@@ -304,8 +363,8 @@ class MetricsTestRunner:
         
         tp_count = tn_count = fp_count = fn_count = 0
         
-        # Create main conversation
-        main_id = self.create_conversation("System Test - Main")
+        # Create main conversation with specified buffer_size
+        main_id = self.create_conversation("System Test - Main", buffer_size=buffer_size)
         if not main_id:
             self.log("❌ Failed to create main conversation", "ERROR", "system")
             return results
@@ -330,7 +389,8 @@ class MetricsTestRunner:
                 parent_node_type = step_data.get("parent_node_type", "main")
                 parent_id = node_map.get(parent_node_type, main_id)
                 
-                subchat_id = self.create_subchat(parent_id, subchat_title, selected_text)
+                # Pass buffer_size to subchat creation
+                subchat_id = self.create_subchat(parent_id, subchat_title, selected_text, buffer_size=buffer_size)
                 
                 if subchat_id:
                     node_map[node_type] = subchat_id
@@ -509,15 +569,16 @@ class MetricsTestRunner:
         }
     
     def generate_table(self, metrics: Dict):
-        """Generate markdown tables"""
+        """Generate markdown tables in buffer-specific folder"""
         
-        output_dir = self.logs_dir / "tables"
-        output_dir.mkdir(exist_ok=True)
+        # Create buffer-specific directory
+        buffer_dir = self.logs_dir / "tables" / f"buffer_{self.current_buffer_size}"
+        buffer_dir.mkdir(parents=True, exist_ok=True)
         
         # Table 1
         table1 = metrics["table_1"]
-        with open(output_dir / "TABLE_1_CONTEXT_ISOLATION.md", 'w') as f:
-            f.write("# TABLE 1: CONTEXT ISOLATION METRICS\n\n")
+        with open(buffer_dir / "TABLE_1_CONTEXT_ISOLATION.md", 'w') as f:
+            f.write(f"# TABLE 1: CONTEXT ISOLATION METRICS (Buffer Size: {self.current_buffer_size})\n\n")
             f.write("| Metric | Baseline System | Our System | Improvement |\n")
             f.write("|--------|----------------|------------|-------------|\n")
             
@@ -534,8 +595,8 @@ class MetricsTestRunner:
         
         # Table 3
         table3 = metrics["table_3"]
-        with open(output_dir / "TABLE_3_SYSTEM_PERFORMANCE.md", 'w') as f:
-            f.write("# TABLE 3: SYSTEM PERFORMANCE METRICS\n\n")
+        with open(buffer_dir / "TABLE_3_SYSTEM_PERFORMANCE.md", 'w') as f:
+            f.write(f"# TABLE 3: SYSTEM PERFORMANCE METRICS (Buffer Size: {self.current_buffer_size})\n\n")
             f.write("| Metric | Baseline System | Our System | Improvement |\n")
             f.write("|--------|----------------|------------|-------------|\n")
             
@@ -598,11 +659,13 @@ class MetricsTestRunner:
         
         self.log("✅ Generated TABLE_3_SYSTEM_PERFORMANCE.md", "INFO")
     
-    def run_full_evaluation(self, scenario_files: List[str]):
-        """Run complete evaluation pipeline"""
+    def run_full_evaluation(self, scenario_files: List[str], buffer_size: int = 15):
+        """Run complete evaluation pipeline for a specific buffer size"""
+        
+        self.current_buffer_size = buffer_size
         
         self.log("="*80, "INFO")
-        self.log("🚀 STARTING METRICS-BASED EVALUATION", "INFO")
+        self.log(f"🚀 STARTING METRICS-BASED EVALUATION (buffer_size={buffer_size})", "INFO")
         self.log("="*80, "INFO")
         
         # Check server first
@@ -620,19 +683,21 @@ class MetricsTestRunner:
                 continue
             
             # Test baseline
-            self.log(f"\n🔵 BASELINE TEST: {scenario_file}", "INFO")
-            if not self.prompt_restart_server("BASELINE"):
+            self.log(f"\n🔵 BASELINE TEST: {scenario_file} (buffer_size={buffer_size})", "INFO")
+            if not self.restart_server_auto():
+                self.log("❌ Failed to restart server for baseline test", "ERROR")
                 continue
             
-            baseline_results = self.run_baseline_test(scenario)
+            baseline_results = self.run_baseline_test(scenario, buffer_size=buffer_size)
             all_baseline_results.extend(baseline_results)
             
             # Test system
-            self.log(f"\n🟢 SYSTEM TEST: {scenario_file}", "INFO")
-            if not self.prompt_restart_server("SYSTEM"):
+            self.log(f"\n🟢 SYSTEM TEST: {scenario_file} (buffer_size={buffer_size})", "INFO")
+            if not self.restart_server_auto():
+                self.log("❌ Failed to restart server for system test", "ERROR")
                 continue
             
-            system_results = self.run_system_test(scenario)
+            system_results = self.run_system_test(scenario, buffer_size=buffer_size)
             all_system_results.extend(system_results)
         
         # Calculate metrics
@@ -667,24 +732,426 @@ class MetricsTestRunner:
         self.log("\n📝 Generating tables...", "INFO")
         self.generate_table(metrics)
         
-        # Save raw results
-        results_file = self.logs_dir / "raw_results.json"
+        # Save raw results in buffer-specific directory
+        buffer_dir = self.logs_dir / "tables" / f"buffer_{self.current_buffer_size}"
+        results_file = buffer_dir / "raw_metrics.json"
         with open(results_file, 'w') as f:
             json.dump({
+                "buffer_size": self.current_buffer_size,
                 "baseline": all_baseline_results,
                 "system": all_system_results,
                 "metrics": metrics
             }, f, indent=2)
         
         self.log(f"\n✅ Results saved to: {results_file}", "INFO")
-        self.log(f"✅ Tables saved to: {self.logs_dir / 'tables'}", "INFO")
+        self.log(f"✅ Tables saved to: {buffer_dir}", "INFO")
         self.log("\n🎉 EVALUATION COMPLETE!", "INFO")
+    
+    def run_buffer_comparison(self, scenario_files: List[str], buffer_sizes: List[int] = [5, 10, 20, 40, 80, 160]):
+        """Run evaluation across multiple buffer sizes and generate comparison visualizations"""
+        
+        self.log("="*80, "INFO")
+        self.log("🚀 STARTING MULTI-BUFFER COMPARISON EVALUATION", "INFO")
+        self.log(f"   Buffer sizes: {buffer_sizes}", "INFO")
+        self.log("="*80, "INFO")
+        
+        all_metrics = {}
+        
+        for buffer_size in buffer_sizes:
+            self.log(f"\n{'='*80}", "INFO")
+            self.log(f"📦 TESTING BUFFER SIZE: {buffer_size}", "INFO")
+            self.log(f"{'='*80}", "INFO")
+            
+            # Run evaluation for this buffer size
+            self.run_full_evaluation(scenario_files, buffer_size=buffer_size)
+            
+            # Load the generated metrics from buffer-specific directory
+            buffer_dir = self.logs_dir / "tables" / f"buffer_{buffer_size}"
+            results_file = buffer_dir / "raw_metrics.json"
+            if results_file.exists():
+                with open(results_file, 'r') as f:
+                    results = json.load(f)
+                    all_metrics[buffer_size] = results["metrics"]
+            
+            self.log(f"\n✅ Completed buffer size {buffer_size}", "INFO")
+        
+        # Generate comparison visualization
+        self.log("\n📊 Generating comparison visualizations...", "INFO")
+        self.generate_comparison_visualization(all_metrics)
+        
+        self.log("\n🎉 MULTI-BUFFER COMPARISON COMPLETE!", "INFO")
+        self.log(f"   Results saved in: {self.logs_dir / 'tables'}", "INFO")
+        self.log(f"   Visualization: {self.logs_dir / 'visualization' / 'index.html'}", "INFO")
+    
+    def generate_comparison_visualization(self, all_metrics: Dict[int, Dict]):
+        """Generate HTML visualization comparing all buffer sizes"""
+        viz_dir = self.logs_dir / "visualization"
+        viz_dir.mkdir(exist_ok=True)
+        
+        html_file = viz_dir / "index.html"
+        
+        # Prepare data for charts
+        buffer_sizes = sorted(all_metrics.keys())
+        
+        # Extract metrics
+        baseline_precision = [all_metrics[bs]["table_1"]["baseline"]["precision"] for bs in buffer_sizes]
+        system_precision = [all_metrics[bs]["table_1"]["system"]["precision"] for bs in buffer_sizes]
+        
+        baseline_recall = [all_metrics[bs]["table_1"]["baseline"]["recall"] for bs in buffer_sizes]
+        system_recall = [all_metrics[bs]["table_1"]["system"]["recall"] for bs in buffer_sizes]
+        
+        baseline_f1 = [all_metrics[bs]["table_1"]["baseline"]["f1"] for bs in buffer_sizes]
+        system_f1 = [all_metrics[bs]["table_1"]["system"]["f1"] for bs in buffer_sizes]
+        
+        baseline_accuracy = [all_metrics[bs]["table_1"]["baseline"]["accuracy"] for bs in buffer_sizes]
+        system_accuracy = [all_metrics[bs]["table_1"]["system"]["accuracy"] for bs in buffer_sizes]
+        
+        baseline_pollution = [all_metrics[bs]["table_1"]["baseline"]["pollution_rate"] for bs in buffer_sizes]
+        system_pollution = [all_metrics[bs]["table_1"]["system"]["pollution_rate"] for bs in buffer_sizes]
+        
+        baseline_tokens = [all_metrics[bs]["table_3"]["baseline"]["avg_total_tokens"] for bs in buffer_sizes]
+        system_tokens = [all_metrics[bs]["table_3"]["system"]["avg_total_tokens"] for bs in buffer_sizes]
+        
+        baseline_latency = [all_metrics[bs]["table_3"]["baseline"]["avg_latency"] for bs in buffer_sizes]
+        system_latency = [all_metrics[bs]["table_3"]["system"]["avg_latency"] for bs in buffer_sizes]
+        
+        # Generate HTML with Chart.js
+        html_content = f'''<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buffer Size Comparison - Subchat Trees</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {{
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }}
+        .container {{
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }}
+        h1 {{
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+        }}
+        .subtitle {{
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }}
+        .chart-container {{
+            position: relative;
+            height: 400px;
+            margin-bottom: 40px;
+        }}
+        .metrics-grid {{
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }}
+        .metric-card {{
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            border-left: 4px solid #667eea;
+        }}
+        .metric-title {{
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }}
+        .metric-value {{
+            font-size: 24px;
+            color: #667eea;
+        }}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Buffer Size Comparison Analysis</h1>
+        <p class="subtitle">Subchat Trees: Multi-Threaded Dialogue and Context Isolation</p>
+        
+        <h2>📊 Context Isolation Metrics</h2>
+        
+        <div class="chart-container">
+            <canvas id="precisionChart"></canvas>
+        </div>
+        
+        <div class="chart-container">
+            <canvas id="recallChart"></canvas>
+        </div>
+        
+        <div class="chart-container">
+            <canvas id="f1Chart"></canvas>
+        </div>
+        
+        <div class="chart-container">
+            <canvas id="accuracyChart"></canvas>
+        </div>
+        
+        <div class="chart-container">
+            <canvas id="pollutionChart"></canvas>
+        </div>
+        
+        <h2>⚡ Performance Metrics</h2>
+        
+        <div class="chart-container">
+            <canvas id="tokensChart"></canvas>
+        </div>
+        
+        <div class="chart-container">
+            <canvas id="latencyChart"></canvas>
+        </div>
+    </div>
+    
+    <script>
+        const bufferSizes = {json.dumps(buffer_sizes)};
+        
+        const chartConfig = {{
+            type: 'line',
+            options: {{
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {{
+                    legend: {{
+                        position: 'top',
+                    }},
+                }},
+                scales: {{
+                    y: {{
+                        beginAtZero: true
+                    }}
+                }}
+            }}
+        }};
+        
+        // Precision Chart
+        new Chart(document.getElementById('precisionChart'), {{
+            ...chartConfig,
+            data: {{
+                labels: bufferSizes,
+                datasets: [{{
+                    label: 'Baseline Precision',
+                    data: {json.dumps(baseline_precision)},
+                    borderColor: 'rgb(255, 99, 132)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                }}, {{
+                    label: 'System Precision',
+                    data: {json.dumps(system_precision)},
+                    borderColor: 'rgb(75, 192, 192)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                }}]
+            }},
+            options: {{
+                ...chartConfig.options,
+                plugins: {{
+                    ...chartConfig.options.plugins,
+                    title: {{
+                        display: true,
+                        text: 'Precision vs Buffer Size (%)'
+                    }}
+                }}
+            }}
+        }});
+        
+        // Recall Chart
+        new Chart(document.getElementById('recallChart'), {{
+            ...chartConfig,
+            data: {{
+                labels: bufferSizes,
+                datasets: [{{
+                    label: 'Baseline Recall',
+                    data: {json.dumps(baseline_recall)},
+                    borderColor: 'rgb(255, 99, 132)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                }}, {{
+                    label: 'System Recall',
+                    data: {json.dumps(system_recall)},
+                    borderColor: 'rgb(75, 192, 192)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                }}]
+            }},
+            options: {{
+                ...chartConfig.options,
+                plugins: {{
+                    ...chartConfig.options.plugins,
+                    title: {{
+                        display: true,
+                        text: 'Recall vs Buffer Size (%)'
+                    }}
+                }}
+            }}
+        }});
+        
+        // F1 Score Chart
+        new Chart(document.getElementById('f1Chart'), {{
+            ...chartConfig,
+            data: {{
+                labels: bufferSizes,
+                datasets: [{{
+                    label: 'Baseline F1 Score',
+                    data: {json.dumps(baseline_f1)},
+                    borderColor: 'rgb(255, 99, 132)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                }}, {{
+                    label: 'System F1 Score',
+                    data: {json.dumps(system_f1)},
+                    borderColor: 'rgb(75, 192, 192)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                }}]
+            }},
+            options: {{
+                ...chartConfig.options,
+                plugins: {{
+                    ...chartConfig.options.plugins,
+                    title: {{
+                        display: true,
+                        text: 'F1 Score vs Buffer Size (%)'
+                    }}
+                }}
+            }}
+        }});
+        
+        // Accuracy Chart
+        new Chart(document.getElementById('accuracyChart'), {{
+            ...chartConfig,
+            data: {{
+                labels: bufferSizes,
+                datasets: [{{
+                    label: 'Baseline Accuracy',
+                    data: {json.dumps(baseline_accuracy)},
+                    borderColor: 'rgb(255, 99, 132)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                }}, {{
+                    label: 'System Accuracy',
+                    data: {json.dumps(system_accuracy)},
+                    borderColor: 'rgb(75, 192, 192)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                }}]
+            }},
+            options: {{
+                ...chartConfig.options,
+                plugins: {{
+                    ...chartConfig.options.plugins,
+                    title: {{
+                        display: true,
+                        text: 'Accuracy vs Buffer Size (%)'
+                    }}
+                }}
+            }}
+        }});
+        
+        // Pollution Rate Chart
+        new Chart(document.getElementById('pollutionChart'), {{
+            ...chartConfig,
+            data: {{
+                labels: bufferSizes,
+                datasets: [{{
+                    label: 'Baseline Pollution Rate',
+                    data: {json.dumps(baseline_pollution)},
+                    borderColor: 'rgb(255, 99, 132)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                }}, {{
+                    label: 'System Pollution Rate',
+                    data: {json.dumps(system_pollution)},
+                    borderColor: 'rgb(75, 192, 192)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                }}]
+            }},
+            options: {{
+                ...chartConfig.options,
+                plugins: {{
+                    ...chartConfig.options.plugins,
+                    title: {{
+                        display: true,
+                        text: 'Pollution Rate vs Buffer Size (%) - Lower is Better'
+                    }}
+                }}
+            }}
+        }});
+        
+        // Tokens Chart
+        new Chart(document.getElementById('tokensChart'), {{
+            ...chartConfig,
+            data: {{
+                labels: bufferSizes,
+                datasets: [{{
+                    label: 'Baseline Avg Tokens',
+                    data: {json.dumps(baseline_tokens)},
+                    borderColor: 'rgb(255, 159, 64)',
+                    backgroundColor: 'rgba(255, 159, 64, 0.2)',
+                }}, {{
+                    label: 'System Avg Tokens',
+                    data: {json.dumps(system_tokens)},
+                    borderColor: 'rgb(153, 102, 255)',
+                    backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                }}]
+            }},
+            options: {{
+                ...chartConfig.options,
+                plugins: {{
+                    ...chartConfig.options.plugins,
+                    title: {{
+                        display: true,
+                        text: 'Average Tokens per Query vs Buffer Size'
+                    }}
+                }}
+            }}
+        }});
+        
+        // Latency Chart
+        new Chart(document.getElementById('latencyChart'), {{
+            ...chartConfig,
+            data: {{
+                labels: bufferSizes,
+                datasets: [{{
+                    label: 'Baseline Avg Latency (s)',
+                    data: {json.dumps(baseline_latency)},
+                    borderColor: 'rgb(255, 159, 64)',
+                    backgroundColor: 'rgba(255, 159, 64, 0.2)',
+                }}, {{
+                    label: 'System Avg Latency (s)',
+                    data: {json.dumps(system_latency)},
+                    borderColor: 'rgb(153, 102, 255)',
+                    backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                }}]
+            }},
+            options: {{
+                ...chartConfig.options,
+                plugins: {{
+                    ...chartConfig.options.plugins,
+                    title: {{
+                        display: true,
+                        text: 'Average Latency vs Buffer Size (seconds)'
+                    }}
+                }}
+            }}
+        }});
+    </script>
+</body>
+</html>'''
+        
+        with open(html_file, 'w') as f:
+            f.write(html_content)
+        
+        self.log(f"✅ Generated visualization: {html_file}", "INFO")
 
 
 if __name__ == "__main__":
     runner = MetricsTestRunner()
     
-    # Run with Python confusion dataset
-    runner.run_full_evaluation([
-        "6c4992f0aed04dd3bf9a4bc225bb4fb0_structured.json"
-    ])
+    # Run buffer comparison with multiple sizes
+    runner.run_buffer_comparison(
+        ["06_lost_in_conversation_sharded_humaneval.json"],
+        buffer_sizes=[5, 10, 20, 40]
+    )

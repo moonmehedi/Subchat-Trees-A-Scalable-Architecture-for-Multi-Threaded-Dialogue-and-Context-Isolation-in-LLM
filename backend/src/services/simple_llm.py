@@ -682,9 +682,9 @@ class SimpleChat:
             self.chat_manager.vector_index = self.llm.vector_index
 
 
-    def start_new_conversation(self,title:str='New Chat')->TreeNode:
-        """ Start new conversation tree """
-        return self.forest.create_tree(title,self.chat_manager)
+    def start_new_conversation(self, title: str = 'New Chat', buffer_size: int = 15) -> TreeNode:
+        """ Start new conversation tree with configurable buffer size """
+        return self.forest.create_tree(title, self.chat_manager, buffer_size=buffer_size)
     
     def create_subchat(self,title:str)->TreeNode:
         """ Create subchat under current active node """

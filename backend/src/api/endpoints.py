@@ -44,6 +44,11 @@ async def send_message(node_id: str, request: MessageRequest):
     try:
         chat_service.chat_manager.switch_node(node_id)
         
+        # Log which provider is being used
+        provider = chat_service.llm.provider
+        rag_status = "disabled" if request.disable_rag else "enabled"
+        print(f"💬 Processing message | Provider: {provider.upper()} | RAG: {rag_status}")
+        
         # Send the message and get response (title generation handled internally)
         response = chat_service.send_message(request.message, disable_rag=request.disable_rag)
         

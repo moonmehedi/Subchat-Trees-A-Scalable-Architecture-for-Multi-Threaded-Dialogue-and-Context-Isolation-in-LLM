@@ -37,6 +37,25 @@ def clear_all_logs():
 # Clear logs before app initialization
 clear_all_logs()
 
+# Print LLM provider configuration
+def print_llm_config():
+    """Print LLM provider configuration on startup"""
+    print("\n" + "="*80)
+    print(f"🤖 LLM PROVIDER CONFIGURATION")
+    print("="*80)
+    print(f"Provider: {settings.llm_provider.upper()}")
+    if settings.llm_provider == 'ollama':
+        print(f"Model: {settings.ollama_model}")
+        print(f"Base URL: {settings.ollama_base_url}")
+        print(f"CPU Threads: {settings.ollama_num_threads}")
+        print("Note: RAG with tool calling will fallback to Groq")
+    elif settings.llm_provider == 'groq':
+        print(f"Model: groq-llama-3.1-8b")
+        print("Features: Full RAG with tool calling support")
+    print("="*80 + "\n")
+
+print_llm_config()
+
 app = FastAPI(
     title=settings.app_name,
     version=settings.version,

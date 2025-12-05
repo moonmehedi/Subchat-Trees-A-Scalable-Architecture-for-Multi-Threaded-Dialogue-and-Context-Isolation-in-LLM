@@ -2,22 +2,40 @@ import openai
 from groq import Groq
 from typing import List, Dict
 import json
+import requests
 from ..models.tree import TreeNode
 from ..cores.config import settings  # Use your existing config
 from .tools import ConversationTools
 from ..utils.debug_logger import get_debug_logger
 
 class SimpleLLMClient:
-    """ Simple LLM client using Groq API with optional RAG """
+    """ Simple LLM client supporting Ollama, Groq, and OpenAI with optional RAG """
 
     def __init__(self, api_key: str = None, enable_vector_index: bool = False):
-        # Use provided api_key, or load from your config
-        if api_key:
-            self.groq_client = Groq(api_key=api_key)
-        elif settings.groq_api_key:
-            self.groq_client = Groq(api_key=settings.groq_api_key)
+        # Determine which LLM provider to use
+        self.provider = settings.llm_provider
+        
+        # Initialize Ollama client if selected
+        if self.provider == 'ollama':
+            self.ollama_url = settings.ollama_base_url
+            self.ollama_model = settings.ollama_model
+            self.groq_client = None  # Keep Groq for fallback if needed
+            print(f"✅ Using Ollama ({self.ollama_model}) at {self.ollama_url}")
+            print(f"🚀 CPU threads: {settings.ollama_num_threads}")
+        # Initialize Groq client
+        elif self.provider == 'groq':
+            if api_key:
+                self.groq_client = Groq(api_key=api_key)
+            elif settings.groq_api_key:
+                self.groq_client = Groq(api_key=settings.groq_api_key)
+            else:
+                print("⚠️  Warning: GROQ_API_KEY not found. Switching to Ollama.")
+                self.provider = 'ollama'
+                self.ollama_url = settings.ollama_base_url
+                self.ollama_model = settings.ollama_model
+                self.groq_client = None
         else:
-            print("⚠️  Warning: GROQ_API_KEY not found in config or environment. Using echo mode.")
+            print("⚠️  Warning: Unknown provider. Using echo mode.")
             self.groq_client = None
         
         # Initialize vector index if enabled
@@ -29,6 +47,38 @@ class SimpleLLMClient:
                 print("✅ Vector index enabled for RAG")
             except Exception as e:
                 print(f"⚠️  Failed to initialize vector index: {e}")
+
+    def _call_ollama(self, messages: List[Dict], stream: bool = False):
+        """Call Ollama API with CPU optimization"""
+        try:
+            payload = {
+                "model": self.ollama_model,
+                "messages": messages,
+                "stream": stream,
+                "options": {
+                    "num_thread": settings.ollama_num_threads,  # Use all CPU cores
+                    "temperature": 0.0
+                }
+            }
+            
+            if stream:
+                response = requests.post(
+                    f"{self.ollama_url}/api/chat",
+                    json=payload,
+                    stream=True
+                )
+                response.raise_for_status()
+                return response
+            else:
+                response = requests.post(
+                    f"{self.ollama_url}/api/chat",
+                    json=payload
+                )
+                response.raise_for_status()
+                return response.json()
+        except Exception as e:
+            print(f"⚠️  Ollama API error: {e}")
+            return None
 
     def generate_response(self, node: TreeNode, user_message: str) -> str:
         """ Generate response using node's hierarchical context with follow-up awareness """
@@ -54,8 +104,21 @@ class SimpleLLMClient:
             'content': user_message
         })
         print('*******************context*********************\n',context_messages)
+        
+        # Use Ollama if selected
+        if self.provider == 'ollama':
+            try:
+                response = self._call_ollama(context_messages, stream=False)
+                if response and 'message' in response:
+                    self.last_usage = {"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0}
+                    return response['message']['content'].strip()
+            except Exception as e:
+                print(f"⚠️  Ollama API error: {e}")
+                self.last_usage = {"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0}
+                return f"Echo from {node.title}: {user_message}"
+        
         # Try to use Groq API if client is available
-        if self.groq_client:
+        elif self.groq_client:
             try:
                 response = self.groq_client.chat.completions.create(
                     model=settings.model_base,
@@ -87,6 +150,8 @@ class SimpleLLMClient:
     def generate_response_stream(self, node: TreeNode, user_message: str):
         """ Generate streaming response using node's hierarchical context with follow-up awareness """
         
+        print(f"🔄 Streaming response | Provider: {self.provider.upper()}")
+        
         # Build context from node's buffer (inherited from parents)
         context_messages = []
 
@@ -109,8 +174,30 @@ class SimpleLLMClient:
         # })
 
         print('entire context message before response ',context_messages)
+        
+        # Use Ollama streaming if selected
+        if self.provider == 'ollama':
+            try:
+                response = self._call_ollama(context_messages, stream=True)
+                if response:
+                    for line in response.iter_lines():
+                        if line:
+                            try:
+                                json_response = json.loads(line)
+                                if 'message' in json_response and 'content' in json_response['message']:
+                                    yield json_response['message']['content']
+                            except json.JSONDecodeError:
+                                continue
+            except Exception as e:
+                print(f"⚠️  Ollama streaming error: {e}")
+                # Fallback to simulated comprehensive response
+                response = self._generate_fallback_response(user_message)
+                for char in response:
+                    yield char
+                    import time
+                    time.sleep(0.001)  # Small delay for visual effect
         # Try to use Groq API streaming if client is available
-        if self.groq_client:
+        elif self.groq_client:
             try:
                 stream = self.groq_client.chat.completions.create(
                     model=settings.model_base,
@@ -286,9 +373,19 @@ class SimpleLLMClient:
         
         Uses structured reasoning framework to guide LLM's tool usage decisions.
         Expected to improve tool calling accuracy.
+        
+        NOTE: RAG with tool calling requires Groq (tool_calling model). 
+        If using Ollama, falls back to standard streaming.
         """
         if not self.vector_index:
             print("⚠️  Vector index not enabled, falling back to standard streaming")
+            yield from self.generate_response_stream(node, user_message)
+            return
+        
+        # Check if we can do RAG with tool calling
+        if self.provider == 'ollama':
+            print("⚠️  RAG with tool calling requires Groq. Falling back to Ollama standard streaming.")
+            print(f"   To enable RAG, set LLM_PROVIDER=groq in .env")
             yield from self.generate_response_stream(node, user_message)
             return
         

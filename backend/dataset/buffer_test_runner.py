@@ -91,9 +91,42 @@ class MetricsTestRunner:
         self.log("❌ Server not responding!", "ERROR")
         return False
     
+    def ensure_ollama_running(self):
+        """Ensure Ollama service is running"""
+        try:
+            response = requests.get("http://localhost:11434/api/tags", timeout=2)
+            if response.status_code == 200:
+                return True
+        except Exception:
+            pass
+        
+        # Start Ollama if not running
+        self.log("🚀 Starting Ollama service...", "INFO")
+        try:
+            subprocess.Popen(
+                ["ollama", "serve"],
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+                env={**os.environ, "OLLAMA_NUM_PARALLEL": "4", "OLLAMA_MAX_LOADED_MODELS": "1"}
+            )
+            time.sleep(3)  # Wait for Ollama to start
+            
+            # Verify it's running
+            response = requests.get("http://localhost:11434/api/tags", timeout=2)
+            if response.status_code == 200:
+                self.log("  ✅ Ollama started successfully", "INFO")
+                return True
+        except Exception as e:
+            self.log(f"  ❌ Failed to start Ollama: {e}", "ERROR")
+            return False
+    
     def restart_server_auto(self):
         """Automatically restart server and clear ChromaDB"""
         self.log("🔄 Restarting server to clear ChromaDB...", "INFO")
+        
+        # Ensure Ollama is running first
+        if not self.ensure_ollama_running():
+            self.log("  ⚠️  Ollama not running, tests may fail", "WARN")
         
         # Kill existing server process
         try:
@@ -1153,5 +1186,5 @@ if __name__ == "__main__":
     # Run buffer comparison with multiple sizes
     runner.run_buffer_comparison(
         ["06_lost_in_conversation_sharded_humaneval.json"],
-        buffer_sizes=[5, 10, 20, 40]
+        buffer_sizes=[5, 10, 20, 40,80,160]
     )

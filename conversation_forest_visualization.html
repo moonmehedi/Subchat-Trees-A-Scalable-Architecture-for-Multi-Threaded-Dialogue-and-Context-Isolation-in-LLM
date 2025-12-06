@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversation Forest - Subchat Trees</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #f0f4f8;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            max-width: 1400px;
+            width: 100%;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        .header h1 {
+            font-size: 26px;
+            color: #2d3748;
+            margin-bottom: 8px;
+        }
+        
+        .header p {
+            font-size: 14px;
+            color: #718096;
+        }
+        
+        .forest {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            padding: 20px 0;
+        }
+        
+        .tree-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .tree-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 20px;
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+        
+        .tree {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 25px;
+        }
+        
+        .node {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 18px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            text-align: center;
+            box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 180px;
+            max-width: 220px;
+            position: relative;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .node:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.6);
+        }
+        
+        .node.root {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            font-size: 15px;
+            padding: 14px 20px;
+            box-shadow: 0 8px 20px rgba(240, 147, 251, 0.5);
+        }
+        
+        .node.child {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            box-shadow: 0 6px 16px rgba(79, 172, 254, 0.4);
+        }
+        
+        .node.grandchild {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            font-size: 11px;
+            padding: 10px 14px;
+            min-width: 160px;
+            box-shadow: 0 4px 12px rgba(67, 233, 123, 0.4);
+        }
+        
+        .children {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .children::before {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 15px;
+            background: #cbd5e0;
+        }
+        
+        .branch {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            position: relative;
+        }
+        
+        .branch::before {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 15px;
+            background: #cbd5e0;
+        }
+        
+        .connector-horizontal {
+            position: absolute;
+            top: -15px;
+            height: 2px;
+            background: #cbd5e0;
+        }
+        
+        .level-indicator {
+            position: absolute;
+            left: -30px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #edf2f7;
+            color: #4a5568;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 10px;
+            font-weight: 700;
+        }
+        
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            
+            .container {
+                box-shadow: none;
+            }
+            
+            .node:hover {
+                transform: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌳 Conversation Forest Visualization</h1>
+            <p>Hierarchical Multi-Threaded Dialogue Structure</p>
+        </div>
+        
+        <div class="forest">
+            <!-- Tree 1: Quantum Computing -->
+            <div class="tree-container">
+                <div class="tree-title">Quantum Computing Fundamentals</div>
+                <div class="tree">
+                    <div class="node root">
+                        Quantum Computing Fundamentals
+                    </div>
+                    
+                    <div class="children">
+                        <div class="branch">
+                            <div class="node child">
+                                Introduction to Quantum Computing
+                            </div>
+                            <div class="children">
+                                <div class="branch">
+                                    <div class="node grandchild">
+                                        The Basics of Computing
+                                    </div>
+                                </div>
+                                <div class="branch">
+                                    <div class="node grandchild">
+                                        Quantum Mechanics Explained
+                                    </div>
+                                    <div class="node grandchild">
+                                        Quantum Superposition Explained
+                                    </div>
+                                    <div class="node grandchild">
+                                        Algorithm Selection Discussion
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="branch">
+                            <div class="node child">
+                                Quantum Mechanics Mystery
+                            </div>
+                            <div class="children">
+                                <div class="branch">
+                                    <div class="node grandchild">
+                                        Breaking Down Complexity
+                                    </div>
+                                    <div class="node grandchild">
+                                        Breaking Down the Process
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="branch">
+                            <div class="node child">
+                                Quantum Algorithm Top Picks
+                            </div>
+                            <div class="children">
+                                <div class="branch">
+                                    <div class="node grandchild">
+                                        Clarifying the Situation
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tree 2: Graphic Design -->
+            <div class="tree-container">
+                <div class="tree-title">Exploring Graphic Design</div>
+                <div class="tree">
+                    <div class="node root">
+                        Exploring Graphic Design
+                    </div>
+                    
+                    <div class="children">
+                        <div class="branch">
+                            <div class="node child">
+                                Computer Graphics Key Files
+                            </div>
+                            <div class="children">
+                                <div class="branch">
+                                    <div class="node grandchild">
+                                        Introduction to 3D Modeling
+                                    </div>
+                                </div>
+                                <div class="branch">
+                                    <div class="node grandchild">
+                                        Human Computer Interaction
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tree 3: Python Learning -->
+            <div class="tree-container">
+                <div class="tree-title">Getting Started with Python</div>
+                <div class="tree">
+                    <div class="node root">
+                        Getting Started with Python
+                    </div>
+                    
+                    <div class="children">
+                        <div class="branch">
+                            <div class="node child">
+                                Code Academy Course Recommendations
+                            </div>
+                        </div>
+                        
+                        <div class="branch">
+                            <div class="node child">
+                                Suggested Ideas and Options
+                            </div>
+                            <div class="children">
+                                <div class="branch">
+                                    <div class="node grandchild">
+                                        Mastering Python in 48 Hours
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tree 4: Sorting Algorithms -->
+            <div class="tree-container">
+                <div class="tree-title">Sorting Algorithm Variations</div>
+                <div class="tree">
+                    <div class="node root">
+                        Sorting Algorithm Variations
+                    </div>
+                    
+                    <div class="children">
+                        <div class="branch">
+                            <div class="node child">
+                                The Mystery of Bubbles
+                            </div>
+                        </div>
+                        
+                        <div class="branch">
+                            <div class="node child">
+                                Clarifying the Situation
+                            </div>
+                            <div class="children">
+                                <div class="branch">
+                                    <div class="node grandchild">
+                                        Clarifying the Situation More
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="branch">
+                            <div class="node child">
+                                Clarifying the Situation Again
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

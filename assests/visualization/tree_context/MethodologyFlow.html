@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subchat Trees - Methodology Flow</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes flowDown {
+            0% { stroke-dashoffset: 20; }
+            100% { stroke-dashoffset: 0; }
+        }
+        @keyframes flowUp {
+            0% { stroke-dashoffset: -20; }
+            100% { stroke-dashoffset: 0; }
+        }
+        .flow-down {
+            stroke-dasharray: 5, 5;
+            animation: flowDown 1s linear infinite;
+        }
+        .flow-up {
+            stroke-dasharray: 5, 5;
+            animation: flowUp 1s linear infinite;
+        }
+        .flow-bidirectional {
+            stroke-dasharray: 8, 4;
+            animation: flowDown 1.5s linear infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="w-full min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-8 overflow-auto">
+        <div class="max-w-7xl mx-auto">
+            <!-- Title -->
+            <div class="text-center mb-8">
+                <h1 class="text-4xl font-bold text-gray-800 mb-3">
+                    Subchat Trees: Multi-Threaded Dialogue Architecture
+                </h1>
+                <p class="text-xl text-gray-600">Methodology & System Flow</p>
+            </div>
+
+            <!-- Main Visualization -->
+            <div class="relative" style="min-height: 1100px;">
+                
+                <!-- SVG Layer for Connections -->
+                <svg class="absolute top-0 left-0 w-full h-full pointer-events-none" style="z-index: 1;">
+                    
+                    <!-- User Query to Tree Structure -->
+                    <path d="M 600 120 L 300 220" stroke="#6366f1" stroke-width="3" fill="none" class="flow-down" marker-end="url(#arrowIndigo)"/>
+                    <path d="M 600 120 L 900 220" stroke="#6366f1" stroke-width="3" fill="none" class="flow-down" marker-end="url(#arrowIndigo)"/>
+                    
+                    <!-- Tree to Buffer (Root) -->
+                    <path d="M 300 310 L 200 420" stroke="#3b82f6" stroke-width="2.5" fill="none" class="flow-down" marker-end="url(#arrowBlue)"/>
+                    
+                    <!-- Tree to Buffer (Child) -->
+                    <path d="M 900 310 L 1000 420" stroke="#f59e0b" stroke-width="2.5" fill="none" class="flow-down" marker-end="url(#arrowOrange)"/>
+                    
+                    <!-- Parent to Child (Context Inheritance) -->
+                    <path d="M 350 265 C 450 280, 550 280, 850 265" stroke="#8b5cf6" stroke-width="2.5" fill="none" class="flow-down" marker-end="url(#arrowPurple)" stroke-dasharray="8,4"/>
+                    
+                    <!-- Buffer to Vector Index (Archiving) -->
+                    <path d="M 200 530 L 200 640" stroke="#10b981" stroke-width="3" fill="none" class="flow-down" marker-end="url(#arrowGreen)"/>
+                    <path d="M 1000 530 L 1000 640" stroke="#10b981" stroke-width="3" fill="none" class="flow-down" marker-end="url(#arrowGreen)"/>
+                    
+                    <!-- Vector Index to Query Processing (Bidirectional) -->
+                    <path d="M 850 695 L 620 695" stroke="#ec4899" stroke-width="3" fill="none" class="flow-bidirectional" marker-start="url(#arrowPinkReverse)" marker-end="url(#arrowPink)"/>
+                    
+                    <!-- Query Processing to LLM -->
+                    <path d="M 480 750 L 480 860" stroke="#f97316" stroke-width="3.5" fill="none" class="flow-down" marker-end="url(#arrowOrangeDark)"/>
+                    
+                    <!-- LLM to Response -->
+                    <path d="M 480 970 L 480 1040" stroke="#22c55e" stroke-width="3.5" fill="none" class="flow-down" marker-end="url(#arrowGreenDark)"/>
+                    
+                    <!-- Summary Flow (Recursive Summarization) -->
+                    <path d="M 120 500 C 80 550, 80 600, 120 650" stroke="#8b5cf6" stroke-width="2.5" fill="none" class="flow-up" marker-end="url(#arrowPurple)" stroke-linecap="round"/>
+                    <path d="M 920 500 C 880 550, 880 600, 920 650" stroke="#8b5cf6" stroke-width="2.5" fill="none" class="flow-up" marker-end="url(#arrowPurple)" stroke-linecap="round"/>
+                    
+                    <!-- Arrow markers -->
+                    <defs>
+                        <marker id="arrowIndigo" markerWidth="14" markerHeight="14" refX="11" refY="3" orient="auto" markerUnits="strokeWidth">
+                            <path d="M0,0 L0,6 L11,3 z" fill="#6366f1" />
+                        </marker>
+                        <marker id="arrowBlue" markerWidth="14" markerHeight="14" refX="11" refY="3" orient="auto" markerUnits="strokeWidth">
+                            <path d="M0,0 L0,6 L11,3 z" fill="#3b82f6" />
+                        </marker>
+                        <marker id="arrowOrange" markerWidth="14" markerHeight="14" refX="11" refY="3" orient="auto" markerUnits="strokeWidth">
+                            <path d="M0,0 L0,6 L11,3 z" fill="#f59e0b" />
+                        </marker>
+                        <marker id="arrowPurple" markerWidth="14" markerHeight="14" refX="11" refY="3" orient="auto">
+                            <path d="M0,0 L0,6 L11,3 z" fill="#8b5cf6" />
+                        </marker>
+                        <marker id="arrowGreen" markerWidth="14" markerHeight="14" refX="11" refY="3" orient="auto" markerUnits="strokeWidth">
+                            <path d="M0,0 L0,6 L11,3 z" fill="#10b981" />
+                        </marker>
+                        <marker id="arrowPink" markerWidth="14" markerHeight="14" refX="11" refY="3" orient="auto" markerUnits="strokeWidth">
+                            <path d="M0,0 L0,6 L11,3 z" fill="#ec4899" />
+                        </marker>
+                        <marker id="arrowPinkReverse" markerWidth="14" markerHeight="14" refX="3" refY="3" orient="auto" markerUnits="strokeWidth">
+                            <path d="M11,0 L11,6 L0,3 z" fill="#ec4899" />
+                        </marker>
+                        <marker id="arrowOrangeDark" markerWidth="14" markerHeight="14" refX="11" refY="3" orient="auto" markerUnits="strokeWidth">
+                            <path d="M0,0 L0,6 L11,3 z" fill="#f97316" />
+                        </marker>
+                        <marker id="arrowGreenDark" markerWidth="14" markerHeight="14" refX="11" refY="3" orient="auto" markerUnits="strokeWidth">
+                            <path d="M0,0 L0,6 L11,3 z" fill="#22c55e" />
+                        </marker>
+                    </defs>
+                    
+                    <!-- Labels -->
+                    <text x="450" y="165" fill="#6366f1" font-size="13" font-weight="700" class="pointer-events-none">Route to Node</text>
+                    <text x="650" y="165" fill="#6366f1" font-size="13" font-weight="700" class="pointer-events-none">Create Subchat</text>
+                    
+                    <text x="130" y="370" fill="#3b82f6" font-size="11" font-weight="600" class="pointer-events-none">Add Message</text>
+                    <text x="920" y="370" fill="#f59e0b" font-size="11" font-weight="600" class="pointer-events-none">Inherit Context</text>
+                    
+                    <text x="550" y="285" fill="#8b5cf6" font-size="12" font-weight="700" class="pointer-events-none">Context Inheritance</text>
+                    
+                    <text x="130" y="590" fill="#10b981" font-size="11" font-weight="600" class="pointer-events-none">Archive</text>
+                    <text x="1010" y="590" fill="#10b981" font-size="11" font-weight="600" class="pointer-events-none">Archive</text>
+                    
+                    <text x="30" y="575" fill="#8b5cf6" font-size="10" font-weight="700" class="pointer-events-none">Rolling</text>
+                    <text x="25" y="590" fill="#8b5cf6" font-size="10" font-weight="700" class="pointer-events-none">Summary</text>
+                    
+                    <text x="690" y="680" fill="#ec4899" font-size="12" font-weight="700" class="pointer-events-none">Multi-Query Retrieval</text>
+                    
+                    <text x="500" y="810" fill="#f97316" font-size="11" font-weight="600" class="pointer-events-none">Generate</text>
+                    
+                    <text x="500" y="1010" fill="#22c55e" font-size="11" font-weight="600" class="pointer-events-none">Response</text>
+                </svg>
+
+                <!-- Content Layer -->
+                <div class="absolute" style="z-index: 2; width: 100%;">
+                    
+                    <!-- 1. User Query -->
+                    <div class="absolute" style="left: 50%; top: 30px; transform: translateX(-50%);">
+                        <div class="bg-gradient-to-r from-indigo-500 to-indigo-600 text-white px-10 py-5 rounded-2xl shadow-2xl border-4 border-indigo-700">
+                            <div class="text-2xl font-bold text-center">① User Query</div>
+                            <div class="text-sm text-indigo-100 text-center mt-2">POST /conversations/{node_id}/messages</div>
+                        </div>
+                    </div>
+
+                    <!-- 2A. Tree Structure (Root) -->
+                    <div class="absolute" style="left: 100px; top: 220px;">
+                        <div class="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-8 py-5 rounded-xl shadow-xl border-3 border-blue-700">
+                            <div class="text-xl font-bold text-center">② Root Node</div>
+                            <div class="text-xs text-blue-100 text-center mt-1">Main Conversation</div>
+                            <div class="text-xs text-blue-200 text-center mt-2 font-mono">node_id: abc-123</div>
+                        </div>
+                    </div>
+
+                    <!-- 2B. Tree Structure (Child) -->
+                    <div class="absolute" style="left: 800px; top: 220px;">
+                        <div class="bg-gradient-to-r from-orange-500 to-orange-600 text-white px-8 py-5 rounded-xl shadow-xl border-3 border-orange-700">
+                            <div class="text-xl font-bold text-center">② Child Node</div>
+                            <div class="text-xs text-orange-100 text-center mt-1">Follow-up Subchat</div>
+                            <div class="text-xs text-orange-200 text-center mt-2 font-mono">parent: abc-123</div>
+                        </div>
+                    </div>
+
+                    <!-- Context Inheritance Label -->
+                    <div class="absolute" style="left: 470px; top: 250px;">
+                        <div class="bg-purple-100 px-3 py-1 rounded-lg text-xs font-bold text-purple-700 border-2 border-purple-300">
+                            selected_text + summary
+                        </div>
+                    </div>
+
+                    <!-- 3A. Local Buffer (Root) -->
+                    <div class="absolute" style="left: 50px; top: 420px;">
+                        <div class="bg-gradient-to-r from-cyan-500 to-cyan-600 text-white px-7 py-4 rounded-xl shadow-lg border-2 border-cyan-700">
+                            <div class="text-lg font-bold text-center">③ Local Buffer</div>
+                            <div class="text-xs text-cyan-100 text-center mt-1">Fixed Size (n=50)</div>
+                            <div class="text-xs text-cyan-200 text-center mt-2 font-mono">[msg₁, msg₂, ... msgₙ]</div>
+                            <div class="text-xs text-cyan-100 text-center mt-2 italic">When full → Archive</div>
+                        </div>
+                    </div>
+
+                    <!-- 3B. Local Buffer (Child) -->
+                    <div class="absolute" style="left: 850px; top: 420px;">
+                        <div class="bg-gradient-to-r from-cyan-500 to-cyan-600 text-white px-7 py-4 rounded-xl shadow-lg border-2 border-cyan-700">
+                            <div class="text-lg font-bold text-center">③ Local Buffer</div>
+                            <div class="text-xs text-cyan-100 text-center mt-1">Inherited + New</div>
+                            <div class="text-xs text-cyan-200 text-center mt-2 font-mono">[parent_msgs + new]</div>
+                            <div class="text-xs text-cyan-100 text-center mt-2 italic">Isolated Context</div>
+                        </div>
+                    </div>
+
+                    <!-- 4. Vector Index -->
+                    <div class="absolute" style="left: 50%; top: 640px; transform: translateX(-50%);">
+                        <div class="bg-gradient-to-r from-emerald-500 to-emerald-600 text-white px-10 py-5 rounded-xl shadow-xl border-3 border-emerald-700">
+                            <div class="text-xl font-bold text-center">④ Vector Index (ChromaDB)</div>
+                            <div class="text-xs text-emerald-100 text-center mt-2">Archived Messages + Embeddings</div>
+                            <div class="text-xs text-emerald-200 text-center mt-1 font-mono">node_id | timestamp | text | embedding</div>
+                            <div class="text-xs text-emerald-100 text-center mt-2 italic">Long-term Memory Store</div>
+                        </div>
+                    </div>
+
+                    <!-- 5. Query Processing -->
+                    <div class="absolute" style="left: 240px; top: 750px;">
+                        <div class="bg-gradient-to-r from-pink-500 to-pink-600 text-white px-8 py-5 rounded-xl shadow-xl border-3 border-pink-700">
+                            <div class="text-lg font-bold text-center">⑤ Query Processing</div>
+                            <div class="text-xs text-pink-100 text-center mt-2">Multi-Query Decomposition</div>
+                            <div class="bg-pink-700 px-3 py-2 rounded mt-3 text-xs">
+                                <div class="font-semibold">Original: "who am i?"</div>
+                                <div class="mt-1 ml-2">→ "my name is"</div>
+                                <div class="ml-2">→ "I am a"</div>
+                                <div class="ml-2">→ "I work as"</div>
+                            </div>
+                            <div class="text-xs text-pink-100 text-center mt-2 italic">Context Window ±60s</div>
+                        </div>
+                    </div>
+
+                    <!-- 6. LLM Response Generation -->
+                    <div class="absolute" style="left: 280px; top: 860px;">
+                        <div class="bg-gradient-to-r from-orange-600 to-orange-700 text-white px-9 py-5 rounded-xl shadow-xl border-3 border-orange-800">
+                            <div class="text-xl font-bold text-center">⑥ LLM Generation</div>
+                            <div class="text-xs text-orange-100 text-center mt-2">Context Assembly:</div>
+                            <div class="bg-orange-800 px-4 py-2 rounded mt-2 text-xs space-y-1">
+                                <div>• Rolling Summary</div>
+                                <div>• Buffer Messages</div>
+                                <div>• Retrieved Context</div>
+                                <div>• Follow-up Hint</div>
+                            </div>
+                            <div class="text-xs text-orange-100 text-center mt-2 font-mono">Groq/Ollama LLM</div>
+                        </div>
+                    </div>
+
+                    <!-- 7. Final Response -->
+                    <div class="absolute" style="left: 50%; top: 1040px; transform: translateX(-50%);">
+                        <div class="bg-gradient-to-r from-green-500 to-green-600 text-white px-12 py-6 rounded-2xl shadow-2xl border-4 border-green-700">
+                            <div class="text-2xl font-bold text-center">⑦ Response to User</div>
+                            <div class="text-sm text-green-100 text-center mt-2">Context-Aware, Isolated Answer</div>
+                        </div>
+                    </div>
+
+                    <!-- Key Features Box -->
+                    <div class="absolute" style="right: 30px; top: 30px;">
+                        <div class="bg-white px-6 py-4 rounded-xl shadow-lg border-2 border-gray-300" style="width: 280px;">
+                            <div class="text-sm font-bold text-gray-800 mb-3 border-b-2 border-gray-200 pb-2">🎯 Key Features</div>
+                            <div class="space-y-2 text-xs text-gray-700">
+                                <div class="flex items-start">
+                                    <span class="text-blue-600 mr-2">▸</span>
+                                    <span><strong>Tree Structure:</strong> Forest → Trees → Nodes</span>
+                                </div>
+                                <div class="flex items-start">
+                                    <span class="text-cyan-600 mr-2">▸</span>
+                                    <span><strong>Fixed Buffer:</strong> n messages per node</span>
+                                </div>
+                                <div class="flex items-start">
+                                    <span class="text-purple-600 mr-2">▸</span>
+                                    <span><strong>Rolling Summary:</strong> Recursive summarization</span>
+                                </div>
+                                <div class="flex items-start">
+                                    <span class="text-emerald-600 mr-2">▸</span>
+                                    <span><strong>Auto-Archive:</strong> Buffer → Vector DB</span>
+                                </div>
+                                <div class="flex items-start">
+                                    <span class="text-pink-600 mr-2">▸</span>
+                                    <span><strong>Multi-Query:</strong> Decompose vague queries</span>
+                                </div>
+                                <div class="flex items-start">
+                                    <span class="text-orange-600 mr-2">▸</span>
+                                    <span><strong>Context Window:</strong> ±60s temporal retrieval</span>
+                                </div>
+                                <div class="flex items-start">
+                                    <span class="text-amber-600 mr-2">▸</span>
+                                    <span><strong>Isolation:</strong> No cross-branch pollution</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Footer -->
+            <div class="text-center mt-8 text-sm text-gray-600">
+                <p class="font-semibold">Subchat Trees: A Scalable Architecture for Multi-Threaded Dialogue and Context Isolation in LLM</p>
+                <p class="mt-1">ChromaDB • Groq/Ollama • FastAPI • Tree-Based Memory Management</p>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>

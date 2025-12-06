@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recursive Summarization - Bottom-Up Context Flow</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .animate-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes flowDown {
+            0% { stroke-dashoffset: 20; }
+            100% { stroke-dashoffset: 0; }
+        }
+        @keyframes flowUp {
+            0% { stroke-dashoffset: -20; }
+            100% { stroke-dashoffset: 0; }
+        }
+        .flow-down {
+            stroke-dasharray: 5, 5;
+            animation: flowDown 1s linear infinite;
+        }
+        .flow-up {
+            stroke-dasharray: 5, 5;
+            animation: flowUp 1s linear infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="w-full min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-8 overflow-auto">
+        <div class="max-w-7xl mx-auto">
+            <!-- Title -->
+            <div class="text-center mb-12">
+                <h1 class="text-3xl font-bold text-gray-800 mb-2">
+                    Recursive Summarization - Bottom-Up Context Flow
+                </h1>
+                <p class="text-gray-600">Context Division → Recursive Summarization → Nested Summary</p>
+            </div>
+
+            <!-- Main Visualization with SVG Connections -->
+            <div class="relative" style="min-height: 700px;">
+                
+                <!-- SVG Layer for Connections -->
+                <svg class="absolute top-0 left-0 w-full h-full pointer-events-none" style="z-index: 1;">
+                    <!-- ROOT to Parents (Context Division) -->
+                    <path d="M 600 150 L 200 235" stroke="#9333ea" stroke-width="3" fill="none" class="flow-down" marker-end="url(#arrowPurple)"/>
+                    <path d="M 600 150 L 600 235" stroke="#9333ea" stroke-width="3" fill="none" class="flow-down" marker-end="url(#arrowPurple)"/>
+                    <path d="M 600 150 L 1000 235" stroke="#9333ea" stroke-width="3" fill="none" class="flow-down" marker-end="url(#arrowPurple)"/>
+                    
+                    <!-- Parent A to Children A -->
+                    <path d="M 200 325 L 110 455" stroke="#3b82f6" stroke-width="2.5" fill="none" class="flow-down" marker-end="url(#arrowBlue)"/>
+                    <path d="M 200 325 L 270 455" stroke="#3b82f6" stroke-width="2.5" fill="none" class="flow-down" marker-end="url(#arrowBlue)"/>
+                    
+                    <!-- Parent B to Children B -->
+                    <path d="M 600 325 L 510 455" stroke="#22c55e" stroke-width="2.5" fill="none" class="flow-down" marker-end="url(#arrowGreen)"/>
+                    <path d="M 600 325 L 610 455" stroke="#22c55e" stroke-width="2.5" fill="none" class="flow-down" marker-end="url(#arrowGreen)"/>
+                    <path d="M 600 325 L 710 455" stroke="#22c55e" stroke-width="2.5" fill="none" class="flow-down" marker-end="url(#arrowGreen)"/>
+                    
+                    <!-- Parent C to Children C -->
+                    <path d="M 1000 325 L 935 455" stroke="#f97316" stroke-width="2.5" fill="none" class="flow-down" marker-end="url(#arrowOrange)"/>
+                    <path d="M 1000 325 L 1065 455" stroke="#f97316" stroke-width="2.5" fill="none" class="flow-down" marker-end="url(#arrowOrange)"/>
+                    
+                    <!-- Children A returning to Parent A (upward with smooth curves) -->
+                    <path d="M 110 460 C 80 430, 100 385, 135 350" stroke="#0284c7" stroke-width="3" fill="none" class="flow-up" marker-end="url(#arrowCyanDark)" stroke-linecap="round"/>
+                    <path d="M 240 460 C 270 430, 250 385, 235 350" stroke="#0284c7" stroke-width="3" fill="none" class="flow-up" marker-end="url(#arrowCyanDark)" stroke-linecap="round"/>
+                    
+                    <!-- Children B returning to Parent B (upward with smooth curves) -->
+                    <path d="M 480 460 C 450 430, 470 385, 535 350" stroke="#047857" stroke-width="3" fill="none" class="flow-up" marker-end="url(#arrowEmeraldDark)" stroke-linecap="round"/>
+                    <path d="M 610 460 C 590 430, 595 385, 600 350" stroke="#047857" stroke-width="3" fill="none" class="flow-up" marker-end="url(#arrowEmeraldDark)" stroke-linecap="round"/>
+                    <path d="M 740 460 C 770 430, 750 385, 665 350" stroke="#047857" stroke-width="3" fill="none" class="flow-up" marker-end="url(#arrowEmeraldDark)" stroke-linecap="round"/>
+                    
+                    <!-- Children C returning to Parent C (upward with smooth curves) -->
+                    <path d="M 935 460 C 905 430, 925 385, 965 350" stroke="#c2410c" stroke-width="3" fill="none" class="flow-up" marker-end="url(#arrowAmberDark)" stroke-linecap="round"/>
+                    <path d="M 1060 460 C 1090 430, 1070 385, 1035 350" stroke="#c2410c" stroke-width="3" fill="none" class="flow-up" marker-end="url(#arrowAmberDark)" stroke-linecap="round"/>
+                    
+                    <!-- Summary labels on child return arrows -->
+                    <text x="25" y="400" fill="#0369a1" font-size="11" font-weight="700" class="pointer-events-none">Summary A1</text>
+                    <text x="275" y="400" fill="#0369a1" font-size="11" font-weight="700" class="pointer-events-none">Summary A2</text>
+                    
+                    <text x="345" y="420" fill="#065f46" font-size="11" font-weight="700" class="pointer-events-none">Summary B1</text>
+                    <text x="515" y="420" fill="#065f46" font-size="11" font-weight="700" class="pointer-events-none">Summary B2</text>
+                    <text x="765" y="420" fill="#065f46" font-size="11" font-weight="700" class="pointer-events-none">Summary B3</text>
+                    
+                    <text x="825" y="400" fill="#9a3412" font-size="11" font-weight="700" class="pointer-events-none">Summary C1</text>
+                    <text x="1105" y="400" fill="#9a3412" font-size="11" font-weight="700" class="pointer-events-none">Summary C2</text>
+                    
+                    <!-- Parents returning to ROOT (upward with smooth curves) -->
+                    <path d="M 585 100 C 400 120, 200 140, 180 245" stroke="#1d4ed8" stroke-width="3.5" fill="none" class="flow-up" marker-start="url(#arrowBlueDark)" stroke-linecap="round"/>
+                    <path d="M 600 100 C 600 120, 600 160, 600 245" stroke="#15803d" stroke-width="3.5" fill="none" class="flow-up" marker-start="url(#arrowGreenDark)" stroke-linecap="round"/>
+                    <path d="M 615 100 C 800 120, 1000 140, 1020 245" stroke="#c2410c" stroke-width="3.5" fill="none" class="flow-up" marker-start="url(#arrowOrangeDark)" stroke-linecap="round"/>
+                    
+                    <!-- Summary labels on parent return arrows -->
+                    <text x="180" y="130" fill="#1e40af" font-size="12" font-weight="700" class="pointer-events-none">Parent A Summary</text>
+                    <text x="605" y="150" fill="#166534" font-size="12" font-weight="700" class="pointer-events-none" text-anchor="start">Parent B Summary</text>
+                    <text x="920" y="130" fill="#9a3412" font-size="12" font-weight="700" class="pointer-events-none">Parent C Summary</text>
+                    
+                    <!-- Arrow markers -->
+                    <defs>
+                        <marker id="arrowPurple" markerWidth="14" markerHeight="14" refX="11" refY="3" orient="auto" markerUnits="strokeWidth">
+                            <path d="M0,0 L0,6 L11,3 z" fill="#9333ea" />
+                        </marker>
+                        <marker id="arrowBlue" markerWidth="14" markerHeight="14" refX="11" refY="3" orient="auto" markerUnits="strokeWidth">
+                            <path d="M0,0 L0,6 L11,3 z" fill="#3b82f6" />
+                        </marker>
+                        <marker id="arrowGreen" markerWidth="14" markerHeight="14" refX="11" refY="3" orient="auto" markerUnits="strokeWidth">
+                            <path d="M0,0 L0,6 L11,3 z" fill="#22c55e" />
+                        </marker>
+                        <marker id="arrowOrange" markerWidth="14" markerHeight="14" refX="11" refY="3" orient="auto" markerUnits="strokeWidth">
+                            <path d="M0,0 L0,6 L11,3 z" fill="#f97316" />
+                        </marker>
+                        <marker id="arrowCyan" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                            <path d="M0,0 L0,6 L9,3 z" fill="#06b6d4" />
+                        </marker>
+                        <marker id="arrowCyanDark" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+                            <path d="M0,0 L0,6 L8,3 z" fill="#0284c7" />
+                        </marker>
+                        <marker id="arrowEmerald" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+                            <path d="M0,0 L0,6 L8,3 z" fill="#10b981" />
+                        </marker>
+                        <marker id="arrowEmeraldDark" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+                            <path d="M0,0 L0,6 L8,3 z" fill="#047857" />
+                        </marker>
+                        <marker id="arrowAmber" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+                            <path d="M0,0 L0,6 L8,3 z" fill="#f59e0b" />
+                        </marker>
+                        <marker id="arrowAmberDark" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+                            <path d="M0,0 L0,6 L8,3 z" fill="#c2410c" />
+                        </marker>
+                        <marker id="arrowBlueDark" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+                            <path d="M0,0 L0,6 L8,3 z" fill="#1d4ed8" />
+                        </marker>
+                        <marker id="arrowGreenDark" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+                            <path d="M0,0 L0,6 L8,3 z" fill="#15803d" />
+                        </marker>
+                        <marker id="arrowOrangeDark" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+                            <path d="M0,0 L0,6 L8,3 z" fill="#c2410c" />
+                        </marker>
+                    </defs>
+                </svg>
+
+                <!-- Content Layer with Nodes -->
+                <div class="absolute" style="z-index: 2; width: 100%;">
+                    
+                    <!-- ROOT NODE - Top -->
+                    <div class="absolute" style="left: 50%; top: 50px; transform: translateX(-50%);">
+                        <div class="bg-gradient-to-r from-purple-600 to-purple-700 text-white px-12 py-6 rounded-2xl shadow-2xl border-4 border-purple-800">
+                            <div class="text-2xl font-bold text-center">ROOT</div>
+                            <div class="text-xs text-purple-200 text-center mt-1">[Initial Context]</div>
+                            <div class="text-xs text-purple-100 text-center mt-2 font-semibold">Aggregated = A+B+C</div>
+                        </div>
+                    </div>
+
+                    <!-- Context Division Label -->
+                    <div class="absolute" style="left: 50%; top: 200px; transform: translateX(-50%);">
+                        <div class="bg-purple-100 px-4 py-2 rounded-lg text-sm font-bold text-purple-700 border-2 border-purple-300">
+                            ↓ Context Division ↓
+                        </div>
+                    </div>
+
+                    <!-- Parent A -->
+                    <div class="absolute" style="left: 100px; top: 250px;">
+                        <div class="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-8 py-4 rounded-xl shadow-xl border-2 border-blue-700">
+                            <div class="text-xl font-bold text-center">Parent A</div>
+                            <div class="text-xs text-blue-200 text-center mt-1">[Context A]</div>
+                            <div class="text-xs text-blue-100 text-center mt-2 font-semibold">Aggregated = A1+A2</div>
+                        </div>
+                    </div>
+
+                    <!-- Parent B -->
+                    <div class="absolute" style="left: 500px; top: 250px;">
+                        <div class="bg-gradient-to-r from-green-500 to-green-600 text-white px-8 py-4 rounded-xl shadow-xl border-2 border-green-700">
+                            <div class="text-xl font-bold text-center">Parent B</div>
+                            <div class="text-xs text-green-200 text-center mt-1">[Context B]</div>
+                            <div class="text-xs text-green-100 text-center mt-2 font-semibold">Aggregated = B1+B2+B3</div>
+                        </div>
+                    </div>
+
+                    <!-- Parent C -->
+                    <div class="absolute" style="left: 900px; top: 250px;">
+                        <div class="bg-gradient-to-r from-orange-500 to-orange-600 text-white px-8 py-4 rounded-xl shadow-xl border-2 border-orange-700">
+                            <div class="text-xl font-bold text-center">Parent C</div>
+                            <div class="text-xs text-orange-200 text-center mt-1">[Context C]</div>
+                            <div class="text-xs text-orange-100 text-center mt-2 font-semibold">Aggregated = C1+C2</div>
+                        </div>
+                    </div>
+
+                    <!-- Sub-context Labels -->
+                    <div class="absolute" style="left: 160px; top: 380px;">
+                        <div class="bg-blue-100 px-2 py-1 rounded text-xs font-semibold text-blue-700">Sub-Context ↓</div>
+                    </div>
+                    <div class="absolute" style="left: 560px; top: 380px;">
+                        <div class="bg-green-100 px-2 py-1 rounded text-xs font-semibold text-green-700">Sub-Context ↓</div>
+                    </div>
+                    <div class="absolute" style="left: 960px; top: 380px;">
+                        <div class="bg-orange-100 px-2 py-1 rounded text-xs font-semibold text-orange-700">Sub-Context ↓</div>
+                    </div>
+
+                    <!-- Child A1 -->
+                    <div class="absolute" style="left: 50px; top: 470px;">
+                        <div class="bg-gradient-to-r from-cyan-400 to-cyan-500 text-white px-6 py-3 rounded-lg shadow-lg border border-cyan-600">
+                            <div class="font-semibold text-center">Child A1</div>
+                            <div class="text-xs text-cyan-100 text-center">[Context A1]</div>
+                        </div>
+                    </div>
+
+                    <!-- Child A2 -->
+                    <div class="absolute" style="left: 210px; top: 470px;">
+                        <div class="bg-gradient-to-r from-cyan-400 to-cyan-500 text-white px-6 py-3 rounded-lg shadow-lg border border-cyan-600">
+                            <div class="font-semibold text-center">Child A2</div>
+                            <div class="text-xs text-cyan-100 text-center">[Context A2]</div>
+                        </div>
+                    </div>
+
+                    <!-- Child B1 -->
+                    <div class="absolute" style="left: 420px; top: 470px;">
+                        <div class="bg-gradient-to-r from-emerald-400 to-emerald-500 text-white px-6 py-3 rounded-lg shadow-lg border border-emerald-600">
+                            <div class="font-semibold text-center">Child B1</div>
+                            <div class="text-xs text-emerald-100 text-center">[Context B1]</div>
+                        </div>
+                    </div>
+
+                    <!-- Child B2 -->
+                    <div class="absolute" style="left: 550px; top: 470px;">
+                        <div class="bg-gradient-to-r from-emerald-400 to-emerald-500 text-white px-6 py-3 rounded-lg shadow-lg border border-emerald-600">
+                            <div class="font-semibold text-center">Child B2</div>
+                            <div class="text-xs text-emerald-100 text-center">[Context B2]</div>
+                        </div>
+                    </div>
+
+                    <!-- Child B3 -->
+                    <div class="absolute" style="left: 680px; top: 470px;">
+                        <div class="bg-gradient-to-r from-emerald-400 to-emerald-500 text-white px-6 py-3 rounded-lg shadow-lg border border-emerald-600">
+                            <div class="font-semibold text-center">Child B3</div>
+                            <div class="text-xs text-emerald-100 text-center">[Context B3]</div>
+                        </div>
+                    </div>
+
+                    <!-- Child C1 -->
+                    <div class="absolute" style="left: 875px; top: 470px;">
+                        <div class="bg-gradient-to-r from-amber-400 to-amber-500 text-white px-6 py-3 rounded-lg shadow-lg border border-amber-600">
+                            <div class="font-semibold text-center">Child C1</div>
+                            <div class="text-xs text-amber-100 text-center">[Context C1]</div>
+                        </div>
+                    </div>
+
+                    <!-- Child C2 -->
+                    <div class="absolute" style="left: 1015px; top: 470px;">
+                        <div class="bg-gradient-to-r from-amber-400 to-amber-500 text-white px-6 py-3 rounded-lg shadow-lg border border-amber-600">
+                            <div class="font-semibold text-center">Child C2</div>
+                            <div class="text-xs text-amber-100 text-center">[Context C2]</div>
+                        </div>
+                    </div>
+
+
+
+                </div>
+            </div>
+
+            <!-- Legend -->
+            <div class="mt-12 bg-white p-6 rounded-xl shadow-lg border-2 border-gray-200">
+                <h3 class="text-lg font-bold text-gray-800 mb-4">Recursive Summarization Flow</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                    <div class="flex items-center gap-2">
+                        <svg class="text-gray-600" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <polyline points="19 12 12 19 5 12"></polyline>
+                        </svg>
+                        <span><strong>Downward:</strong> Context division (ROOT → Parent → Child)</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <svg class="text-gray-600" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="19" x2="12" y2="5"></line>
+                            <polyline points="5 12 12 5 19 12"></polyline>
+                        </svg>
+                        <span><strong>Upward:</strong> Context returns to parent (Child → Parent)</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-6 h-6 bg-gradient-to-r from-purple-600 to-purple-700 rounded"></div>
+                        <span><strong>Purple:</strong> ROOT level with initial context</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-6 h-6 bg-gradient-to-r from-blue-500 to-green-600 rounded"></div>
+                        <span><strong>Blue/Green/Orange:</strong> Parent nodes (receive child contexts)</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-6 h-6 bg-gradient-to-r from-cyan-400 to-amber-500 rounded"></div>
+                        <span><strong>Light colors:</strong> Child nodes (return contexts upward)</span>
+                    </div>
+                </div>
+                
+                <div class="mt-6 p-4 bg-blue-50 rounded-lg border-2 border-blue-200">
+                    <h4 class="font-bold text-blue-900 mb-2">Bottom-Up Recursive Flow:</h4>
+                    <ol class="list-decimal list-inside text-sm text-blue-800 space-y-1">
+                        <li><strong>Step 1:</strong> ROOT divides initial context → Parent A, B, C</li>
+                        <li><strong>Step 2:</strong> Parents divide sub-contexts → Children (A1, A2, B1, B2, B3, C1, C2)</li>
+                        <li><strong>Step 3:</strong> Children process and return contexts back to their parents</li>
+                        <li><strong>Step 4:</strong> Parents aggregate child contexts and return to ROOT</li>
+                        <li><strong>Step 5:</strong> ROOT receives aggregated contexts from all parents</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

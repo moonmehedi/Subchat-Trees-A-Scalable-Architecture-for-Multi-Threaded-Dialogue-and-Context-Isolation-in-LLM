@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tour Planning - Hierarchical Context Flow</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .animate-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes flowDown {
+            0% { stroke-dashoffset: 20; }
+            100% { stroke-dashoffset: 0; }
+        }
+        @keyframes flowUp {
+            0% { stroke-dashoffset: -20; }
+            100% { stroke-dashoffset: 0; }
+        }
+        .flow-down {
+            stroke-dasharray: 5, 5;
+            animation: flowDown 1s linear infinite;
+        }
+        .flow-up {
+            stroke-dasharray: 5, 5;
+            animation: flowUp 1s linear infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="w-full min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-8 overflow-auto">
+        <div class="max-w-7xl mx-auto">
+            <!-- Title -->
+            <div class="text-center mb-12">
+                <h1 class="text-3xl font-bold text-gray-800 mb-2">
+                    Tour Planning - Hierarchical Context Flow
+                </h1>
+                <p class="text-gray-600">Restaurant • Hotel • Travel Optimization</p>
+            </div>
+
+            <!-- Main Visualization with SVG Connections -->
+            <div class="relative" style="min-height: 1800px;">
+                
+                <!-- SVG Layer for Connections -->
+                <svg class="absolute top-0 left-0 w-full h-full pointer-events-none" style="z-index: 1;">
+                    <!-- MAIN to Parents -->
+                    <path d="M 600 120 L 200 250" stroke="#9333ea" stroke-width="3" fill="none" class="flow-down" marker-end="url(#arrowPurple)"/>
+                    <path d="M 600 120 L 600 250" stroke="#9333ea" stroke-width="3" fill="none" class="flow-down" marker-end="url(#arrowPurple)"/>
+                    <path d="M 600 120 L 1000 250" stroke="#9333ea" stroke-width="3" fill="none" class="flow-down" marker-end="url(#arrowPurple)"/>
+                    
+                    <!-- Parent A to Children A -->
+                    <path d="M 200 340 L 140 470" stroke="#3b82f6" stroke-width="2.5" fill="none" class="flow-down" marker-end="url(#arrowBlue)"/>
+                    <path d="M 200 340 L 260 470" stroke="#3b82f6" stroke-width="2.5" fill="none" class="flow-down" marker-end="url(#arrowBlue)"/>
+                    
+                    <!-- Children A to Compare -->
+                    <path d="M 140 560 L 200 650" stroke="#06b6d4" stroke-width="2" fill="none" class="flow-up" marker-end="url(#arrowCyan)"/>
+                    <path d="M 260 560 L 200 650" stroke="#06b6d4" stroke-width="2" fill="none" class="flow-up" marker-end="url(#arrowCyan)"/>
+                    
+                    <!-- Compare to Parent A Aggregated -->
+                    <path d="M 200 720 L 200 800" stroke="#3b82f6" stroke-width="2.5" fill="none" class="flow-down" marker-end="url(#arrowBlue)"/>
+                    
+                    <!-- Parent A Aggregated to MAIN Merge -->
+                    <path d="M 200 900 L 600 1050" stroke="#3b82f6" stroke-width="3" fill="none" class="flow-up" marker-end="url(#arrowBlue)"/>
+                    
+                    <!-- Parent B to Children B -->
+                    <path d="M 600 340 L 510 470" stroke="#22c55e" stroke-width="2.5" fill="none" class="flow-down" marker-end="url(#arrowGreen)"/>
+                    <path d="M 600 340 L 600 470" stroke="#22c55e" stroke-width="2.5" fill="none" class="flow-down" marker-end="url(#arrowGreen)"/>
+                    <path d="M 600 340 L 690 470" stroke="#22c55e" stroke-width="2.5" fill="none" class="flow-down" marker-end="url(#arrowGreen)"/>
+                    
+                    <!-- Children B to Merge -->
+                    <path d="M 510 560 L 600 650" stroke="#10b981" stroke-width="2" fill="none" class="flow-up" marker-end="url(#arrowEmerald)"/>
+                    <path d="M 600 560 L 600 650" stroke="#10b981" stroke-width="2" fill="none" class="flow-up" marker-end="url(#arrowEmerald)"/>
+                    <path d="M 690 560 L 600 650" stroke="#10b981" stroke-width="2" fill="none" class="flow-up" marker-end="url(#arrowEmerald)"/>
+                    
+                    <!-- Merge to Parent B Aggregated -->
+                    <path d="M 600 720 L 600 800" stroke="#22c55e" stroke-width="2.5" fill="none" class="flow-down" marker-end="url(#arrowGreen)"/>
+                    
+                    <!-- Parent B Aggregated to MAIN Merge -->
+                    <path d="M 600 900 L 600 1050" stroke="#22c55e" stroke-width="3" fill="none" class="flow-up" marker-end="url(#arrowGreen)"/>
+                    
+                    <!-- Parent C to Children C -->
+                    <path d="M 1000 340 L 940 470" stroke="#f97316" stroke-width="2.5" fill="none" class="flow-down" marker-end="url(#arrowOrange)"/>
+                    <path d="M 1000 340 L 1060 470" stroke="#f97316" stroke-width="2.5" fill="none" class="flow-down" marker-end="url(#arrowOrange)"/>
+                    
+                    <!-- Children C to Compare -->
+                    <path d="M 940 560 L 1000 650" stroke="#f59e0b" stroke-width="2" fill="none" class="flow-up" marker-end="url(#arrowAmber)"/>
+                    <path d="M 1060 560 L 1000 650" stroke="#f59e0b" stroke-width="2" fill="none" class="flow-up" marker-end="url(#arrowAmber)"/>
+                    
+                    <!-- Compare to Parent C Aggregated -->
+                    <path d="M 1000 720 L 1000 800" stroke="#f97316" stroke-width="2.5" fill="none" class="flow-down" marker-end="url(#arrowOrange)"/>
+                    
+                    <!-- Parent C Aggregated to MAIN Merge -->
+                    <path d="M 1000 900 L 600 1050" stroke="#f97316" stroke-width="3" fill="none" class="flow-up" marker-end="url(#arrowOrange)"/>
+                    
+                    <!-- MAIN Merge to Final MAIN -->
+                    <path d="M 600 1150 L 600 1250" stroke="#9333ea" stroke-width="3" fill="none" class="flow-down" marker-end="url(#arrowPurple)"/>
+                    
+                    <!-- Arrow markers -->
+                    <defs>
+                        <marker id="arrowPurple" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                            <path d="M0,0 L0,6 L9,3 z" fill="#9333ea" />
+                        </marker>
+                        <marker id="arrowBlue" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                            <path d="M0,0 L0,6 L9,3 z" fill="#3b82f6" />
+                        </marker>
+                        <marker id="arrowCyan" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                            <path d="M0,0 L0,6 L9,3 z" fill="#06b6d4" />
+                        </marker>
+                        <marker id="arrowGreen" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                            <path d="M0,0 L0,6 L9,3 z" fill="#22c55e" />
+                        </marker>
+                        <marker id="arrowEmerald" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                            <path d="M0,0 L0,6 L9,3 z" fill="#10b981" />
+                        </marker>
+                        <marker id="arrowOrange" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                            <path d="M0,0 L0,6 L9,3 z" fill="#f97316" />
+                        </marker>
+                        <marker id="arrowAmber" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                            <path d="M0,0 L0,6 L9,3 z" fill="#f59e0b" />
+                        </marker>
+                    </defs>
+                </svg>
+
+                <!-- Content Layer with Nodes -->
+                <div class="absolute" style="z-index: 2; width: 100%;">
+                    
+                    <!-- MAIN NODE - Top -->
+                    <div class="absolute" style="left: 50%; top: 50px; transform: translateX(-50%);">
+                        <div class="bg-gradient-to-r from-purple-600 to-purple-700 text-white px-12 py-6 rounded-2xl shadow-2xl border-4 border-purple-800">
+                            <div class="text-2xl font-bold text-center">MAIN</div>
+                            <div class="text-sm text-purple-100 text-center mt-1">Trip Planner</div>
+                            <div class="text-xs text-purple-200 text-center mt-1">[Travel Context]</div>
+                        </div>
+                    </div>
+
+                    <!-- Context Label -->
+                    <div class="absolute" style="left: 50%; top: 170px; transform: translateX(-50%);">
+                        <div class="bg-purple-100 px-3 py-1 rounded text-xs font-semibold text-purple-700">
+                            Travel Context ↓
+                        </div>
+                    </div>
+
+                    <!-- Parent A (Restaurant) -->
+                    <div class="absolute" style="left: 100px; top: 250px;">
+                        <div class="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-8 py-4 rounded-xl shadow-xl border-2 border-blue-700">
+                            <div class="text-xl font-bold text-center">Parent A</div>
+                            <div class="text-sm text-blue-100 text-center mt-1">(Restaurant)</div>
+                            <div class="text-xs text-blue-200 text-center">[Food Context]</div>
+                        </div>
+                    </div>
+
+                    <!-- Parent B (Hotel) -->
+                    <div class="absolute" style="left: 500px; top: 250px;">
+                        <div class="bg-gradient-to-r from-green-500 to-green-600 text-white px-8 py-4 rounded-xl shadow-xl border-2 border-green-700">
+                            <div class="text-xl font-bold text-center">Parent B</div>
+                            <div class="text-sm text-green-100 text-center mt-1">(Hotel)</div>
+                            <div class="text-xs text-green-200 text-center">[Stay Context]</div>
+                        </div>
+                    </div>
+
+                    <!-- Parent C (Travel) -->
+                    <div class="absolute" style="left: 900px; top: 250px;">
+                        <div class="bg-gradient-to-r from-orange-500 to-orange-600 text-white px-8 py-4 rounded-xl shadow-xl border-2 border-orange-700">
+                            <div class="text-xl font-bold text-center">Parent C</div>
+                            <div class="text-sm text-orange-100 text-center mt-1">(Travel)</div>
+                            <div class="text-xs text-orange-200 text-center">[Route Context]</div>
+                        </div>
+                    </div>
+
+                    <!-- Context Labels for Parents -->
+                    <div class="absolute" style="left: 175px; top: 380px;">
+                        <div class="bg-blue-100 px-2 py-1 rounded text-xs font-semibold text-blue-700">Food Context ↓</div>
+                    </div>
+                    <div class="absolute" style="left: 575px; top: 380px;">
+                        <div class="bg-green-100 px-2 py-1 rounded text-xs font-semibold text-green-700">Stay Context ↓</div>
+                    </div>
+                    <div class="absolute" style="left: 965px; top: 380px;">
+                        <div class="bg-orange-100 px-2 py-1 rounded text-xs font-semibold text-orange-700">Route Context ↓</div>
+                    </div>
+
+                    <!-- Restaurant A1 -->
+                    <div class="absolute" style="left: 50px; top: 470px;">
+                        <div class="bg-gradient-to-r from-cyan-400 to-cyan-500 text-white px-6 py-3 rounded-lg shadow-lg border border-cyan-600">
+                            <div class="font-semibold text-center">Restaurant A1</div>
+                            <div class="text-xs text-cyan-100 text-center">[Menu A1]</div>
+                        </div>
+                    </div>
+
+                    <!-- Restaurant A2 -->
+                    <div class="absolute" style="left: 210px; top: 470px;">
+                        <div class="bg-gradient-to-r from-cyan-400 to-cyan-500 text-white px-6 py-3 rounded-lg shadow-lg border border-cyan-600">
+                            <div class="font-semibold text-center">Restaurant A2</div>
+                            <div class="text-xs text-cyan-100 text-center">[Menu A2]</div>
+                        </div>
+                    </div>
+
+                    <!-- Hotel B1 -->
+                    <div class="absolute" style="left: 455px; top: 470px;">
+                        <div class="bg-gradient-to-r from-emerald-400 to-emerald-500 text-white px-5 py-3 rounded-lg shadow-lg border border-emerald-600">
+                            <div class="font-semibold text-center text-sm">Hotel B1</div>
+                            <div class="text-xs text-emerald-100 text-center">[B1]</div>
+                        </div>
+                    </div>
+
+                    <!-- Hotel B2 -->
+                    <div class="absolute" style="left: 560px; top: 470px;">
+                        <div class="bg-gradient-to-r from-emerald-400 to-emerald-500 text-white px-5 py-3 rounded-lg shadow-lg border border-emerald-600">
+                            <div class="font-semibold text-center text-sm">Hotel B2</div>
+                            <div class="text-xs text-emerald-100 text-center">[B2]</div>
+                        </div>
+                    </div>
+
+                    <!-- Hotel B3 -->
+                    <div class="absolute" style="left: 655px; top: 470px;">
+                        <div class="bg-gradient-to-r from-emerald-400 to-emerald-500 text-white px-5 py-3 rounded-lg shadow-lg border border-emerald-600">
+                            <div class="font-semibold text-center text-sm">Hotel B3</div>
+                            <div class="text-xs text-emerald-100 text-center">[B3]</div>
+                        </div>
+                    </div>
+
+                    <!-- Travel C1 -->
+                    <div class="absolute" style="left: 875px; top: 470px;">
+                        <div class="bg-gradient-to-r from-amber-400 to-amber-500 text-white px-6 py-3 rounded-lg shadow-lg border border-amber-600">
+                            <div class="font-semibold text-center">Travel C1</div>
+                            <div class="text-xs text-amber-100 text-center">[Route 1]</div>
+                        </div>
+                    </div>
+
+                    <!-- Travel C2 -->
+                    <div class="absolute" style="left: 1015px; top: 470px;">
+                        <div class="bg-gradient-to-r from-amber-400 to-amber-500 text-white px-6 py-3 rounded-lg shadow-lg border border-amber-600">
+                            <div class="font-semibold text-center">Travel C2</div>
+                            <div class="text-xs text-amber-100 text-center">[Route 2]</div>
+                        </div>
+                    </div>
+
+                    <!-- Children Info Labels -->
+                    <div class="absolute" style="left: 95px; top: 570px;">
+                        <div class="bg-cyan-100 px-2 py-1 rounded text-xs font-semibold text-cyan-700">A1 Info ↑</div>
+                    </div>
+                    <div class="absolute" style="left: 255px; top: 570px;">
+                        <div class="bg-cyan-100 px-2 py-1 rounded text-xs font-semibold text-cyan-700">A2 Info ↑</div>
+                    </div>
+                    <div class="absolute" style="left: 475px; top: 570px;">
+                        <div class="bg-emerald-100 px-2 py-1 rounded text-xs font-semibold text-emerald-700">B1 Info ↑</div>
+                    </div>
+                    <div class="absolute" style="left: 575px; top: 570px;">
+                        <div class="bg-emerald-100 px-2 py-1 rounded text-xs font-semibold text-emerald-700">B2 Info ↑</div>
+                    </div>
+                    <div class="absolute" style="left: 670px; top: 570px;">
+                        <div class="bg-emerald-100 px-2 py-1 rounded text-xs font-semibold text-emerald-700">B3 Info ↑</div>
+                    </div>
+                    <div class="absolute" style="left: 905px; top: 570px;">
+                        <div class="bg-amber-100 px-2 py-1 rounded text-xs font-semibold text-amber-700">C1 Info ↑</div>
+                    </div>
+                    <div class="absolute" style="left: 1050px; top: 570px;">
+                        <div class="bg-amber-100 px-2 py-1 rounded text-xs font-semibold text-amber-700">C2 Info ↑</div>
+                    </div>
+
+                    <!-- Compare/Merge Boxes -->
+                    <div class="absolute" style="left: 90px; top: 650px;">
+                        <div class="flex items-center gap-2 bg-blue-200 px-4 py-2 rounded-lg border-2 border-blue-400">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-blue-700">
+                                <path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"></path>
+                            </svg>
+                            <span class="text-sm font-bold text-blue-800">COMPARE: A1 vs A2</span>
+                        </div>
+                    </div>
+
+                    <div class="absolute" style="left: 480px; top: 650px;">
+                        <div class="flex items-center gap-2 bg-green-200 px-4 py-2 rounded-lg border-2 border-green-400">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-700">
+                                <path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"></path>
+                            </svg>
+                            <span class="text-sm font-bold text-green-800">MERGE: B1 + B2 + B3</span>
+                        </div>
+                    </div>
+
+                    <div class="absolute" style="left: 900px; top: 650px;">
+                        <div class="flex items-center gap-2 bg-orange-200 px-4 py-2 rounded-lg border-2 border-orange-400">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-orange-700">
+                                <path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"></path>
+                            </svg>
+                            <span class="text-sm font-bold text-orange-800">COMPARE: C1 vs C2</span>
+                        </div>
+                    </div>
+
+                    <!-- Aggregated Parents -->
+                    <div class="absolute" style="left: 100px; top: 800px;">
+                        <div class="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-8 py-4 rounded-xl shadow-xl border-2 border-blue-800">
+                            <div class="text-lg font-bold text-center">Parent A</div>
+                            <div class="text-sm text-blue-100 text-center mt-1">(Restaurant)</div>
+                            <div class="text-xs text-blue-200 text-center">[Aggregated Restaurant Context]</div>
+                        </div>
+                    </div>
+
+                    <div class="absolute" style="left: 490px; top: 800px;">
+                        <div class="bg-gradient-to-r from-green-600 to-green-700 text-white px-8 py-4 rounded-xl shadow-xl border-2 border-green-800">
+                            <div class="text-lg font-bold text-center">Parent B</div>
+                            <div class="text-sm text-green-100 text-center mt-1">(Hotel)</div>
+                            <div class="text-xs text-green-200 text-center">[Aggregated Hotel Context]</div>
+                        </div>
+                    </div>
+
+                    <div class="absolute" style="left: 900px; top: 800px;">
+                        <div class="bg-gradient-to-r from-orange-600 to-orange-700 text-white px-8 py-4 rounded-xl shadow-xl border-2 border-orange-800">
+                            <div class="text-lg font-bold text-center">Parent C</div>
+                            <div class="text-sm text-orange-100 text-center mt-1">(Travel)</div>
+                            <div class="text-xs text-orange-200 text-center">[Aggregated Travel Context]</div>
+                        </div>
+                    </div>
+
+                    <!-- MAIN Merge Box -->
+                    <div class="absolute" style="left: 50%; top: 1050px; transform: translateX(-50%);">
+                        <div class="flex items-center gap-3 bg-purple-200 px-8 py-4 rounded-xl border-4 border-purple-400 shadow-lg">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-purple-700">
+                                <path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"></path>
+                            </svg>
+                            <span class="text-lg font-bold text-purple-900">
+                                MAIN MERGE: Restaurant + Hotel + Travel
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Final MAIN -->
+                    <div class="absolute" style="left: 50%; top: 1250px; transform: translateX(-50%);">
+                        <div class="bg-gradient-to-r from-purple-600 to-purple-700 text-white px-12 py-6 rounded-2xl shadow-2xl border-4 border-purple-800">
+                            <div class="text-2xl font-bold text-center">MAIN</div>
+                            <div class="text-sm text-purple-100 text-center mt-1">Trip Planner</div>
+                            <div class="text-xs text-purple-200 text-center mt-1">[Optimized Complete Tour Plan]</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Legend -->
+            <div class="mt-12 bg-white p-6 rounded-xl shadow-lg border-2 border-gray-200">
+                <h3 class="text-lg font-bold text-gray-800 mb-4">Tour Planning Context Flow</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                    <div class="flex items-center gap-2">
+                        <svg class="text-gray-600" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <polyline points="19 12 12 19 5 12"></polyline>
+                        </svg>
+                        <span><strong>Downward:</strong> Context propagation (Parent → Child)</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <svg class="text-gray-600" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="19" x2="12" y2="5"></line>
+                            <polyline points="5 12 12 5 19 12"></polyline>
+                        </svg>
+                        <span><strong>Upward:</strong> Info/context return (Child → Parent)</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <svg class="text-gray-600" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"></path>
+                        </svg>
+                        <span><strong>Compare/Merge:</strong> Context aggregation & comparison</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-6 h-6 bg-gradient-to-r from-purple-600 to-purple-700 rounded"></div>
+                        <span><strong>Purple:</strong> MAIN (Trip Planner)</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-6 h-6 bg-gradient-to-r from-blue-500 to-green-600 rounded"></div>
+                        <span><strong>Blue/Green/Orange:</strong> Restaurant/Hotel/Travel</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-6 h-6 bg-gradient-to-r from-cyan-400 to-amber-500 rounded"></div>
+                        <span><strong>Light colors:</strong> Specific options</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

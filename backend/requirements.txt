@@ -22,6 +22,7 @@ python-dotenv>=1.0.0
 # LLM API Clients
 openai>=1.0.0
 groq>=0.4.0
+ollama>=0.1.0  # Local LLM support
 
 # HTTP & Async
 httpx>=0.25.0

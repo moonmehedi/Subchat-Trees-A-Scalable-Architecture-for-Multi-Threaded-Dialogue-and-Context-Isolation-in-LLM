@@ -1,5 +1,6 @@
 import openai
 from groq import Groq
+import ollama
 from typing import List, Dict
 import json
 from ..models.tree import TreeNode
@@ -11,14 +12,32 @@ class SimpleLLMClient:
     """ Simple LLM client using Groq API with optional RAG """
 
     def __init__(self, api_key: str = None, enable_vector_index: bool = False):
-        # Use provided api_key, or load from your config
-        if api_key:
-            self.groq_client = Groq(api_key=api_key)
-        elif settings.groq_api_key:
-            self.groq_client = Groq(api_key=settings.groq_api_key)
-        else:
-            print("⚠️  Warning: GROQ_API_KEY not found in config or environment. Using echo mode.")
-            self.groq_client = None
+        # Initialize LLM client based on backend setting
+        self.llm_backend = settings.llm_backend
+        self.groq_client = None
+        self.ollama_available = False
+        
+        if self.llm_backend == "ollama":
+            # Use Ollama (local)
+            try:
+                # Test Ollama connection
+                ollama.list()
+                self.ollama_available = True
+                print(f"✅ Ollama connected. Using model: {settings.model_base}")
+            except Exception as e:
+                print(f"⚠️  Ollama not available: {e}")
+                print("   Falling back to Groq if available...")
+                self.llm_backend = "groq"
+        
+        if self.llm_backend == "groq" or not self.ollama_available:
+            # Use Groq (cloud)
+            if api_key:
+                self.groq_client = Groq(api_key=api_key)
+            elif settings.groq_api_key:
+                self.groq_client = Groq(api_key=settings.groq_api_key)
+            else:
+                print("⚠️  Warning: GROQ_API_KEY not found and Ollama unavailable. Using echo mode.")
+                self.groq_client = None
         
         # Initialize vector index if enabled
         self.vector_index = None
@@ -54,8 +73,38 @@ class SimpleLLMClient:
             'content': user_message
         })
         print('*******************context*********************\n',context_messages)
-        # Try to use Groq API if client is available
-        if self.groq_client:
+        # Try to use LLM API based on backend
+        if self.ollama_available and self.llm_backend == "ollama":
+            # Use Ollama
+            try:
+                response = ollama.chat(
+                    model=settings.model_base,
+                    messages=context_messages,
+                    options={
+                        "temperature": 0.0,  # Deterministic for reproducible testing
+                        "num_predict": 1000,  # Max tokens
+                    }
+                )
+                
+                assistant_message = response['message']['content']
+                
+                # Extract usage info if available
+                self.last_usage = {
+                    "prompt_tokens": response.get('prompt_eval_count', 0),
+                    "completion_tokens": response.get('eval_count', 0),
+                    "total_tokens": response.get('prompt_eval_count', 0) + response.get('eval_count', 0)
+                }
+                
+                return assistant_message
+                
+            except Exception as e:
+                print(f"Ollama error: {e}")
+                print("Falling back to echo mode...")
+                self.last_usage = {"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0}
+                return f"Echo (Ollama error): {user_message}"
+        
+        elif self.groq_client:
+            # Use Groq
             try:
                 response = self.groq_client.chat.completions.create(
                     model=settings.model_base,
@@ -109,8 +158,32 @@ class SimpleLLMClient:
         # })
 
         print('entire context message before response ',context_messages)
-        # Try to use Groq API streaming if client is available
-        if self.groq_client:
+        # Try to use LLM API streaming based on backend
+        if self.ollama_available and self.llm_backend == "ollama":
+            # Ollama streaming
+            try:
+                stream = ollama.chat(
+                    model=settings.model_base,
+                    messages=context_messages,
+                    stream=True,
+                    options={
+                        "temperature": 0.0,
+                        "num_predict": 1000,
+                    }
+                )
+                
+                for chunk in stream:
+                    if 'message' in chunk and 'content' in chunk['message']:
+                        yield chunk['message']['content']
+                         
+            except Exception as e:
+                print(f"Ollama streaming error: {e}")
+                response = self._generate_fallback_response(user_message)
+                for char in response:
+                    yield char
+        
+        elif self.groq_client:
+            # Groq streaming
             try:
                 stream = self.groq_client.chat.completions.create(
                     model=settings.model_base,

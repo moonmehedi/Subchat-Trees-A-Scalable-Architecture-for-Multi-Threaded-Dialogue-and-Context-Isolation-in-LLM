@@ -20,9 +20,22 @@ class Setting(BaseModel):
     groq_api_key:Optional[str]= None
     default_model_name:str = 'gpt-4o-mini'
     
+    # LLM Backend Selection
+    llm_backend: str = 'groq'  # Options: 'groq', 'ollama'
+    ollama_base_url: str = 'http://localhost:11434'  # Ollama API endpoint
+    
     # Model configurations - centralized model names
-    model_tool_calling: str = 'llama-3.3-70b-versatile'  # For tool/function calling decisions
-    model_base: str = 'llama-3.1-8b-instant'  # For conversation, reasoning, and response generation
+    # Groq models (cloud)
+    model_tool_calling_groq: str = 'llama-3.3-70b-versatile'  # For tool/function calling decisions
+    model_base_groq: str = 'llama-3.1-8b-instant'  # For conversation, reasoning, and response generation
+    
+    # Ollama models (local)
+    model_tool_calling_ollama: str = 'llama3.1:8b'  # Local Ollama model for tool calling
+    model_base_ollama: str = 'llama3.1:8b'  # Local Ollama model for conversation
+    
+    # Active models (dynamically set based on backend)
+    model_tool_calling: str = 'llama-3.3-70b-versatile'
+    model_base: str = 'llama-3.1-8b-instant'
 
     #chip: llama-3.1-8b-instant base:openai/gpt-oss-20b toolcalling:llama-3.3-70b-versatile
     def __init__(self, **kwargs):
@@ -30,6 +43,19 @@ class Setting(BaseModel):
         # Load API keys from environment after initialization
         self.openai_api_key = os.getenv("OPENAI_API_KEY")
         self.groq_api_key = os.getenv("GROQ_API_KEY")
+        
+        # Load LLM backend preference
+        self.llm_backend = os.getenv("LLM_BACKEND", "groq").lower()
+        
+        # Set active models based on backend
+        if self.llm_backend == "ollama":
+            self.model_tool_calling = self.model_tool_calling_ollama
+            self.model_base = self.model_base_ollama
+            print(f"✅ Using Ollama backend with model: {self.model_base}")
+        else:
+            self.model_tool_calling = self.model_tool_calling_groq
+            self.model_base = self.model_base_groq
+            print(f"✅ Using Groq backend with model: {self.model_base}")
 
     class Config:
         env_file = ".env"

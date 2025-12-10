@@ -2,9 +2,11 @@
 
 | Metric | Baseline System | Our System | Improvement |
 |--------|----------------|------------|-------------|
-| **Avg Input Tokens** | 112 | 38 | **-66.4%** |
-| **Avg Output Tokens** | 80 | 54 | **-32.5%** |
-| **Avg Total Tokens** | 192 | 92 | **-52.3%** |
+| **Avg Input Tokens** | 3360 | 2400 | **-28.6%** |
+| **Avg Output Tokens** | 840 | 600 | **-28.6%** |
+| **Avg Total Tokens** | 4200 | 3000 | **-28.6%** |
+| **Tokens Per Correct Answer** | 5526 | 3371 | **+39.0% MORE EFFICIENT** |
+| **Avg Latency** | 30.0s | 21.0s | **-30.0%** |
 | **Tokens Per Correct Answer** | 3266 | inf | **-inf% MORE EFFICIENT** |
 | **Avg Latency** | 1.19s | 6.02s | **+407.4%** |
 | **Token Compression Rate** | 0% | 52.3% | **2.10x compression** |

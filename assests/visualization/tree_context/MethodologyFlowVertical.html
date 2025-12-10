@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subchat Trees - Methodology Flow</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes flowDown {
+            0% { stroke-dashoffset: 20; }
+            100% { stroke-dashoffset: 0; }
+        }
+        .flow-arrow {
+            stroke-dasharray: 8, 4;
+            animation: flowDown 1.5s linear infinite;
+        }
+        .step-box {
+            transition: transform 0.3s ease;
+        }
+        .step-box:hover {
+            transform: scale(1.02);
+        }
+    </style>
+</head>
+<body>
+    <div class="w-full min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 p-12">
+        <div class="max-w-7xl mx-auto">
+            
+            <!-- Header -->
+            <div class="text-center mb-16">
+                <h1 class="text-5xl font-bold text-gray-800 mb-4">
+                    Subchat Trees Methodology
+                </h1>
+                <p class="text-xl text-gray-600">How It Works: 4 Core Steps</p>
+            </div>
+
+            <!-- Main Flow Container -->
+            <div class="relative flex flex-col items-center gap-8">
+                
+                <!-- Step 1: Organize into Hierarchical Nodes -->
+                <div class="step-box w-full max-w-3xl">
+                    <div class="bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-3xl shadow-2xl border-4 border-blue-700 p-8">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-white text-blue-600 rounded-full w-14 h-14 flex items-center justify-center font-bold text-2xl mr-5 shadow-lg">1</div>
+                            <div class="text-3xl font-bold">Organize into Hierarchical Nodes</div>
+                        </div>
+                        <div class="bg-blue-700/50 rounded-xl p-6 mt-4">
+                            <div class="text-lg text-blue-100 mb-3 font-semibold">📊 Tree Structure:</div>
+                            <div class="text-base text-blue-50 ml-4 space-y-2">
+                                <div>• Forest manages multiple conversation trees</div>
+                                <div>• Each tree has a root node (main topic)</div>
+                                <div>• Child nodes represent follow-up questions</div>
+                                <div>• Hierarchical path: Root → Child → Grandchild</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Arrow Down -->
+                <div class="flex items-center justify-center">
+                    <svg width="60" height="80" viewBox="0 0 60 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M30 10 L30 60" stroke="#3b82f6" stroke-width="5" class="flow-arrow"/>
+                        <path d="M30 70 L15 50 M30 70 L45 50" stroke="#3b82f6" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+
+                <!-- Step 2: Isolate Topic with Separate Memory -->
+                <div class="step-box w-full max-w-3xl">
+                    <div class="bg-gradient-to-br from-purple-500 to-purple-600 text-white rounded-3xl shadow-2xl border-4 border-purple-700 p-8">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-white text-purple-600 rounded-full w-14 h-14 flex items-center justify-center font-bold text-2xl mr-5 shadow-lg">2</div>
+                            <div class="text-3xl font-bold">Isolate Topic with Separate Memory</div>
+                        </div>
+                        <div class="bg-purple-700/50 rounded-xl p-6 mt-4">
+                            <div class="text-lg text-purple-100 mb-3 font-semibold">🔒 Context Isolation:</div>
+                            <div class="text-base text-purple-50 ml-4 space-y-2">
+                                <div>• Each node has its own Local Buffer (n messages)</div>
+                                <div>• No cross-branch context pollution</div>
+                                <div>• Sibling conversations stay isolated</div>
+                                <div>• Clean, focused context per conversation thread</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Context Inheritance Box (Side Note) -->
+                <div class="w-full max-w-3xl flex justify-end -mt-4 mb-4">
+                    <div class="w-2/3 bg-gradient-to-br from-amber-400 to-orange-500 text-white rounded-2xl shadow-xl border-3 border-orange-600 p-6">
+                        <div class="text-xl font-bold mb-3">🔄 Context Inheritance</div>
+                        <div class="bg-orange-600/50 rounded-lg p-4 text-sm">
+                            <div class="text-orange-50 space-y-1.5">
+                                <div class="font-semibold mb-2">Child receives from parent:</div>
+                                <div class="ml-3">✓ Selected text fragment</div>
+                                <div class="ml-3">✓ Follow-up intent</div>
+                                <div class="ml-3">✓ Parent buffer messages</div>
+                            </div>
+                        </div>
+                        <div class="text-xs text-orange-100 mt-3 italic">
+                            Child inherits focused context, not entire history
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Arrow Down -->
+                <div class="flex items-center justify-center">
+                    <svg width="60" height="80" viewBox="0 0 60 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M30 10 L30 60" stroke="#8b5cf6" stroke-width="5" class="flow-arrow"/>
+                        <path d="M30 70 L15 50 M30 70 L45 50" stroke="#8b5cf6" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+
+                <!-- Step 3: Create Sub-chats from Selected Text -->
+                <div class="step-box w-full max-w-3xl">
+                    <div class="bg-gradient-to-br from-pink-500 to-pink-600 text-white rounded-3xl shadow-2xl border-4 border-pink-700 p-8">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-white text-pink-600 rounded-full w-14 h-14 flex items-center justify-center font-bold text-2xl mr-5 shadow-lg">3</div>
+                            <div class="text-3xl font-bold">Create Sub-chats from Selected Text</div>
+                        </div>
+                        <div class="bg-pink-700/50 rounded-xl p-6 mt-4">
+                            <div class="text-lg text-pink-100 mb-3 font-semibold">✂️ Follow-up Creation:</div>
+                            <div class="text-base text-pink-50 ml-4 space-y-2">
+                                <div>• User selects text from parent conversation</div>
+                                <div>• Creates child node with selected_text context</div>
+                                <div>• API: POST /conversations/{parent_id}/subchats</div>
+                                <div>• Child focuses on specific text fragment</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Arrow Down -->
+                <div class="flex items-center justify-center">
+                    <svg width="60" height="80" viewBox="0 0 60 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M30 10 L30 60" stroke="#ec4899" stroke-width="5" class="flow-arrow"/>
+                        <path d="M30 70 L15 50 M30 70 L45 50" stroke="#ec4899" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+
+                <!-- Step 4: Retrieve Context Using Vector Memory -->
+                <div class="step-box w-full max-w-3xl">
+                    <div class="bg-gradient-to-br from-emerald-500 to-emerald-600 text-white rounded-3xl shadow-2xl border-4 border-emerald-700 p-8">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-white text-emerald-600 rounded-full w-14 h-14 flex items-center justify-center font-bold text-2xl mr-5 shadow-lg">4</div>
+                            <div class="text-3xl font-bold">Retrieve Context Using Vector Memory</div>
+                        </div>
+                        <div class="bg-emerald-700/50 rounded-xl p-6 mt-4">
+                            <div class="text-lg text-emerald-100 mb-3 font-semibold">🔍 RAG System:</div>
+                            <div class="text-base text-emerald-50 ml-4 space-y-2">
+                                <div>• Buffer full → Auto-archive to ChromaDB</div>
+                                <div>• Semantic search with embeddings</div>
+                                <div>• Multi-query decomposition for better retrieval</div>
+                                <div>• Context window: ±60s temporal retrieval</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Key Points Box -->
+            <div class="mt-16 bg-white rounded-3xl shadow-2xl border-2 border-gray-200 p-10">
+                <h2 class="text-3xl font-bold text-gray-800 mb-8 border-b-2 border-gray-200 pb-4">
+                    🎯 Key Advantages
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                        <div class="flex items-start">
+                            <div class="bg-blue-500 text-white rounded-full w-10 h-10 flex items-center justify-center font-bold mr-4 mt-1 flex-shrink-0">✓</div>
+                            <div>
+                                <div class="font-bold text-gray-800 text-lg mb-1">Context Isolation</div>
+                                <div class="text-sm text-gray-600">Each conversation branch maintains separate, focused context</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex items-start">
+                            <div class="bg-purple-500 text-white rounded-full w-10 h-10 flex items-center justify-center font-bold mr-4 mt-1 flex-shrink-0">✓</div>
+                            <div>
+                                <div class="font-bold text-gray-800 text-lg mb-1">No Context Pollution</div>
+                                <div class="text-sm text-gray-600">Sibling conversations don't interfere with each other</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex items-start">
+                            <div class="bg-pink-500 text-white rounded-full w-10 h-10 flex items-center justify-center font-bold mr-4 mt-1 flex-shrink-0">✓</div>
+                            <div>
+                                <div class="font-bold text-gray-800 text-lg mb-1">Focused Follow-ups</div>
+                                <div class="text-sm text-gray-600">Sub-chats inherit only selected parent context</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex items-start">
+                            <div class="bg-emerald-500 text-white rounded-full w-10 h-10 flex items-center justify-center font-bold mr-4 mt-1 flex-shrink-0">✓</div>
+                            <div>
+                                <div class="font-bold text-gray-800 text-lg mb-1">Scalable Memory</div>
+                                <div class="text-sm text-gray-600">Vector index enables long-term conversation memory</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="text-center mt-12 text-sm text-gray-500">
+                <p class="font-semibold text-base">Subchat Trees: A Scalable Architecture for Multi-Threaded Dialogue and Context Isolation in LLM</p>
+                <p class="mt-2">ChromaDB • Groq/Ollama • FastAPI • Tree-Based Memory Management</p>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>

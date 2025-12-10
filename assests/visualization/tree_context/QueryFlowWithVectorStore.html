@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Query Processing Flow with Vector Store</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes flowRight {
+            0% { stroke-dashoffset: 20; }
+            100% { stroke-dashoffset: 0; }
+        }
+        @keyframes flowLeft {
+            0% { stroke-dashoffset: -20; }
+            100% { stroke-dashoffset: 0; }
+        }
+        .flow-arrow {
+            stroke-dasharray: 8, 4;
+        }
+        .flow-right { animation: flowRight 1.5s linear infinite; }
+        .flow-left { animation: flowLeft 1.5s linear infinite; }
+        
+        body { overflow: hidden; }
+    </style>
+</head>
+<body>
+    <div class="w-screen h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50 overflow-hidden flex items-center justify-center p-4">
+        <div class="relative w-full max-w-7xl h-full max-h-[90vh]">
+            
+            <!-- Title -->
+            <div class="text-center mb-6">
+                <h1 class="text-3xl font-bold text-gray-800">Query Processing & Response Flow</h1>
+                <p class="text-sm text-gray-600 mt-1">Vector Store as Central Memory Hub</p>
+            </div>
+
+            <!-- Main Container -->
+            <div class="relative w-full" style="height: calc(100% - 100px);">
+                
+                <!-- Top Row: Steps 1-4 -->
+                <div class="absolute top-0 left-0 right-0 flex justify-between items-start px-2">
+                    
+                    <!-- Step 1 -->
+                    <div class="w-[200px]">
+                        <div class="bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-xl shadow-xl border-3 border-blue-700 p-3">
+                            <div class="flex items-center mb-2">
+                                <div class="bg-white text-blue-600 rounded-full w-8 h-8 flex items-center justify-center font-bold mr-2 text-sm">1</div>
+                                <div class="text-sm font-bold">User Query</div>
+                            </div>
+                            <div class="bg-blue-700/50 rounded-lg p-2 text-xs space-y-1">
+                                <div class="font-semibold text-blue-100">📨 Input:</div>
+                                <div class="text-blue-50 italic">"What languages discussed?"</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Arrow 1→2 -->
+                    <div class="flex items-center pt-6">
+                        <svg width="50" height="30">
+                            <path d="M5 15 L40 15" stroke="#3b82f6" stroke-width="3" class="flow-arrow flow-right"/>
+                            <path d="M45 15 L35 10 M45 15 L35 20" stroke="#3b82f6" stroke-width="3" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="w-[200px]">
+                        <div class="bg-gradient-to-br from-cyan-500 to-cyan-600 text-white rounded-xl shadow-xl border-3 border-cyan-700 p-3">
+                            <div class="flex items-center mb-2">
+                                <div class="bg-white text-cyan-600 rounded-full w-8 h-8 flex items-center justify-center font-bold mr-2 text-sm">2</div>
+                                <div class="text-sm font-bold">Store in Buffer</div>
+                            </div>
+                            <div class="bg-cyan-700/50 rounded-lg p-2 text-xs space-y-1">
+                                <div class="font-semibold text-cyan-100">💾 Actions:</div>
+                                <div class="text-cyan-50">• Add to buffer</div>
+                                <div class="text-cyan-50">• Archive if full</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Arrow 2→3 -->
+                    <div class="flex items-center pt-6">
+                        <svg width="50" height="30">
+                            <path d="M5 15 L40 15" stroke="#06b6d4" stroke-width="3" class="flow-arrow flow-right"/>
+                            <path d="M45 15 L35 10 M45 15 L35 20" stroke="#06b6d4" stroke-width="3" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="w-[200px]">
+                        <div class="bg-gradient-to-br from-purple-500 to-purple-600 text-white rounded-xl shadow-xl border-3 border-purple-700 p-3">
+                            <div class="flex items-center mb-2">
+                                <div class="bg-white text-purple-600 rounded-full w-8 h-8 flex items-center justify-center font-bold mr-2 text-sm">3</div>
+                                <div class="text-sm font-bold">Query Decomposition</div>
+                            </div>
+                            <div class="bg-purple-700/50 rounded-lg p-2 text-xs space-y-1">
+                                <div class="font-semibold text-purple-100">🔍 Generate:</div>
+                                <div class="text-purple-50">• Sub-queries</div>
+                                <div class="text-purple-50">• Multi-query search</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Arrow 3→4 -->
+                    <div class="flex items-center pt-6">
+                        <svg width="50" height="30">
+                            <path d="M5 15 L40 15" stroke="#8b5cf6" stroke-width="3" class="flow-arrow flow-right"/>
+                            <path d="M45 15 L35 10 M45 15 L35 20" stroke="#8b5cf6" stroke-width="3" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+
+                    <!-- Step 4 -->
+                    <div class="w-[200px]">
+                        <div class="bg-gradient-to-br from-pink-500 to-pink-600 text-white rounded-xl shadow-xl border-3 border-pink-700 p-3">
+                            <div class="flex items-center mb-2">
+                                <div class="bg-white text-pink-600 rounded-full w-8 h-8 flex items-center justify-center font-bold mr-2 text-sm">4</div>
+                                <div class="text-sm font-bold">Search Vector DB</div>
+                            </div>
+                            <div class="bg-pink-700/50 rounded-lg p-2 text-xs space-y-1">
+                                <div class="font-semibold text-pink-100">🔎 Query:</div>
+                                <div class="text-pink-50">• Semantic search</div>
+                                <div class="text-pink-50">• ±60s window</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Center: Vector Store -->
+                <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[350px]">
+                    <div class="bg-gradient-to-br from-indigo-600 to-indigo-700 text-white rounded-2xl shadow-2xl border-4 border-indigo-800 p-5">
+                        <div class="text-center mb-3">
+                            <div class="flex items-center justify-center mb-2">
+                                <div class="bg-white text-indigo-600 rounded-full w-12 h-12 flex items-center justify-center font-bold text-2xl mr-3">🗄️</div>
+                                <div>
+                                    <div class="text-xl font-bold">Vector Store</div>
+                                    <div class="text-sm text-indigo-200">(ChromaDB)</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-indigo-800/60 rounded-xl p-4 space-y-3">
+                            <div class="text-center font-semibold text-indigo-100 mb-2">Central Memory Hub</div>
+                            
+                            <!-- Real-time Info -->
+                            <div class="bg-indigo-900/70 rounded-lg p-3 space-y-2 text-xs">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-indigo-200 font-semibold">🗄️ Database:</span>
+                                    <span class="bg-indigo-700 px-2 py-0.5 rounded text-indigo-100">ChromaDB</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-indigo-200 font-semibold">🤖 Embedding Model:</span>
+                                    <span class="bg-indigo-700 px-2 py-0.5 rounded text-indigo-100 text-[10px]">all-MiniLM-L6-v2</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-indigo-200 font-semibold">📏 Dimensions:</span>
+                                    <span class="bg-indigo-700 px-2 py-0.5 rounded text-indigo-100">384-dim vectors</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-indigo-200 font-semibold">⚡ Distance Metric:</span>
+                                    <span class="bg-indigo-700 px-2 py-0.5 rounded text-indigo-100">Cosine similarity</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-indigo-200 font-semibold">🔍 Chunking:</span>
+                                    <span class="bg-indigo-700 px-2 py-0.5 rounded text-indigo-100">Per message</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-indigo-200 font-semibold">🎯 Retrieval Strategy:</span>
+                                    <span class="bg-indigo-700 px-2 py-0.5 rounded text-indigo-100 text-[10px]">Multi-query + ±60s</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-indigo-200 font-semibold">🔒 Isolation:</span>
+                                    <span class="bg-indigo-700 px-2 py-0.5 rounded text-indigo-100">node_id filter</span>
+                                </div>
+                            </div>
+
+                            <!-- Operations -->
+                            <div class="grid grid-cols-2 gap-2 text-xs">
+                                <div class="bg-indigo-900/50 rounded p-2 text-center">
+                                    <div class="font-semibold mb-1 text-indigo-100">📥 Archive</div>
+                                    <div class="text-indigo-200 text-[10px]">When buffer full</div>
+                                </div>
+                                <div class="bg-indigo-900/50 rounded p-2 text-center">
+                                    <div class="font-semibold mb-1 text-indigo-100">📤 Retrieve</div>
+                                    <div class="text-indigo-200 text-[10px]">Top-k relevant</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Curved Arrows connecting to Vector Store -->
+                
+                <!-- Step 1 → Vector Store (Store) -->
+                <div class="absolute" style="top: 100px; left: 150px;">
+                    <svg width="200" height="150" viewBox="0 0 200 150">
+                        <path d="M10 10 Q 100 80, 190 140" stroke="#3b82f6" stroke-width="2.5" fill="none" class="flow-arrow flow-right" stroke-dasharray="6,3"/>
+                        <path d="M195 143 L185 140 M195 143 L192 133" stroke="#3b82f6" stroke-width="2.5" stroke-linecap="round"/>
+                    </svg>
+                    <text x="70" y="60" fill="#3b82f6" font-size="11" font-weight="700" class="pointer-events-none">Store</text>
+                </div>
+
+                <!-- Step 4 → Vector Store (Query) -->
+                <div class="absolute" style="top: 100px; right: 150px;">
+                    <svg width="200" height="150" viewBox="0 0 200 150">
+                        <path d="M190 10 Q 100 80, 10 140" stroke="#ec4899" stroke-width="2.5" fill="none" class="flow-arrow flow-left" stroke-dasharray="6,3"/>
+                        <path d="M5 143 L15 140 M5 143 L8 133" stroke="#ec4899" stroke-width="2.5" stroke-linecap="round"/>
+                    </svg>
+                    <text x="100" y="60" fill="#ec4899" font-size="11" font-weight="700" class="pointer-events-none">Query</text>
+                </div>
+
+                <!-- Vector Store → Step 8 (Retrieve) -->
+                <div class="absolute" style="bottom: 100px; left: 150px;">
+                    <svg width="200" height="150" viewBox="0 0 200 150">
+                        <path d="M190 140 Q 100 70, 10 10" stroke="#10b981" stroke-width="2.5" fill="none" class="flow-arrow flow-left" stroke-dasharray="6,3"/>
+                        <path d="M5 7 L8 17 M5 7 L15 10" stroke="#10b981" stroke-width="2.5" stroke-linecap="round"/>
+                    </svg>
+                    <text x="60" y="90" fill="#10b981" font-size="11" font-weight="700" class="pointer-events-none">Retrieve</text>
+                </div>
+
+                <!-- Bottom Row: Steps 8-5 -->
+                <div class="absolute bottom-0 left-0 right-0 flex justify-between items-start px-2">
+                    
+                    <!-- Step 8 -->
+                    <div class="w-[200px]">
+                        <div class="bg-gradient-to-br from-green-500 to-green-600 text-white rounded-xl shadow-xl border-3 border-green-700 p-3">
+                            <div class="flex items-center mb-2">
+                                <div class="bg-white text-green-600 rounded-full w-8 h-8 flex items-center justify-center font-bold mr-2 text-sm">8</div>
+                                <div class="text-sm font-bold">Return Response</div>
+                            </div>
+                            <div class="bg-green-700/50 rounded-lg p-2 text-xs space-y-1">
+                                <div class="font-semibold text-green-100">✅ Output:</div>
+                                <div class="text-green-50">• Send to user</div>
+                                <div class="text-green-50">• Store in buffer</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Arrow 7→8 -->
+                    <div class="flex items-center pt-6">
+                        <svg width="50" height="30">
+                            <path d="M45 15 L10 15" stroke="#10b981" stroke-width="3" class="flow-arrow flow-left"/>
+                            <path d="M5 15 L15 10 M5 15 L15 20" stroke="#10b981" stroke-width="3" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+
+                    <!-- Step 7 -->
+                    <div class="w-[200px]">
+                        <div class="bg-gradient-to-br from-emerald-500 to-emerald-600 text-white rounded-xl shadow-xl border-3 border-emerald-700 p-3">
+                            <div class="flex items-center mb-2">
+                                <div class="bg-white text-emerald-600 rounded-full w-8 h-8 flex items-center justify-center font-bold mr-2 text-sm">7</div>
+                                <div class="text-sm font-bold">LLM Generation</div>
+                            </div>
+                            <div class="bg-emerald-700/50 rounded-lg p-2 text-xs space-y-1">
+                                <div class="font-semibold text-emerald-100">🤖 Process:</div>
+                                <div class="text-emerald-50">• Groq/Ollama</div>
+                                <div class="text-emerald-50">• Generate response</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Arrow 6→7 -->
+                    <div class="flex items-center pt-6">
+                        <svg width="50" height="30">
+                            <path d="M45 15 L10 15" stroke="#059669" stroke-width="3" class="flow-arrow flow-left"/>
+                            <path d="M5 15 L15 10 M5 15 L15 20" stroke="#059669" stroke-width="3" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+
+                    <!-- Step 6 -->
+                    <div class="w-[200px]">
+                        <div class="bg-gradient-to-br from-orange-500 to-orange-600 text-white rounded-xl shadow-xl border-3 border-orange-700 p-3">
+                            <div class="flex items-center mb-2">
+                                <div class="bg-white text-orange-600 rounded-full w-8 h-8 flex items-center justify-center font-bold mr-2 text-sm">6</div>
+                                <div class="text-sm font-bold">Context Assembly</div>
+                            </div>
+                            <div class="bg-orange-700/50 rounded-lg p-2 text-xs space-y-1">
+                                <div class="font-semibold text-orange-100">📝 Combine:</div>
+                                <div class="text-orange-50">• Buffer messages</div>
+                                <div class="text-orange-50">• Retrieved context</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Arrow 5→6 -->
+                    <div class="flex items-center pt-6">
+                        <svg width="50" height="30">
+                            <path d="M45 15 L10 15" stroke="#f97316" stroke-width="3" class="flow-arrow flow-left"/>
+                            <path d="M5 15 L15 10 M5 15 L15 20" stroke="#f97316" stroke-width="3" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+
+                    <!-- Step 5 -->
+                    <div class="w-[200px]">
+                        <div class="bg-gradient-to-br from-amber-500 to-amber-600 text-white rounded-xl shadow-xl border-3 border-amber-700 p-3">
+                            <div class="flex items-center mb-2">
+                                <div class="bg-white text-amber-600 rounded-full w-8 h-8 flex items-center justify-center font-bold mr-2 text-sm">5</div>
+                                <div class="text-sm font-bold">Get Results</div>
+                            </div>
+                            <div class="bg-amber-700/50 rounded-lg p-2 text-xs space-y-1">
+                                <div class="font-semibold text-amber-100">📦 Results:</div>
+                                <div class="text-amber-50">• Relevant messages</div>
+                                <div class="text-amber-50">• Ranked by similarity</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Footer -->
+            <div class="text-center text-xs text-gray-600 mt-2">
+                <p class="font-semibold">Vector Store acts as central hub: stores messages (1), answers queries (4), retrieves context (8)</p>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="220" height="120" viewBox="0 0 220 120">
+  <rect x="0" y="0" width="220" height="120" fill="#ffffff"/>
+  <rect x="10" y="10" width="200" height="100" rx="14" ry="14" fill="#ff8a1e"/>
+  <text x="110" y="58" text-anchor="middle"
+        style="font:700 18px Arial,sans-serif; fill:#fff;">
+    Judgment
+  </text>
+  <text x="110" y="82" text-anchor="middle"
+        style="font:12px Arial,sans-serif; fill:#fff3e6;">
+    Correct / Wrong
+  </text>
+</svg>

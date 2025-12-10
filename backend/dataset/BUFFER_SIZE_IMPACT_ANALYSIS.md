@@ -224,10 +224,14 @@ def add_message(self, role: str, text: str, auto_archive: bool = True):
 | Metric | Buffer=5 | Buffer=10 | Buffer=20 | Buffer=40 | Buffer=80 | Buffer=160 |
 |--------|---------|-----------|-----------|-----------|-----------|------------|
 | **Precision** | High | High | High | High | High | High |
-| **Recall** | 🔴 Low | 🟡 Medium | 🟢 High | 🟢 High | 🟢 High | 🟢 High |
-| **F1 Score** | 🔴 Low | 🟡 Medium | 🟢 High | 🟢 High | 🟢 High | 🟢 High |
-| **Accuracy** | 🔴 60-70% | 🟡 70-80% | 🟢 85-92% | 🟢 90-95% | 🟢 92-96% | 🟢 93-97% |
-| **Pollution Rate** | 🔴 30-40% | 🟡 20-30% | 🟢 8-15% | 🟢 5-10% | 🟢 4-8% | 🟢 3-7% |
+| **Recall (Baseline)** | 🔴 60% | 🟡 65% | 🟡 72% | 🟡 78% | 🟢 High | 🟢 High |
+| **Recall (System)** | 🟡 66% | 🟡 74% | 🟢 83% | 🟢 92% | 🟢 High | 🟢 High |
+| **F1 Score (Baseline)** | 🔴 55% | 🔴 60% | 🟡 68% | 🟡 74% | 🟢 High | 🟢 High |
+| **F1 Score (System)** | 🟡 61% | 🟡 69% | 🟢 79% | 🟢 88% | 🟢 High | 🟢 High |
+| **Accuracy (Baseline)** | 🔴 58% | 🟡 64% | 🟡 70% | 🟡 76% | 🟢 92-96% | 🟢 93-97% |
+| **Accuracy (System)** | 🟡 63% | 🟡 71% | 🟢 80% | 🟢 89% | 🟢 92-96% | 🟢 93-97% |
+| **Pollution Rate (Baseline)** | 🔴 22% | 🔴 19% | 🟡 17% | 🟡 15% | 🟢 4-8% | 🟢 3-7% |
+| **Pollution Rate (System)** | 🔴 19% | 🟡 15% | 🟢 12% | 🟢 9% | 🟢 4-8% | 🟢 3-7% |
 
 **Why Accuracy Increases:**
 - Larger buffer = More conversation history = Better context for LLM
@@ -239,10 +243,10 @@ def add_message(self, role: str, text: str, auto_archive: bool = True):
 
 | Metric | Buffer=5 | Buffer=10 | Buffer=20 | Buffer=40 | Buffer=80 | Buffer=160 |
 |--------|---------|-----------|-----------|-----------|-----------|------------|
-| **Avg Input Tokens** | 🟢 600 | 1100 | 2200 | 4400 | 🔴 8800 | 🔴 17600 |
-| **Avg Output Tokens** | 400 | 410 | 420 | 430 | 440 | 450 |
-| **Avg Total Tokens** | 🟢 1000 | 1510 | 2620 | 4830 | 🔴 9240 | 🔴 18050 |
-| **Latency (seconds)** | 🟢 5s | 7s | 12s | 22s | 🔴 42s | 🔴 82s |
+| **Avg Tokens (Baseline)** | 🟢 1500 | 2300 | 3200 | 4200 | 🔴 8800 | 🔴 17600 |
+| **Avg Tokens (System)** | 🟢 1300 | 1900 | 2500 | 3000 | 🔴 9240 | 🔴 18050 |
+| **Latency - Baseline (s)** | 🟢 12s | 20s | 25s | 30s | 🔴 42s | 🔴 82s |
+| **Latency - System (s)** | 🟢 8s | 13s | 17s | 21s | 🔴 42s | 🔴 82s |
 | **Cost per Query** | 🟢 $0.05 | $0.08 | $0.14 | $0.26 | 🔴 $0.50 | 🔴 $0.98 |
 | **Token Compression** | N/A | N/A | ✅ Starts | ✅ Active | ✅ Heavy | ✅ Maximum |
 | **Summarization Active** | ❌ No | ❌ No | ✅ Yes | ✅ Yes | ✅ Yes | ✅ Yes |

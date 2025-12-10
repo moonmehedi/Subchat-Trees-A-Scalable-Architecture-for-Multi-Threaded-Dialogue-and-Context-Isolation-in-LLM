@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Query Processing Flow</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes flowRight {
+            0% { stroke-dashoffset: 20; }
+            100% { stroke-dashoffset: 0; }
+        }
+        @keyframes flowDown {
+            0% { stroke-dashoffset: 20; }
+            100% { stroke-dashoffset: 0; }
+        }
+        @keyframes flowLeft {
+            0% { stroke-dashoffset: -20; }
+            100% { stroke-dashoffset: 0; }
+        }
+        .flow-arrow {
+            stroke-dasharray: 8, 4;
+        }
+        .flow-right { animation: flowRight 1.5s linear infinite; }
+        .flow-down { animation: flowDown 1.5s linear infinite; }
+        .flow-left { animation: flowLeft 1.5s linear infinite; }
+        
+        body { overflow: hidden; }
+    </style>
+</head>
+<body>
+    <div class="w-screen h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50 p-6 overflow-hidden">
+        <div class="h-full flex flex-col">
+            
+            <!-- Header -->
+            <div class="text-center mb-4">
+                <h1 class="text-3xl font-bold text-gray-800 mb-1">Query Processing & Response Flow</h1>
+                <p class="text-sm text-gray-600">From User Message to LLM Response</p>
+            </div>
+
+            <!-- Flow Container -->
+            <div class="flex-1 relative">
+                
+                <!-- Top Row: Steps 1-4 (Left to Right) -->
+                <div class="absolute top-4 left-0 right-0 flex justify-between items-start px-4">
+                    
+                    <!-- Step 1 -->
+                    <div class="w-48">
+                        <div class="bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-xl shadow-xl border-3 border-blue-700 p-3">
+                            <div class="flex items-center mb-2">
+                                <div class="bg-white text-blue-600 rounded-full w-8 h-8 flex items-center justify-center font-bold mr-2">1</div>
+                                <div class="text-sm font-bold">User Query</div>
+                            </div>
+                            <div class="bg-blue-700/50 rounded-lg p-3 text-xs space-y-1">
+                                <div class="font-semibold text-blue-100">📨 Input:</div>
+                                <div class="text-blue-50 italic">"What languages discussed?"</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Arrow 1→2 -->
+                    <div class="flex items-center pt-8">
+                        <svg width="50" height="40" viewBox="0 0 50 40">
+                            <path d="M5 20 L40 20" stroke="#3b82f6" stroke-width="3" class="flow-arrow flow-right"/>
+                            <path d="M45 20 L35 15 M45 20 L35 25" stroke="#3b82f6" stroke-width="3" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="w-48">
+                        <div class="bg-gradient-to-br from-cyan-500 to-cyan-600 text-white rounded-xl shadow-xl border-3 border-cyan-700 p-3">
+                            <div class="flex items-center mb-2">
+                                <div class="bg-white text-cyan-600 rounded-full w-8 h-8 flex items-center justify-center font-bold mr-2">2</div>
+                                <div class="text-sm font-bold">Store in Buffer</div>
+                            </div>
+                            <div class="bg-cyan-700/50 rounded-lg p-3 text-xs space-y-1">
+                                <div class="font-semibold text-cyan-100">💾 Actions:</div>
+                                <div class="text-cyan-50">• Add to local buffer</div>
+                                <div class="text-cyan-50">• If full → archive oldest</div>
+                                <div class="text-cyan-50">• Save to ChromaDB</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Arrow 2→3 -->
+                    <div class="flex items-center pt-8">
+                        <svg width="50" height="40" viewBox="0 0 50 40">
+                            <path d="M5 20 L40 20" stroke="#06b6d4" stroke-width="3" class="flow-arrow flow-right"/>
+                            <path d="M45 20 L35 15 M45 20 L35 25" stroke="#06b6d4" stroke-width="3" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="w-48">
+                        <div class="bg-gradient-to-br from-purple-500 to-purple-600 text-white rounded-xl shadow-xl border-3 border-purple-700 p-3">
+                            <div class="flex items-center mb-2">
+                                <div class="bg-white text-purple-600 rounded-full w-8 h-8 flex items-center justify-center font-bold mr-2">3</div>
+                                <div class="text-sm font-bold">Query Decomposition</div>
+                            </div>
+                            <div class="bg-purple-700/50 rounded-lg p-3 text-xs space-y-1">
+                                <div class="font-semibold text-purple-100">🔍 Generate:</div>
+                                <div class="text-purple-50">• "programming languages"</div>
+                                <div class="text-purple-50">• "languages discussed"</div>
+                                <div class="text-purple-50">• "Python Java mentioned"</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Arrow 3→4 -->
+                    <div class="flex items-center pt-8">
+                        <svg width="50" height="40" viewBox="0 0 50 40">
+                            <path d="M5 20 L40 20" stroke="#8b5cf6" stroke-width="3" class="flow-arrow flow-right"/>
+                            <path d="M45 20 L35 15 M45 20 L35 25" stroke="#8b5cf6" stroke-width="3" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+
+                    <!-- Step 4 -->
+                    <div class="w-48">
+                        <div class="bg-gradient-to-br from-pink-500 to-pink-600 text-white rounded-xl shadow-xl border-3 border-pink-700 p-3">
+                            <div class="flex items-center mb-2">
+                                <div class="bg-white text-pink-600 rounded-full w-8 h-8 flex items-center justify-center font-bold mr-2">4</div>
+                                <div class="text-sm font-bold">Retrieve from Vector DB</div>
+                            </div>
+                            <div class="bg-pink-700/50 rounded-lg p-3 text-xs space-y-1">
+                                <div class="font-semibold text-pink-100">🗄️ Search:</div>
+                                <div class="text-pink-50">• ChromaDB semantic search</div>
+                                <div class="text-pink-50">• ±60s context window</div>
+                                <div class="text-pink-50">• Filter by node_id</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Vertical Arrow Down (from Step 4) -->
+                <div class="absolute" style="top: 210px; right: 124px;">
+                    <svg width="40" height="100" viewBox="0 0 40 100">
+                        <path d="M20 5 L20 90" stroke="#ec4899" stroke-width="3" class="flow-arrow flow-down"/>
+                        <path d="M20 95 L15 85 M20 95 L25 85" stroke="#ec4899" stroke-width="3" stroke-linecap="round"/>
+                    </svg>
+                </div>
+
+                <!-- Bottom Row: Steps 8-5 (Right to Left) -->
+                <div class="absolute bottom-8 left-0 right-0 flex justify-between items-start px-8">
+                    
+                    <!-- Step 8 -->
+                    <div class="w-56">
+                        <div class="bg-gradient-to-br from-green-500 to-green-600 text-white rounded-xl shadow-xl border-3 border-green-700 p-4">
+                            <div class="flex items-center mb-2">
+                                <div class="bg-white text-green-600 rounded-full w-8 h-8 flex items-center justify-center font-bold mr-2">8</div>
+                                <div class="text-sm font-bold">Return Response</div>
+                            </div>
+                            <div class="bg-green-700/50 rounded-lg p-3 text-xs space-y-1">
+                                <div class="font-semibold text-green-100">✅ Output:</div>
+                                <div class="text-green-50">• Send to user</div>
+                                <div class="text-green-50">• Store in buffer</div>
+                                <div class="text-green-50">• Update metadata</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Arrow 7→8 -->
+                    <div class="flex items-center pt-12">
+                        <svg width="80" height="40" viewBox="0 0 80 40">
+                            <path d="M75 20 L10 20" stroke="#10b981" stroke-width="3" class="flow-arrow flow-left"/>
+                            <path d="M5 20 L15 15 M5 20 L15 25" stroke="#10b981" stroke-width="3" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+
+                    <!-- Step 7 -->
+                    <div class="w-56">
+                        <div class="bg-gradient-to-br from-emerald-500 to-emerald-600 text-white rounded-xl shadow-xl border-3 border-emerald-700 p-4">
+                            <div class="flex items-center mb-2">
+                                <div class="bg-white text-emerald-600 rounded-full w-8 h-8 flex items-center justify-center font-bold mr-2">7</div>
+                                <div class="text-sm font-bold">LLM Generation</div>
+                            </div>
+                            <div class="bg-emerald-700/50 rounded-lg p-3 text-xs space-y-1">
+                                <div class="font-semibold text-emerald-100">🤖 Process:</div>
+                                <div class="text-emerald-50">• Send to Groq/Ollama</div>
+                                <div class="text-emerald-50">• Model: llama-3.1-8b</div>
+                                <div class="text-emerald-50">• Generate response</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Arrow 6→7 -->
+                    <div class="flex items-center pt-12">
+                        <svg width="80" height="40" viewBox="0 0 80 40">
+                            <path d="M75 20 L10 20" stroke="#059669" stroke-width="3" class="flow-arrow flow-left"/>
+                            <path d="M5 20 L15 15 M5 20 L15 25" stroke="#059669" stroke-width="3" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+
+                    <!-- Step 6 -->
+                    <div class="w-56">
+                        <div class="bg-gradient-to-br from-orange-500 to-orange-600 text-white rounded-xl shadow-xl border-3 border-orange-700 p-4">
+                            <div class="flex items-center mb-2">
+                                <div class="bg-white text-orange-600 rounded-full w-8 h-8 flex items-center justify-center font-bold mr-2">6</div>
+                                <div class="text-sm font-bold">Context Assembly</div>
+                            </div>
+                            <div class="bg-orange-700/50 rounded-lg p-3 text-xs space-y-1">
+                                <div class="font-semibold text-orange-100">📝 Combine:</div>
+                                <div class="text-orange-50">• Parent context (if subchat)</div>
+                                <div class="text-orange-50">• Buffer messages</div>
+                                <div class="text-orange-50">• Retrieved context</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Arrow 5→6 -->
+                    <div class="flex items-center pt-12">
+                        <svg width="80" height="40" viewBox="0 0 80 40">
+                            <path d="M75 20 L10 20" stroke="#f97316" stroke-width="3" class="flow-arrow flow-left"/>
+                            <path d="M5 20 L15 15 M5 20 L15 25" stroke="#f97316" stroke-width="3" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+
+                    <!-- Step 5 -->
+                    <div class="w-56">
+                        <div class="bg-gradient-to-br from-amber-500 to-amber-600 text-white rounded-xl shadow-xl border-3 border-amber-700 p-4">
+                            <div class="flex items-center mb-2">
+                                <div class="bg-white text-amber-600 rounded-full w-8 h-8 flex items-center justify-center font-bold mr-2">5</div>
+                                <div class="text-sm font-bold">Get Retrieved Results</div>
+                            </div>
+                            <div class="bg-amber-700/50 rounded-lg p-3 text-xs space-y-1">
+                                <div class="font-semibold text-amber-100">📦 Results:</div>
+                                <div class="text-amber-50">• Relevant past messages</div>
+                                <div class="text-amber-50">• Exclude buffer messages</div>
+                                <div class="text-amber-50">• Ranked by similarity</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Vertical Arrow Up (from Step 5) -->
+                <div class="absolute" style="bottom: 210px; right: 124px;">
+                    <svg width="40" height="100" viewBox="0 0 40 100">
+                        <path d="M20 95 L20 10" stroke="#f59e0b" stroke-width="3" class="flow-arrow flow-down"/>
+                        <path d="M20 5 L15 15 M20 5 L25 15" stroke="#f59e0b" stroke-width="3" stroke-linecap="round"/>
+                    </svg>
+                </div>
+
+            </div>
+
+            <!-- Footer Note -->
+            <div class="text-center text-xs text-gray-600 mt-2">
+                <p class="font-semibold">Complete Query Processing Pipeline: User Input → Storage → Retrieval → Context Assembly → LLM → Response</p>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>

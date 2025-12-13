@@ -1,0 +1,62 @@
+Undrestand the interface here 
+
+see the hirachical-subchat.ipynb this file is runnign on kaggle environment read this notebook to undrestand what runs on the kaggle environment this specific configuration is required to run the llm on gpu
+
+
+
+
+now a i have given the github repo donwload the kaggle-run branch dont donwload the main branch 
+
+if required sign in with my name on the notebook on kaggle or guide em what i should do before
+
+you can follow below steps then push on github from the kaggle environment do till this
+
+lets first veryfy git push is possible
+
+
+2) Push logs back to GitHub from Kaggle
+Important prerequisites
+
+Kaggle Notebook Settings → Internet ON
+
+You need a GitHub Personal Access Token (PAT)
+
+Safer: Fine-grained token with access only to that repo.
+
+A) Clone your repo
+!git clone https://github.com/YOUR_USERNAME/YOUR_REPO.git
+%cd YOUR_REPO
+
+B) Run tests and save logs inside the repo folder
+!mkdir -p logs
+!python -u run_tests.py 2>&1 | tee -a logs/test.log
+
+C) Commit logs and push
+
+Set your git identity:
+
+!git config user.name "moonmehedi"
+!git config user.email "the.mehedi.hasan.moon@gmail.com"
+
+
+Add + commit:
+
+!git add logs/test.log
+!git commit -m "Add test logs from Kaggle run"
+
+
+Push using token (without printing it):
+In Kaggle, store the token as an environment variable (best practice):
+
+import os
+os.environ["GITHUB_TOKEN"] = "PASTE_YOUR_TOKEN_HERE"
+
+
+Then push:
+
+!git remote set-url origin https://$GITHUB_TOKEN@github.com/YOUR_USERNAME/YOUR_REPO.git
+!git push origin main
+
+
+⚠️ Do not make the notebook public if it contains the token.
+Also avoid printing os.environ["GITHUB_TOKEN"].

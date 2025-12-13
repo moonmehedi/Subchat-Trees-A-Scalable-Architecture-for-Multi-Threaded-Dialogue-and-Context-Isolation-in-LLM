@@ -3,20 +3,27 @@
 ============================================================
 
 📅 Test Date: 2025-12-13
-⏰ Test Time: 16:32:42 UTC
-📍 Timestamp: 2025-12-13 16:32:42.723501
+⏰ Test Time: 19:31:56 UTC
+📍 Timestamp: 2025-12-13 19:31:56.649878
 
 ============================================================
 🎮 GPU CONFIGURATION
 ============================================================
-GPU Count: 0
-⚠️  No GPU detected
+GPU Count: 2
+
+GPU 0:
+  - Name: Tesla T4
+  - Memory: 14.74 GB
+
+GPU 1:
+  - Name: Tesla T4
+  - Memory: 14.74 GB
 
 ============================================================
 📊 ENVIRONMENT INFO
 ============================================================
 PyTorch Version: 2.6.0+cu124
-CUDA Available: False
+CUDA Available: True
 Working Directory: /kaggle/working/Subchat-Trees
 
 ============================================================
@@ -24,4 +31,4 @@ Working Directory: /kaggle/working/Subchat-Trees
 ============================================================
 
 This log was generated from Kaggle notebook
-Push attempt at: 2025-12-13T16:32:42.722416
+Push attempt at: 2025-12-13T19:31:56.649399

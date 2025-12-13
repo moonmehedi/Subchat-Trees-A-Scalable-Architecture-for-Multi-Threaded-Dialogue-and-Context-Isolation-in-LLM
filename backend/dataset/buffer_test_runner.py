@@ -176,8 +176,17 @@ class MetricsTestRunner:
             self.log(f"❌ Scenario not found: {scenario_file}", "ERROR")
             return None
         
-        with open(scenario_path, 'r') as f:
-            return json.load(f)
+        # Check if file is empty
+        if scenario_path.stat().st_size == 0:
+            self.log(f"⚠️  Skipping empty file: {scenario_file}", "WARNING")
+            return None
+        
+        try:
+            with open(scenario_path, 'r') as f:
+                return json.load(f)
+        except json.JSONDecodeError as e:
+            self.log(f"❌ Invalid JSON in {scenario_file}: {e}", "ERROR")
+            return None
     
     def create_conversation(self, title: str = "Test Chat", buffer_size: int = 15) -> Optional[str]:
         """Create new conversation with configurable buffer size, return node_id"""

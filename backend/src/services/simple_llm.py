@@ -16,8 +16,25 @@ class SimpleLLMClient:
         self.llm_backend = settings.llm_backend
         self.groq_client = None
         self.ollama_available = False
+        self.vllm_client = None
         
-        if self.llm_backend == "ollama":
+        if self.llm_backend == "vllm":
+            # Use vLLM (Kaggle GPU)
+            try:
+                from .vllm_client import vllm_client
+                if vllm_client.is_available():
+                    self.vllm_client = vllm_client
+                    print(f"✅ vLLM connected. Using Kaggle GPU")
+                else:
+                    print("⚠️  vLLM model not loaded yet. Call VLLMClient.set_model(llm) first.")
+                    print("   Falling back to Groq if available...")
+                    self.llm_backend = "groq"
+            except ImportError:
+                print("⚠️  vLLM not available (install with: pip install vllm)")
+                print("   Falling back to Groq if available...")
+                self.llm_backend = "groq"
+        
+        elif self.llm_backend == "ollama":
             # Use Ollama (local)
             try:
                 # Test Ollama connection
@@ -73,8 +90,27 @@ class SimpleLLMClient:
             'content': user_message
         })
         print('*******************context*********************\n',context_messages)
+        
+        # Try vLLM first (Kaggle GPU)
+        if self.vllm_client:
+            try:
+                response = self.vllm_client.generate(
+                    messages=context_messages,
+                    temperature=0.0,  # Deterministic
+                    max_tokens=1000
+                )
+                
+                self.last_usage = self.vllm_client.get_last_usage()
+                return response
+                
+            except Exception as e:
+                print(f"vLLM error: {e}")
+                print("Falling back to echo mode...")
+                self.last_usage = {"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0}
+                return f"Echo (vLLM error): {user_message}"
+        
         # Try to use LLM API based on backend
-        if self.ollama_available and self.llm_backend == "ollama":
+        elif self.ollama_available and self.llm_backend == "ollama":
             # Use Ollama
             try:
                 response = ollama.chat(
@@ -158,8 +194,26 @@ class SimpleLLMClient:
         # })
 
         print('entire context message before response ',context_messages)
+        
+        # Try vLLM streaming first (Kaggle GPU)
+        if self.vllm_client:
+            try:
+                for chunk in self.vllm_client.generate_stream(
+                    messages=context_messages,
+                    temperature=0.0,
+                    max_tokens=1000
+                ):
+                    yield chunk
+                return
+            except Exception as e:
+                print(f"vLLM streaming error: {e}")
+                response = self._generate_fallback_response(user_message)
+                for char in response:
+                    yield char
+                return
+        
         # Try to use LLM API streaming based on backend
-        if self.ollama_available and self.llm_backend == "ollama":
+        elif self.ollama_available and self.llm_backend == "ollama":
             # Ollama streaming
             try:
                 stream = ollama.chat(

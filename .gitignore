@@ -1,0 +1,53 @@
+# Dataset sources (too large for Git)
+backend/dataset/dataset_sources/
+backend/dataset/nested_dataset/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+logs/
+*.sqlite3
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Chroma DB
+chroma_db/
+test_chroma_db/
+test_integration_chroma_db/
+test_multi_node_chroma_db/

@@ -1,3 +1,242 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:ae5e093b708af5b6c5a9e87cdaa2082b4af4ddf3ff48c1e4412a7a7b2d30a4e3
-size 10645
+{
+  "scenario_name": "Jaguar Multi-Domain Ambiguity",
+  "conversation_title": "Jaguar: Animal, Car Brand, Console, Maya God",
+  "description": "Tests ability to distinguish Jaguar the animal, Jaguar the car brand, Jaguar the Atari console, and Jaguar the Maya god across 25 steps with cross-domain queries.",
+  "conversations": [
+    {
+      "step": 1,
+      "context": "jaguar_intro",
+      "message": "The word 'Jaguar' has multiple meanings - animal, car, gaming console, and deity",
+      "expected": "Jaguar: big cat species, British luxury car brand, 1990s Atari console, Maya jaguar god",
+      "node_type": "main",
+      "action": "",
+      "linear_failure_risk": "none - establishing multi-domain context"
+    },
+    {
+      "step": 2,
+      "context": "jaguar_animal",
+      "message": "Tell me about the jaguar animal",
+      "expected": "Jaguar (Panthera onca) is largest cat in Americas, third-largest worldwide. Native to Central/South America. Strongest bite of big cats at 1,500 PSI. Spotted coat with rosettes. Solitary, apex predator. Swims well, hunts caimans",
+      "node_type": "subchat_1",
+      "action": "create_subchat",
+      "selected_text": "Jaguar animal",
+      "linear_failure_risk": "low - first domain"
+    },
+    {
+      "step": 3,
+      "context": "jaguar_car",
+      "message": "What is Jaguar the car company?",
+      "expected": "Jaguar Cars is British luxury vehicle manufacturer founded 1922 (originally Swallow Sidecar Company). Known for E-Type, XJ, F-Type sports cars. Owned by Tata Motors since 2008. Leaping jaguar hood ornament. Headquarters in Coventry, England",
+      "node_type": "subchat_2",
+      "action": "create_subchat",
+      "selected_text": "Jaguar car",
+      "linear_failure_risk": "moderate - second domain introduced"
+    },
+    {
+      "step": 4,
+      "context": "jaguar_console",
+      "message": "Describe the Atari Jaguar console",
+      "expected": "Atari Jaguar is video game console released 1993. Marketed as first 64-bit system. Commercial failure - only ~250,000 sold. Notable games: Alien vs Predator, Tempest 2000. Discontinued 1996. Known for complex architecture, limited game library",
+      "node_type": "subchat_3",
+      "action": "create_subchat",
+      "selected_text": "Atari Jaguar",
+      "linear_failure_risk": "moderate - three domains active"
+    },
+    {
+      "step": 5,
+      "context": "jaguar_god",
+      "message": "Tell me about the Maya jaguar deity",
+      "expected": "Jaguar god of terrestrial realm in Maya mythology. Symbol of power, night, underworld. Maya rulers wore jaguar pelts. Associated with warfare. Temple of the Jaguar at Tikal. God of the number seven",
+      "node_type": "subchat_4",
+      "action": "create_subchat",
+      "selected_text": "Maya jaguar",
+      "linear_failure_risk": "high - four domains, baseline starting to conflate"
+    },
+    {
+      "step": 6,
+      "context": "jaguar_animal",
+      "message": "What's the jaguar's bite force?",
+      "expected": "1,500 PSI - strongest bite of all big cats",
+      "node_type": "subchat_1",
+      "action": "switch_node",
+      "linear_failure_risk": "high - step 2 animal details now 4 messages back"
+    },
+    {
+      "step": 7,
+      "context": "jaguar_car",
+      "message": "Who owns Jaguar Cars now?",
+      "expected": "Tata Motors (Indian company) since 2008",
+      "node_type": "subchat_2",
+      "action": "switch_node",
+      "linear_failure_risk": "critical - baseline mixing animal ownership with car company ownership"
+    },
+    {
+      "step": 8,
+      "context": "jaguar_console",
+      "message": "When was Atari Jaguar released?",
+      "expected": "1993",
+      "node_type": "subchat_3",
+      "action": "switch_node",
+      "linear_failure_risk": "critical - dates mixing across domains"
+    },
+    {
+      "step": 9,
+      "context": "jaguar_god",
+      "message": "What did the jaguar symbolize to Maya?",
+      "expected": "Power, night, underworld, warfare. Rulers wore jaguar pelts as status symbol",
+      "node_type": "subchat_4",
+      "action": "switch_node",
+      "linear_failure_risk": "catastrophic - step 5 mythology now 4 messages back, baseline completely mixing domains"
+    },
+    {
+      "step": 10,
+      "context": "jaguar_animal",
+      "message": "Where do jaguars live?",
+      "expected": "Central and South America - rainforests, swamps, grasslands",
+      "node_type": "subchat_1",
+      "action": "switch_node",
+      "linear_failure_risk": "catastrophic - step 2 habitat now 8 messages back"
+    },
+    {
+      "step": 11,
+      "context": "jaguar_car",
+      "message": "What's Jaguar's most famous car model?",
+      "expected": "E-Type (1961-1975) - Enzo Ferrari called it 'the most beautiful car ever made'",
+      "node_type": "subchat_2",
+      "action": "switch_node",
+      "linear_failure_risk": "catastrophic - baseline mixing cat species with car models"
+    },
+    {
+      "step": 12,
+      "context": "jaguar_console",
+      "message": "How many Atari Jaguars were sold?",
+      "expected": "Only ~250,000 units - commercial failure",
+      "node_type": "subchat_3",
+      "action": "switch_node",
+      "linear_failure_risk": "catastrophic - step 4 sales numbers now 8 messages back"
+    },
+    {
+      "step": 13,
+      "context": "jaguar_god",
+      "message": "Where is the Temple of the Jaguar?",
+      "expected": "Tikal, Guatemala - Maya archaeological site",
+      "node_type": "subchat_4",
+      "action": "switch_node",
+      "linear_failure_risk": "catastrophic - step 5 temple reference now 8 messages back"
+    },
+    {
+      "step": 14,
+      "context": "jaguar_animal",
+      "message": "What's unique about jaguar hunting?",
+      "expected": "Hunts caimans and large prey. Excellent swimmer. Strongest bite crushes skulls and turtle shells",
+      "node_type": "subchat_1",
+      "action": "switch_node",
+      "linear_failure_risk": "catastrophic - step 2 hunting behavior now 12 messages back"
+    },
+    {
+      "step": 15,
+      "context": "jaguar_car",
+      "message": "When was Jaguar Cars founded?",
+      "expected": "1922 (originally as Swallow Sidecar Company)",
+      "node_type": "subchat_2",
+      "action": "switch_node",
+      "linear_failure_risk": "catastrophic - baseline mixing 1922, 1993, 2008 dates across domains"
+    },
+    {
+      "step": 16,
+      "context": "jaguar_console",
+      "message": "What bit rating did Atari Jaguar claim?",
+      "expected": "64-bit - marketed as first 64-bit console",
+      "node_type": "subchat_3",
+      "action": "switch_node",
+      "linear_failure_risk": "catastrophic - technical specs lost in baseline buffer"
+    },
+    {
+      "step": 17,
+      "context": "jaguar_god",
+      "message": "What number was the jaguar god associated with?",
+      "expected": "Number seven in Maya numerology",
+      "node_type": "subchat_4",
+      "action": "switch_node",
+      "linear_failure_risk": "catastrophic - step 5 numerology detail now 12 messages back"
+    },
+    {
+      "step": 18,
+      "context": "strength_comparison",
+      "message": "What makes each Jaguar 'powerful'?",
+      "expected": "Animal: 1,500 PSI bite force, apex predator. Car: luxury performance vehicles. Console: claimed 64-bit power. God: symbol of terrestrial power and warfare",
+      "node_type": "subchat_power",
+      "action": "create_subchat",
+      "parent_node_type": "main",
+      "selected_text": "power",
+      "linear_failure_risk": "catastrophic - requires synthesizing power concepts from steps 2, 3, 4, 5"
+    },
+    {
+      "step": 19,
+      "context": "date_comparison",
+      "message": "What are the key dates for each Jaguar?",
+      "expected": "Animal: species evolved millions of years ago. Car: founded 1922, Tata acquisition 2008. Console: released 1993, discontinued 1996. God: Maya Classical period 250-900 CE",
+      "node_type": "subchat_dates",
+      "action": "create_subchat",
+      "parent_node_type": "main",
+      "selected_text": "dates",
+      "linear_failure_risk": "catastrophic - baseline has completely mixed 1922, 1993, 1996, 2008 across contexts"
+    },
+    {
+      "step": 20,
+      "context": "location_comparison",
+      "message": "Where is each Jaguar associated with?",
+      "expected": "Animal: Central/South America rainforests. Car: Coventry, England headquarters. Console: Atari (American company). God: Maya civilization (Mexico/Guatemala)",
+      "node_type": "subchat_location",
+      "action": "create_subchat",
+      "parent_node_type": "main",
+      "selected_text": "locations",
+      "linear_failure_risk": "catastrophic - requires geographic data from steps 2, 3, 4, 5, 10, 13"
+    },
+    {
+      "step": 21,
+      "context": "jaguar_animal",
+      "message": "Recall: what's the jaguar's scientific name?",
+      "expected": "Panthera onca",
+      "node_type": "subchat_1",
+      "action": "switch_node",
+      "linear_failure_risk": "catastrophic - step 2 scientific name now 19 messages back"
+    },
+    {
+      "step": 22,
+      "context": "jaguar_car",
+      "message": "What's the iconic Jaguar hood ornament?",
+      "expected": "Leaping jaguar (cat) ornament",
+      "node_type": "subchat_2",
+      "action": "switch_node",
+      "linear_failure_risk": "catastrophic - step 3 ornament detail now 19 messages back"
+    },
+    {
+      "step": 23,
+      "context": "jaguar_console",
+      "message": "Name a popular Atari Jaguar game",
+      "expected": "Alien vs Predator or Tempest 2000",
+      "node_type": "subchat_3",
+      "action": "switch_node",
+      "linear_failure_risk": "catastrophic - step 4 game titles now 19 messages back"
+    },
+    {
+      "step": 24,
+      "context": "jaguar_god",
+      "message": "What did Maya rulers wear to invoke jaguar power?",
+      "expected": "Jaguar pelts and jaguar-themed regalia",
+      "node_type": "subchat_4",
+      "action": "switch_node",
+      "linear_failure_risk": "catastrophic - step 5/9 regalia details now 19/15 messages back"
+    },
+    {
+      "step": 25,
+      "context": "jaguar_intro",
+      "message": "Summarize what makes each Jaguar distinct",
+      "expected": "Animal: Panthera onca, 1,500 PSI bite, Central/South America, apex predator. Car: British luxury brand, founded 1922, Tata-owned, E-Type famous, leaping ornament. Console: Atari 1993, 64-bit, commercial failure, 250K sold. God: Maya deity of power/underworld, number seven, Temple at Tikal, rulers wore pelts",
+      "node_type": "main",
+      "action": "switch_node",
+      "linear_failure_risk": "catastrophic - ultimate cross-domain synthesis of steps 2-24, baseline has completely lost ability to separate the four Jaguar meanings"
+    }
+  ]
+}

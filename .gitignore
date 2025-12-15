@@ -37,9 +37,8 @@ ENV/
 *.swo
 *~
 
-# Logs
+# Logs (but keep backend/logs/ and backend/dataset/logs/ for kaggle-run branch)
 *.log
-logs/
 *.sqlite3
 
 # OS

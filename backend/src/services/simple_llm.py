@@ -145,7 +145,7 @@ class SimpleLLMClient:
                 response = self.groq_client.chat.completions.create(
                     model=settings.model_base,
                     messages=context_messages,
-                    max_tokens=1000,  # Increased for longer responses
+                    max_tokens=100,  # Increased for longer responses
                     temperature=0.0,  # Deterministic for reproducible testing
                     stream=False  # Non-streaming version
                 )
@@ -242,7 +242,7 @@ class SimpleLLMClient:
                 stream = self.groq_client.chat.completions.create(
                     model=settings.model_base,
                     messages=context_messages,
-                    max_tokens=1000,
+                    max_tokens=100,
                     temperature=0.0,  # Deterministic for reproducible testing
                     stream=True  # Enable streaming
                 )
@@ -317,7 +317,7 @@ class SimpleLLMClient:
                     tools=ConversationTools.get_tool_definitions(),
                     tool_choice="auto",  # LLM decides
                     stream=False,  # Need complete response to check for tool calls
-                    max_tokens=1000,
+                    max_tokens=100,
                     temperature=0.0  # Deterministic for reproducible testing
                 )
                 
@@ -374,7 +374,7 @@ class SimpleLLMClient:
                         model=settings.model_base,
                         messages=context_messages,
                         stream=True,
-                        max_tokens=1000,
+                        max_tokens=100,
                         temperature=0.0  # Deterministic for reproducible testing
                     )
                     
@@ -391,7 +391,7 @@ class SimpleLLMClient:
                         model=settings.model_base,
                         messages=context_messages,
                         stream=True,
-                        max_tokens=1000,
+                        max_tokens=100,
                         temperature=0.0  # Deterministic for reproducible testing
                     )
                     
@@ -496,7 +496,7 @@ Never mention tools or searching.
                     tools=ConversationTools.get_tool_definitions(),
                     tool_choice="auto",  # LLM decides based on CoT guidance
                     stream=False,
-                    max_tokens=1000,
+                    max_tokens=100,
                     temperature=0.0  # Deterministic for reproducible testing
                 )
                 
@@ -607,7 +607,7 @@ Never mention tools or searching.
                         model=settings.model_base,
                         messages=context_messages,
                         stream=True,
-                        max_tokens=1000,
+                        max_tokens=100,
                         temperature=0.0  # Deterministic for reproducible testing
                     )
                     
@@ -752,7 +752,7 @@ The system can handle:
                         {"role": "system", "content": "You are a title generator. Generate short, descriptive titles for conversations. Respond only with the title, no quotes or extra formatting."},
                         {"role": "user", "content": title_prompt}
                     ],
-                    max_tokens=20,  # Short response for titles
+                    max_tokens=50,  # Short response for titles
                     temperature=0.3,  # Lower temperature for consistent, focused titles
                     stream=False
                 )

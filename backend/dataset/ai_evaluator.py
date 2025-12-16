@@ -170,7 +170,7 @@ Respond ONLY with valid JSON, no other text."""
                 model=self.model,
                 messages=[{"role": "user", "content": prompt}],
                 temperature=self.temperature,
-                max_tokens=200
+                max_tokens=50
             )
             
             # Extract evaluation

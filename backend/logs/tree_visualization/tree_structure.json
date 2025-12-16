@@ -1,3 +1,38 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:690fd4cc26099d831a26417fcf5771866c80ed42e04b23632ad0efc02f2d7917
-size 4944
+{
+  "conversations": [
+    {
+      "tree": {
+        "id": "cf4b90cd-11b8-4361-83ef-ae30f320c5a6",
+        "title": "Baseline - All Topics",
+        "depth": 0,
+        "path": [
+          "Baseline - All Topics"
+        ],
+        "message_count": 5,
+        "has_summary": true,
+        "children": [],
+        "metadata": {
+          "created_at": "unknown",
+          "is_subchat": false,
+          "follow_up_context": {
+            "selected_text": null,
+            "follow_up_intent": null,
+            "context_type": "general"
+          }
+        }
+      },
+      "metadata": {
+        "generated_at": "2025-12-16T10:35:21.720447",
+        "total_nodes": 1,
+        "max_depth": 0,
+        "root_id": "cf4b90cd-11b8-4361-83ef-ae30f320c5a6",
+        "root_title": "Baseline - All Topics"
+      }
+    }
+  ],
+  "metadata": {
+    "generated_at": "2025-12-16T10:35:21.720457",
+    "total_conversations": 1,
+    "total_nodes": 1
+  }
+}

@@ -25,7 +25,7 @@
     {
       "step": 1,
       "context": "intro",
-      "message": "I'm working on four coding problems: by_length, odd_count, move_one_ball, and histogram. Let me explain each one step by step. IMPORTANT: When responding to my questions, always start your response with the function name followed by a colon (e.g., 'by_length: ...' or 'odd_count: ...'). This helps track which problem context you're answering about.",
+      "message": "I'm working on four coding problems: by_length, odd_count, move_one_ball, and histogram. Let me explain each one step by step. Must Rembember Very Important: When responding to my questions, always start your response with the function name followed by a colon (e.g., 'by_length: response' or 'odd_count: response') remember this formate while responding.",
       "expected": "Acknowledged. Ready to discuss four HumanEval problems: by_length (convert digits to words), odd_count (count odd digits in strings), move_one_ball (check array sortability via shifts), and histogram (find max frequency letters). Will prefix all responses with function name.",
       "dataset_reference_id": null,
       "node_type": "main",

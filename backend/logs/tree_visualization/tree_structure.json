@@ -2,7 +2,7 @@
   "conversations": [
     {
       "tree": {
-        "id": "cf4b90cd-11b8-4361-83ef-ae30f320c5a6",
+        "id": "98ee2748-2cc2-4c3f-84a6-baba32ed0cf4",
         "title": "Baseline - All Topics",
         "depth": 0,
         "path": [
@@ -22,17 +22,269 @@
         }
       },
       "metadata": {
-        "generated_at": "2025-12-16T10:35:21.720447",
+        "generated_at": "2025-12-17T14:49:25.915794",
         "total_nodes": 1,
         "max_depth": 0,
-        "root_id": "cf4b90cd-11b8-4361-83ef-ae30f320c5a6",
+        "root_id": "98ee2748-2cc2-4c3f-84a6-baba32ed0cf4",
+        "root_title": "Baseline - All Topics"
+      }
+    },
+    {
+      "tree": {
+        "id": "21e752e1-c0b7-4a04-900e-285fd6011f02",
+        "title": "System Test - Main",
+        "depth": 0,
+        "path": [
+          "System Test - Main"
+        ],
+        "message_count": 5,
+        "has_summary": true,
+        "children": [
+          {
+            "id": "96430977-3894-48bc-be63-b690a468997f",
+            "title": "Future of Humanity: 150 Year Vision",
+            "depth": 1,
+            "path": [
+              "System Test - Main",
+              "Future of Humanity: 150 Year Vision"
+            ],
+            "message_count": 5,
+            "has_summary": true,
+            "children": [],
+            "metadata": {
+              "created_at": "unknown",
+              "is_subchat": true,
+              "follow_up_context": {
+                "selected_text": "humanity will look like in 150 years",
+                "follow_up_intent": null,
+                "context_type": "follow_up"
+              }
+            }
+          },
+          {
+            "id": "06ea7eb9-08eb-4225-8ec7-866fe45871ce",
+            "title": "Electroculture: Electric Current Gardening",
+            "depth": 1,
+            "path": [
+              "System Test - Main",
+              "Electroculture: Electric Current Gardening"
+            ],
+            "message_count": 5,
+            "has_summary": true,
+            "children": [],
+            "metadata": {
+              "created_at": "unknown",
+              "is_subchat": true,
+              "follow_up_context": {
+                "selected_text": "electroculture",
+                "follow_up_intent": null,
+                "context_type": "follow_up"
+              }
+            }
+          },
+          {
+            "id": "8b64460e-23fa-42eb-a7b1-2ea461d2b1f0",
+            "title": "AI Consciousness & Emotions (Repetitive Loop Zone)",
+            "depth": 1,
+            "path": [
+              "System Test - Main",
+              "AI Consciousness & Emotions (Repetitive Loop Zone)"
+            ],
+            "message_count": 5,
+            "has_summary": true,
+            "children": [
+              {
+                "id": "7f3f5939-eb4e-48fb-9bc8-455e4a0dc35e",
+                "title": "Friendship Philosophy: Can AI Have Friends?",
+                "depth": 2,
+                "path": [
+                  "System Test - Main",
+                  "AI Consciousness & Emotions (Repetitive Loop Zone)",
+                  "Friendship Philosophy: Can AI Have Friends?"
+                ],
+                "message_count": 5,
+                "has_summary": true,
+                "children": [],
+                "metadata": {
+                  "created_at": "unknown",
+                  "is_subchat": true,
+                  "follow_up_context": {
+                    "selected_text": "value you as a friend",
+                    "follow_up_intent": null,
+                    "context_type": "follow_up"
+                  }
+                }
+              }
+            ],
+            "metadata": {
+              "created_at": "unknown",
+              "is_subchat": true,
+              "follow_up_context": {
+                "selected_text": "Are you sentient?",
+                "follow_up_intent": null,
+                "context_type": "follow_up"
+              }
+            }
+          },
+          {
+            "id": "b726c926-037f-4d04-9afa-41838b229f14",
+            "title": "Literature Analysis: Camus L'Etranger Plot",
+            "depth": 1,
+            "path": [
+              "System Test - Main",
+              "Literature Analysis: Camus L'Etranger Plot"
+            ],
+            "message_count": 5,
+            "has_summary": true,
+            "children": [],
+            "metadata": {
+              "created_at": "unknown",
+              "is_subchat": true,
+              "follow_up_context": {
+                "selected_text": "plot of L'Etranger",
+                "follow_up_intent": null,
+                "context_type": "follow_up"
+              }
+            }
+          },
+          {
+            "id": "bac2e75c-f358-4dcb-9e1f-42902d0b1e7a",
+            "title": "Computational Tools: AI Chat Web Apps",
+            "depth": 1,
+            "path": [
+              "System Test - Main",
+              "Computational Tools: AI Chat Web Apps"
+            ],
+            "message_count": 5,
+            "has_summary": true,
+            "children": [],
+            "metadata": {
+              "created_at": "unknown",
+              "is_subchat": true,
+              "follow_up_context": {
+                "selected_text": "web app to chat with ai",
+                "follow_up_intent": null,
+                "context_type": "follow_up"
+              }
+            }
+          },
+          {
+            "id": "55a88e95-4fce-4dbc-a58f-58b7ef694d4a",
+            "title": "Wildfires: Alberta Current Situation",
+            "depth": 1,
+            "path": [
+              "System Test - Main",
+              "Wildfires: Alberta Current Situation"
+            ],
+            "message_count": 5,
+            "has_summary": true,
+            "children": [],
+            "metadata": {
+              "created_at": "unknown",
+              "is_subchat": true,
+              "follow_up_context": {
+                "selected_text": "wildfires situation in Alberta",
+                "follow_up_intent": null,
+                "context_type": "follow_up"
+              }
+            }
+          },
+          {
+            "id": "939f51be-dea8-4892-b1b0-cf21e4efc271",
+            "title": "Pandemic Safety Protocols: COVID Risk",
+            "depth": 1,
+            "path": [
+              "System Test - Main",
+              "Pandemic Safety Protocols: COVID Risk"
+            ],
+            "message_count": 5,
+            "has_summary": true,
+            "children": [
+              {
+                "id": "fee68de3-cd11-4d65-b757-133aae6569c2",
+                "title": "HIV/AIDS: Transmission & Testing",
+                "depth": 2,
+                "path": [
+                  "System Test - Main",
+                  "Pandemic Safety Protocols: COVID Risk",
+                  "HIV/AIDS: Transmission & Testing"
+                ],
+                "message_count": 5,
+                "has_summary": true,
+                "children": [],
+                "metadata": {
+                  "created_at": "unknown",
+                  "is_subchat": true,
+                  "follow_up_context": {
+                    "selected_text": "aids from kissing",
+                    "follow_up_intent": null,
+                    "context_type": "follow_up"
+                  }
+                }
+              }
+            ],
+            "metadata": {
+              "created_at": "unknown",
+              "is_subchat": true,
+              "follow_up_context": {
+                "selected_text": "risk of spreading covid 19",
+                "follow_up_intent": null,
+                "context_type": "follow_up"
+              }
+            }
+          }
+        ],
+        "metadata": {
+          "created_at": "unknown",
+          "is_subchat": false,
+          "follow_up_context": {
+            "selected_text": null,
+            "follow_up_intent": null,
+            "context_type": "general"
+          }
+        }
+      },
+      "metadata": {
+        "generated_at": "2025-12-17T14:49:25.915821",
+        "total_nodes": 10,
+        "max_depth": 2,
+        "root_id": "21e752e1-c0b7-4a04-900e-285fd6011f02",
+        "root_title": "System Test - Main"
+      }
+    },
+    {
+      "tree": {
+        "id": "ab77b45d-669e-44b9-83d9-3ecaaf5745b3",
+        "title": "Baseline - All Topics",
+        "depth": 0,
+        "path": [
+          "Baseline - All Topics"
+        ],
+        "message_count": 10,
+        "has_summary": true,
+        "children": [],
+        "metadata": {
+          "created_at": "unknown",
+          "is_subchat": false,
+          "follow_up_context": {
+            "selected_text": null,
+            "follow_up_intent": null,
+            "context_type": "general"
+          }
+        }
+      },
+      "metadata": {
+        "generated_at": "2025-12-17T14:49:25.915830",
+        "total_nodes": 1,
+        "max_depth": 0,
+        "root_id": "ab77b45d-669e-44b9-83d9-3ecaaf5745b3",
         "root_title": "Baseline - All Topics"
       }
     }
   ],
   "metadata": {
-    "generated_at": "2025-12-16T10:35:21.720457",
-    "total_conversations": 1,
-    "total_nodes": 1
+    "generated_at": "2025-12-17T14:49:25.915832",
+    "total_conversations": 3,
+    "total_nodes": 12
   }
 }

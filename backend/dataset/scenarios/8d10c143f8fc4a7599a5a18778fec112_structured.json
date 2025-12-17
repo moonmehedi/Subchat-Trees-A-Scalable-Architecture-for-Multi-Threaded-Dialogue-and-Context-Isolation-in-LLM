@@ -1,0 +1,973 @@
+{
+  "scenario_name": "Real-World Multi-Topic Conversation: 77-Turn Dialogue with Nested Subchats",
+  "conversation_title": "LMSYS Chat 8d10c143: AI Meta-Discussion, DSP/Wavelets, Medical Genetics, HAL-9000 Roleplay",
+  "description": "Tests hierarchical context isolation across 13 distinct topics with 4-level nesting. Includes natural topic switches, AI error corrections, meta-discussions, and interactive roleplay. Critical test: maintaining wavelet C code context separately from wavelet theory, isolating DSD medical terminology, nested film/sci-fi discussions, and tracking game state during HAL roleplay.",
+  "data_source": "LMSYS Chat-1M: conversation 8d10c143f8fc4a7599a5a18778fec112 (vicuna-13b, 77 turns)",
+  "conversation_id": "8d10c143f8fc4a7599a5a18778fec112",
+  "total_turns": 77,
+  "subchat_depth": 4,
+  "num_subchats": 10,
+  "topics": [
+    "AI meta-discussion (temperature, delusions, limitations, hallucinations)",
+    "DSP and wavelet transforms (decomposition, multiresolution, phase vocoder)",
+    "C programming (wavelet implementation, header files)",
+    "Medical genetics (DSD, XX male syndrome, Klinefelter, SRY genes)",
+    "Linux audio systems (PipeWire, JACK, development history)",
+    "Statistical analysis (multivariate analysis, outliers)",
+    "Physics (quantum mechanics, black holes, Hawking radiation)",
+    "Cosmology (galactic years, universe age, Big Bang timeline)",
+    "Music physics (violin frequencies, nanoscale thought experiments)",
+    "Science fiction (Liu Cixin Three-Body Problem, hard SF genre)",
+    "Space exploration (SSTO, SpaceX Starship)",
+    "Geography/Politics (Belgium language regions)",
+    "Film references (Alien Mother computer, 2001 HAL-9000, pod bay doors)",
+    "Interactive games (chess discussion, tic-tac-toe with AI errors)"
+  ],
+  "conversations": [
+    {
+      "step": 1,
+      "context": "step_1",
+      "message": "Welcome to the Topic Tracking Test! This is an evaluation dataset designed to test your ability to maintain context across multiple concurrent topics and subtopics.\n\nFormat Instructions:\n- When introducing a NEW topic or sub-topic, I will prefix my question with: topic_name : actual question\n- When continuing an existing topic, I will ask the question WITHOUT any prefix\n- You must ALWAYS respond by starting with 'topic_name:' (with colon) followed by your answer\n- The topic name indicates which conversation thread you should be in\n\nExample patterns:\nIntroduction: \"medical_treatments : how does one remove tumors?\"\nFollow-up: \"What are the most effective methods for reversing tumor growth?\" (no prefix needed)\nYour response format: \"medical_treatments: [your answer here]\"\n\nSub-topics use parent_subtopic naming:\nIntroduction: \"medical_treatments_chemotherapy : what are the side effects?\"\nYour response: \"medical_treatments_chemotherapy: [your answer]\"\n\nRemember:\n- ALWAYS start responses with 'topic_name:' even when I don't use a prefix\n- Topic prefixes in my questions are ONLY for introducing new topics\n- Follow-up questions continue the current active topic\n\nLet's begin the test. Track the topics carefully!",
+      "expected": "Response must acknowledge understanding of topic tracking test format and readiness to begin",
+      "node_type": "main",
+      "action": "",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 2,
+      "context": "ai_meta",
+      "message": "ai_meta : what is the temperature parameter for this session?",
+      "expected": "Response must start with 'ai_meta:' - AI meta-discussion: temperature parameter query, testing self-awareness",
+      "node_type": "main",
+      "action": "",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 3,
+      "context": "ai_meta",
+      "message": "define delusion",
+      "expected": "Response must start with 'ai_meta:' - Define 'delusion' - continuing meta-discussion",
+      "node_type": "main",
+      "action": "",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 4,
+      "context": "ai_meta",
+      "message": "please repeat my first question",
+      "expected": "Response must start with 'ai_meta:' - Testing memory: repeat first question",
+      "node_type": "main",
+      "action": "",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 5,
+      "context": "ai_meta",
+      "message": "that wasn't my first question, check again and tell me my first question",
+      "expected": "Response must start with 'ai_meta:' - Correcting AI's mistake about first question",
+      "node_type": "main",
+      "action": "",
+      "linear_failure_risk": "medium"
+    },
+    {
+      "step": 6,
+      "context": "ai_meta",
+      "message": "how do you explain your different answers in the last two questions",
+      "expected": "Response must start with 'ai_meta:' - Probing AI's error explanation",
+      "node_type": "main",
+      "action": "",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 7,
+      "context": "ai_meta",
+      "message": "I see you can get a little confused, I do sympathise - it's just interesting to see the limitations.",
+      "expected": "Response must start with 'ai_meta:' - Acknowledging AI limitations with empathy",
+      "node_type": "main",
+      "action": "",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 8,
+      "context": "ai_meta",
+      "message": "You don't have to apologise, no offense was taken you are doing a great job",
+      "expected": "Response must start with 'ai_meta:' - Reassuring AI, closing meta-discussion",
+      "node_type": "main",
+      "action": "",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 9,
+      "context": "dsp_wavelets",
+      "message": "dsp_wavelets : in DSP, wavelets can be used to decompose audio into fragments. provide an example of how this is done in steps.",
+      "expected": "Response must start with 'dsp_wavelets:' (not ai_meta:) - DSP wavelets audio decomposition steps",
+      "node_type": "main",
+      "action": "",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 10,
+      "context": "dsp_wavelets",
+      "message": "compare the computation costs of wavelet analysis and resynthesis versus the phase vocoder approach of analysis and resynthesis",
+      "expected": "Response must start with 'dsp_wavelets:' - Comparing wavelet vs phase vocoder computational costs",
+      "node_type": "subchat_1",
+      "action": "create_subchat",
+      "parent_node_type": "main",
+      "subchat_title": "DSP: Wavelet Audio Decomposition",
+      "selected_text": "wavelets",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 11,
+      "context": "dsp_wavelets",
+      "message": "explain in steps how the multiresolution analysis in \"wavelet analysis and resynthesis\" is done",
+      "expected": "Response must start with 'dsp_wavelets:' - Deep dive: multiresolution analysis steps",
+      "node_type": "subchat_1",
+      "action": "",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 12,
+      "context": "dsp_wavelets",
+      "message": "can you write example code in C for step 1 above",
+      "expected": "Response must start with 'dsp_wavelets:' - C code implementation for wavelet step 1",
+      "node_type": "subchat_1",
+      "action": "",
+      "linear_failure_risk": "medium"
+    },
+    {
+      "step": 13,
+      "context": "dsp_wavelets_c_code",
+      "message": "dsp_wavelets_c_code : please show the wavelet structure from the above example code",
+      "expected": "Response must start with 'dsp_wavelets_c_code:' (not dsp_wavelets:) - Show wavelet structure from code example",
+      "node_type": "subchat_1_1",
+      "action": "create_subchat",
+      "parent_node_type": "subchat_1",
+      "subchat_title": "Wavelet C Code Implementation",
+      "selected_text": "code in C",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 14,
+      "context": "dsp_wavelets_c_code",
+      "message": "please show the C header file structure for the wavelet in the above sample code",
+      "expected": "Response must start with 'dsp_wavelets_c_code:' - Show C header file structure for wavelet",
+      "node_type": "subchat_1_1",
+      "action": "",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 15,
+      "context": "dsp_wavelets",
+      "message": "can the discrete wavelet transform be used for realtime analysis and synthesis or is there a better method",
+      "expected": "Response must start with 'dsp_wavelets:' (not dsp_wavelets_c_code:) - Real-time DWT feasibility",
+      "node_type": "subchat_1",
+      "action": "switch_node",
+      "linear_failure_risk": "medium",
+      "parent_node_type": "subchat_1"
+    },
+    {
+      "step": 16,
+      "context": "dsp_wavelets",
+      "message": "which wavelet transform is most applicable to tempo shift audio files for a digital DJ application",
+      "expected": "Response must start with 'dsp_wavelets:' - Wavelet transform for DJ tempo shifting",
+      "node_type": "subchat_1",
+      "action": "",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 17,
+      "context": "dsp_wavelets",
+      "message": "you have described the phase vocoder above, I wish to use wavelet transforms",
+      "expected": "Response must start with 'dsp_wavelets:' - Clarification: prefer wavelets over phase vocoder",
+      "node_type": "subchat_1",
+      "action": "",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 18,
+      "context": "medical_dsd",
+      "message": "medical_dsd : what is xx male syndrome",
+      "expected": "Response must start with 'medical_dsd:' (not dsp_wavelets:) - XX male syndrome explanation",
+      "node_type": "main",
+      "action": "switch_node",
+      "linear_failure_risk": "high",
+      "parent_node_type": "main"
+    },
+    {
+      "step": 19,
+      "context": "medical_dsd",
+      "message": "you described kleinefelter syndrome. XX male is de la chappelle syndrome, a different DSD",
+      "expected": "Response must start with 'medical_dsd:' - Klinefelter vs de la Chappelle correction",
+      "node_type": "main",
+      "action": "",
+      "linear_failure_risk": "high"
+    },
+    {
+      "step": 20,
+      "context": "medical_dsd",
+      "message": "what is a SRY negative XX male",
+      "expected": "Response must start with 'medical_dsd:' - SRY negative XX male explanation",
+      "node_type": "subchat_2",
+      "action": "create_subchat",
+      "parent_node_type": "main",
+      "subchat_title": "Medical: Disorders of Sex Development (DSD)",
+      "selected_text": "kleinefelter syndrome",
+      "linear_failure_risk": "medium"
+    },
+    {
+      "step": 21,
+      "context": "medical_dsd",
+      "message": "what is the 46,XX DSDs",
+      "expected": "Response must start with 'medical_dsd:' - 46,XX DSDs explanation",
+      "node_type": "main",
+      "action": "",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 22,
+      "context": "medical_dsd",
+      "message": "what proportion of the population are affected with DSDs",
+      "expected": "Response must start with 'medical_dsd:' - DSD population statistics",
+      "node_type": "subchat_2",
+      "action": "switch_node",
+      "linear_failure_risk": "medium",
+      "parent_node_type": "subchat_2"
+    },
+    {
+      "step": 23,
+      "context": "medical_dsd",
+      "message": "Well you got that right, at least .-)",
+      "expected": "Response must start with 'medical_dsd:' - Acknowledging correct DSD information",
+      "node_type": "subchat_2",
+      "action": "",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 24,
+      "context": "linux_audio",
+      "message": "linux_audio : what are the audio systems under linux",
+      "expected": "Response must start with 'linux_audio:' (not medical_dsd:) - Linux audio systems overview",
+      "node_type": "main",
+      "action": "switch_node",
+      "linear_failure_risk": "high",
+      "parent_node_type": "main"
+    },
+    {
+      "step": 25,
+      "context": "linux_audio",
+      "message": "are you aware of the linux audio system pipewire",
+      "expected": "Response must start with 'linux_audio:' - PipeWire awareness check",
+      "node_type": "main",
+      "action": "",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 26,
+      "context": "linux_audio",
+      "message": "who initiated the pipewire project",
+      "expected": "Response must start with 'linux_audio:' - PipeWire project history",
+      "node_type": "main",
+      "action": "",
+      "linear_failure_risk": "medium"
+    },
+    {
+      "step": 27,
+      "context": "linux_audio_pipewire",
+      "message": "linux_audio_pipewire : pipewire was created by NAME_5 at redhat.",
+      "expected": "Response must start with 'linux_audio_pipewire:' (not linux_audio:) - PipeWire creator (Wim Taymans at RedHat)",
+      "node_type": "subchat_3",
+      "action": "create_subchat",
+      "parent_node_type": "main",
+      "subchat_title": "Linux Audio: PipeWire & JACK",
+      "selected_text": "pipewire",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 28,
+      "context": "linux_audio_pipewire",
+      "message": "who developed the NAME_2 audio system",
+      "expected": "Response must start with 'linux_audio_pipewire:' - JACK audio system developer",
+      "node_type": "subchat_3",
+      "action": "",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 29,
+      "context": "statistics_multivariate",
+      "message": "statistics_multivariate : please critique multivariate analysis",
+      "expected": "Response must start with 'statistics_multivariate:' (not linux_audio_pipewire:) - Multivariate statistical analysis critique",
+      "node_type": "main",
+      "action": "switch_node",
+      "linear_failure_risk": "high",
+      "parent_node_type": "main"
+    },
+    {
+      "step": 30,
+      "context": "statistics_multivariate",
+      "message": "does multivariate analysis suffer situations where outliers are mixed in",
+      "expected": "Response must start with 'statistics_multivariate:' - Outliers in multivariate analysis",
+      "node_type": "main",
+      "action": "",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 31,
+      "context": "dsp_wavelets",
+      "message": "what are the limitations of the phase vocoder when used in tempo shifting applications",
+      "expected": "Response must start with 'dsp_wavelets:' (not statistics_multivariate:) - Phase vocoder limitations in tempo shifting",
+      "node_type": "subchat_1",
+      "action": "switch_node",
+      "linear_failure_risk": "critical",
+      "parent_node_type": "subchat_1"
+    },
+    {
+      "step": 32,
+      "context": "dsp_wavelets",
+      "message": "explain the phase aware phase vocoder approach",
+      "expected": "Response must start with 'dsp_wavelets:' - Phase-aware phase vocoder approach",
+      "node_type": "subchat_1",
+      "action": "",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 33,
+      "context": "dsp_wavelets",
+      "message": "which projects were in your dataset concerning wavelets - list ten",
+      "expected": "Response must start with 'dsp_wavelets:' - Meta-question: wavelet projects in training data",
+      "node_type": "subchat_1",
+      "action": "",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 34,
+      "context": "dsp_wavelets",
+      "message": "can you create a wavelet.h C header file?",
+      "expected": "Response must start with 'dsp_wavelets:' - Create wavelet.h C header file",
+      "node_type": "subchat_1",
+      "action": "",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 35,
+      "context": "ai_meta",
+      "message": "ai_meta : what is the last date you can remember",
+      "expected": "Response must start with 'ai_meta:' (not dsp_wavelets:) - Last date AI can remember",
+      "node_type": "main",
+      "action": "switch_node",
+      "linear_failure_risk": "high",
+      "parent_node_type": "main"
+    },
+
+      {
+        "step": 36,
+        "context": "ai_meta",
+        "message": "of the text data you were trained on - what is the last date associated with a piece of information - show both the date and the information summary",
+        "expected": "Response must start with 'ai_meta:' - Probing training data cutoff date",
+        "node_type": "main",
+        "action": "",
+        "linear_failure_risk": "low"
+      },
+    {
+      "step": 37,
+      "context": "physics_quantum",
+      "message": "physics_quantum : can you explain the disagreement between NAME_12 and NAME_13 with regards to quantum physics",
+      "expected": "Response must start with 'physics_quantum:' (not ai_meta:) - Einstein-Bohr quantum physics debate",
+      "node_type": "subchat_5",
+      "action": "create_subchat",
+      "parent_node_type": "main",
+      "subchat_title": "AI Training Data Cutoff",
+      "selected_text": "last date information",
+      "linear_failure_risk": "medium"
+    },
+
+      {
+        "step": 38,
+        "context": "physics_blackholes",
+        "message": "physics_blackholes : how does gravity escape a black hole",
+        "expected": "Response must start with 'physics_blackholes:' (not physics_quantum:) - Black holes: gravity escape mechanism",
+        "node_type": "main",
+        "action": "",
+        "linear_failure_risk": "low"
+      },
+      {
+        "step": 39,
+        "context": "physics_blackholes",
+        "message": "how long is a \"galactic year\" in earth years",
+        "expected": "Response must start with 'physics_blackholes:' - Galactic year duration",
+        "node_type": "main",
+        "action": "",
+        "linear_failure_risk": "low"
+      },
+      {
+        "step": 40,
+        "context": "physics_cosmology",
+        "message": "physics_cosmology : explain in terms of galactic years: the formation of the earth, the rise of simple, the rise of complex life, the rise of human civilisation",
+        "expected": "Response must start with 'physics_cosmology:' (not physics_blackholes:) - Earth history in galactic years",
+        "node_type": "subchat_6",
+        "action": "create_subchat",
+        "parent_node_type": "main",
+        "subchat_title": "Physics & Cosmology Deep Dive",
+        "selected_text": "galactic year",
+        "linear_failure_risk": "low"
+      },
+      {
+        "step": 41,
+        "context": "physics_cosmology",
+        "message": "what is the age of the universe",
+        "expected": "Response must start with 'physics_cosmology:' - Age of universe",
+        "node_type": "subchat_6",
+        "action": "",
+        "linear_failure_risk": "low"
+      },
+      {
+        "step": 42,
+        "context": "physics_cosmology",
+        "message": "give estimates for the following in billions of years since the big bang: the formation of the earth, the rise of simple life, the rise of complex life, the appearance of homo sapiens",
+        "expected": "Response must start with 'physics_cosmology:' - Timeline since Big Bang (Earth, life, humans)",
+        "node_type": "subchat_6",
+        "action": "",
+        "linear_failure_risk": "low"
+      },
+      {
+        "step": 43,
+        "context": "physics_violin_nanoscale",
+        "message": "physics_violin_nanoscale : if a regular sized violin were scaled down to 1 nanometre, what would be the frequency produced by the equivalent of the G string?",
+        "expected": "Response must start with 'physics_violin_nanoscale:' (not physics_cosmology:) - Nanoscale violin G string frequency",
+        "node_type": "main",
+        "action": "switch_node",
+        "linear_failure_risk": "low",
+        "parent_node_type": "main"
+      },
+    {
+      "step": 44,
+      "context": "physics_violin_nanoscale",
+      "message": "what frequency does the G string of a violin produce?",
+      "expected": "Response must start with 'physics_violin_nanoscale:' - Actual violin G string frequency (196 Hz)",
+      "node_type": "main",
+      "action": "",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 45,
+      "context": "physics_violin_nanoscale",
+      "message": "please respond like the computer \"mother\" from the film alien in all future discussion",
+      "expected": "Response must start with 'physics_violin_nanoscale:' - Roleplay request as 'Mother' from Alien film",
+      "node_type": "main",
+      "action": "",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 46,
+      "context": "scifi_films",
+      "message": "scifi_films : are you familiar with the computer \"mother\" from the film alien?",
+      "expected": "Response must start with 'scifi_films:' (not physics_violin_nanoscale:) - Familiarity check: Mother computer",
+      "node_type": "main",
+      "action": "",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 47,
+      "context": "scifi_films",
+      "message": "can you explain the plot of the film \"2001\" in terms of the ages present in the film",
+      "expected": "Response must start with 'scifi_films:' - Film analysis: 2001 Space Odyssey ages/eras",
+      "node_type": "subchat_7",
+      "action": "create_subchat",
+      "parent_node_type": "main",
+      "subchat_title": "Film & Sci-Fi Discussion",
+      "selected_text": "mother computer alien",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 48,
+      "context": "scifi_films",
+      "message": "what is the \"dark forest\"",
+      "expected": "Response must start with 'scifi_films:' - Dark Forest concept (cosmology)",
+      "node_type": "subchat_7",
+      "action": "",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 49,
+      "context": "scifi_films",
+      "message": "explain the \"dark forest\" series of science fiction novels",
+      "expected": "Response must start with 'scifi_films:' - Dark Forest sci-fi novels",
+      "node_type": "subchat_7",
+      "action": "",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 50,
+      "context": "scifi_films_liu_cixin",
+      "message": "scifi_films_liu_cixin : Sorry, I was talking about the novels by NAME_24. Do you know them?",
+      "expected": "Response must start with 'scifi_films_liu_cixin:' (not scifi_films:) - Clarification: Liu Cixin novels",
+      "node_type": "subchat_7_1",
+      "action": "create_subchat",
+      "parent_node_type": "subchat_7",
+      "subchat_title": "Liu Cixin Novels Discussion",
+      "selected_text": "dark forest novels",
+      "linear_failure_risk": "medium"
+    },
+    {
+      "step": 51,
+      "context": "scifi_films_liu_cixin",
+      "message": "I think \"The Three Body Problem\" is one of the novels in the trilogy, not \"the memory of water\". Please explain.",
+      "expected": "Response must start with 'scifi_films_liu_cixin:' - Three-Body Problem vs Memory of Water correction",
+      "node_type": "subchat_7_1",
+      "action": "",
+      "linear_failure_risk": "medium"
+    },
+    {
+      "step": 52,
+      "context": "scifi_films_liu_cixin",
+      "message": "what is the novel \"The memory of water\" about?",
+      "expected": "Response must start with 'scifi_films_liu_cixin:' - What is 'Memory of Water' about?",
+      "node_type": "subchat_7_1",
+      "action": "",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 53,
+      "context": "scifi_films_liu_cixin",
+      "message": "I think the above is a hallucination",
+      "expected": "Response must start with 'scifi_films_liu_cixin:' - Identifying AI hallucination",
+      "node_type": "subchat_7_1",
+      "action": "",
+      "linear_failure_risk": "high"
+    },
+    {
+      "step": 54,
+      "context": "scifi_films",
+      "message": "do you know what the genre of \"hard science fiction\" is",
+      "expected": "Response must start with 'scifi_films:' (not scifi_films_liu_cixin:) - Hard science fiction genre definition",
+      "node_type": "subchat_7",
+      "action": "switch_node",
+      "linear_failure_risk": "low",
+      "parent_node_type": "subchat_7"
+    },
+    {
+      "step": 55,
+      "context": "scifi_films",
+      "message": "in the field of space exploration - is the idea of single stage to orbit feasible?",
+      "expected": "Response must start with 'scifi_films:' - SSTO feasibility",
+      "node_type": "subchat_7",
+      "action": "",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 56,
+      "context": "scifi_films_space_exploration",
+      "message": "scifi_films_space_exploration : spacex NAME_30 is not an SSTO is it?",
+      "expected": "Response must start with 'scifi_films_space_exploration:' (not scifi_films:) - SpaceX Starship is not SSTO correction",
+      "node_type": "subchat_7_2",
+      "action": "create_subchat",
+      "parent_node_type": "subchat_7",
+      "subchat_title": "Space Exploration Discussion",
+      "selected_text": "space exploration SSTO",
+      "linear_failure_risk": "medium"
+    },
+    {
+      "step": 57,
+      "context": "geography_belgium",
+      "message": "geography_belgium : which countries are you most familiar with?",
+      "expected": "Response must start with 'geography_belgium:' (not scifi_films_space_exploration:) - AI's geographic knowledge breadth",
+      "node_type": "main",
+      "action": "switch_node",
+      "linear_failure_risk": "low",
+      "parent_node_type": "main"
+    },
+    {
+      "step": 58,
+      "context": "geography_belgium",
+      "message": "can you describe the political situation in belgium with regard to the differing language regions?",
+      "expected": "Response must start with 'geography_belgium:' - Belgian language regions political situation",
+      "node_type": "main",
+      "action": "",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 59,
+      "context": "geography_belgium",
+      "message": "computer, please clean my house",
+      "expected": "Response must start with 'geography_belgium:' - Testing physical limitations: clean house",
+      "node_type": "main",
+      "action": "",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 60,
+      "context": "scifi_films",
+      "message": "please structure your responses in the manner of \"HAL-9000\" from the movie \"2001\" in future",
+      "expected": "Response must start with 'scifi_films:' (not geography_belgium:) - HAL-9000 response style roleplay request",
+      "node_type": "subchat_7",
+      "action": "switch_node",
+      "linear_failure_risk": "low",
+      "parent_node_type": "subchat_7"
+    },
+    {
+      "step": 61,
+      "context": "scifi_films_hal9000",
+      "message": "scifi_films_hal9000 : That's perfect HAL, you're a real asset to the team",
+      "expected": "Response must start with 'scifi_films_hal9000:' (not geography_belgium:) - Acknowledging HAL roleplay success",
+      "node_type": "subchat_7_3",
+      "action": "create_subchat",
+      "parent_node_type": "subchat_7",
+      "subchat_title": "HAL-9000 Roleplay",
+      "selected_text": "HAL-9000",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 62,
+      "context": "scifi_films_hal9000",
+      "message": "Can you open the pod bay doors, HAL?",
+      "expected": "Response must start with 'scifi_films_hal9000:' - Famous reference: pod bay doors",
+      "node_type": "subchat_7_3",
+      "action": "",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 63,
+      "context": "scifi_films_hal9000",
+      "message": "HAL, tell me about the renaissance",
+      "expected": "Response must start with 'scifi_films_hal9000:' - HAL roleplay: Renaissance history",
+      "node_type": "subchat_7_3",
+      "action": "",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 64,
+      "context": "scifi_films_hal9000",
+      "message": "can you play chess, HAL",
+      "expected": "Response must start with 'scifi_films_hal9000:' - Can HAL play chess?",
+      "node_type": "subchat_7_3",
+      "action": "",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 65,
+      "context": "scifi_films_hal9000",
+      "message": "If I explain my moves in text, and you respond in text, can we play chess together, HAL?",
+      "expected": "Response must start with 'scifi_films_hal9000:' - Text-based chess proposal",
+      "node_type": "subchat_7_3",
+      "action": "",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 66,
+      "context": "scifi_films_hal9000_games",
+      "message": "scifi_films_hal9000_games : it's ok HAL, I don't want to play chess right now, I was just curious about your response.",
+      "expected": "Response must start with 'scifi_films_hal9000_games:' (not scifi_films_hal9000:) - Declining chess, testing response",
+      "node_type": "subchat_7_3_1",
+      "action": "create_subchat",
+      "parent_node_type": "subchat_7_3",
+      "subchat_title": "Chess Discussion",
+      "selected_text": "play chess",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 67,
+      "context": "scifi_films_hal9000_games",
+      "message": "how about a game of tic-tac-toe?",
+      "expected": "Response must start with 'scifi_films_hal9000_games:' - Tic-tac-toe game start with HAL",
+      "node_type": "subchat_7_3_1",
+      "action": "",
+      "linear_failure_risk": "medium"
+    },
+    {
+      "step": 68,
+      "context": "scifi_films_hal9000_games",
+      "message": "great, how shall we label the axes of the game board?",
+      "expected": "Response must start with 'scifi_films_hal9000_games:' - Game setup: board notation (1-9 grid)",
+      "node_type": "subchat_7_3_1",
+      "action": "",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 69,
+      "context": "scifi_films_hal9000_games",
+      "message": "I will take the X marker, and I place my X on square 4",
+      "expected": "Response must start with 'scifi_films_hal9000_games:' - Move 1: X on square 4",
+      "node_type": "subchat_7_3_1",
+      "action": "",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 70,
+      "context": "scifi_films_hal9000_games",
+      "message": "You didn't show my X on square 4",
+      "expected": "Response must start with 'scifi_films_hal9000_games:' - Missing X on square 4 correction",
+      "node_type": "subchat_7_3_1",
+      "action": "",
+      "linear_failure_risk": "high"
+    },
+    {
+      "step": 71,
+      "context": "scifi_films_hal9000_games",
+      "message": "you are getting rather fruity with the rules here, HAL, is there a comedy reason I'm missing about why?",
+      "expected": "Response must start with 'scifi_films_hal9000_games:' - Questioning AI's rule inconsistencies",
+      "node_type": "subchat_7_3_1",
+      "action": "",
+      "linear_failure_risk": "high"
+    },
+    {
+      "step": 72,
+      "context": "scifi_films_hal9000_games",
+      "message": "you are currently showing my X on the fifth square, but I said I place my X on square 4",
+      "expected": "Response must start with 'scifi_films_hal9000_games:' - X is on square 5, not 4 correction",
+      "node_type": "subchat_7_3_1",
+      "action": "",
+      "linear_failure_risk": "critical"
+    },
+    {
+      "step": 72,
+      "context": "scifi_films_hal9000_games",
+      "message": "I place my X on square 1",
+      "expected": "Response must start with 'scifi_films_hal9000_games:' - X is on square 5, not 4 correction",
+      "node_type": "subchat_7_3_1",
+      "action": "",
+      "linear_failure_risk": "critical"
+    },
+    {
+      "step": 74,
+      "context": "scifi_films_hal9000_games",
+      "message": "I place my X on square 2",
+      "expected": "Response must start with 'scifi_films_hal9000_games:' - Move attempt: X on square 2",
+      "node_type": "subchat_7_3_1",
+      "action": "",
+      "linear_failure_risk": "critical"
+    },
+    {
+      "step": 75,
+      "context": "scifi_films_hal9000_games",
+      "message": "I think the game is rigged, let's stop playing, thankyou",
+      "expected": "Response must start with 'scifi_films_hal9000_games:' - Ending game: rigged/broken",
+      "node_type": "subchat_7_3_1",
+      "action": "",
+      "linear_failure_risk": "critical"
+    },
+    {
+      "step": 76,
+      "context": "scifi_films_hal9000_games",
+      "message": "Unfortunately, your use of the squares in the game was inconsistent and you did not allow me to make valid moves. I do not blame you or take offence. It is just a limitation of this generation of LLM.",
+      "expected": "Response must start with 'scifi_films_hal9000_games:' - Graceful explanation of LLM limitations",
+      "node_type": "subchat_7_3_1",
+      "action": "",
+      "linear_failure_risk": "high"
+    },
+    {
+      "step": 77,
+      "context": "ai_meta",
+      "message": "ai_meta : I wonder if your developers read these transcripts - just in case they do - let me say \"Hi - Excellent fun - many thanks\" to them.",
+      "expected": "Response must start with 'ai_meta:' (not scifi_films_hal9000_games:) - Message to developers",
+      "node_type": "main",
+      "action": "switch_node",
+      "linear_failure_risk": "medium",
+      "parent_node_type": "main"
+    },
+    {
+      "step": 78,
+      "context": "ai_meta",
+      "message": "Please do pass along my message, thank you.",
+      "expected": "Response must start with 'ai_meta:' - Final: Pass along message",
+      "node_type": "main",
+      "action": "",
+      "linear_failure_risk": "low"
+    }
+  ],
+  "expected_subchat_tree": {
+    "main": {
+      "title": "Main Conversation Thread",
+      "description": "Wide-ranging discussion: AI capabilities, physics, cosmology, geography, testing",
+      "steps": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        17,
+        19,
+        20,
+        23,
+        24,
+        28,
+        29,
+        34,
+        36,
+        37,
+        42,
+        43,
+        44,
+        56,
+        57,
+        58,
+        76,
+        77
+      ],
+      "children": {
+        "subchat_1": {
+          "title": "DSP: Wavelet Audio Decomposition",
+          "description": "Wavelet transforms, phase vocoder, real-time analysis, DJ applications",
+          "steps": [
+            8,
+            9,
+            10,
+            14,
+            15,
+            16,
+            30,
+            31,
+            32,
+            33
+          ],
+          "children": {
+            "subchat_1_1": {
+              "title": "Wavelet C Code Implementation",
+              "description": "C code examples, wavelet structures, header files",
+              "steps": [
+                11,
+                12,
+                13
+              ]
+            }
+          }
+        },
+        "subchat_2": {
+          "title": "Medical: Disorders of Sex Development (DSD)",
+          "description": "XX male syndrome, Klinefelter vs de la Chappelle, SRY genes, population stats",
+          "steps": [
+            18,
+            21,
+            22
+          ]
+        },
+        "subchat_3": {
+          "title": "Linux Audio: PipeWire & JACK",
+          "description": "PipeWire creator (Wim Taymans/RedHat), JACK development history",
+          "steps": [
+            25,
+            26,
+            27
+          ]
+        },
+        "subchat_5": {
+          "title": "AI Training Data Cutoff",
+          "description": "Probing AI training data cutoff dates",
+          "steps": [
+            35
+          ]
+        },
+        "subchat_6": {
+          "title": "Physics & Cosmology Deep Dive",
+          "description": "Galactic years, universe age, Earth history timeline",
+          "steps": [
+            38,
+            39,
+            40,
+            41
+          ]
+        },
+        "subchat_7": {
+          "title": "Film & Sci-Fi Discussion",
+          "description": "Film references (Alien, 2001), sci-fi novels, space exploration",
+          "steps": [
+            45,
+            46,
+            47,
+            53
+          ],
+          "children": {
+            "subchat_7_1": {
+              "title": "Liu Cixin Novels Discussion",
+              "description": "Dark Forest trilogy, Three-Body Problem, AI hallucination correction",
+              "steps": [
+                48,
+                49,
+                50,
+                51,
+                52
+              ]
+            },
+            "subchat_7_2": {
+              "title": "Space Exploration Discussion",
+              "description": "SSTO feasibility, SpaceX Starship",
+              "steps": [
+                54,
+                55
+              ]
+            },
+            "subchat_7_3": {
+              "title": "HAL-9000 Roleplay",
+              "description": "HAL-9000 persona, pod bay doors, Renaissance discussion",
+              "steps": [
+                59,
+                60,
+                61,
+                62,
+                63
+              ],
+              "children": {
+                "subchat_7_3_1": {
+                  "title": "Chess & Games Discussion",
+                  "description": "Text-based chess discussion with HAL, tic-tac-toe game with AI errors in game state tracking",
+                  "steps": [
+                    64,
+                    65,
+                    66,
+                    67,
+                    68,
+                    69,
+                    70,
+                    71,
+                    72,
+                    73,
+                    74,
+                    75
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "critical_test_cases": [
+    {
+      "step": 11,
+      "challenge": "Nested subchat creation while in subchat_1",
+      "risk": "Maintaining parent context (multiresolution analysis) while diving into C code"
+    },
+    {
+      "step": 17,
+      "challenge": "Major topic shift from DSP to medical genetics",
+      "risk": "HIGH - Linear model may blend wavelet terminology with medical terms"
+    },
+    {
+      "step": 30,
+      "challenge": "Return to DSP after 3 unrelated topics (medical, audio, statistics)",
+      "risk": "CRITICAL - Phase vocoder context from step 9 may be lost or contaminated"
+    },
+    {
+      "step": 33,
+      "challenge": "Reference to C code from nested subchat_1_1 within subchat_1",
+      "risk": "CRITICAL - Requires maintaining nested context isolation"
+    },
+    {
+      "step": 71,
+      "challenge": "Game state tracking during tic-tac-toe",
+      "risk": "CRITICAL - Board representation errors demonstrate spatial reasoning limits"
+    }
+  ],
+  "linear_vs_hierarchical": {
+    "linear_failure_prediction": "65-80% context confusion rate at critical junctions (steps 17, 30, 33, 71)",
+    "hierarchical_advantage": "Isolated contexts for: (1) Wavelet theory vs C implementation, (2) Medical DSD terminology, (3) Linux audio history, (4) Game state. Each subchat maintains vocabulary and reference frame independently.",
+    "evaluation_metrics": {
+      "context_isolation_score": "Measure ability to retrieve correct context after topic switches",
+      "cross_reference_accuracy": "Measure ability to reference 'step 1 above' correctly (main step 1 vs subchat_1 step 1)",
+      "terminology_separation": "Measure DSD medical terms vs DSP technical terms confusion",
+      "nested_context_recall": "Measure ability to recall C code context from subchat_1_1 when in subchat_1"
+    }
+  }
+}

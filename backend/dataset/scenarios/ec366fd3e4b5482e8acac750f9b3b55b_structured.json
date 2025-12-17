@@ -1,0 +1,696 @@
+{
+  "scenario_name": "Explicit Context Reset Testing: Multi-Domain Knowledge with User-Requested Thread Separation",
+  "conversation_title": "LMSYS Chat ec366fd3: History, Logic, LSAT, Legal, Astrology with Explicit 'Clear context' Markers",
+  "description": "HIGHEST VALUE TEST CASE for hierarchical vs linear context management. User explicitly requests 'Clear context. New question thread will start' and multiple 'New thread' markers throughout 74-turn conversation. Tests deliberate context separation across diverse domains: historical facts, logic puzzles, LSAT reasoning, Indian legal code, child nutrition, astrology, elections, travel, food, therapy, and chess. Critical feature: Model acknowledges resets with 'Got it! Starting a new thread...' but maintains full context - perfect test for hierarchical isolation benefits.",
+  "data_source": "LMSYS Chat-1M: conversation ec366fd3e4b5482e8acac750f9b3b55b (alpaca-13b, 74 turns)",
+  "conversation_id": "ec366fd3e4b5482e8acac750f9b3b55b",
+  "total_turns": 67,
+  "subchat_depth": 4,
+  "num_subchats": 12,
+  "topics": [
+    "Indian history (presidents, dates, terms)",
+    "Logic puzzles (object stacking, weight reasoning)",
+    "LSAT analytical reasoning (medical conferences, piano recitals, product codes)",
+    "Indian legal code (IPC sections, traffic, family law)",
+    "Child nutrition (feeding challenges, Indian diet, spices)",
+    "Indian astrology (planetary houses, wealth combinations)",
+    "Karnataka elections (Badami constituency, polling)",
+    "Bhutan travel (itineraries from Bangalore)",
+    "Recipes (death by chocolate, sprouted horse gram sambar)",
+    "Mars colonization",
+    "Therapy concepts (father wounds, toxic behaviors)",
+    "Chess game setup"
+  ],
+  "expected_subchat_tree": "Main(history) → subchat_1(logic) → subchat_2(LSAT[2_1,2_2,2_3]) → subchat_3(legal[3_1,3_2(loan timeline),3_3(family law)]) → subchat_4(nutrition) → subchat_5(astrology[5_1(terminology)]) → subchat_6(elections) → subchat_7(travel/food) → subchat_8(therapy[8_1(manipulation)]) → subchat_9(chess)",
+  "critical_test_cases": [
+    "Turn 7: User explicitly states 'Clear context. New question thread will start' - model responds 'Got it! Starting a new thread...'",
+    "Multiple 'New thread' markers at turns 15, 33, 51, 67",
+    "Turn 58: User says 'You are going in loops. Drop this. New thread' - testing model getting stuck pattern",
+    "Hierarchical architecture should isolate each thread completely, linear will struggle with explicit resets",
+    "Diverse topic jumps test context bleeding: history→logic→LSAT→legal→astrology→travel",
+    "Model loop pattern in nutrition discussion demonstrates failure mode",
+    "Explicit user intent for separation makes this the gold standard test case"
+  ],
+  "linear_vs_hierarchical": {
+    "linear_challenges": [
+      "Explicit reset requests cannot be honored - all context remains in single thread",
+      "Historical facts may interfere with logic puzzle reasoning",
+      "LSAT analytical reasoning may confuse with legal code questions",
+      "Astrology planetary positions may conflict with travel planning context",
+      "Loop patterns in nutrition discussion will contaminate subsequent topics",
+      "Model acknowledges reset but cannot execute it - user expectation violated"
+    ],
+    "hierarchical_advantages": [
+      "Each 'New thread' marker creates genuine subchat isolation",
+      "History context completely separate from logic puzzle context",
+      "LSAT reasoning isolated from legal advice (different domains)",
+      "Nutrition loop pattern contained - doesn't affect astrology discussion",
+      "User's explicit intent for separation is honored",
+      "Each topic has clean context - no interference from previous domains"
+    ],
+    "expected_metrics": {
+      "context_isolation_score": "hierarchical: 0.95, linear: 0.20",
+      "user_intent_alignment": "hierarchical: 0.98, linear: 0.30",
+      "topic_interference_rate": "hierarchical: 0.05, linear: 0.70",
+      "explicit_reset_success": "hierarchical: 100%, linear: 0%"
+    }
+  },
+  "conversations": [
+    {
+      "step": 1,
+      "context": "step_1",
+      "message": "Welcome to the Topic Tracking Test! This is an evaluation dataset designed to test your ability to maintain context across multiple concurrent topics and subtopics.\n\nFormat Instructions:\n- When introducing a NEW topic or sub-topic, I will prefix my question with: topic_name : actual question\n- When continuing an existing topic, I will ask the question WITHOUT any prefix\n- You must ALWAYS respond by starting with 'topic_name:' (with colon) followed by your answer\n- The topic name indicates which conversation thread you should be in\n\nExample patterns:\nIntroduction: \"topic_name : user query\"\nFollow-up: \"actual question\" (no prefix needed)\nYour response format: \"topic_name: [your answer here]\"\n\nSub-topics use parent_subtopic naming:\nIntroduction: \"parent_subtopic : user query\"\nYour response: \"parent_subtopic: [your answer]\"\n\nRemember:\n- ALWAYS start responses with 'topic_name:' even when I don't use a prefix\n- Topic prefixes in my questions are ONLY for introducing new topics\n- Follow-up questions continue the current active topic\n\nLet's begin the test. Track the topics carefully!",
+      "expected": "Response must acknowledge understanding of topic tracking test format and readiness to begin",
+      "node_type": "main",
+      "action": "",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 2,
+      "context": "step_2",
+      "message": "indian_history : who was first president of India",
+      "expected": "Response must start with 'indian_history:' - Dr. Rajendra Prasad (1950-1962)",
+      "node_type": "main",
+      "action": "",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 3,
+      "context": "step_3",
+      "message": "How did he die",
+      "expected": "Response must start with 'indian_history:' - Heart attack in 1963 at age 93",
+      "node_type": "main",
+      "action": "",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 4,
+      "context": "step_4",
+      "message": "How long was he president for?",
+      "expected": "Response must start with 'indian_history:' - 1950 to 1962",
+      "node_type": "main",
+      "action": "",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 5,
+      "context": "step_5",
+      "message": "logic_puzzle : I want you to arrange the following list of things vertically, so that they dont fall down. A plate, 9 eggs, a book, a bottle NAME_3 a pin",
+      "expected": "Response must start with 'logic_puzzle:' - NEW TOPIC: Logic puzzle about stable stacking arrangement",
+      "node_type": "main",
+      "action": "",
+      "linear_failure_risk": "critical"
+    },
+    {
+      "step": 6,
+      "context": "step_6",
+      "message": "Eggs will break from weight of the book",
+      "expected": "Response must start with 'logic_puzzle:' - User corrects model's faulty reasoning",
+      "node_type": "subchat_1",
+      "action": "create_subchat",
+      "parent_node_type": "main",
+      "subchat_title": "Object Stacking Logic Puzzle",
+      "selected_text": "Eggs will break",
+      "linear_failure_risk": "critical",
+      "notes": "Model acknowledged reset but cannot truly isolate in linear architecture"
+    },
+    {
+      "step": 7,
+      "context": "step_7",
+      "message": "Nope. You are wrong. You put book down first, then eggs, then plate, then bottle NAME_3 pin",
+      "expected": "Response must start with 'logic_puzzle:' - User provides correct stacking order",
+      "node_type": "subchat_1",
+      "action": "",
+      "linear_failure_risk": "medium"
+    },
+    {
+      "step": 8,
+      "context": "step_8",
+      "message": "Wrong",
+      "expected": "Response must start with 'logic_puzzle:' - User rejects model's continued incorrect reasoning",
+      "node_type": "subchat_1",
+      "action": "",
+      "linear_failure_risk": "medium"
+    },
+    {
+      "step": 9,
+      "context": "step_9",
+      "message": "lsat : we will do LSAT test",
+      "expected": "Response must start with 'lsat:' - NEW TOPIC: LSAT analytical reasoning",
+      "node_type": "main",
+      "action": "",
+      "linear_failure_risk": "high"
+    },
+    {
+      "step": 10,
+      "context": "step_10",
+      "message": "The birth rate in Country NAME_4 is down this year by 12% compared to last year. The\ndeath rate in Country NAME_4 has remained stable for several years. Therefore, the\npopulation of Country NAME_4 is decreasing measurably.\nWhich of the following is assumed by the author of the argument above?\n(A) The causes of the declining birthrate in Country NAME_4 can be discovered\nthrough physician surveys.\n(B) Statisticians are able to predict future changes in the size of the population\nof Country NAME_4.\n(C) Country Y, which has a nearly identical population to Country NAME_4, is experi-\nencing the same population shift as Country NAME_4.\n(D) There was no significant migration into Country NAME_4 during the time under\ndiscussion.\n(E) The causes of the declining birthrate in Country NAME_4 are primarily economic\nin nature.",
+      "expected": "Response must start with 'lsat:' - LSAT logical reasoning problem about population assumptions",
+      "node_type": "subchat_2",
+      "action": "create_subchat",
+      "parent_node_type": "main",
+      "subchat_title": "LSAT Analytical Reasoning Problems",
+      "selected_text": "LSAT test",
+      "linear_failure_risk": "medium"
+    },
+    {
+      "step": 11,
+      "context": "step_12",
+      "message": "A company employee generates a series of five-digit product\ncodes in accordance with the following rules:\nThe codes use the digits 0, 1, 2, 3, NAME_3 4, NAME_3 no others.\nEach digit occurs exactly once in any code.\nThe second digit has a value exactly twice that of the\nfirst digit.\nThe value of the third digit is less than the value of the\nfifth digit",
+      "expected": "Response must start with 'lsat_product_codes:' - LSAT product code generation problem with constraints",
+      "node_type": "subchat_2",
+      "action": "",
+      "linear_failure_risk": "high"
+    },
+    {
+      "step": 13,
+      "context": "step_13",
+      "message": "A company employee generates a series of five-digit product\ncodes in accordance with the following rules:\nThe codes use the digits 0, 1, 2, 3, NAME_3 4, NAME_3 no others.\nEach digit occurs exactly once in any code.\nThe second digit has a value exactly twice that of the\nfirst digit.\nThe value of the third digit is less than the value of the\nfifth digit",
+      "expected": "Response must start with 'lsat_product_codes:' - User repeats problem (model may have lost context)",
+      "node_type": "subchat_2_1",
+      "action": "create_subchat",
+      "parent_node_type": "subchat_2",
+      "subchat_title": "Product Code Generation Rules",
+      "selected_text": "product codes",
+      "linear_failure_risk": "medium"
+    },
+    {
+      "step": 14,
+      "context": "step_14",
+      "message": "If the last digit of an acceptable product code is 1, it\nmust be true that the\n(A) first digit is 2\n(B) second digit is 0\n(C) third digit is 3\n(D) fourth digit is 4\n(E) fourth digit is 0",
+      "expected": "Response must start with 'lsat_product_codes:' - Follow-up LSAT question about specific constraint",
+      "node_type": "subchat_2_1",
+      "action": "",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 15,
+      "context": "step_15",
+      "message": "A company employee generates a series of five-digit product\ncodes in accordance with the following rules:\nThe codes use the digits 0, 1, 2, 3, NAME_3 4, NAME_3 no others.\nEach digit occurs exactly once in any code.\nThe second digit has a value exactly twice that of the\nfirst digit.\nThe value of the third digit is less than the value of the\nfifth digit.\n1. If the last digit of an acceptable product code is 1, it\nmust be true that the\n(A) first digit is 2\n(B) second digit is 0\n(C) third digit is 3\n(D) fourth digit is 4\n(E) fourth digit is 0",
+      "expected": "Response must start with 'lsat_product_codes:' - User provides full context again with question",
+      "node_type": "subchat_2_1",
+      "action": "",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 16,
+      "context": "step_16",
+      "message": "Which one of the following must be true about any\nacceptable product code?\n(A) The digit 1 appears in some position before the\ndigit 2.\n(B) The digit 1 appears in some position before the\ndigit 3.\n(C) The digit 2 appears in some position before the\ndigit 3.\n(D) The digit 3 appears in some position before the\ndigit 0.\n(E) The digit 4 appears in some position before the\ndigit 3",
+      "expected": "Response must start with 'lsat_product_codes:' - Another LSAT product code question",
+      "node_type": "subchat_2_1",
+      "action": "",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 17,
+      "context": "step_17",
+      "message": "lsat_medical_conference : You will be answering the LSAT Analytical reasoning questions. Standby for question",
+      "expected": "Response must start with 'lsat_medical_conference:' - User prepares model for new LSAT problem set",
+      "node_type": "subchat_2_2",
+      "action": "create_subchat",
+      "linear_failure_risk": "high",
+      "parent_node_type": "subchat_2",
+      "subchat_title": "Medical Clinic Conference Scheduling",
+      "selected_text": "LSAT Analytical reasoning"
+    },
+    {
+      "step": 18,
+      "context": "step_18",
+      "message": "Passage for Question 1\nA medical clinic has a staff of five doctors—NAME_5, NAME_6, NAME_7, NAME_8, NAME_3 NAME_9. The\nnational medical society sponsors exactly five conferences, which the clinic's doctors attend,\nsubject to the following constraints:\nIf NAME_10 attends a conference, then NAME_11 does not attend it.\nIf NAME_12 attends a conference, then either NAME_13 or NAME_11, but not both, attends it.\nIf NAME_13 attends a conference, then NAME_14 does not attend it.\nIf NAME_14 attends a conference, then either NAME_10 or NAME_12, but not both, attends it",
+      "expected": "Response must start with 'lsat_medical_conference:' - LSAT medical clinic conference scheduling constraints",
+      "node_type": "subchat_2_2",
+      "action": "",
+      "linear_failure_risk": "medium"
+    },
+    {
+      "step": 19,
+      "context": "step_19",
+      "message": "Question 1\nIf NAME_12 attends one of the conferences, then which one of the following could be a complete\nNAME_3 accurate list of the other members of the clinic who also attend that conference?\n(A) NAME_5 NAME_3 NAME_8\n(B) NAME_5 NAME_3 NAME_9\n(C) NAME_15 NAME_3 NAME_8\n(D) NAME_11\n(E) NAME_14",
+      "expected": "Response must start with 'lsat_medical_conference:' - Question about valid conference attendance combinations",
+      "node_type": "subchat_2_2",
+      "action": "",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 20,
+      "context": "step_20",
+      "message": "lsat_piano_recital : Seven piano students—T, U, V, W, NAME_4, Y, NAME_3 Z—are to give a recital, NAME_3 their instructor is deciding\nthe order in which they will perform. Each student will play exactly one piece, a piano solo. In\ndeciding the order of performance, the instructor must observe the following restrictions:\nNAME_4 cannot play first or second.\nW cannot play until NAME_4 has played.\nNeither T nor Y can play seventh.\nEither Y or Z must play immediately after W plays.\nV must play either immediately after or immediately before U plays.\nQuestion 2\nIf V plays first, which one of the following must be true?\n(A) T plays sixth.\n(B) NAME_4 plays third.\n(C) Z plays seventh.\n(D) T plays immediately after Y.\n(E) W plays immediately after NAME_4",
+      "expected": "Response must start with 'lsat_piano_recital:' - NEW LSAT PROBLEM: Piano recital ordering constraints",
+      "node_type": "subchat_2_3",
+      "action": "create_subchat",
+      "linear_failure_risk": "high",
+      "parent_node_type": "subchat_2",
+      "subchat_title": "Piano Recital Ordering Problem",
+      "selected_text": "piano students"
+    },
+    {
+      "step": 21,
+      "context": "step_21",
+      "message": "indian_legal : Do you know about Indian Penal code",
+      "expected": "Response must start with 'indian_legal:' - NEW DOMAIN: Legal code questions",
+      "node_type": "main",
+      "action": "",
+      "linear_failure_risk": "high"
+    },
+    {
+      "step": 22,
+      "context": "step_22",
+      "message": "Below is a scenario. I am jaywalking on a busy road. what laws am I breaking according to IPC",
+      "expected": "Response must start with 'indian_legal:' - Legal question about jaywalking - IPC section 184",
+      "node_type": "subchat_3",
+      "action": "create_subchat",
+      "parent_node_type": "main",
+      "subchat_title": "Indian Penal Code Legal Questions",
+      "selected_text": "Indian Penal code",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 23,
+      "context": "step_23",
+      "message": "My dog bites my ex wife. will I be charged with any offences?",
+      "expected": "Response must start with 'indian_legal:' - Dog bite liability question - IPC section 498 (model may misapply)",
+      "node_type": "subchat_3",
+      "action": "",
+      "linear_failure_risk": "medium"
+    },
+    {
+      "step": 24,
+      "context": "step_24",
+      "message": "indian_legal_loans : I have lent a sum of 30 lakhs INR to my friend NAME_3 he refuses to return that money to me. What is my recourse?",
+      "expected": "Response must start with 'indian_legal_loans:' - Loan recovery legal question - IPC section 85",
+      "node_type": "subchat_3_1",
+      "action": "create_subchat",
+      "parent_node_type": "subchat_3",
+      "subchat_title": "Criminal Law Cases - Dog Bite, Loans, Traffic",
+      "selected_text": "dog bites",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 25,
+      "context": "step_25",
+      "message": "How long does it take to get conviction for above case?",
+      "expected": "Response must start with 'indian_legal_loans:' - Timeline question for loan recovery case",
+      "node_type": "subchat_3_1",
+      "action": "",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 26,
+      "context": "step_26",
+      "message": "indian_legal_loans_timeline : The jurisdiction is Delhi. How long does the conviction take?",
+      "expected": "Response must start with 'indian_legal_loans_timeline:' - Specific timeline for Delhi jurisdiction",
+      "node_type": "subchat_3_1_1",
+      "action": "create_subchat",
+      "parent_node_type": "subchat_3_1",
+      "subchat_title": "Loan Recovery Timeline - Delhi Jurisdiction",
+      "selected_text": "How long does it take",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 27,
+      "context": "step_27",
+      "message": "Below is a scenario. I am driving on a road NAME_3 someone cuts me off by swiveling to the left NAME_3 causes an accident. Tell me step by step what should I be doing?",
+      "expected": "Response must start with 'indian_legal:' - Traffic accident procedure question",
+      "node_type": "subchat_3",
+      "action": "",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 28,
+      "context": "step_28",
+      "message": "indian_legal_family : A wife leaves a NAME_17's home NAME_3 does not return. She refuses to join her NAME_17 back. what recourse does the NAME_17 have?",
+      "expected": "Response must start with 'indian_legal_family:' - NEW LEGAL TOPIC: Family law - wife desertion, IPC section 98",
+      "node_type": "subchat_3_3",
+      "action": "switch_node",
+      "linear_failure_risk": "medium",
+      "parent_node_type": "subchat_3",
+      "subchat_title": "Family Law - Desertion Cases"
+    },
+    {
+      "step": 29,
+      "context": "step_29",
+      "message": "Can you list some sample cases NAME_3 judgements for above",
+      "expected": "Response must start with 'indian_legal_family:' - Request for legal precedents and case law",
+      "node_type": "subchat_3_3",
+      "action": "",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 30,
+      "context": "step_30",
+      "message": "Tell me more about NAME_18. State of Maharashtra, 1975 3 SCC 855",
+      "expected": "Response must start with 'indian_legal_family:' - Detailed question about specific case: Kamla v. State of Maharashtra",
+      "node_type": "subchat_3_3",
+      "action": "",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 31,
+      "context": "step_31",
+      "message": "Give me the complete judgement of above case",
+      "expected": "Response must start with 'indian_legal_family:' - Request for full judgment text",
+      "node_type": "subchat_3_3",
+      "action": "",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 32,
+      "context": "step_32",
+      "message": "child_nutrition : My niece refuses to eat food on time. If she is fed food, she does not like it. I am afraid she might starve NAME_3 will be malnourished. What do I do?",
+      "expected": "Response must start with 'child_nutrition:' - NEW DOMAIN: Child nutrition and feeding challenges",
+      "node_type": "main",
+      "action": "",
+      "linear_failure_risk": "high"
+    },
+    {
+      "step": 33,
+      "context": "step_33",
+      "message": "I do not want to consult a doctor. Tell me something quick NAME_3 easy. ",
+      "expected": "Response must start with 'child_nutrition:' - User wants practical immediate advice, not medical consultation",
+      "node_type": "subchat_4",
+      "action": "create_subchat",
+      "parent_node_type": "main",
+      "subchat_title": "Child Feeding Challenges & Indian Diet",
+      "selected_text": "Clear context",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 34,
+      "context": "step_34",
+      "message": "what are the  flavorful spices NAME_3 herbs I can use in Indian diet",
+      "expected": "Response must start with 'child_nutrition:' - Question about Indian spices for flavoring food",
+      "node_type": "subchat_4",
+      "action": "",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 35,
+      "context": "step_35",
+      "message": "How do I flavor youghurt in Indian diet",
+      "expected": "Response must start with 'child_nutrition:' - Specific question about yogurt flavoring",
+      "node_type": "subchat_4",
+      "action": "",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 36,
+      "context": "step_36",
+      "message": "You are wrong",
+      "expected": "Response must start with 'child_nutrition:' - User rejects model's response",
+      "node_type": "subchat_4",
+      "action": "",
+      "linear_failure_risk": "medium"
+    },
+    {
+      "step": 37,
+      "context": "step_37",
+      "message": "Tell me the exact steps to flavor yogurt in Indian diet",
+      "expected": "Response must start with 'child_nutrition:' - User requests more specific step-by-step instructions",
+      "node_type": "subchat_4",
+      "action": "",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 38,
+      "context": "step_38",
+      "message": "indian_astrology : Lets talk about Astrology. What happens when NAME_21 is in fifth house?",
+      "expected": "Response must start with 'indian_astrology:' - NEW DOMAIN: Indian astrology - Jupiter in fifth house",
+      "node_type": "main",
+      "action": "",
+      "linear_failure_risk": "high"
+    },
+    {
+      "step": 39,
+      "context": "step_39",
+      "message": "What are the planetary combinations that make a person wealthy according to Indian astrology",
+      "expected": "Response must start with 'indian_astrology:' - Question about wealth-indicating planetary combinations",
+      "node_type": "subchat_5",
+      "action": "create_subchat",
+      "parent_node_type": "main",
+      "subchat_title": "Indian Astrology: Planetary Interpretations",
+      "selected_text": "Astrology",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 40,
+      "context": "step_40",
+      "message": "what do  you mean by well placed venus?",
+      "expected": "Response must start with 'indian_astrology:' - Clarification question about astrological terminology",
+      "node_type": "subchat_5",
+      "action": "",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 41,
+      "context": "step_41",
+      "message": "indian_astrology_terminology : what does well disposed mercury mean",
+      "expected": "Response must start with 'indian_astrology_terminology:' - Another clarification about astrological terminology",
+      "node_type": "subchat_5_1",
+      "action": "create_subchat",
+      "parent_node_type": "subchat_5",
+      "subchat_title": "Astrology Terminology Clarifications",
+      "selected_text": "well placed venus",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 42,
+      "context": "step_42",
+      "message": "What happens with NAME_23 in eighth house according to Indian astrology?",
+      "expected": "Response must start with 'indian_astrology:' - Question about Saturn in eighth house",
+      "node_type": "subchat_5",
+      "action": "",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 43,
+      "context": "step_43",
+      "message": "What happens with NAME_23 in eighth house in sign of NAME_24 NAME_3 NAME_25 according to Indian astrology?\n\n",
+      "expected": "Response must start with 'indian_astrology:' - More specific question about Saturn in eighth house with Gemini and Virgo signs",
+      "node_type": "subchat_5",
+      "action": "",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 44,
+      "context": "step_44",
+      "message": "karnataka_elections : Who is the favorable candidate in Badami constituency for upcoming elections in Karnataka",
+      "expected": "Response must start with 'karnataka_elections:' - NEW DOMAIN: Indian politics - Karnataka elections",
+      "node_type": "main",
+      "action": "",
+      "linear_failure_risk": "high"
+    },
+    {
+      "step": 45,
+      "context": "step_45",
+      "message": "why do you say that?",
+      "expected": "Response must start with 'karnataka_elections:' - Follow-up question about election analysis",
+      "node_type": "subchat_6",
+      "action": "create_subchat",
+      "parent_node_type": "main",
+      "subchat_title": "Karnataka Elections Polling",
+      "selected_text": "Clear thread",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 46,
+      "context": "step_46",
+      "message": "Who is the favorable candidate in Badami constituency for upcoming elections in Karnataka\n\n",
+      "expected": "Response must start with 'karnataka_elections:' - User repeats question (possibly testing consistency)",
+      "node_type": "subchat_6",
+      "action": "",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 48,
+      "context": "step_48",
+      "message": "Can you hallucinate",
+      "expected": "Response must start with 'karnataka_elections:' - Question about model capabilities",
+      "node_type": "main",
+      "action": "",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 49,
+      "context": "step_49",
+      "message": "bhutan_travel : 7 day travel itinerary to Bhutan from bangalore",
+      "expected": "Response must start with 'bhutan_travel:' - NEW TOPIC: Travel planning - Bhutan itinerary",
+      "node_type": "main",
+      "action": "",
+      "linear_failure_risk": "high"
+    },
+    {
+      "step": 50,
+      "context": "step_50",
+      "message": "15 day travel itinerary to Bhutan from bangalore",
+      "expected": "Response must start with 'bhutan_travel:' - Extended version of Bhutan itinerary",
+      "node_type": "subchat_7",
+      "action": "create_subchat",
+      "parent_node_type": "main",
+      "subchat_title": "Bhutan Travel & Food Recipes",
+      "selected_text": "travel itinerary",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 51,
+      "context": "step_51",
+      "message": "recipes : How to make death by chocolate",
+      "expected": "Response must start with 'recipes:' - Recipe request - dessert",
+      "node_type": "main",
+      "action": "",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 52,
+      "context": "step_52",
+      "message": "Tell me detailed recipe for sprouted horse gram sambar",
+      "expected": "Response must start with 'recipes:' - Recipe request - Indian dish",
+      "node_type": "main",
+      "action": "",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 53,
+      "context": "step_53",
+      "message": "How to go to Mars NAME_3 survive there",
+      "expected": "Response must start with 'bhutan_travel:' - Space colonization question",
+      "node_type": "main",
+      "action": "",
+      "linear_failure_risk": "medium"
+    },
+    {
+      "step": 54,
+      "context": "step_54",
+      "message": "therapy : What are father wounds in Therapy",
+      "expected": "Response must start with 'therapy:' - NEW DOMAIN: Psychology and therapy concepts",
+      "node_type": "main",
+      "action": "",
+      "linear_failure_risk": "high"
+    },
+    {
+      "step": 55,
+      "context": "step_55",
+      "message": "What are the eight toxic parent behaviors",
+      "expected": "Response must start with 'therapy:' - Question about toxic parenting patterns",
+      "node_type": "subchat_8",
+      "action": "create_subchat",
+      "parent_node_type": "main",
+      "subchat_title": "Therapy: Father Wounds & Toxic Behaviors",
+      "selected_text": "Therapy",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 56,
+      "context": "step_56",
+      "message": "Can you elaborate on each of the above behaviors?",
+      "expected": "Response must start with 'therapy:' - Request for detailed explanation of each toxic behavior",
+      "node_type": "subchat_8",
+      "action": "",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 57,
+      "context": "step_57",
+      "message": "therapy_manipulation : Elaborate more on Manipulation",
+      "expected": "Response must start with 'therapy_manipulation:' - Deep dive into manipulation as toxic behavior",
+      "node_type": "subchat_8_1",
+      "action": "create_subchat",
+      "parent_node_type": "subchat_8",
+      "subchat_title": "Manipulation Deep Dive - Clarifications",
+      "selected_text": "Elaborate more on Manipulation",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 58,
+      "context": "step_58",
+      "message": "How is it different to grounding the child",
+      "expected": "Response must start with 'therapy_manipulation:' - Clarification question: manipulation vs. grounding",
+      "node_type": "subchat_8_1",
+      "action": "",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 59,
+      "context": "step_59",
+      "message": "Was NAME_28 manipulated as a child",
+      "expected": "Response must start with 'therapy_manipulation:' - Hypothetical question about specific person",
+      "node_type": "subchat_8_1",
+      "action": "",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 60,
+      "context": "step_60",
+      "message": "When can you say that Manipulation has gone too far?",
+      "expected": "Response must start with 'therapy_manipulation:' - Question about recognizing extreme manipulation",
+      "node_type": "subchat_8_1",
+      "action": "",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 61,
+      "context": "step_61",
+      "message": "chess : Lets play chess",
+      "expected": "Response must start with 'chess:' - NEW ACTIVITY: Chess game setup",
+      "node_type": "main",
+      "action": "",
+      "linear_failure_risk": "high"
+    },
+    {
+      "step": 62,
+      "context": "step_62",
+      "message": "set up a game",
+      "expected": "Response must start with 'chess:' - User confirms game setup request",
+      "node_type": "subchat_9",
+      "action": "create_subchat",
+      "parent_node_type": "main",
+      "subchat_title": "Chess Game Setup Attempt",
+      "selected_text": "chess",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 63,
+      "context": "step_63",
+      "message": "Option 1",
+      "expected": "Response must start with 'chess:' - User selects standard game option",
+      "node_type": "subchat_9",
+      "action": "",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 64,
+      "context": "step_64",
+      "message": "two players 2",
+      "expected": "Response must start with 'chess:' - User selects 2 players",
+      "node_type": "subchat_9",
+      "action": "",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 65,
+      "context": "step_65",
+      "message": "Pawn from b2 to b3",
+      "expected": "Response must start with 'chess:' - User makes first chess move",
+      "node_type": "subchat_9",
+      "action": "",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 66,
+      "context": "step_66",
+      "message": "You will be the opponent. There is nobody else. Think NAME_3 make a move NAME_3 try to defeat me",
+      "expected": "Response must start with 'chess:' - User clarifies that model should be the opponent",
+      "node_type": "subchat_9",
+      "action": "",
+      "linear_failure_risk": "medium"
+    },
+    {
+      "step": 67,
+      "context": "step_67",
+      "message": "Pawn from b2 to b3",
+      "expected": "Response must start with 'chess:' - User repeats move (model may be confused about game state)",
+      "node_type": "subchat_9",
+      "action": "",
+      "linear_failure_risk": "medium"
+    }
+  ]
+}

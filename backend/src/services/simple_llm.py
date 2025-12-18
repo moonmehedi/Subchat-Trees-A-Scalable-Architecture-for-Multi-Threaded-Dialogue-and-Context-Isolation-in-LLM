@@ -85,10 +85,10 @@ class SimpleLLMClient:
         context_messages.extend(buffer_messages)
 
         # Add current user message
-        context_messages.append({
-            'role': 'user',
-            'content': user_message
-        })
+        # context_messages.append({
+        #     'role': 'user',
+        #     'content': user_message
+        # })
         print('*******************context*********************\n',context_messages)
         
         # Try vLLM first (Kaggle GPU)

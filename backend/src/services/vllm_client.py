@@ -131,26 +131,25 @@ class VLLMClient:
     
     def _messages_to_prompt(self, messages: List[Dict[str, str]]) -> str:
         """
-        Convert OpenAI-style messages to a single prompt string.
-        Follows Qwen chat template format.
+        Convert OpenAI-style messages to Qwen chat template format.
+        Uses the tokenizer's apply_chat_template method for proper formatting.
         """
-        prompt_parts = []
+        if not self.is_available():
+            raise RuntimeError("vLLM model not loaded")
         
-        for msg in messages:
-            role = msg['role']
-            content = msg['content']
-            
-            if role == 'system':
-                prompt_parts.append(f"System: {content}")
-            elif role == 'user':
-                prompt_parts.append(f"User: {content}")
-            elif role == 'assistant':
-                prompt_parts.append(f"Assistant: {content}")
+        # Get tokenizer from the vLLM model
+        tokenizer = self._llm.get_tokenizer()
         
-        # Add final prompt for assistant response
-        prompt_parts.append("Assistant:")
+        # Use the tokenizer's chat template (proper Qwen format)
+        # tokenize=False returns the string prompt instead of token IDs
+        # add_generation_prompt=True adds the assistant prompt marker
+        prompt = tokenizer.apply_chat_template(
+            messages,
+            tokenize=False,
+            add_generation_prompt=True
+        )
         
-        return "\n\n".join(prompt_parts)
+        return prompt
 
 
 # Global singleton instance

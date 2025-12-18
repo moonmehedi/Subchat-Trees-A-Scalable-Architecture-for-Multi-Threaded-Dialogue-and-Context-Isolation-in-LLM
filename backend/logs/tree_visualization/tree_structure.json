@@ -1,3 +1,67 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:690fd4cc26099d831a26417fcf5771866c80ed42e04b23632ad0efc02f2d7917
-size 4944
+{
+  "conversations": [
+    {
+      "tree": {
+        "id": "3f49c4c0-7538-4e9c-a72c-0f5deaabd264",
+        "title": "Baseline - All Topics",
+        "depth": 0,
+        "path": [
+          "Baseline - All Topics"
+        ],
+        "message_count": 5,
+        "has_summary": true,
+        "children": [],
+        "metadata": {
+          "created_at": "unknown",
+          "is_subchat": false,
+          "follow_up_context": {
+            "selected_text": null,
+            "follow_up_intent": null,
+            "context_type": "general"
+          }
+        }
+      },
+      "metadata": {
+        "generated_at": "2025-12-18T12:15:19.363836",
+        "total_nodes": 1,
+        "max_depth": 0,
+        "root_id": "3f49c4c0-7538-4e9c-a72c-0f5deaabd264",
+        "root_title": "Baseline - All Topics"
+      }
+    },
+    {
+      "tree": {
+        "id": "aa0db00d-304a-404c-990d-c8c51101eff7",
+        "title": "Baseline - All Topics",
+        "depth": 0,
+        "path": [
+          "Baseline - All Topics"
+        ],
+        "message_count": 5,
+        "has_summary": true,
+        "children": [],
+        "metadata": {
+          "created_at": "unknown",
+          "is_subchat": false,
+          "follow_up_context": {
+            "selected_text": null,
+            "follow_up_intent": null,
+            "context_type": "general"
+          }
+        }
+      },
+      "metadata": {
+        "generated_at": "2025-12-18T12:15:19.363852",
+        "total_nodes": 1,
+        "max_depth": 0,
+        "root_id": "aa0db00d-304a-404c-990d-c8c51101eff7",
+        "root_title": "Baseline - All Topics"
+      }
+    }
+  ],
+  "metadata": {
+    "generated_at": "2025-12-18T12:15:19.363856",
+    "total_conversations": 2,
+    "total_nodes": 2
+  }
+}

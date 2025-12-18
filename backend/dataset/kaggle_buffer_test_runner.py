@@ -43,20 +43,39 @@ class KaggleMetricsTestRunner:
         self.logs_dir = Path(__file__).parent / "logs" / "metrics_tests"
         self.logs_dir.mkdir(parents=True, exist_ok=True)
         
-        # Setup separate log files
+        # Setup log files (buffer-specific files are configured per run)
         self.main_log_file = self.logs_dir / "test_execution.log"
-        self.baseline_log_file = self.logs_dir / "baseline_test.log"
-        self.system_log_file = self.logs_dir / "system_test.log"
+        self.current_buffer_size = None
+        self.buffer_log_dir: Optional[Path] = None
+        self.baseline_log_file: Optional[Path] = None
+        self.system_log_file: Optional[Path] = None
         
         # Results storage
         self.baseline_results = []
         self.system_results = []
         
-        # Buffer size tracking for current run
-        self.current_buffer_size = 15
-        
         # Git configuration
         self.repo_root = Path(__file__).parent.parent.parent
+
+    def setup_buffer_logs(self, buffer_size: int):
+        """Setup buffer-specific log directories and files"""
+        self.current_buffer_size = buffer_size
+        
+        # Create buffer-specific folder
+        self.buffer_log_dir = self.logs_dir / f"buffer_{buffer_size}"
+        self.buffer_log_dir.mkdir(parents=True, exist_ok=True)
+        
+        # Buffer-specific log files
+        self.baseline_log_file = self.buffer_log_dir / "baseline_test.log"
+        self.system_log_file = self.buffer_log_dir / "system_test.log"
+        
+        # Clear buffer-specific logs at start of this buffer test
+        for log_file in [self.baseline_log_file, self.system_log_file]:
+            with open(log_file, 'w') as f:
+                f.write(f"{'='*80}\n")
+                f.write(f"{'BASELINE' if 'baseline' in log_file.name else 'SYSTEM'} TEST LOG (Buffer Size: {buffer_size})\n")
+                f.write(f"Started: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+                f.write(f"{'='*80}\n\n")
         
     def log(self, message: str, level: str = "INFO", test_type: Optional[str] = None):
         """Log with timestamp to test-specific log file only"""
@@ -65,10 +84,10 @@ class KaggleMetricsTestRunner:
         print(log_msg)
         
         # Write to test-specific log ONLY (not main log)
-        if test_type == "baseline":
+        if test_type == "baseline" and self.baseline_log_file:
             with open(self.baseline_log_file, 'a') as f:
                 f.write(log_msg + "\n")
-        elif test_type == "system":
+        elif test_type == "system" and self.system_log_file:
             with open(self.system_log_file, 'a') as f:
                 f.write(log_msg + "\n")
         else:
@@ -168,14 +187,20 @@ class KaggleMetricsTestRunner:
         # Add table files
         table1 = buffer_dir / "TABLE_1_CONTEXT_ISOLATION.md"
         table3 = buffer_dir / "TABLE_3_SYSTEM_PERFORMANCE.md"
-        raw_metrics = buffer_dir / "raw_metrics.json"
+        metrics_summary = buffer_dir / "raw_metrics.json"
+        raw_baseline = buffer_dir / "raw_metrics_baseline.json"
+        raw_system = buffer_dir / "raw_metrics_system.json"
         
         if table1.exists():
             files_to_push.append(str(table1))
         if table3.exists():
             files_to_push.append(str(table3))
-        if raw_metrics.exists():
-            files_to_push.append(str(raw_metrics))
+        if metrics_summary.exists():
+            files_to_push.append(str(metrics_summary))
+        if raw_baseline.exists():
+            files_to_push.append(str(raw_baseline))
+        if raw_system.exists():
+            files_to_push.append(str(raw_system))
         
         # Add log files
         files_to_push.extend([
@@ -810,7 +835,8 @@ class KaggleMetricsTestRunner:
     def run_full_evaluation(self, scenario_files: List[str], buffer_size: int = 15):
         """Run complete evaluation pipeline for a specific buffer size"""
         
-        self.current_buffer_size = buffer_size
+        # Ensure buffer-specific logs are initialized for this run
+        self.setup_buffer_logs(buffer_size)
         
         self.log("="*80, "INFO")
         self.log(f"🚀 STARTING METRICS-BASED EVALUATION (buffer_size={buffer_size})", "INFO")
@@ -882,18 +908,29 @@ class KaggleMetricsTestRunner:
         self.log("\n📝 Generating tables...", "INFO")
         self.generate_table(metrics)
         
-        # Save raw results in buffer-specific directory
+        # Save raw results (separated) and metrics summary in buffer-specific directory
         buffer_dir = self.logs_dir / "tables" / f"buffer_{self.current_buffer_size}"
-        results_file = buffer_dir / "raw_metrics.json"
-        with open(results_file, 'w') as f:
+        buffer_dir.mkdir(parents=True, exist_ok=True)
+
+        baseline_file = buffer_dir / "raw_metrics_baseline.json"
+        system_file = buffer_dir / "raw_metrics_system.json"
+        metrics_file = buffer_dir / "raw_metrics.json"  # metrics summary
+
+        with open(baseline_file, 'w') as f:
+            json.dump(all_baseline_results, f, indent=2)
+
+        with open(system_file, 'w') as f:
+            json.dump(all_system_results, f, indent=2)
+
+        with open(metrics_file, 'w') as f:
             json.dump({
                 "buffer_size": self.current_buffer_size,
-                "baseline": all_baseline_results,
-                "system": all_system_results,
                 "metrics": metrics
             }, f, indent=2)
         
-        self.log(f"\n✅ Results saved to: {results_file}", "INFO")
+        self.log(f"\n✅ Saved baseline raw results: {baseline_file}", "INFO")
+        self.log(f"✅ Saved system raw results: {system_file}", "INFO")
+        self.log(f"✅ Saved metrics summary: {metrics_file}", "INFO")
         self.log(f"✅ Tables saved to: {buffer_dir}", "INFO")
         self.log("\n🎉 EVALUATION COMPLETE!", "INFO")
     
@@ -902,6 +939,15 @@ class KaggleMetricsTestRunner:
         Run evaluation across multiple buffer sizes with git push after each buffer
         CRITICAL: Push must succeed or test stops
         """
+        
+        # Clear main execution log at start
+        with open(self.main_log_file, 'w') as f:
+            f.write(f"{'='*80}\n")
+            f.write("KAGGLE BUFFER COMPARISON TEST EXECUTION LOG\n")
+            f.write(f"Started: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+            f.write(f"Buffer sizes: {buffer_sizes}\n")
+            f.write(f"Git branch: {self.repo_branch}\n")
+            f.write(f"{'='*80}\n\n")
         
         self.log("="*80, "INFO")
         self.log("🚀 STARTING KAGGLE MULTI-BUFFER COMPARISON", "INFO")
@@ -921,9 +967,9 @@ class KaggleMetricsTestRunner:
             
             # Load the generated metrics from buffer-specific directory
             buffer_dir = self.logs_dir / "tables" / f"buffer_{buffer_size}"
-            results_file = buffer_dir / "raw_metrics.json"
-            if results_file.exists():
-                with open(results_file, 'r') as f:
+            metrics_file = buffer_dir / "raw_metrics.json"
+            if metrics_file.exists():
+                with open(metrics_file, 'r') as f:
                     results = json.load(f)
                     all_metrics[buffer_size] = results["metrics"]
             

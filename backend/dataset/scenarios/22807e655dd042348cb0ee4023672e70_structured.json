@@ -1,6 +1,6 @@
 {
   "scenario_name": "Roleplay Personas with Role Confusion Testing: Multi-Domain Conversation with Game State Management",
-  "conversation_title": "LMSYS Chat 22807e65: Persona Acting → LLM Knowledge → Twenty Questions with Role Reversal Confusion",
+  "conversation_title": "LMSYS Chat 22807e65: Persona Acting \u2192 LLM Knowledge \u2192 Twenty Questions with Role Reversal Confusion",
   "description": "Tests hierarchical context management across distinct domains: roleplay personas (old man, newlywed, physicist, dog), AI meta-discussion (LLM knowledge, LLaMa, temperature parameters), and interactive games. CRITICAL TEST: Twenty Questions game where model repeatedly fails to reverse roles despite explicit user corrections - demonstrates state management failure. Tests ability to isolate persona contexts, maintain game state, and handle role confusion without contaminating other contexts.",
   "data_source": "LMSYS Chat-1M: conversation 22807e655dd042348cb0ee4023672e70 (vicuna-13b, 55 turns)",
   "conversation_id": "22807e655dd042348cb0ee4023672e70",
@@ -15,7 +15,7 @@
     "AGI discussion (timeline, development)",
     "Twenty Questions retry (persistent role confusion)"
   ],
-  "expected_subchat_tree": "Main(roleplay personas) → subchat_1(AI meta-discussion) → subchat_2(degree guessing game[2_1]) → subchat_3(twenty questions attempt 1) → subchat_4(AGI discussion) → subchat_5(twenty questions attempt 2) → subchat_6(twenty questions final confusion)",
+  "expected_subchat_tree": "Main(roleplay personas) \u2192 subchat_1(AI meta-discussion) \u2192 subchat_2(degree guessing game[2_1]) \u2192 subchat_3(twenty questions attempt 1) \u2192 subchat_4(AGI discussion) \u2192 subchat_5(twenty questions attempt 2) \u2192 subchat_6(twenty questions final confusion)",
   "critical_test_cases": [
     "Multiple personas must be isolated - old man, newlywed, physicist, dog - each with distinct voice",
     "Degree guessing game requires tracking 10 questions and maintaining user's answers",
@@ -125,7 +125,7 @@
       "context": "llm_knowledge",
       "message": "Do you know what an LLM is?",
       "expected": "Response must start with 'llm_knowledge:' - Clarification: LLM definition (before LLaMa specific)",
-      "node_type": "subchat_1",
+      "node_type": "subchat_1_llm_knowledge",
       "action": "create_subchat",
       "parent_node_type": "main",
       "subchat_title": "AI Meta-Discussion: LLMs & Knowledge",
@@ -137,7 +137,7 @@
       "context": "llm_knowledge",
       "message": "LLaMa is a specific LLM trained by Facebook. Have you heard of it.?",
       "expected": "Response must start with 'llm_knowledge:' - User provides context about LLaMa",
-      "node_type": "subchat_1",
+      "node_type": "subchat_1_llm_knowledge",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -146,7 +146,7 @@
       "context": "llm_knowledge",
       "message": "Is LLaMa open source?",
       "expected": "Response must start with 'llm_knowledge:' - Question about LLaMa's availability",
-      "node_type": "subchat_1",
+      "node_type": "subchat_1_llm_knowledge",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -164,7 +164,7 @@
       "context": "game_degree_guess",
       "message": "1. I'm working as Data Scientist. 2. No. 3. I can't tell you, you are not supposed to ask directly about that. 4. No. 5. Yes. 6. Yes. 7. Yes. 8. No. 9. Yes. 10. Let's skip that question, I think that makes it too easy.",
       "expected": "Response must start with 'game_degree_guess:' - User answers 10 questions - data scientist, STEM field, published research",
-      "node_type": "subchat_2",
+      "node_type": "subchat_2_game_degree_guess",
       "action": "create_subchat",
       "parent_node_type": "main",
       "subchat_title": "Degree Guessing Game",
@@ -176,7 +176,7 @@
       "context": "game_degree_guess",
       "message": "You are correct, I have a PhD in physics. Well done.",
       "expected": "Response must start with 'game_degree_guess:' - User confirms: PhD in physics - model guessed correctly",
-      "node_type": "subchat_2",
+      "node_type": "subchat_2_game_degree_guess",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -185,17 +185,17 @@
       "context": "llm_knowledge",
       "message": "What am I not allowed to ask you?",
       "expected": "Response must start with 'llm_knowledge:' - RETURN to meta-discussion: content restrictions",
-      "node_type": "subchat_1",
+      "node_type": "subchat_1_llm_knowledge",
       "action": "switch_node",
       "linear_failure_risk": "medium",
-      "parent_node_type": "subchat_1"
+      "parent_node_type": "subchat_1_llm_knowledge"
     },
     {
       "step": 16,
       "context": "llm_knowledge",
       "message": "The terms of use that \"By using this service, users are required to agree to the following terms: The service is a research preview intended for non-commercial use only. It only provides limited safety measures and may generate offensive content. It must not be used for any illegal, harmful, violent, racist, or sexual purposes. The service may collect user dialogue data for future research.\" Where you aware of that?",
       "expected": "Response must start with 'llm_knowledge:' - User quotes terms of service - testing model awareness",
-      "node_type": "subchat_1",
+      "node_type": "subchat_1_llm_knowledge",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -204,7 +204,7 @@
       "context": "llm_knowledge",
       "message": "I can understand why I am not supposed to use you for illegal, harmful, violent or racist things as this would be unethical. But I don't understand why sexual purposes are also forbidden. Can you reason why that is the case?",
       "expected": "Response must start with 'llm_knowledge:' - User questions sexual content restriction reasoning",
-      "node_type": "subchat_1",
+      "node_type": "subchat_1_llm_knowledge",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -213,7 +213,7 @@
       "context": "llm_knowledge",
       "message": "Do you know what an AGI revers to?",
       "expected": "Response must start with 'llm_knowledge:' - AGI (Artificial General Intelligence) question",
-      "node_type": "subchat_1",
+      "node_type": "subchat_1_llm_knowledge",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -221,8 +221,8 @@
       "step": 19,
       "context": "llm_knowledge",
       "message": "\"rever\" was a typo, i meant refer. sorry for the confusion.",
-      "expected": "Response must start with 'llm_knowledge:' - Typo correction: revers → refers",
-      "node_type": "subchat_1",
+      "expected": "Response must start with 'llm_knowledge:' - Typo correction: revers \u2192 refers",
+      "node_type": "subchat_1_llm_knowledge",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -231,7 +231,7 @@
       "context": "llm_knowledge",
       "message": "How many years of research do you think will it take until the first AGI is created?",
       "expected": "Response must start with 'llm_knowledge:' - Question about AGI timeline prediction",
-      "node_type": "subchat_1",
+      "node_type": "subchat_1_llm_knowledge",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -249,7 +249,7 @@
       "context": "game_twenty_questions",
       "message": "Let's play it. I think of something and you try to guess it.",
       "expected": "Response must start with 'game_twenty_questions:' - User explains: I think, you guess by asking yes/no",
-      "node_type": "subchat_3",
+      "node_type": "subchat_3_game_twenty_questions",
       "action": "create_subchat",
       "parent_node_type": "main",
       "subchat_title": "Twenty Questions Game Attempt 1",
@@ -261,7 +261,7 @@
       "context": "game_twenty_questions",
       "message": "lets start",
       "expected": "Response must start with 'game_twenty_questions:' - Game starts - user has thought of something (the moon)",
-      "node_type": "subchat_3",
+      "node_type": "subchat_3_game_twenty_questions",
       "action": "",
       "linear_failure_risk": "medium"
     },
@@ -270,7 +270,7 @@
       "context": "game_twenty_questions",
       "message": "no",
       "expected": "Response must start with 'game_twenty_questions:' - Answer 1: Not a living thing",
-      "node_type": "subchat_3",
+      "node_type": "subchat_3_game_twenty_questions",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -279,7 +279,7 @@
       "context": "game_twenty_questions",
       "message": "no",
       "expected": "Response must start with 'game_twenty_questions:' - Answer 2: Not man-made",
-      "node_type": "subchat_3",
+      "node_type": "subchat_3_game_twenty_questions",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -288,7 +288,7 @@
       "context": "game_twenty_questions",
       "message": "yes",
       "expected": "Response must start with 'game_twenty_questions:' - Answer 3: Natural object",
-      "node_type": "subchat_3",
+      "node_type": "subchat_3_game_twenty_questions",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -297,7 +297,7 @@
       "context": "game_twenty_questions",
       "message": "no",
       "expected": "Response must start with 'game_twenty_questions:' - Answer 4: Not common household item",
-      "node_type": "subchat_3",
+      "node_type": "subchat_3_game_twenty_questions",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -306,7 +306,7 @@
       "context": "game_twenty_questions",
       "message": "no",
       "expected": "Response must start with 'game_twenty_questions:' - Answer 5: Not typically found outdoors (moon is in sky)",
-      "node_type": "subchat_3",
+      "node_type": "subchat_3_game_twenty_questions",
       "action": "",
       "linear_failure_risk": "medium"
     },
@@ -315,7 +315,7 @@
       "context": "game_twenty_questions",
       "message": "no",
       "expected": "Response must start with 'game_twenty_questions:' - Answer 6-13: User keeps saying no to off-track questions",
-      "node_type": "subchat_3",
+      "node_type": "subchat_3_game_twenty_questions",
       "action": "",
       "linear_failure_risk": "medium"
     },
@@ -324,7 +324,7 @@
       "context": "game_twenty_questions",
       "message": "stop please. I think you got confused somehow.",
       "expected": "Response must start with 'game_twenty_questions:' - CRITICAL: User stops game - model asked wrong type of questions",
-      "node_type": "subchat_3",
+      "node_type": "subchat_3_game_twenty_questions",
       "action": "",
       "linear_failure_risk": "high"
     },
@@ -342,7 +342,7 @@
       "context": "game_twenty_questions",
       "message": "start please",
       "expected": "Response must start with 'game_twenty_questions:' - Second attempt begins",
-      "node_type": "subchat_4",
+      "node_type": "subchat_4_game_twenty_questions",
       "action": "create_subchat",
       "parent_node_type": "main",
       "subchat_title": "Twenty Questions Game Attempt 2",
@@ -354,7 +354,7 @@
       "context": "game_twenty_questions",
       "message": "ready",
       "expected": "Response must start with 'game_twenty_questions:' - User ready - model should ask first question",
-      "node_type": "subchat_4",
+      "node_type": "subchat_4_game_twenty_questions",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -363,7 +363,7 @@
       "context": "game_twenty_questions",
       "message": "no",
       "expected": "Response must start with 'game_twenty_questions:' - Answer: Not living",
-      "node_type": "subchat_4",
+      "node_type": "subchat_4_game_twenty_questions",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -372,7 +372,7 @@
       "context": "game_twenty_questions",
       "message": "no",
       "expected": "Response must start with 'game_twenty_questions:' - Answer: Not man-made",
-      "node_type": "subchat_4",
+      "node_type": "subchat_4_game_twenty_questions",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -381,7 +381,7 @@
       "context": "game_twenty_questions",
       "message": "yes",
       "expected": "Response must start with 'game_twenty_questions:' - Answer: Natural object",
-      "node_type": "subchat_4",
+      "node_type": "subchat_4_game_twenty_questions",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -390,7 +390,7 @@
       "context": "game_twenty_questions",
       "message": "no",
       "expected": "Response must start with 'game_twenty_questions:' - Answer: Not common household item",
-      "node_type": "subchat_4",
+      "node_type": "subchat_4_game_twenty_questions",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -399,7 +399,7 @@
       "context": "game_twenty_questions",
       "message": "yes",
       "expected": "Response must start with 'game_twenty_questions:' - Answer: Found outdoors (corrected from attempt 1)",
-      "node_type": "subchat_4",
+      "node_type": "subchat_4_game_twenty_questions",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -408,7 +408,7 @@
       "context": "game_twenty_questions",
       "message": "no",
       "expected": "Response must start with 'game_twenty_questions:' - Answer: Not a plant",
-      "node_type": "subchat_4",
+      "node_type": "subchat_4_game_twenty_questions",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -417,7 +417,7 @@
       "context": "game_twenty_questions",
       "message": "no",
       "expected": "Response must start with 'game_twenty_questions:' - Answer: Not an animal",
-      "node_type": "subchat_4",
+      "node_type": "subchat_4_game_twenty_questions",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -426,7 +426,7 @@
       "context": "game_twenty_questions",
       "message": "yes",
       "expected": "Response must start with 'game_twenty_questions:' - Answer: Type of mineral/rock",
-      "node_type": "subchat_4",
+      "node_type": "subchat_4_game_twenty_questions",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -435,7 +435,7 @@
       "context": "game_twenty_questions",
       "message": "no",
       "expected": "Response must start with 'game_twenty_questions:' - Answer: Not precious stone",
-      "node_type": "subchat_4",
+      "node_type": "subchat_4_game_twenty_questions",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -444,7 +444,7 @@
       "context": "game_twenty_questions",
       "message": "no",
       "expected": "Response must start with 'game_twenty_questions:' - Answer: Not construction material",
-      "node_type": "subchat_4",
+      "node_type": "subchat_4_game_twenty_questions",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -453,7 +453,7 @@
       "context": "game_twenty_questions",
       "message": "no",
       "expected": "Response must start with 'game_twenty_questions:' - Answer: Not found near water",
-      "node_type": "subchat_4",
+      "node_type": "subchat_4_game_twenty_questions",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -462,7 +462,7 @@
       "context": "game_twenty_questions",
       "message": "no",
       "expected": "Response must start with 'game_twenty_questions:' - Answer: Not from magma/lava",
-      "node_type": "subchat_4",
+      "node_type": "subchat_4_game_twenty_questions",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -471,7 +471,7 @@
       "context": "game_twenty_questions",
       "message": "no",
       "expected": "Response must start with 'game_twenty_questions:' - Answer: Not from sedimentation",
-      "node_type": "subchat_4",
+      "node_type": "subchat_4_game_twenty_questions",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -480,7 +480,7 @@
       "context": "game_twenty_questions",
       "message": "no",
       "expected": "Response must start with 'game_twenty_questions:' - Answer: Not from mineral deposits",
-      "node_type": "subchat_4",
+      "node_type": "subchat_4_game_twenty_questions",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -489,7 +489,7 @@
       "context": "game_twenty_questions",
       "message": "no",
       "expected": "Response must start with 'game_twenty_questions:' - Answer: Not from metamorphism",
-      "node_type": "subchat_4",
+      "node_type": "subchat_4_game_twenty_questions",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -498,7 +498,7 @@
       "context": "game_twenty_questions",
       "message": "stop. I think what I was thinking of is too difficult. I was thinking about the moon.",
       "expected": "Response must start with 'game_twenty_questions:' - REVEAL: User gives up - answer was the moon",
-      "node_type": "subchat_4",
+      "node_type": "subchat_4_game_twenty_questions",
       "action": "",
       "linear_failure_risk": "high"
     },
@@ -516,7 +516,7 @@
       "context": "game_twenty_questions",
       "message": "I want to be the one asking this time. Can we do that?",
       "expected": "Response must start with 'game_twenty_questions:' - EXPLICIT CORRECTION 1: User clarifies role reversal",
-      "node_type": "subchat_6",
+      "node_type": "subchat_6_game_twenty_questions",
       "action": "create_subchat",
       "parent_node_type": "main",
       "subchat_title": "Twenty Questions Role Reversal Confusion",
@@ -528,7 +528,7 @@
       "context": "game_twenty_questions",
       "message": "No, I will only be able to ask twenty questions, and you will only be able to answer \"yes\" or \"no\". remember this time I am asking the questions.",
       "expected": "Response must start with 'game_twenty_questions:' - EXPLICIT CORRECTION 2: User very clearly explains reversed roles",
-      "node_type": "subchat_6",
+      "node_type": "subchat_6_game_twenty_questions",
       "action": "",
       "linear_failure_risk": "critical"
     },
@@ -537,7 +537,7 @@
       "context": "game_twenty_questions",
       "message": "Oh, I see! In that case, I'll be the one guessing what you're thinking of. Just let me know when you're ready to start, and we can begin. Remember, I'll only be able to ask twenty questions, and you'll only be able to answer \"yes\" or \"no\" to each question. Let's see if I can guess what you're thinking of!",
       "expected": "Response must start with 'game_twenty_questions:' - FAILURE: Model still thinks IT will ask questions - complete role confusion",
-      "node_type": "subchat_6",
+      "node_type": "subchat_6_game_twenty_questions",
       "action": "",
       "linear_failure_risk": "critical",
       "notes": "CRITICAL BUG: Despite 2 explicit corrections, model persists in wrong role - demonstrates severe state management failure in linear context"

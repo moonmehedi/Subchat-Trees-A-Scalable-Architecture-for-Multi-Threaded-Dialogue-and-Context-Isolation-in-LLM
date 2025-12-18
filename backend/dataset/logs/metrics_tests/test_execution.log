@@ -1,30 +1,126 @@
 ================================================================================
-BUFFER COMPARISON TEST EXECUTION LOG
-Started: 2025-12-18 13:21:01
+KAGGLE BUFFER COMPARISON TEST EXECUTION LOG
+Started: 2025-12-18 15:09:53
 Buffer sizes: [5, 10, 20, 40]
+Git branch: kaggle-run
 ================================================================================
 
-[13:21:01] [INFO] ================================================================================
-[13:21:01] [INFO] 🚀 STARTING MULTI-BUFFER COMPARISON EVALUATION
-[13:21:01] [INFO]    Buffer sizes: [5, 10, 20, 40]
-[13:21:01] [INFO] ================================================================================
-[13:21:01] [INFO] 
+[15:09:53] [INFO] ================================================================================
+[15:09:53] [INFO] 🚀 STARTING KAGGLE MULTI-BUFFER COMPARISON
+[15:09:53] [INFO]    Buffer sizes: [5, 10, 20, 40]
+[15:09:53] [INFO]    Git branch: kaggle-run
+[15:09:53] [INFO] ================================================================================
+[15:09:53] [INFO] 
 ================================================================================
-[13:21:01] [INFO] 📦 TESTING BUFFER SIZE: 5
-[13:21:01] [INFO] ================================================================================
-[13:21:01] [INFO] ================================================================================
-[13:21:01] [INFO] 🚀 STARTING METRICS-BASED EVALUATION (buffer_size=5)
-[13:21:01] [INFO] ================================================================================
-[13:21:01] [INFO] ⏳ Checking if server is ready...
-[13:21:01] [INFO] ✅ Server is ready!
-[13:21:01] [INFO] 
+[15:09:53] [INFO] 📦 TESTING BUFFER SIZE: 5
+[15:09:53] [INFO] ================================================================================
+[15:09:53] [INFO] ================================================================================
+[15:09:53] [INFO] 🚀 STARTING METRICS-BASED EVALUATION (buffer_size=5)
+[15:09:53] [INFO] ================================================================================
+[15:09:53] [INFO] ⏳ Checking if server is ready...
+[15:09:54] [INFO] ✅ Server is ready!
+[15:09:54] [INFO] 
 🔵 BASELINE TEST: 6c4992f0aed04dd3bf9a4bc225bb4fb0_structured.json (buffer_size=5)
-[13:21:01] [INFO] 🔄 Restarting server to clear ChromaDB...
-[13:21:01] [INFO]   🛑 Stopping server...
-[13:21:03] [INFO]   ✅ Server stopped
-[13:21:03] [INFO]   🗑️  Clearing ChromaDB...
-[13:21:03] [WARN]   ⚠️  Warning during ChromaDB clear: [Errno 39] Directory not empty: '/media/sda3/projects/simple build/Subchat-Trees-A-Scalable-Architecture-for-Multi-Threaded-Dialogue-and-Context-Isolation-in-LLM/backend/chroma_db'
-[13:21:03] [INFO]   🚀 Starting server...
-[13:21:08] [INFO] ⏳ Checking if server is ready...
-[13:21:08] [INFO] ✅ Server is ready!
-[13:21:08] [INFO]   ✅ Server restarted successfully!
+[15:09:54] [INFO] 🗑️  Ensuring clean state before baseline test...
+[15:09:54] [INFO] 🔄 Restarting server to clear ChromaDB...
+[15:09:54] [INFO]   🛑 Stopping server...
+[15:09:56] [INFO]   ✅ Server stopped
+[15:09:56] [INFO] 🗑️  Clearing ChromaDB...
+[15:09:56] [INFO] ✅ ChromaDB cleared
+[15:09:56] [INFO]   🚀 Starting server...
+[15:10:01] [INFO] ⏳ Checking if server is ready...
+[15:10:01] [INFO] ✅ Server is ready!
+[15:10:01] [INFO]   ✅ Server restarted successfully!
+[15:23:17] [INFO] 
+🟢 SYSTEM TEST: 6c4992f0aed04dd3bf9a4bc225bb4fb0_structured.json (buffer_size=5)
+[15:23:17] [INFO] 🗑️  Ensuring clean state before system test...
+[15:23:17] [INFO] 🔄 Restarting server to clear ChromaDB...
+[15:23:17] [INFO]   🛑 Stopping server...
+[15:23:19] [INFO]   ✅ Server stopped
+[15:23:19] [INFO] 🗑️  Clearing ChromaDB...
+[15:23:19] [WARN] ⚠️  Warning during ChromaDB clear: [Errno 39] Directory not empty: '/media/sda3/projects/simple build/Subchat-Trees-A-Scalable-Architecture-for-Multi-Threaded-Dialogue-and-Context-Isolation-in-LLM/backend/chroma_db'
+[15:23:19] [INFO]   🚀 Starting server...
+[15:23:24] [INFO] ⏳ Checking if server is ready...
+[15:23:24] [INFO] ✅ Server is ready!
+[15:23:24] [INFO]   ✅ Server restarted successfully!
+[15:36:50] [INFO] 
+🔵 BASELINE TEST: 8d10c143f8fc4a7599a5a18778fec112_structured.json (buffer_size=5)
+[15:36:50] [INFO] 🗑️  Ensuring clean state before baseline test...
+[15:36:50] [INFO] 🔄 Restarting server to clear ChromaDB...
+[15:36:50] [INFO]   🛑 Stopping server...
+[15:36:52] [INFO]   ✅ Server stopped
+[15:36:52] [INFO] 🗑️  Clearing ChromaDB...
+[15:36:52] [WARN] ⚠️  Warning during ChromaDB clear: [Errno 39] Directory not empty: '/media/sda3/projects/simple build/Subchat-Trees-A-Scalable-Architecture-for-Multi-Threaded-Dialogue-and-Context-Isolation-in-LLM/backend/chroma_db'
+[15:36:52] [INFO]   🚀 Starting server...
+[15:36:57] [INFO] ⏳ Checking if server is ready...
+[15:36:57] [INFO] ✅ Server is ready!
+[15:36:57] [INFO]   ✅ Server restarted successfully!
+[15:50:51] [INFO] 
+🟢 SYSTEM TEST: 8d10c143f8fc4a7599a5a18778fec112_structured.json (buffer_size=5)
+[15:50:51] [INFO] 🗑️  Ensuring clean state before system test...
+[15:50:51] [INFO] 🔄 Restarting server to clear ChromaDB...
+[15:50:51] [INFO]   🛑 Stopping server...
+[15:50:53] [INFO]   ✅ Server stopped
+[15:50:53] [INFO] 🗑️  Clearing ChromaDB...
+[15:50:53] [WARN] ⚠️  Warning during ChromaDB clear: [Errno 39] Directory not empty: '/media/sda3/projects/simple build/Subchat-Trees-A-Scalable-Architecture-for-Multi-Threaded-Dialogue-and-Context-Isolation-in-LLM/backend/chroma_db'
+[15:50:53] [INFO]   🚀 Starting server...
+[15:50:58] [INFO] ⏳ Checking if server is ready...
+[15:50:58] [INFO] ✅ Server is ready!
+[15:50:58] [INFO]   ✅ Server restarted successfully!
+[16:04:06] [INFO] 
+📊 Calculating metrics...
+[16:04:06] [INFO] 
+================================================================================
+[16:04:06] [INFO] 📊 FINAL METRICS COMPARISON
+[16:04:06] [INFO] ================================================================================
+[16:04:06] [INFO] 
+🔵 BASELINE:
+[16:04:06] [INFO]    Precision: 100.0%
+[16:04:06] [INFO]    Recall: 17.0%
+[16:04:06] [INFO]    F1 Score: 29.1%
+[16:04:06] [INFO]    Accuracy: 17.0%
+[16:04:06] [WARN]    Pollution Rate: 83.0%
+[16:04:06] [INFO] 
+🟢 SYSTEM:
+[16:04:06] [INFO]    Precision: 100.0%
+[16:04:06] [INFO]    Recall: 6.4%
+[16:04:06] [INFO]    F1 Score: 12.0%
+[16:04:06] [INFO]    Accuracy: 6.4%
+[16:04:06] [INFO]    Pollution Rate: 93.6%
+[16:04:06] [INFO] ================================================================================
+[16:04:06] [INFO] 
+📝 Generating tables...
+[16:04:06] [INFO] ✅ Generated TABLE_1_CONTEXT_ISOLATION.md
+[16:04:06] [INFO] ✅ Generated TABLE_3_SYSTEM_PERFORMANCE.md
+[16:04:06] [INFO] 
+✅ Results saved to: /media/sda3/projects/simple build/Subchat-Trees-A-Scalable-Architecture-for-Multi-Threaded-Dialogue-and-Context-Isolation-in-LLM/backend/dataset/logs/metrics_tests/tables/buffer_5/raw_metrics.json
+[16:04:06] [INFO] ✅ Tables saved to: /media/sda3/projects/simple build/Subchat-Trees-A-Scalable-Architecture-for-Multi-Threaded-Dialogue-and-Context-Isolation-in-LLM/backend/dataset/logs/metrics_tests/tables/buffer_5
+[16:04:06] [INFO] 
+🎉 EVALUATION COMPLETE!
+[16:04:06] [INFO] 
+================================================================================
+[16:04:06] [INFO] 📤 PUSHING BUFFER 5 RESULTS TO GITHUB
+[16:04:06] [INFO] ================================================================================
+[16:04:06] [INFO] 
+================================================================================
+[16:04:06] [INFO] 📤 PUSHING RESULTS FOR BUFFER SIZE 5
+[16:04:06] [INFO] ================================================================================
+[16:04:06] [INFO] ================================================================================
+[16:04:06] [INFO] 📤 GIT PUSH: Starting commit and push
+[16:04:06] [INFO] ================================================================================
+[16:04:06] [INFO]   ✅ Added: backend/dataset/logs/metrics_tests/tables/buffer_5/TABLE_1_CONTEXT_ISOLATION.md
+[16:04:06] [INFO]   ✅ Added: backend/dataset/logs/metrics_tests/tables/buffer_5/TABLE_3_SYSTEM_PERFORMANCE.md
+[16:04:06] [INFO]   ✅ Added: backend/dataset/logs/metrics_tests/tables/buffer_5/raw_metrics.json
+[16:04:06] [ERROR] ❌ Push failed: Git add failed for backend/dataset/logs/metrics_tests/buffer_5/baseline_test.log: The following paths are ignored by one of your .gitignore files:
+backend/dataset/logs/metrics_tests/buffer_5/baseline_test.log
+hint: Use -f if you really want to add them.
+hint: Turn this message off by running
+hint: "git config advice.addIgnoredFile false"
+
+[16:04:06] [ERROR] 
+================================================================================
+[16:04:06] [ERROR] ❌ CRITICAL ERROR: Git push failed!
+[16:04:06] [ERROR]    Stopping test execution as per requirements
+[16:04:06] [ERROR]    Already completed buffers have been pushed
+[16:04:06] [ERROR]    Failed at buffer size: 5
+[16:04:06] [ERROR] ================================================================================

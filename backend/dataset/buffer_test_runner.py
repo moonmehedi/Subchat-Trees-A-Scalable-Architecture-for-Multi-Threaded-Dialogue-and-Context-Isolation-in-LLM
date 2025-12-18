@@ -1193,6 +1193,6 @@ if __name__ == "__main__":
     
     # Run buffer comparison with multiple sizes
     runner.run_buffer_comparison(
-        ["6c4992f0aed04dd3bf9a4bc225bb4fb0_structured.json"],
-        buffer_sizes=[5, 10, 20, 40]
+        ["6c4992f0aed04dd3bf9a4bc225bb4fb0_structured.json",'8d10c143f8fc4a7599a5a18778fec112_structured.json'],
+        buffer_sizes=[5,10,20,40]
     )

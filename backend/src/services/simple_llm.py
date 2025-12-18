@@ -24,7 +24,14 @@ class SimpleLLMClient:
                 from .vllm_client import vllm_client
                 if vllm_client.is_available():
                     self.vllm_client = vllm_client
-                    print(f"✅ vLLM connected. Using Kaggle GPU")
+                    # Get model name for display
+                    try:
+                        model_name = getattr(vllm_client._llm.llm_engine.model_config, 'model', 'Unknown')
+                        print(f"✅ vLLM connected for RESPONSES: {model_name}")
+                        print(f"✅ vLLM will be used for SUMMARIZATION: {model_name}")
+                    except:
+                        print(f"✅ vLLM connected. Using Kaggle GPU")
+                        print(f"✅ vLLM will be used for responses and summarization")
                 else:
                     print("⚠️  vLLM model not loaded yet. Call VLLMClient.set_model(llm) first.")
                     print("   Falling back to Groq if available...")

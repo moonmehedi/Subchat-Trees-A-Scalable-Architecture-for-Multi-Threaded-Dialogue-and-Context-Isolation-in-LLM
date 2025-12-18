@@ -54,13 +54,29 @@ class ContextClassifier:
     """Binary classifier for context isolation testing"""
     
     def __init__(self):
-        """Initialize with Groq client for LLM fallback"""
-        api_key = os.getenv("GROQ_API_KEY")
-        if not api_key:
-            raise ValueError("GROQ_API_KEY not set")
+        """Initialize with vLLM client (Kaggle GPU) - no Groq fallback"""
+        # Import vLLM client from backend services
+        import sys
+        import os
+        backend_path = os.path.join(os.path.dirname(__file__), '..')
+        if backend_path not in sys.path:
+            sys.path.insert(0, backend_path)
         
-        self.groq_client = Groq(api_key=api_key)
-        self.model = "llama-3.1-8b-instant"  # Cheap, fast model for classification
+        try:
+            from src.services.vllm_client import vllm_client
+            if not vllm_client.is_available():
+                raise RuntimeError(
+                    "❌ vLLM not available for classification!\n"
+                    "   Judge/classifier requires vLLM to avoid Groq API quota limits.\n"
+                    "   Please ensure VLLMClient.set_model(llm) was called in your notebook."
+                )
+            self.vllm_client = vllm_client
+            print("✅ ContextClassifier using vLLM for JUDGING/CLASSIFICATION")
+        except ImportError:
+            raise RuntimeError(
+                "❌ Cannot import vLLM client!\n"
+                "   Make sure backend/src/services/vllm_client.py is accessible."
+            )
     
     def classify(
         self, 
@@ -136,17 +152,19 @@ Does the response satisfy the requirement?
 Answer only with: yes or no"""
         
         try:
-            result = self.groq_client.chat.completions.create(
-                model=self.model,
-                messages=[
-                    {"role": "system", "content": "You are a strict test evaluator. Check if the response contain the right topic name at the beginning. Answer only 'yes' or 'no'."},
-                    {"role": "user", "content": prompt}
-                ],
-                max_tokens=50,
-                temperature=0
+            # Use vLLM for classification (Kaggle GPU)
+            messages = [
+                {"role": "system", "content": "You are a strict test evaluator. Check if the response contain the right topic name at the beginning. Answer only 'yes' or 'no'."},
+                {"role": "user", "content": prompt}
+            ]
+            
+            result = self.vllm_client.generate(
+                messages=messages,
+                temperature=0,
+                max_tokens=50
             )
             
-            answer = result.choices[0].message.content.strip().lower()
+            answer = result.strip().lower()
 
             print('****************** The answer from LLm***************',answer,prompt)
             
@@ -156,9 +174,11 @@ Answer only with: yes or no"""
                 return "FN"
         
         except Exception as e:
-            print(f"⚠️  LLM classification failed: {e}")
-            # Default to FN on error (conservative)
-            return "FN"
+            print(f"❌ CRITICAL: LLM classification failed: {e}")
+            import traceback
+            traceback.print_exc()
+            # Re-raise to stop execution
+            raise
     
     def get_classification_details(
         self,

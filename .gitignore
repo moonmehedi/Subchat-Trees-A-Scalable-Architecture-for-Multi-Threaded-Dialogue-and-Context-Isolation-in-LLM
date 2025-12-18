@@ -50,3 +50,7 @@ chroma_db/
 test_chroma_db/
 test_integration_chroma_db/
 test_multi_node_chroma_db/
+
+# Large dataset files
+backend/dataset/dataset_sources/
+backend/dataset/nested_dataset/

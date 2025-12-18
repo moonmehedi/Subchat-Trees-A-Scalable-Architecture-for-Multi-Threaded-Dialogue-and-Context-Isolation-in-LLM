@@ -31,7 +31,13 @@ class VLLMClient:
             VLLMClient.set_model(llm)  # Pass the loaded vLLM model
         """
         cls._llm = llm_model
-        print("✅ vLLM model registered with VLLMClient")
+        
+        # Get model name for display
+        try:
+            model_name = getattr(llm_model.llm_engine.model_config, 'model', 'Unknown')
+            print(f"✅ vLLM model registered: {model_name}")
+        except:
+            print("✅ vLLM model registered with VLLMClient")
     
     @classmethod
     def is_available(cls) -> bool:

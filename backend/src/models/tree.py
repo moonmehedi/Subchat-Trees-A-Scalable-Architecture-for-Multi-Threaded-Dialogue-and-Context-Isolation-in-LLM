@@ -187,17 +187,24 @@ MESSAGES (messages {start_msg_num}-{end_msg_num}, total: {len(all_buffer_message
 Summary:"""
         
         try:
-            # Call LLM to generate summary
-            response = self.llm_client.groq_client.chat.completions.create(
-                model="llama-3.3-70b-versatile",
-                messages=[{"role": "user", "content": prompt}],
-                max_tokens=500,
-                temperature=0.3  # Lower temperature for consistent summarization
-            )
+            # 🎯 Use vLLM ONLY - no fallback to save Groq quota
+            if hasattr(self.llm_client, 'vllm_client') and self.llm_client.vllm_client:
+                # Use vLLM (Kaggle GPU)
+                new_summary = self.llm_client.vllm_client.generate(
+                    messages=[{"role": "user", "content": prompt}],
+                    temperature=0.3,  # Lower temperature for consistent summarization
+                    max_tokens=500
+                )
+                new_summary = new_summary.strip()
+            else:
+                # Hard fail - no fallback to preserve Groq quota
+                raise RuntimeError(
+                    "❌ vLLM not available for summarization!\n"
+                    "   Summarization requires vLLM to avoid Groq API quota limits.\n"
+                    "   Please ensure VLLMClient.set_model(llm) was called in your notebook."
+                )
             
-            new_summary = response.choices[0].message.content.strip()
             old_summary_len = len(self.summary) if self.summary else 0
-            
             self.summary = new_summary
             
             print(f"📝 Summary updated: {old_summary_len} → {len(new_summary)} chars")
@@ -205,9 +212,12 @@ Summary:"""
             print(f"   Summary preview: {new_summary[:100]}{'...' if len(new_summary) > 100 else ''}")
             
         except Exception as e:
-            print(f"⚠️  Summarization failed: {e}")
+            print(f"❌ CRITICAL: Summarization failed: {e}")
+            print("   Server cannot continue without working summarization.")
             import traceback
             traceback.print_exc()
+            # Re-raise to stop execution
+            raise
     
     def inherit_summary(self, parent_summary: str):
         """

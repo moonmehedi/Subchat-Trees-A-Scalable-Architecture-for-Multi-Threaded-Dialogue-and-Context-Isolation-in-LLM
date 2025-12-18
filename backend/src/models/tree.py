@@ -191,7 +191,7 @@ Summary:"""
             response = self.llm_client.groq_client.chat.completions.create(
                 model="llama-3.3-70b-versatile",
                 messages=[{"role": "user", "content": prompt}],
-                max_tokens=self.summary_max_tokens,
+                max_tokens=500,
                 temperature=0.3  # Lower temperature for consistent summarization
             )
             

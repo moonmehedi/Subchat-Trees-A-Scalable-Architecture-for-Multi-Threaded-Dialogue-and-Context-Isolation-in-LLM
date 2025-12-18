@@ -137,7 +137,7 @@ Example: {example}"""
                     {"role": "user", "content": prompt}
                 ],
                 temperature=0.3,
-                max_tokens=200
+                max_tokens=50
             )
             
             result = response.choices[0].message.content.strip()

@@ -2,16 +2,14 @@
 
 | Metric | Baseline System | Our System | Improvement |
 |--------|----------------|------------|-------------|
-| **Avg Input Tokens** | 3360 | 2400 | **-28.6%** |
-| **Avg Output Tokens** | 840 | 600 | **-28.6%** |
-| **Avg Total Tokens** | 4200 | 3000 | **-28.6%** |
-| **Tokens Per Correct Answer** | 5526 | 3371 | **+39.0% MORE EFFICIENT** |
-| **Avg Latency** | 30.0s | 21.0s | **-30.0%** |
-| **Tokens Per Correct Answer** | 3266 | inf | **-inf% MORE EFFICIENT** |
-| **Avg Latency** | 1.19s | 6.02s | **+407.4%** |
-| **Token Compression Rate** | 0% | 52.3% | **2.10x compression** |
-| **Cost per Query** | $0.032371 | $0.018995 | **+41.3%** |
-| **Cost per 1M Queries** | $32371 | $18995 | **-$13376 savings** |
+| **Avg Input Tokens** | 1925 | 679 | **-64.7%** |
+| **Avg Output Tokens** | 98 | 97 | **-1.2%** |
+| **Avg Total Tokens** | 2023 | 776 | **-61.6%** |
+| **Tokens Per Correct Answer** | 3621 | 824 | **+77.2% MORE EFFICIENT** |
+| **Avg Latency** | 19.47s | 6.55s | **-66.4%** |
+| **Token Compression Rate** | 0% | 61.6% | **2.61x compression** |
+| **Cost per Query** | $0.173753 | $0.079937 | **+54.0%** |
+| **Cost per 1M Queries** | $173753 | $79937 | **-$93816 savings** |
 
 ---
 
@@ -24,8 +22,8 @@ The system uses ~39% more tokens due to:
 2. **Higher response quality**: System gives complete, accurate answers (92.5% accuracy) vs baseline's confused, partial answers (60% accuracy)
 
 **However, the system is MORE EFFICIENT when measuring tokens per CORRECT answer:**
-- Baseline: 192 avg tokens × (100/5.9%) = 3266 tokens per correct answer
-- System: 92 avg tokens × (100/0.0%) = inf tokens per correct answer
-- **Result: System is -inf% MORE EFFICIENT!**
+- Baseline: 2023 avg tokens × (100/55.9%) = 3621 tokens per correct answer
+- System: 776 avg tokens × (100/94.1%) = 824 tokens per correct answer
+- **Result: System is 77.2% MORE EFFICIENT!**
 
 This means you get MORE correct answers for FEWER tokens overall.

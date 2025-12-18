@@ -41,17 +41,38 @@ class MetricsTestRunner:
         self.logs_dir = Path(__file__).parent / "logs" / "metrics_tests"
         self.logs_dir.mkdir(parents=True, exist_ok=True)
         
-        # Setup separate log files
+        # Main execution log (cleared at test start)
         self.main_log_file = self.logs_dir / "test_execution.log"
-        self.baseline_log_file = self.logs_dir / "baseline_test.log"
-        self.system_log_file = self.logs_dir / "system_test.log"
+        
+        # Buffer-specific logs (set per buffer size)
+        self.current_buffer_size = None
+        self.buffer_log_dir = None
+        self.baseline_log_file = None
+        self.system_log_file = None
         
         # Results storage
         self.baseline_results = []
         self.system_results = []
+    
+    def setup_buffer_logs(self, buffer_size: int):
+        """Setup buffer-specific log directories and files"""
+        self.current_buffer_size = buffer_size
         
-        # Buffer size tracking for current run
-        self.current_buffer_size = 15
+        # Create buffer-specific folder
+        self.buffer_log_dir = self.logs_dir / f"buffer_{buffer_size}"
+        self.buffer_log_dir.mkdir(parents=True, exist_ok=True)
+        
+        # Buffer-specific log files
+        self.baseline_log_file = self.buffer_log_dir / "baseline_test.log"
+        self.system_log_file = self.buffer_log_dir / "system_test.log"
+        
+        # Clear buffer-specific logs at start of this buffer test
+        for log_file in [self.baseline_log_file, self.system_log_file]:
+            with open(log_file, 'w') as f:
+                f.write(f"{'='*80}\n")
+                f.write(f"{'BASELINE' if 'baseline' in log_file.name else 'SYSTEM'} TEST LOG (Buffer Size: {buffer_size})\n")
+                f.write(f"Started: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+                f.write(f"{'='*80}\n\n")
         
     def log(self, message: str, level: str = "INFO", test_type: Optional[str] = None):
         """Log with timestamp to test-specific log file only"""
@@ -60,14 +81,14 @@ class MetricsTestRunner:
         print(log_msg)
         
         # Write to test-specific log ONLY (not main log)
-        if test_type == "baseline":
+        if test_type == "baseline" and self.baseline_log_file:
             with open(self.baseline_log_file, 'a') as f:
                 f.write(log_msg + "\n")
-        elif test_type == "system":
+        elif test_type == "system" and self.system_log_file:
             with open(self.system_log_file, 'a') as f:
                 f.write(log_msg + "\n")
         else:
-            # If no test_type specified, write to main log
+            # Write to main log if no specific test type
             with open(self.main_log_file, 'a') as f:
                 f.write(log_msg + "\n")
     
@@ -759,6 +780,14 @@ class MetricsTestRunner:
     def run_buffer_comparison(self, scenario_files: List[str], buffer_sizes: List[int] = [5, 10, 20, 40, 80, 160]):
         """Run evaluation across multiple buffer sizes and generate comparison visualizations"""
         
+        # Clear main execution log at start
+        with open(self.main_log_file, 'w') as f:
+            f.write(f"{'='*80}\n")
+            f.write(f"BUFFER COMPARISON TEST EXECUTION LOG\n")
+            f.write(f"Started: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+            f.write(f"Buffer sizes: {buffer_sizes}\n")
+            f.write(f"{'='*80}\n\n")
+        
         self.log("="*80, "INFO")
         self.log("🚀 STARTING MULTI-BUFFER COMPARISON EVALUATION", "INFO")
         self.log(f"   Buffer sizes: {buffer_sizes}", "INFO")
@@ -770,6 +799,9 @@ class MetricsTestRunner:
             self.log(f"\n{'='*80}", "INFO")
             self.log(f"📦 TESTING BUFFER SIZE: {buffer_size}", "INFO")
             self.log(f"{'='*80}", "INFO")
+            
+            # Setup buffer-specific logs
+            self.setup_buffer_logs(buffer_size)
             
             # Run evaluation for this buffer size
             self.run_full_evaluation(scenario_files, buffer_size=buffer_size)

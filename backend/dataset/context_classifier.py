@@ -142,7 +142,7 @@ Answer only with: yes or no"""
                     {"role": "system", "content": "You are a strict test evaluator. Check if the response contain the right topic name at the beginning. Answer only 'yes' or 'no'."},
                     {"role": "user", "content": prompt}
                 ],
-                max_tokens=10,
+                max_tokens=50,
                 temperature=0
             )
             

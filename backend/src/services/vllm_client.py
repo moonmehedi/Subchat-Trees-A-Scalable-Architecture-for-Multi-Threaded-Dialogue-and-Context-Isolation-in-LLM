@@ -42,7 +42,7 @@ class VLLMClient:
         self,
         messages: List[Dict[str, str]],
         temperature: float = 0.0,
-        max_tokens: int = 1000,
+        max_tokens: int = 512,
         top_p: float = 0.9
     ) -> str:
         """
@@ -94,7 +94,7 @@ class VLLMClient:
         self,
         messages: List[Dict[str, str]],
         temperature: float = 0.0,
-        max_tokens: int = 1000,
+        max_tokens: int = 512,
         top_p: float = 0.9
     ):
         """

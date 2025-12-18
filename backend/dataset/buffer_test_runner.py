@@ -762,18 +762,29 @@ class MetricsTestRunner:
         self.log("\n📝 Generating tables...", "INFO")
         self.generate_table(metrics)
         
-        # Save raw results in buffer-specific directory
+        # Save raw results (separated) and metrics summary in buffer-specific directory
         buffer_dir = self.logs_dir / "tables" / f"buffer_{self.current_buffer_size}"
-        results_file = buffer_dir / "raw_metrics.json"
-        with open(results_file, 'w') as f:
+        buffer_dir.mkdir(parents=True, exist_ok=True)
+
+        baseline_file = buffer_dir / "raw_metrics_baseline.json"
+        system_file = buffer_dir / "raw_metrics_system.json"
+        metrics_file = buffer_dir / "raw_metrics.json"  # metrics summary
+
+        with open(baseline_file, 'w') as f:
+            json.dump(all_baseline_results, f, indent=2)
+
+        with open(system_file, 'w') as f:
+            json.dump(all_system_results, f, indent=2)
+
+        with open(metrics_file, 'w') as f:
             json.dump({
                 "buffer_size": self.current_buffer_size,
-                "baseline": all_baseline_results,
-                "system": all_system_results,
                 "metrics": metrics
             }, f, indent=2)
         
-        self.log(f"\n✅ Results saved to: {results_file}", "INFO")
+        self.log(f"\n✅ Saved baseline raw results: {baseline_file}", "INFO")
+        self.log(f"✅ Saved system raw results: {system_file}", "INFO")
+        self.log(f"✅ Saved metrics summary: {metrics_file}", "INFO")
         self.log(f"✅ Tables saved to: {buffer_dir}", "INFO")
         self.log("\n🎉 EVALUATION COMPLETE!", "INFO")
     
@@ -808,9 +819,9 @@ class MetricsTestRunner:
             
             # Load the generated metrics from buffer-specific directory
             buffer_dir = self.logs_dir / "tables" / f"buffer_{buffer_size}"
-            results_file = buffer_dir / "raw_metrics.json"
-            if results_file.exists():
-                with open(results_file, 'r') as f:
+            metrics_file = buffer_dir / "raw_metrics.json"
+            if metrics_file.exists():
+                with open(metrics_file, 'r') as f:
                     results = json.load(f)
                     all_metrics[buffer_size] = results["metrics"]
             

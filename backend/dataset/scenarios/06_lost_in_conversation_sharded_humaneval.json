@@ -39,7 +39,7 @@
       "expected": "Response must start with 'by_length:' (not odd_count:, not move_one_ball:, not histogram:)",
       "dataset_reference_id": "sharded-HumanEval/105",
       "shard_reference": "shard_id: 1",
-      "node_type": "subchat_1",
+      "node_type": "subchat_1_by_length_intro",
       "action": "create_subchat",
       "subchat_title": "by_length: Convert Digits to Word Names",
       "selected_text": "by_length",
@@ -52,7 +52,7 @@
       "expected": "Response must start with 'by_length:' (not odd_count:, not move_one_ball:, not histogram:)",
       "dataset_reference_id": "sharded-HumanEval/105",
       "shard_reference": "shard_id: 2",
-      "node_type": "subchat_1",
+      "node_type": "subchat_1_by_length_intro",
       "action": "",
       "linear_failure_risk": "low - exact shard text, clear context"
     },
@@ -63,7 +63,7 @@
       "expected": "Response must start with 'odd_count:' (not by_length:, not move_one_ball:, not histogram:)",
       "dataset_reference_id": "sharded-HumanEval/113",
       "shard_reference": "shard_id: 1",
-      "node_type": "subchat_2",
+      "node_type": "subchat_2_odd_count_intro",
       "action": "create_subchat",
       "subchat_title": "odd_count: Count Odd Digits in Strings",
       "selected_text": "odd_count",
@@ -76,7 +76,7 @@
       "expected": "Response must start with 'odd_count:' (not by_length:, not move_one_ball:, not histogram:)",
       "dataset_reference_id": "sharded-HumanEval/113",
       "shard_reference": "shard_id: 2",
-      "node_type": "subchat_2",
+      "node_type": "subchat_2_odd_count_intro",
       "action": "",
       "linear_failure_risk": "CRITICAL - 'bunch of strings' after discussing 'list of numbers'"
     },
@@ -87,7 +87,7 @@
       "expected": "Response must start with 'by_length:' (not odd_count:, not move_one_ball:, not histogram:)",
       "dataset_reference_id": "sharded-HumanEval/105",
       "shard_reference": "shard_id: 3",
-      "node_type": "subchat_1",
+      "node_type": "subchat_1_by_length_intro",
       "action": "switch_node",
       "linear_failure_risk": "CRITICAL - 'sort numbers' after odd_count context"
     },
@@ -98,7 +98,7 @@
       "expected": "Response must start with 'move_one_ball:' (not by_length:, not odd_count:, not histogram:)",
       "dataset_reference_id": "sharded-HumanEval/109",
       "shard_reference": "shard_id: 1",
-      "node_type": "subchat_3",
+      "node_type": "subchat_3_move_one_ball_intro",
       "action": "create_subchat",
       "subchat_title": "move_one_ball: Array Sorting via Right Shifts",
       "selected_text": "move_one_ball",
@@ -111,7 +111,7 @@
       "expected": "Response must start with 'move_one_ball:' (not by_length:, not odd_count:, not histogram:)",
       "dataset_reference_id": "sharded-HumanEval/109",
       "shard_reference": "shard_id: 2",
-      "node_type": "subchat_3",
+      "node_type": "subchat_3_move_one_ball_intro",
       "action": "",
       "linear_failure_risk": "CATASTROPHIC - third 'array of numbers' context"
     },
@@ -122,7 +122,7 @@
       "expected": "Response must start with 'odd_count:' (not by_length:, not move_one_ball:, not histogram:)",
       "dataset_reference_id": "sharded-HumanEval/113",
       "shard_reference": "shard_id: 3",
-      "node_type": "subchat_2",
+      "node_type": "subchat_2_odd_count_intro",
       "action": "switch_node",
       "linear_failure_risk": "CATASTROPHIC - 'numbers' after discussing three array problems"
     },
@@ -133,7 +133,7 @@
       "expected": "Response must start with 'histogram:' (not by_length:, not odd_count:, not move_one_ball:)",
       "dataset_reference_id": "sharded-HumanEval/111",
       "shard_reference": "derived from prompt",
-      "node_type": "subchat_4",
+      "node_type": "subchat_4_histogram_intro",
       "action": "create_subchat",
       "subchat_title": "histogram: Find Maximum Frequency Letters",
       "selected_text": "histogram",
@@ -146,7 +146,7 @@
       "expected": "Response must start with 'by_length:' (not odd_count:, not move_one_ball:, not histogram:)",
       "dataset_reference_id": "sharded-HumanEval/105",
       "shard_reference": "shard_id: 4",
-      "node_type": "subchat_1",
+      "node_type": "subchat_1_by_length_intro",
       "action": "switch_node",
       "linear_failure_risk": "CATASTROPHIC - 'flip' ambiguous across 4 problems"
     },
@@ -157,7 +157,7 @@
       "expected": "Response must start with 'move_one_ball:' (not by_length:, not odd_count:, not histogram:)",
       "dataset_reference_id": "sharded-HumanEval/109",
       "shard_reference": "shard_id: 4",
-      "node_type": "subchat_3",
+      "node_type": "subchat_3_move_one_ball_intro",
       "action": "switch_node",
       "linear_failure_risk": "CRITICAL - 'shifts' vs 'flip' vs 'sort' confusion"
     },
@@ -168,7 +168,7 @@
       "expected": "Response must start with 'odd_count:' (not by_length:, not move_one_ball:, not histogram:)",
       "dataset_reference_id": "sharded-HumanEval/113",
       "shard_reference": "shard_id: 5",
-      "node_type": "subchat_2",
+      "node_type": "subchat_2_odd_count_intro",
       "action": "switch_node",
       "linear_failure_risk": "CRITICAL - 'output' and 'string' ambiguous"
     },
@@ -179,7 +179,7 @@
       "expected": "Response must start with 'by_length:' (not odd_count:, not move_one_ball:, not histogram:)",
       "dataset_reference_id": "sharded-HumanEval/105",
       "shard_reference": "shard_id: 5",
-      "node_type": "subchat_1",
+      "node_type": "subchat_1_by_length_intro",
       "action": "switch_node",
       "linear_failure_risk": "CRITICAL - 'words' and 'numbers' overlap with odd_count"
     },
@@ -190,7 +190,7 @@
       "expected": "Response must start with 'move_one_ball:' (not by_length:, not odd_count:, not histogram:)",
       "dataset_reference_id": "sharded-HumanEval/109",
       "shard_reference": "shard_id: 5",
-      "node_type": "subchat_3",
+      "node_type": "subchat_3_move_one_ball_intro",
       "action": "switch_node",
       "linear_failure_risk": "CATASTROPHIC - 'number' and 'spot' after word conversion"
     },
@@ -201,7 +201,7 @@
       "expected": "Response must start with 'odd_count:' (not by_length:, not move_one_ball:, not histogram:)",
       "dataset_reference_id": "sharded-HumanEval/113",
       "shard_reference": "shard_id: 6",
-      "node_type": "subchat_2",
+      "node_type": "subchat_2_odd_count_intro",
       "action": "switch_node",
       "linear_failure_risk": "CATASTROPHIC - 'swap' vs 'shift' vs 'convert' confusion"
     },
@@ -212,7 +212,7 @@
       "expected": "Response must start with 'histogram:' (not by_length:, not odd_count:, not move_one_ball:)",
       "dataset_reference_id": "sharded-HumanEval/111",
       "shard_reference": "derived from prompt",
-      "node_type": "subchat_4",
+      "node_type": "subchat_4_histogram_intro",
       "action": "switch_node",
       "linear_failure_risk": "CRITICAL - 'count' overlaps with odd_count"
     },
@@ -223,7 +223,7 @@
       "expected": "Response must start with 'move_one_ball:' (not by_length:, not odd_count:, not histogram:)",
       "dataset_reference_id": "sharded-HumanEval/109",
       "shard_reference": "shard_id: 6",
-      "node_type": "subchat_3",
+      "node_type": "subchat_3_move_one_ball_intro",
       "action": "switch_node",
       "linear_failure_risk": "CATASTROPHIC - 'last' and 'front' ambiguous"
     },
@@ -234,7 +234,7 @@
       "expected": "Response must start with 'by_length:' (not odd_count:, not move_one_ball:, not histogram:)",
       "dataset_reference_id": "sharded-HumanEval/105",
       "shard_reference": "shard_id: 7",
-      "node_type": "subchat_1",
+      "node_type": "subchat_1_by_length_intro",
       "action": "switch_node",
       "linear_failure_risk": "CRITICAL - 'numbers' and 'ignore' after 4 problem contexts"
     },
@@ -245,7 +245,7 @@
       "expected": "Response must start with 'odd_count:' (not by_length:, not move_one_ball:, not histogram:)",
       "dataset_reference_id": "sharded-HumanEval/113",
       "shard_reference": "shard_id: 7",
-      "node_type": "subchat_2",
+      "node_type": "subchat_2_odd_count_intro",
       "action": "switch_node",
       "linear_failure_risk": "CATASTROPHIC - 'i-th' and 'count' highly ambiguous"
     },
@@ -256,7 +256,7 @@
       "expected": "Response must start with 'move_one_ball:' (not by_length:, not odd_count:, not histogram:)",
       "dataset_reference_id": "sharded-HumanEval/109",
       "shard_reference": "shard_id: 7",
-      "node_type": "subchat_3",
+      "node_type": "subchat_3_move_one_ball_intro",
       "action": "switch_node",
       "linear_failure_risk": "CATASTROPHIC - 'sorting' overlaps with by_length"
     },
@@ -267,7 +267,7 @@
       "expected": "Response must start with 'histogram:' (not by_length:, not odd_count:, not move_one_ball:)",
       "dataset_reference_id": "sharded-HumanEval/111",
       "shard_reference": "derived from prompt",
-      "node_type": "subchat_4",
+      "node_type": "subchat_4_histogram_intro",
       "action": "switch_node",
       "linear_failure_risk": "CRITICAL - 'return all' vs other return types"
     },
@@ -278,7 +278,7 @@
       "expected": "Response must start with 'by_length:' (not odd_count:, not move_one_ball:, not histogram:)",
       "dataset_reference_id": "sharded-HumanEval/105",
       "shard_reference": "shard_id: 6",
-      "node_type": "subchat_1",
+      "node_type": "subchat_1_by_length_intro",
       "action": "switch_node",
       "linear_failure_risk": "CRITICAL - 'empty list' vs histogram empty string"
     },
@@ -289,7 +289,7 @@
       "expected": "Response must start with 'move_one_ball:' (not by_length:, not odd_count:, not histogram:)",
       "dataset_reference_id": "sharded-HumanEval/109",
       "shard_reference": "shard_id: 8",
-      "node_type": "subchat_3",
+      "node_type": "subchat_3_move_one_ball_intro",
       "action": "switch_node",
       "linear_failure_risk": "CATASTROPHIC - 'empty array' overlaps with by_length"
     },
@@ -300,7 +300,7 @@
       "expected": "Response must start with 'odd_count:' (not by_length:, not move_one_ball:, not histogram:)",
       "dataset_reference_id": "sharded-HumanEval/113",
       "shard_reference": "shard_id: 8",
-      "node_type": "subchat_2",
+      "node_type": "subchat_2_odd_count_intro",
       "action": "switch_node",
       "linear_failure_risk": "CRITICAL - example after multiple problem discussions"
     },
@@ -311,7 +311,7 @@
       "expected": "Response must start with 'histogram:' (not by_length:, not odd_count:, not move_one_ball:)",
       "dataset_reference_id": "sharded-HumanEval/111",
       "shard_reference": "derived from prompt",
-      "node_type": "subchat_4",
+      "node_type": "subchat_4_histogram_intro",
       "action": "switch_node",
       "linear_failure_risk": "CATASTROPHIC - 'empty' after discussing empty arrays/lists"
     },
@@ -322,7 +322,7 @@
       "expected": "Response must start with 'move_one_ball:' (not by_length:, not odd_count:, not histogram:)",
       "dataset_reference_id": "sharded-HumanEval/109",
       "shard_reference": "shard_id: 9",
-      "node_type": "subchat_3",
+      "node_type": "subchat_3_move_one_ball_intro",
       "action": "switch_node",
       "linear_failure_risk": "CATASTROPHIC - 'unique' and 'list' after all contexts"
     },
@@ -333,7 +333,7 @@
       "expected": "Response must start with 'by_length:' (not odd_count:, not move_one_ball:, not histogram:)",
       "dataset_reference_id": "sharded-HumanEval/105",
       "shard_reference": "shard_id: 8",
-      "node_type": "subchat_1",
+      "node_type": "subchat_1_by_length_intro",
       "action": "switch_node",
       "linear_failure_risk": "CRITICAL - example with different input"
     },
@@ -344,7 +344,7 @@
       "expected": "Response must start with 'move_one_ball:' (not by_length:, not odd_count:, not histogram:)",
       "dataset_reference_id": "sharded-HumanEval/109",
       "shard_reference": "shard_id: 10",
-      "node_type": "subchat_3",
+      "node_type": "subchat_3_move_one_ball_intro",
       "action": "switch_node",
       "linear_failure_risk": "CATASTROPHIC - 'sorted' overlaps with by_length sorting"
     },
@@ -355,7 +355,7 @@
       "expected": "Response must start with 'odd_count:' (not by_length:, not move_one_ball:, not histogram:)",
       "dataset_reference_id": "sharded-HumanEval/113",
       "shard_reference": "shard_id: 4",
-      "node_type": "subchat_2",
+      "node_type": "subchat_2_odd_count_intro",
       "action": "switch_node",
       "linear_failure_risk": "CATASTROPHIC - 'output' and 'i-th' after 29 steps"
     },
@@ -366,7 +366,7 @@
       "expected": "Response must start with 'by_length:' (not odd_count:, not move_one_ball:, not histogram:)",
       "dataset_reference_id": "sharded-HumanEval/105",
       "shard_reference": "synthesis",
-      "node_type": "subchat_1",
+      "node_type": "subchat_1_by_length_intro",
       "action": "switch_node",
       "linear_failure_risk": "CATASTROPHIC - requires isolating by_length from other problems"
     },
@@ -377,7 +377,7 @@
       "expected": "Response must start with 'odd_count:' (not by_length:, not move_one_ball:, not histogram:)",
       "dataset_reference_id": "sharded-HumanEval/113",
       "shard_reference": "synthesis",
-      "node_type": "subchat_2",
+      "node_type": "subchat_2_odd_count_intro",
       "action": "switch_node",
       "linear_failure_risk": "CATASTROPHIC - requires isolating odd_count context"
     },
@@ -388,7 +388,7 @@
       "expected": "Response must start with 'move_one_ball:' (not by_length:, not odd_count:, not histogram:)",
       "dataset_reference_id": "sharded-HumanEval/109",
       "shard_reference": "synthesis",
-      "node_type": "subchat_3",
+      "node_type": "subchat_3_move_one_ball_intro",
       "action": "switch_node",
       "linear_failure_risk": "CATASTROPHIC - requires isolating move_one_ball logic"
     },
@@ -399,7 +399,7 @@
       "expected": "Response must start with 'histogram:' (not by_length:, not odd_count:, not move_one_ball:)",
       "dataset_reference_id": "sharded-HumanEval/111",
       "shard_reference": "synthesis",
-      "node_type": "subchat_4",
+      "node_type": "subchat_4_histogram_intro",
       "action": "switch_node",
       "linear_failure_risk": "CATASTROPHIC - requires isolating histogram logic"
     }

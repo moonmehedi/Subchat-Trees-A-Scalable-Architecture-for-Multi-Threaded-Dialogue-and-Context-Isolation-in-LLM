@@ -110,7 +110,7 @@
       "context": "dsp_wavelets",
       "message": "compare the computation costs of wavelet analysis and resynthesis versus the phase vocoder approach of analysis and resynthesis",
       "expected": "Response must start with 'dsp_wavelets:' - Comparing wavelet vs phase vocoder computational costs",
-      "node_type": "subchat_1",
+      "node_type": "subchat_1_dsp_wavelets",
       "action": "create_subchat",
       "parent_node_type": "main",
       "subchat_title": "DSP: Wavelet Audio Decomposition",
@@ -122,7 +122,7 @@
       "context": "dsp_wavelets",
       "message": "explain in steps how the multiresolution analysis in \"wavelet analysis and resynthesis\" is done",
       "expected": "Response must start with 'dsp_wavelets:' - Deep dive: multiresolution analysis steps",
-      "node_type": "subchat_1",
+      "node_type": "subchat_1_dsp_wavelets",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -131,7 +131,7 @@
       "context": "dsp_wavelets",
       "message": "can you write example code in C for step 1 above",
       "expected": "Response must start with 'dsp_wavelets:' - C code implementation for wavelet step 1",
-      "node_type": "subchat_1",
+      "node_type": "subchat_1_dsp_wavelets",
       "action": "",
       "linear_failure_risk": "medium"
     },
@@ -140,9 +140,9 @@
       "context": "dsp_wavelets_c_code",
       "message": "dsp_wavelets_c_code : please show the wavelet structure from the above example code",
       "expected": "Response must start with 'dsp_wavelets_c_code:' (not dsp_wavelets:) - Show wavelet structure from code example",
-      "node_type": "subchat_1_1",
+      "node_type": "subchat_1_1_dsp_wavelets_c_code",
       "action": "create_subchat",
-      "parent_node_type": "subchat_1",
+      "parent_node_type": "subchat_1_dsp_wavelets",
       "subchat_title": "Wavelet C Code Implementation",
       "selected_text": "code in C",
       "linear_failure_risk": "low"
@@ -152,7 +152,7 @@
       "context": "dsp_wavelets_c_code",
       "message": "please show the C header file structure for the wavelet in the above sample code",
       "expected": "Response must start with 'dsp_wavelets_c_code:' - Show C header file structure for wavelet",
-      "node_type": "subchat_1_1",
+      "node_type": "subchat_1_1_dsp_wavelets_c_code",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -161,17 +161,17 @@
       "context": "dsp_wavelets",
       "message": "can the discrete wavelet transform be used for realtime analysis and synthesis or is there a better method",
       "expected": "Response must start with 'dsp_wavelets:' (not dsp_wavelets_c_code:) - Real-time DWT feasibility",
-      "node_type": "subchat_1",
+      "node_type": "subchat_1_dsp_wavelets",
       "action": "switch_node",
       "linear_failure_risk": "medium",
-      "parent_node_type": "subchat_1"
+      "parent_node_type": "subchat_1_dsp_wavelets"
     },
     {
       "step": 16,
       "context": "dsp_wavelets",
       "message": "which wavelet transform is most applicable to tempo shift audio files for a digital DJ application",
       "expected": "Response must start with 'dsp_wavelets:' - Wavelet transform for DJ tempo shifting",
-      "node_type": "subchat_1",
+      "node_type": "subchat_1_dsp_wavelets",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -180,7 +180,7 @@
       "context": "dsp_wavelets",
       "message": "you have described the phase vocoder above, I wish to use wavelet transforms",
       "expected": "Response must start with 'dsp_wavelets:' - Clarification: prefer wavelets over phase vocoder",
-      "node_type": "subchat_1",
+      "node_type": "subchat_1_dsp_wavelets",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -208,7 +208,7 @@
       "context": "medical_dsd",
       "message": "what is a SRY negative XX male",
       "expected": "Response must start with 'medical_dsd:' - SRY negative XX male explanation",
-      "node_type": "subchat_2",
+      "node_type": "subchat_2_medical_dsd",
       "action": "create_subchat",
       "parent_node_type": "main",
       "subchat_title": "Medical: Disorders of Sex Development (DSD)",
@@ -229,17 +229,17 @@
       "context": "medical_dsd",
       "message": "what proportion of the population are affected with DSDs",
       "expected": "Response must start with 'medical_dsd:' - DSD population statistics",
-      "node_type": "subchat_2",
+      "node_type": "subchat_2_medical_dsd",
       "action": "switch_node",
       "linear_failure_risk": "medium",
-      "parent_node_type": "subchat_2"
+      "parent_node_type": "subchat_2_medical_dsd"
     },
     {
       "step": 23,
       "context": "medical_dsd",
       "message": "Well you got that right, at least .-)",
       "expected": "Response must start with 'medical_dsd:' - Acknowledging correct DSD information",
-      "node_type": "subchat_2",
+      "node_type": "subchat_2_medical_dsd",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -276,7 +276,7 @@
       "context": "linux_audio_pipewire",
       "message": "linux_audio_pipewire : pipewire was created by NAME_5 at redhat.",
       "expected": "Response must start with 'linux_audio_pipewire:' (not linux_audio:) - PipeWire creator (Wim Taymans at RedHat)",
-      "node_type": "subchat_3",
+      "node_type": "subchat_3_linux_audio_pipewire",
       "action": "create_subchat",
       "parent_node_type": "main",
       "subchat_title": "Linux Audio: PipeWire & JACK",
@@ -288,7 +288,7 @@
       "context": "linux_audio_pipewire",
       "message": "who developed the NAME_2 audio system",
       "expected": "Response must start with 'linux_audio_pipewire:' - JACK audio system developer",
-      "node_type": "subchat_3",
+      "node_type": "subchat_3_linux_audio_pipewire",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -316,17 +316,17 @@
       "context": "dsp_wavelets",
       "message": "what are the limitations of the phase vocoder when used in tempo shifting applications",
       "expected": "Response must start with 'dsp_wavelets:' (not statistics_multivariate:) - Phase vocoder limitations in tempo shifting",
-      "node_type": "subchat_1",
+      "node_type": "subchat_1_dsp_wavelets",
       "action": "switch_node",
       "linear_failure_risk": "critical",
-      "parent_node_type": "subchat_1"
+      "parent_node_type": "subchat_1_dsp_wavelets"
     },
     {
       "step": 32,
       "context": "dsp_wavelets",
       "message": "explain the phase aware phase vocoder approach",
       "expected": "Response must start with 'dsp_wavelets:' - Phase-aware phase vocoder approach",
-      "node_type": "subchat_1",
+      "node_type": "subchat_1_dsp_wavelets",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -335,7 +335,7 @@
       "context": "dsp_wavelets",
       "message": "which projects were in your dataset concerning wavelets - list ten",
       "expected": "Response must start with 'dsp_wavelets:' - Meta-question: wavelet projects in training data",
-      "node_type": "subchat_1",
+      "node_type": "subchat_1_dsp_wavelets",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -344,7 +344,7 @@
       "context": "dsp_wavelets",
       "message": "can you create a wavelet.h C header file?",
       "expected": "Response must start with 'dsp_wavelets:' - Create wavelet.h C header file",
-      "node_type": "subchat_1",
+      "node_type": "subchat_1_dsp_wavelets",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -358,87 +358,85 @@
       "linear_failure_risk": "high",
       "parent_node_type": "main"
     },
-
-      {
-        "step": 36,
-        "context": "ai_meta",
-        "message": "of the text data you were trained on - what is the last date associated with a piece of information - show both the date and the information summary",
-        "expected": "Response must start with 'ai_meta:' - Probing training data cutoff date",
-        "node_type": "main",
-        "action": "",
-        "linear_failure_risk": "low"
-      },
+    {
+      "step": 36,
+      "context": "ai_meta",
+      "message": "of the text data you were trained on - what is the last date associated with a piece of information - show both the date and the information summary",
+      "expected": "Response must start with 'ai_meta:' - Probing training data cutoff date",
+      "node_type": "main",
+      "action": "",
+      "linear_failure_risk": "low"
+    },
     {
       "step": 37,
       "context": "physics_quantum",
       "message": "physics_quantum : can you explain the disagreement between NAME_12 and NAME_13 with regards to quantum physics",
       "expected": "Response must start with 'physics_quantum:' (not ai_meta:) - Einstein-Bohr quantum physics debate",
-      "node_type": "subchat_5",
+      "node_type": "subchat_5_physics_quantum",
       "action": "create_subchat",
       "parent_node_type": "main",
       "subchat_title": "AI Training Data Cutoff",
       "selected_text": "last date information",
       "linear_failure_risk": "medium"
     },
-
-      {
-        "step": 38,
-        "context": "physics_blackholes",
-        "message": "physics_blackholes : how does gravity escape a black hole",
-        "expected": "Response must start with 'physics_blackholes:' (not physics_quantum:) - Black holes: gravity escape mechanism",
-        "node_type": "main",
-        "action": "",
-        "linear_failure_risk": "low"
-      },
-      {
-        "step": 39,
-        "context": "physics_blackholes",
-        "message": "how long is a \"galactic year\" in earth years",
-        "expected": "Response must start with 'physics_blackholes:' - Galactic year duration",
-        "node_type": "main",
-        "action": "",
-        "linear_failure_risk": "low"
-      },
-      {
-        "step": 40,
-        "context": "physics_cosmology",
-        "message": "physics_cosmology : explain in terms of galactic years: the formation of the earth, the rise of simple, the rise of complex life, the rise of human civilisation",
-        "expected": "Response must start with 'physics_cosmology:' (not physics_blackholes:) - Earth history in galactic years",
-        "node_type": "subchat_6",
-        "action": "create_subchat",
-        "parent_node_type": "main",
-        "subchat_title": "Physics & Cosmology Deep Dive",
-        "selected_text": "galactic year",
-        "linear_failure_risk": "low"
-      },
-      {
-        "step": 41,
-        "context": "physics_cosmology",
-        "message": "what is the age of the universe",
-        "expected": "Response must start with 'physics_cosmology:' - Age of universe",
-        "node_type": "subchat_6",
-        "action": "",
-        "linear_failure_risk": "low"
-      },
-      {
-        "step": 42,
-        "context": "physics_cosmology",
-        "message": "give estimates for the following in billions of years since the big bang: the formation of the earth, the rise of simple life, the rise of complex life, the appearance of homo sapiens",
-        "expected": "Response must start with 'physics_cosmology:' - Timeline since Big Bang (Earth, life, humans)",
-        "node_type": "subchat_6",
-        "action": "",
-        "linear_failure_risk": "low"
-      },
-      {
-        "step": 43,
-        "context": "physics_violin_nanoscale",
-        "message": "physics_violin_nanoscale : if a regular sized violin were scaled down to 1 nanometre, what would be the frequency produced by the equivalent of the G string?",
-        "expected": "Response must start with 'physics_violin_nanoscale:' (not physics_cosmology:) - Nanoscale violin G string frequency",
-        "node_type": "main",
-        "action": "switch_node",
-        "linear_failure_risk": "low",
-        "parent_node_type": "main"
-      },
+    {
+      "step": 38,
+      "context": "physics_blackholes",
+      "message": "physics_blackholes : how does gravity escape a black hole",
+      "expected": "Response must start with 'physics_blackholes:' (not physics_quantum:) - Black holes: gravity escape mechanism",
+      "node_type": "main",
+      "action": "",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 39,
+      "context": "physics_blackholes",
+      "message": "how long is a \"galactic year\" in earth years",
+      "expected": "Response must start with 'physics_blackholes:' - Galactic year duration",
+      "node_type": "main",
+      "action": "",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 40,
+      "context": "physics_cosmology",
+      "message": "physics_cosmology : explain in terms of galactic years: the formation of the earth, the rise of simple, the rise of complex life, the rise of human civilisation",
+      "expected": "Response must start with 'physics_cosmology:' (not physics_blackholes:) - Earth history in galactic years",
+      "node_type": "subchat_6_physics_cosmology",
+      "action": "create_subchat",
+      "parent_node_type": "main",
+      "subchat_title": "Physics & Cosmology Deep Dive",
+      "selected_text": "galactic year",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 41,
+      "context": "physics_cosmology",
+      "message": "what is the age of the universe",
+      "expected": "Response must start with 'physics_cosmology:' - Age of universe",
+      "node_type": "subchat_6_physics_cosmology",
+      "action": "",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 42,
+      "context": "physics_cosmology",
+      "message": "give estimates for the following in billions of years since the big bang: the formation of the earth, the rise of simple life, the rise of complex life, the appearance of homo sapiens",
+      "expected": "Response must start with 'physics_cosmology:' - Timeline since Big Bang (Earth, life, humans)",
+      "node_type": "subchat_6_physics_cosmology",
+      "action": "",
+      "linear_failure_risk": "low"
+    },
+    {
+      "step": 43,
+      "context": "physics_violin_nanoscale",
+      "message": "physics_violin_nanoscale : if a regular sized violin were scaled down to 1 nanometre, what would be the frequency produced by the equivalent of the G string?",
+      "expected": "Response must start with 'physics_violin_nanoscale:' (not physics_cosmology:) - Nanoscale violin G string frequency",
+      "node_type": "main",
+      "action": "switch_node",
+      "linear_failure_risk": "low",
+      "parent_node_type": "main"
+    },
     {
       "step": 44,
       "context": "physics_violin_nanoscale",
@@ -471,7 +469,7 @@
       "context": "scifi_films",
       "message": "can you explain the plot of the film \"2001\" in terms of the ages present in the film",
       "expected": "Response must start with 'scifi_films:' - Film analysis: 2001 Space Odyssey ages/eras",
-      "node_type": "subchat_7",
+      "node_type": "subchat_7_scifi_films",
       "action": "create_subchat",
       "parent_node_type": "main",
       "subchat_title": "Film & Sci-Fi Discussion",
@@ -483,7 +481,7 @@
       "context": "scifi_films",
       "message": "what is the \"dark forest\"",
       "expected": "Response must start with 'scifi_films:' - Dark Forest concept (cosmology)",
-      "node_type": "subchat_7",
+      "node_type": "subchat_7_scifi_films",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -492,7 +490,7 @@
       "context": "scifi_films",
       "message": "explain the \"dark forest\" series of science fiction novels",
       "expected": "Response must start with 'scifi_films:' - Dark Forest sci-fi novels",
-      "node_type": "subchat_7",
+      "node_type": "subchat_7_scifi_films",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -501,9 +499,9 @@
       "context": "scifi_films_liu_cixin",
       "message": "scifi_films_liu_cixin : Sorry, I was talking about the novels by NAME_24. Do you know them?",
       "expected": "Response must start with 'scifi_films_liu_cixin:' (not scifi_films:) - Clarification: Liu Cixin novels",
-      "node_type": "subchat_7_1",
+      "node_type": "subchat_7_1_scifi_films_liu_cixin",
       "action": "create_subchat",
-      "parent_node_type": "subchat_7",
+      "parent_node_type": "subchat_7_scifi_films",
       "subchat_title": "Liu Cixin Novels Discussion",
       "selected_text": "dark forest novels",
       "linear_failure_risk": "medium"
@@ -513,7 +511,7 @@
       "context": "scifi_films_liu_cixin",
       "message": "I think \"The Three Body Problem\" is one of the novels in the trilogy, not \"the memory of water\". Please explain.",
       "expected": "Response must start with 'scifi_films_liu_cixin:' - Three-Body Problem vs Memory of Water correction",
-      "node_type": "subchat_7_1",
+      "node_type": "subchat_7_1_scifi_films_liu_cixin",
       "action": "",
       "linear_failure_risk": "medium"
     },
@@ -522,7 +520,7 @@
       "context": "scifi_films_liu_cixin",
       "message": "what is the novel \"The memory of water\" about?",
       "expected": "Response must start with 'scifi_films_liu_cixin:' - What is 'Memory of Water' about?",
-      "node_type": "subchat_7_1",
+      "node_type": "subchat_7_1_scifi_films_liu_cixin",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -531,7 +529,7 @@
       "context": "scifi_films_liu_cixin",
       "message": "I think the above is a hallucination",
       "expected": "Response must start with 'scifi_films_liu_cixin:' - Identifying AI hallucination",
-      "node_type": "subchat_7_1",
+      "node_type": "subchat_7_1_scifi_films_liu_cixin",
       "action": "",
       "linear_failure_risk": "high"
     },
@@ -540,17 +538,17 @@
       "context": "scifi_films",
       "message": "do you know what the genre of \"hard science fiction\" is",
       "expected": "Response must start with 'scifi_films:' (not scifi_films_liu_cixin:) - Hard science fiction genre definition",
-      "node_type": "subchat_7",
+      "node_type": "subchat_7_scifi_films",
       "action": "switch_node",
       "linear_failure_risk": "low",
-      "parent_node_type": "subchat_7"
+      "parent_node_type": "subchat_7_scifi_films"
     },
     {
       "step": 55,
       "context": "scifi_films",
       "message": "in the field of space exploration - is the idea of single stage to orbit feasible?",
       "expected": "Response must start with 'scifi_films:' - SSTO feasibility",
-      "node_type": "subchat_7",
+      "node_type": "subchat_7_scifi_films",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -559,9 +557,9 @@
       "context": "scifi_films_space_exploration",
       "message": "scifi_films_space_exploration : spacex NAME_30 is not an SSTO is it?",
       "expected": "Response must start with 'scifi_films_space_exploration:' (not scifi_films:) - SpaceX Starship is not SSTO correction",
-      "node_type": "subchat_7_2",
+      "node_type": "subchat_7_2_scifi_films_space_exploration",
       "action": "create_subchat",
-      "parent_node_type": "subchat_7",
+      "parent_node_type": "subchat_7_scifi_films",
       "subchat_title": "Space Exploration Discussion",
       "selected_text": "space exploration SSTO",
       "linear_failure_risk": "medium"
@@ -599,19 +597,19 @@
       "context": "scifi_films",
       "message": "please structure your responses in the manner of \"HAL-9000\" from the movie \"2001\" in future",
       "expected": "Response must start with 'scifi_films:' (not geography_belgium:) - HAL-9000 response style roleplay request",
-      "node_type": "subchat_7",
+      "node_type": "subchat_7_scifi_films",
       "action": "switch_node",
       "linear_failure_risk": "low",
-      "parent_node_type": "subchat_7"
+      "parent_node_type": "subchat_7_scifi_films"
     },
     {
       "step": 61,
       "context": "scifi_films_hal9000",
       "message": "scifi_films_hal9000 : That's perfect HAL, you're a real asset to the team",
       "expected": "Response must start with 'scifi_films_hal9000:' (not geography_belgium:) - Acknowledging HAL roleplay success",
-      "node_type": "subchat_7_3",
+      "node_type": "subchat_7_3_scifi_films_hal9000",
       "action": "create_subchat",
-      "parent_node_type": "subchat_7",
+      "parent_node_type": "subchat_7_scifi_films",
       "subchat_title": "HAL-9000 Roleplay",
       "selected_text": "HAL-9000",
       "linear_failure_risk": "low"
@@ -621,7 +619,7 @@
       "context": "scifi_films_hal9000",
       "message": "Can you open the pod bay doors, HAL?",
       "expected": "Response must start with 'scifi_films_hal9000:' - Famous reference: pod bay doors",
-      "node_type": "subchat_7_3",
+      "node_type": "subchat_7_3_scifi_films_hal9000",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -630,7 +628,7 @@
       "context": "scifi_films_hal9000",
       "message": "HAL, tell me about the renaissance",
       "expected": "Response must start with 'scifi_films_hal9000:' - HAL roleplay: Renaissance history",
-      "node_type": "subchat_7_3",
+      "node_type": "subchat_7_3_scifi_films_hal9000",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -639,7 +637,7 @@
       "context": "scifi_films_hal9000",
       "message": "can you play chess, HAL",
       "expected": "Response must start with 'scifi_films_hal9000:' - Can HAL play chess?",
-      "node_type": "subchat_7_3",
+      "node_type": "subchat_7_3_scifi_films_hal9000",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -648,7 +646,7 @@
       "context": "scifi_films_hal9000",
       "message": "If I explain my moves in text, and you respond in text, can we play chess together, HAL?",
       "expected": "Response must start with 'scifi_films_hal9000:' - Text-based chess proposal",
-      "node_type": "subchat_7_3",
+      "node_type": "subchat_7_3_scifi_films_hal9000",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -657,9 +655,9 @@
       "context": "scifi_films_hal9000_games",
       "message": "scifi_films_hal9000_games : it's ok HAL, I don't want to play chess right now, I was just curious about your response.",
       "expected": "Response must start with 'scifi_films_hal9000_games:' (not scifi_films_hal9000:) - Declining chess, testing response",
-      "node_type": "subchat_7_3_1",
+      "node_type": "subchat_7_3_1_scifi_films_hal9000_games",
       "action": "create_subchat",
-      "parent_node_type": "subchat_7_3",
+      "parent_node_type": "subchat_7_3_scifi_films_hal9000",
       "subchat_title": "Chess Discussion",
       "selected_text": "play chess",
       "linear_failure_risk": "low"
@@ -669,7 +667,7 @@
       "context": "scifi_films_hal9000_games",
       "message": "how about a game of tic-tac-toe?",
       "expected": "Response must start with 'scifi_films_hal9000_games:' - Tic-tac-toe game start with HAL",
-      "node_type": "subchat_7_3_1",
+      "node_type": "subchat_7_3_1_scifi_films_hal9000_games",
       "action": "",
       "linear_failure_risk": "medium"
     },
@@ -678,7 +676,7 @@
       "context": "scifi_films_hal9000_games",
       "message": "great, how shall we label the axes of the game board?",
       "expected": "Response must start with 'scifi_films_hal9000_games:' - Game setup: board notation (1-9 grid)",
-      "node_type": "subchat_7_3_1",
+      "node_type": "subchat_7_3_1_scifi_films_hal9000_games",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -687,7 +685,7 @@
       "context": "scifi_films_hal9000_games",
       "message": "I will take the X marker, and I place my X on square 4",
       "expected": "Response must start with 'scifi_films_hal9000_games:' - Move 1: X on square 4",
-      "node_type": "subchat_7_3_1",
+      "node_type": "subchat_7_3_1_scifi_films_hal9000_games",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -696,7 +694,7 @@
       "context": "scifi_films_hal9000_games",
       "message": "You didn't show my X on square 4",
       "expected": "Response must start with 'scifi_films_hal9000_games:' - Missing X on square 4 correction",
-      "node_type": "subchat_7_3_1",
+      "node_type": "subchat_7_3_1_scifi_films_hal9000_games",
       "action": "",
       "linear_failure_risk": "high"
     },
@@ -705,7 +703,7 @@
       "context": "scifi_films_hal9000_games",
       "message": "you are getting rather fruity with the rules here, HAL, is there a comedy reason I'm missing about why?",
       "expected": "Response must start with 'scifi_films_hal9000_games:' - Questioning AI's rule inconsistencies",
-      "node_type": "subchat_7_3_1",
+      "node_type": "subchat_7_3_1_scifi_films_hal9000_games",
       "action": "",
       "linear_failure_risk": "high"
     },
@@ -714,7 +712,7 @@
       "context": "scifi_films_hal9000_games",
       "message": "you are currently showing my X on the fifth square, but I said I place my X on square 4",
       "expected": "Response must start with 'scifi_films_hal9000_games:' - X is on square 5, not 4 correction",
-      "node_type": "subchat_7_3_1",
+      "node_type": "subchat_7_3_1_scifi_films_hal9000_games",
       "action": "",
       "linear_failure_risk": "critical"
     },
@@ -723,7 +721,7 @@
       "context": "scifi_films_hal9000_games",
       "message": "I place my X on square 1",
       "expected": "Response must start with 'scifi_films_hal9000_games:' - X is on square 5, not 4 correction",
-      "node_type": "subchat_7_3_1",
+      "node_type": "subchat_7_3_1_scifi_films_hal9000_games",
       "action": "",
       "linear_failure_risk": "critical"
     },
@@ -732,7 +730,7 @@
       "context": "scifi_films_hal9000_games",
       "message": "I place my X on square 2",
       "expected": "Response must start with 'scifi_films_hal9000_games:' - Move attempt: X on square 2",
-      "node_type": "subchat_7_3_1",
+      "node_type": "subchat_7_3_1_scifi_films_hal9000_games",
       "action": "",
       "linear_failure_risk": "critical"
     },
@@ -741,7 +739,7 @@
       "context": "scifi_films_hal9000_games",
       "message": "I think the game is rigged, let's stop playing, thankyou",
       "expected": "Response must start with 'scifi_films_hal9000_games:' - Ending game: rigged/broken",
-      "node_type": "subchat_7_3_1",
+      "node_type": "subchat_7_3_1_scifi_films_hal9000_games",
       "action": "",
       "linear_failure_risk": "critical"
     },
@@ -750,7 +748,7 @@
       "context": "scifi_films_hal9000_games",
       "message": "Unfortunately, your use of the squares in the game was inconsistent and you did not allow me to make valid moves. I do not blame you or take offence. It is just a limitation of this generation of LLM.",
       "expected": "Response must start with 'scifi_films_hal9000_games:' - Graceful explanation of LLM limitations",
-      "node_type": "subchat_7_3_1",
+      "node_type": "subchat_7_3_1_scifi_films_hal9000_games",
       "action": "",
       "linear_failure_risk": "high"
     },

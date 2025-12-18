@@ -97,7 +97,7 @@ class SimpleLLMClient:
                 response = self.vllm_client.generate(
                     messages=context_messages,
                     temperature=0.0,  # Deterministic
-                    max_tokens=1000
+                    max_tokens=512
                 )
                 
                 self.last_usage = self.vllm_client.get_last_usage()
@@ -201,7 +201,7 @@ class SimpleLLMClient:
                 for chunk in self.vllm_client.generate_stream(
                     messages=context_messages,
                     temperature=0.0,
-                    max_tokens=1000
+                    max_tokens=512
                 ):
                     yield chunk
                 return

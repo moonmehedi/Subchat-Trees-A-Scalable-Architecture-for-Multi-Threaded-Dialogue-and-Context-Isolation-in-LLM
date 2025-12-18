@@ -1,0 +1,50 @@
+[12:10:22] [INFO] ================================================================================
+[12:10:22] [INFO] 🚀 STARTING KAGGLE MULTI-BUFFER COMPARISON
+[12:10:22] [INFO]    Buffer sizes: [5, 10, 20, 40]
+[12:10:22] [INFO]    Git branch: kaggle-run
+[12:10:22] [INFO] ================================================================================
+[12:10:22] [INFO] 
+================================================================================
+[12:10:22] [INFO] 📦 TESTING BUFFER SIZE: 5
+[12:10:22] [INFO] ================================================================================
+[12:10:22] [INFO] ================================================================================
+[12:10:22] [INFO] 🚀 STARTING METRICS-BASED EVALUATION (buffer_size=5)
+[12:10:22] [INFO] ================================================================================
+[12:10:22] [INFO] ⏳ Checking if server is ready...
+[12:10:22] [INFO] ✅ Server is ready!
+[12:10:22] [INFO] 
+🔵 BASELINE TEST: 6c4992f0aed04dd3bf9a4bc225bb4fb0_structured.json (buffer_size=5)
+[12:10:22] [INFO] 🗑️  Ensuring clean state before baseline test...
+[12:10:22] [INFO] 🔄 Restarting server to clear ChromaDB...
+[12:10:22] [INFO]   🛑 Stopping server...
+[12:10:24] [INFO]   ✅ Server stopped
+[12:10:24] [INFO] 🗑️  Clearing ChromaDB...
+[12:10:24] [WARN] ⚠️  Warning during ChromaDB clear: [Errno 39] Directory not empty: '/media/sda3/projects/simple build/Subchat-Trees-A-Scalable-Architecture-for-Multi-Threaded-Dialogue-and-Context-Isolation-in-LLM/backend/chroma_db'
+[12:10:24] [INFO]   🚀 Starting server...
+[12:10:29] [INFO] ⏳ Checking if server is ready...
+[12:10:29] [INFO] ✅ Server is ready!
+[12:10:29] [INFO]   ✅ Server restarted successfully!
+[12:14:25] [INFO] ================================================================================
+[12:14:25] [INFO] 🚀 STARTING MULTI-BUFFER COMPARISON EVALUATION
+[12:14:25] [INFO]    Buffer sizes: [5, 10, 20, 40]
+[12:14:25] [INFO] ================================================================================
+[12:14:25] [INFO] 
+================================================================================
+[12:14:25] [INFO] 📦 TESTING BUFFER SIZE: 5
+[12:14:25] [INFO] ================================================================================
+[12:14:25] [INFO] ================================================================================
+[12:14:25] [INFO] 🚀 STARTING METRICS-BASED EVALUATION (buffer_size=5)
+[12:14:25] [INFO] ================================================================================
+[12:14:25] [INFO] ⏳ Checking if server is ready...
+[12:14:25] [INFO] ✅ Server is ready!
+[12:14:25] [INFO] 
+🔵 BASELINE TEST: 6c4992f0aed04dd3bf9a4bc225bb4fb0_structured.json (buffer_size=5)
+[12:14:25] [INFO] 🔄 Restarting server to clear ChromaDB...
+[12:14:25] [INFO]   🛑 Stopping server...
+[12:14:27] [INFO]   ✅ Server stopped
+[12:14:27] [INFO]   🗑️  Clearing ChromaDB...
+[12:14:27] [WARN]   ⚠️  Warning during ChromaDB clear: [Errno 39] Directory not empty: '/media/sda3/projects/simple build/Subchat-Trees-A-Scalable-Architecture-for-Multi-Threaded-Dialogue-and-Context-Isolation-in-LLM/backend/chroma_db'
+[12:14:27] [INFO]   🚀 Starting server...
+[12:14:32] [INFO] ⏳ Checking if server is ready...
+[12:14:32] [INFO] ✅ Server is ready!
+[12:14:32] [INFO]   ✅ Server restarted successfully!

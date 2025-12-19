@@ -12,6 +12,12 @@ import time
 import requests
 import subprocess
 from pathlib import Path
+
+# Handle exec() case where __file__ is not defined (e.g., when run from Kaggle notebook)
+if '__file__' not in dir():
+    # When run via exec(), we're already in /kaggle/working/Subchat-Trees/backend
+    # So __file__ should point to dataset/kaggle_buffer_test_runner.py
+    __file__ = os.path.join(os.getcwd(), "dataset", "kaggle_buffer_test_runner.py")
 from typing import Dict, List, Any, Optional
 from datetime import datetime
 

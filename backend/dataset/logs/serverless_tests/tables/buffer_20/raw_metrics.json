@@ -1,0 +1,65 @@
+{
+  "buffer_size": 20,
+  "metrics": {
+    "table_1": {
+      "baseline": {
+        "precision": 100.0,
+        "recall": 12.056737588652481,
+        "f1": 21.51898734177215,
+        "accuracy": 12.056737588652481,
+        "pollution_rate": 87.94326241134752,
+        "tp": 17,
+        "tn": 0,
+        "fp": 0,
+        "fn": 124
+      },
+      "system": {
+        "precision": 100.0,
+        "recall": 23.404255319148938,
+        "f1": 37.93103448275862,
+        "accuracy": 23.404255319148938,
+        "pollution_rate": 76.59574468085107,
+        "tp": 33,
+        "tn": 0,
+        "fp": 0,
+        "fn": 108
+      },
+      "improvements": {
+        "precision": 0.0,
+        "recall": 94.11764705882355,
+        "f1": 76.26774847870183,
+        "accuracy": 94.11764705882355,
+        "pollution_rate": -12.903225806451607
+      }
+    },
+    "table_3": {
+      "baseline": {
+        "avg_input_tokens": 0,
+        "avg_output_tokens": 0,
+        "avg_total_tokens": 0,
+        "avg_latency": 20.342318235559667,
+        "buffer_hit_rate": 0,
+        "archive_hit_rate": 0,
+        "tokens_per_correct_answer": 0
+      },
+      "system": {
+        "avg_input_tokens": 0,
+        "avg_output_tokens": 0,
+        "avg_total_tokens": 0,
+        "avg_latency": 12.58430196376557,
+        "buffer_hit_rate": 0,
+        "archive_hit_rate": 0,
+        "tokens_per_correct_answer": 0
+      },
+      "improvements": {
+        "avg_input_tokens": 0,
+        "avg_output_tokens": 0,
+        "avg_total_tokens": 0,
+        "avg_latency": -38.137326247470604,
+        "buffer_hit_rate": 0,
+        "archive_hit_rate": 0,
+        "tokens_per_correct_answer": 0
+      }
+    }
+  }
+}

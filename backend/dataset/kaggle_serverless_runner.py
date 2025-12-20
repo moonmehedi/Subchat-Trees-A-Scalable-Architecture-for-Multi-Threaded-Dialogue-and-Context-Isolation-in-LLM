@@ -994,7 +994,12 @@ class ServerlessTestRunner:
             success, message = self.git_commit_and_push([str(viz_file)], commit_msg)
             
             if not success:
-                self.log(f"⚠️  Warning: Could not push visualization: {message}", "WARN")
+                # Log warning to both console AND file so it's visible in Kaggle logs
+                warning_msg = f"⚠️  Warning: Could not push visualization: {message}"
+                self.log(warning_msg, "WARN")
+                # Also write to main log explicitly
+                with open(self.main_log_file, 'a') as f:
+                    f.write(f"[{datetime.now().strftime('%H:%M:%S')}] [WARN] {warning_msg}\n")
         
         self.log("\n🎉 KAGGLE SERVERLESS MULTI-BUFFER COMPARISON COMPLETE!", "INFO")
         self.log(f"   All results pushed to branch: {self.repo_branch}", "INFO")

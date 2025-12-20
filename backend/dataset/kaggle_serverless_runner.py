@@ -668,6 +668,277 @@ class ServerlessTestRunner:
         
         self.log(f"\n✅ Results saved to: {buffer_dir}", "INFO")
 
+    def generate_comparison_visualization(self, all_metrics: Dict[int, Dict]):
+        """Generate HTML visualization comparing all buffer sizes"""
+        viz_dir = self.logs_dir / "visualization"
+        viz_dir.mkdir(exist_ok=True)
+        
+        html_file = viz_dir / "index.html"
+        
+        # Prepare data for charts
+        buffer_sizes = sorted(all_metrics.keys())
+        
+        # Extract metrics
+        baseline_precision = [all_metrics[bs]["table_1"]["baseline"]["precision"] for bs in buffer_sizes]
+        system_precision = [all_metrics[bs]["table_1"]["system"]["precision"] for bs in buffer_sizes]
+        
+        baseline_recall = [all_metrics[bs]["table_1"]["baseline"]["recall"] for bs in buffer_sizes]
+        system_recall = [all_metrics[bs]["table_1"]["system"]["recall"] for bs in buffer_sizes]
+        
+        baseline_f1 = [all_metrics[bs]["table_1"]["baseline"]["f1"] for bs in buffer_sizes]
+        system_f1 = [all_metrics[bs]["table_1"]["system"]["f1"] for bs in buffer_sizes]
+        
+        baseline_accuracy = [all_metrics[bs]["table_1"]["baseline"]["accuracy"] for bs in buffer_sizes]
+        system_accuracy = [all_metrics[bs]["table_1"]["system"]["accuracy"] for bs in buffer_sizes]
+        
+        baseline_pollution = [all_metrics[bs]["table_1"]["baseline"]["pollution_rate"] for bs in buffer_sizes]
+        system_pollution = [all_metrics[bs]["table_1"]["system"]["pollution_rate"] for bs in buffer_sizes]
+        
+        # Generate HTML with Chart.js
+        html_content = f'''<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kaggle Serverless - Buffer Size Comparison</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {{
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }}
+        .container {{
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }}
+        h1 {{
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+        }}
+        .subtitle {{
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }}
+        .kaggle-badge {{
+            background: #20BEFF;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 5px;
+            display: inline-block;
+            margin: 10px auto;
+        }}
+        .serverless-badge {{
+            background: #10B981;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 5px;
+            display: inline-block;
+            margin: 10px;
+        }}
+        .chart-container {{
+            position: relative;
+            height: 400px;
+            margin-bottom: 40px;
+        }}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Kaggle Serverless Buffer Size Comparison</h1>
+        <p class="subtitle">Subchat Trees: Direct Python Imports - No Server Needed</p>
+        <div style="text-align: center;">
+            <span class="kaggle-badge">Tested on Kaggle GPUs</span>
+            <span class="serverless-badge">Serverless Architecture</span>
+        </div>
+        
+        <h2>📊 Context Isolation Metrics</h2>
+        
+        <div class="chart-container">
+            <canvas id="accuracyChart"></canvas>
+        </div>
+        
+        <div class="chart-container">
+            <canvas id="precisionChart"></canvas>
+        </div>
+        
+        <div class="chart-container">
+            <canvas id="recallChart"></canvas>
+        </div>
+        
+        <div class="chart-container">
+            <canvas id="f1Chart"></canvas>
+        </div>
+        
+        <div class="chart-container">
+            <canvas id="pollutionChart"></canvas>
+        </div>
+    </div>
+    
+    <script>
+        const bufferSizes = {json.dumps(buffer_sizes)};
+        const baselineAccuracy = {json.dumps(baseline_accuracy)};
+        const systemAccuracy = {json.dumps(system_accuracy)};
+        const baselinePrecision = {json.dumps(baseline_precision)};
+        const systemPrecision = {json.dumps(system_precision)};
+        const baselineRecall = {json.dumps(baseline_recall)};
+        const systemRecall = {json.dumps(system_recall)};
+        const baselineF1 = {json.dumps(baseline_f1)};
+        const systemF1 = {json.dumps(system_f1)};
+        const baselinePollution = {json.dumps(baseline_pollution)};
+        const systemPollution = {json.dumps(system_pollution)};
+        
+        const chartOptions = {{
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {{
+                legend: {{ position: 'top' }}
+            }},
+            scales: {{
+                y: {{ beginAtZero: true }}
+            }}
+        }};
+        
+        new Chart(document.getElementById('accuracyChart'), {{
+            type: 'line',
+            data: {{
+                labels: bufferSizes,
+                datasets: [{{
+                    label: 'Baseline Accuracy',
+                    data: baselineAccuracy,
+                    borderColor: 'rgb(255, 99, 132)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                }}, {{
+                    label: 'System Accuracy',
+                    data: systemAccuracy,
+                    borderColor: 'rgb(75, 192, 192)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                }}]
+            }},
+            options: {{
+                ...chartOptions,
+                plugins: {{
+                    ...chartOptions.plugins,
+                    title: {{ display: true, text: 'Accuracy vs Buffer Size (%)' }}
+                }}
+            }}
+        }});
+        
+        new Chart(document.getElementById('precisionChart'), {{
+            type: 'line',
+            data: {{
+                labels: bufferSizes,
+                datasets: [{{
+                    label: 'Baseline Precision',
+                    data: baselinePrecision,
+                    borderColor: 'rgb(255, 99, 132)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                }}, {{
+                    label: 'System Precision',
+                    data: systemPrecision,
+                    borderColor: 'rgb(75, 192, 192)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                }}]
+            }},
+            options: {{
+                ...chartOptions,
+                plugins: {{
+                    ...chartOptions.plugins,
+                    title: {{ display: true, text: 'Precision vs Buffer Size (%)' }}
+                }}
+            }}
+        }});
+        
+        new Chart(document.getElementById('recallChart'), {{
+            type: 'line',
+            data: {{
+                labels: bufferSizes,
+                datasets: [{{
+                    label: 'Baseline Recall',
+                    data: baselineRecall,
+                    borderColor: 'rgb(255, 99, 132)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                }}, {{
+                    label: 'System Recall',
+                    data: systemRecall,
+                    borderColor: 'rgb(75, 192, 192)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                }}]
+            }},
+            options: {{
+                ...chartOptions,
+                plugins: {{
+                    ...chartOptions.plugins,
+                    title: {{ display: true, text: 'Recall vs Buffer Size (%)' }}
+                }}
+            }}
+        }});
+        
+        new Chart(document.getElementById('f1Chart'), {{
+            type: 'line',
+            data: {{
+                labels: bufferSizes,
+                datasets: [{{
+                    label: 'Baseline F1 Score',
+                    data: baselineF1,
+                    borderColor: 'rgb(255, 99, 132)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                }}, {{
+                    label: 'System F1 Score',
+                    data: systemF1,
+                    borderColor: 'rgb(75, 192, 192)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                }}]
+            }},
+            options: {{
+                ...chartOptions,
+                plugins: {{
+                    ...chartOptions.plugins,
+                    title: {{ display: true, text: 'F1 Score vs Buffer Size (%)' }}
+                }}
+            }}
+        }});
+        
+        new Chart(document.getElementById('pollutionChart'), {{
+            type: 'line',
+            data: {{
+                labels: bufferSizes,
+                datasets: [{{
+                    label: 'Baseline Pollution Rate',
+                    data: baselinePollution,
+                    borderColor: 'rgb(255, 99, 132)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                }}, {{
+                    label: 'System Pollution Rate',
+                    data: systemPollution,
+                    borderColor: 'rgb(75, 192, 192)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                }}]
+            }},
+            options: {{
+                ...chartOptions,
+                plugins: {{
+                    ...chartOptions.plugins,
+                    title: {{ display: true, text: 'Pollution Rate vs Buffer Size (%) - Lower is Better' }}
+                }}
+            }}
+        }});
+    </script>
+</body>
+</html>'''
+        
+        with open(html_file, 'w') as f:
+            f.write(html_content)
+        
+        self.log(f"✅ Generated Kaggle Serverless visualization: {html_file}", "INFO")
+
     def run_buffer_comparison(self, scenario_files: List[str], buffer_sizes: List[int] = [5, 10, 20, 40]):
         """Run evaluation across multiple buffer sizes"""
         
@@ -685,12 +956,22 @@ class ServerlessTestRunner:
         self.log("   ✅ Using DIRECT Python imports - NO SERVER NEEDED", "INFO")
         self.log("="*80, "INFO")
         
+        all_metrics = {}
+        
         for buffer_size in buffer_sizes:
             self.log(f"\n{'='*80}", "INFO")
             self.log(f"📦 TESTING BUFFER SIZE: {buffer_size}", "INFO")
             self.log(f"{'='*80}", "INFO")
             
             self.run_full_evaluation(scenario_files, buffer_size=buffer_size)
+            
+            # Load the generated metrics from buffer-specific directory
+            buffer_dir = self.logs_dir / "tables" / f"buffer_{buffer_size}"
+            metrics_file = buffer_dir / "raw_metrics.json"
+            if metrics_file.exists():
+                with open(metrics_file, 'r') as f:
+                    results = json.load(f)
+                    all_metrics[buffer_size] = results["metrics"]
             
             # Push after each buffer
             push_success = self.push_buffer_results(buffer_size)
@@ -701,7 +982,24 @@ class ServerlessTestRunner:
             
             self.log(f"\n✅ Completed buffer size {buffer_size}", "INFO")
         
+        # Generate comparison visualization
+        self.log("\n📊 Generating final comparison visualization...", "INFO")
+        self.generate_comparison_visualization(all_metrics)
+        
+        # Push final visualization
+        viz_file = self.logs_dir / "visualization" / "index.html"
+        if viz_file.exists():
+            timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            commit_msg = f"Kaggle Serverless: Final comparison visualization - {timestamp}"
+            success, message = self.git_commit_and_push([str(viz_file)], commit_msg)
+            
+            if not success:
+                self.log(f"⚠️  Warning: Could not push visualization: {message}", "WARN")
+        
         self.log("\n🎉 KAGGLE SERVERLESS MULTI-BUFFER COMPARISON COMPLETE!", "INFO")
+        self.log(f"   All results pushed to branch: {self.repo_branch}", "INFO")
+        self.log(f"   Results directory: {self.logs_dir / 'tables'}", "INFO")
+        self.log(f"   Visualization: {self.logs_dir / 'visualization' / 'index.html'}", "INFO")
 
 
 if __name__ == "__main__":

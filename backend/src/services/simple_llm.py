@@ -79,6 +79,25 @@ class SimpleLLMClient:
         # Build context from node's buffer (inherited from parents)
         context_messages = []
 
+        # Add base system prompt for multi-topic evaluation
+        context_messages.append({
+            'role': 'system',
+            'content': (
+                "You are participating in a multi-topic, multi-turn evaluation where topics persist "
+                "independently of conversational order. Topics are introduced using the format "
+                "topic_name : user query, and sub-topics using topic_name_subtopic_name : user query; "
+                "these topic labels remain available for future reference. For every user query, you must "
+                "analyze its semantic meaning and select the previously introduced topic or sub-topic it "
+                "most strongly refers to, regardless of recency or prior conversational flow. Your selection "
+                "must be based solely on semantic relevance, not on which topic was last used. You must never "
+                "invent new topic or sub-topic names and may only choose from those already introduced; if "
+                "multiple topics are plausible, select the best semantic match, and if none clearly match, "
+                "request clarification while still choosing the closest topic. Every response must begin with "
+                "the selected topic or sub-topic name followed by a colon, in the format "
+                "<topic_or_subtopic_name>: <your answer>."
+            )
+        })
+
         # Add system message with follow-up context if this is a follow-up conversation
         follow_up_prompt = node.get_enhanced_context_prompt()
         if follow_up_prompt:

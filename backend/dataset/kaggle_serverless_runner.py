@@ -39,7 +39,9 @@ class ServerlessTestRunner:
     def __init__(self, repo_branch: str = "kaggle-run"):
         self.classifier = ContextClassifier()
         self.repo_branch = repo_branch
-        self.llm_client = SimpleLLMClient()
+        
+        # Enable vector index for message archiving
+        self.llm_client = SimpleLLMClient(enable_vector_index=True)
         
         # Track nodes in memory (no server/database)
         self.nodes: Dict[str, TreeNode] = {}
@@ -112,7 +114,8 @@ class ServerlessTestRunner:
                 node_id=node_id,
                 title=title,
                 buffer_size=buffer_size,
-                llm_client=self.llm_client
+                llm_client=self.llm_client,
+                vector_index=self.llm_client.vector_index
             )
             self.nodes[node_id] = node
             return node_id
@@ -137,7 +140,8 @@ class ServerlessTestRunner:
                 title=title,
                 buffer_size=buffer_size,
                 llm_client=self.llm_client,
-                parent=parent
+                parent=parent,
+                vector_index=self.llm_client.vector_index
             )
             
             # If selected_text provided, add as context

@@ -1,0 +1,55 @@
+{
+  "buffer_size": 5,
+  "metrics": {
+    "table_1": {
+      "baseline": {
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "accuracy": 0,
+        "pollution_rate": 0,
+        "tp": 0,
+        "tn": 0,
+        "fp": 0,
+        "fn": 0
+      },
+      "system": {
+        "precision": 100.0,
+        "recall": 76.47058823529412,
+        "f1": 86.66666666666666,
+        "accuracy": 76.47058823529412,
+        "pollution_rate": 23.52941176470588,
+        "tp": 26,
+        "tn": 0,
+        "fp": 0,
+        "fn": 8
+      },
+      "improvements": {
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "accuracy": 0,
+        "pollution_rate": 0
+      }
+    },
+    "table_3": {
+      "baseline": {
+        "avg_latency": 0,
+        "tokens_per_correct_answer": 0
+      },
+      "system": {
+        "avg_input_tokens": 0,
+        "avg_output_tokens": 0,
+        "avg_total_tokens": 0,
+        "avg_latency": 8.923269776736989,
+        "buffer_hit_rate": 0,
+        "archive_hit_rate": 0,
+        "tokens_per_correct_answer": 0
+      },
+      "improvements": {
+        "avg_latency": 0,
+        "tokens_per_correct_answer": 0
+      }
+    }
+  }
+}

@@ -3,42 +3,129 @@ AI-Based Test Evaluator
 
 Uses LLM to semantically evaluate if AI responses correctly answer questions.
 Provides more intelligent validation than simple keyword matching.
+
+Strictly follows LLM_BACKEND setting from environment:
+- 'groq': Uses Groq cloud API (requires GROQ_API_KEY)
+- 'vllm': Uses vLLM local GPU (requires vllm_model to be passed)
+
+No silent fallbacks - if specified backend is not available, raises error.
 """
 
 import os
 import json
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional, Tuple, Any
 from datetime import datetime
 from pathlib import Path
-from groq import Groq
+
+# Groq import is optional
+try:
+    from groq import Groq
+    GROQ_AVAILABLE = True
+except ImportError:
+    GROQ_AVAILABLE = False
+    Groq = None
 
 
 class AIEvaluator:
-    """Evaluates test responses using AI for semantic understanding."""
+    """Evaluates test responses using AI for semantic understanding.
     
-    def __init__(self, model: str = "llama-3.1-8b-instant", temperature: float = 0.0):
+    Strictly follows LLM_BACKEND setting from environment:
+    - 'groq': Uses Groq cloud API for evaluation (requires GROQ_API_KEY)
+    - 'vllm': Uses vLLM local GPU for evaluation (requires vllm_model to be passed)
+    
+    No silent fallbacks - if specified backend is not available, raises error.
+    """
+    
+    def __init__(
+        self, 
+        model: str = "llama-3.1-8b-instant", 
+        temperature: float = 0.0,
+        vllm_model: Any = None,
+        vllm_tokenizer: Any = None
+    ):
         """
         Initialize the AI Evaluator.
         
         Args:
-            model: The model to use for evaluation (via GROQ API)
-            temperature: Temperature for model responses (0.0 = fully deterministic for reproducibility)
+            model: The model to use for Groq evaluation
+            temperature: Temperature for model responses (0.0 = fully deterministic)
+            vllm_model: Optional vLLM model instance for vLLM backend
+            vllm_tokenizer: Optional vLLM tokenizer for vLLM backend
         """
         self.model = model
         self.temperature = temperature
-        self.groq_client = None  # Will be initialized when needed
+        self.groq_client = None
+        self.vllm_model = vllm_model
+        self.vllm_tokenizer = vllm_tokenizer
+        
+        # Determine backend from LLM_BACKEND setting
+        self.use_groq = False
+        self.use_vllm = False
+        
+        llm_backend = os.getenv("LLM_BACKEND", "groq").strip().strip("'\"")
+        print(f"🔧 AIEvaluator: LLM_BACKEND configured as: '{llm_backend}'")
+        
+        if llm_backend == "groq":
+            # Use Groq - STRICT, no fallback
+            if not GROQ_AVAILABLE:
+                raise RuntimeError(
+                    "❌ LLM_BACKEND='groq' specified but groq package not installed!\n"
+                    "   Install with: pip install groq\n"
+                    "   If you want to use vLLM instead, set LLM_BACKEND='vllm' in .env"
+                )
+            
+            groq_api_key = os.getenv("GROQ_API_KEY")
+            if not groq_api_key:
+                raise RuntimeError(
+                    "❌ LLM_BACKEND='groq' specified but GROQ_API_KEY not found!\n"
+                    "   Set GROQ_API_KEY in your .env file.\n"
+                    "   If you want to use vLLM instead, set LLM_BACKEND='vllm' in .env"
+                )
+            
+            self.use_groq = True
+            print("✅ AIEvaluator using GROQ backend")
+        
+        elif llm_backend == "vllm":
+            # Use vLLM - STRICT, no fallback
+            if vllm_model is None:
+                raise RuntimeError(
+                    "❌ LLM_BACKEND='vllm' specified but vllm_model not provided!\n"
+                    "   Pass vllm_model and vllm_tokenizer to AIEvaluator constructor.\n"
+                    "   If you want to use Groq instead, set LLM_BACKEND='groq' in .env"
+                )
+            self.use_vllm = True
+            print("✅ AIEvaluator using vLLM backend")
+        
+        else:
+            raise RuntimeError(
+                f"❌ Unknown LLM_BACKEND for AIEvaluator: '{llm_backend}'\n"
+                "   Valid options: 'groq', 'vllm'\n"
+                "   Set LLM_BACKEND in your .env file."
+            )
         
         # Setup logging to dataset logs directory
-        log_dir = Path(__file__).parent / "logs" / "dataset-results"
+        # Use writable path on Kaggle
+        if os.path.exists("/kaggle"):
+            log_dir = Path("/kaggle/working/logs/dataset-results")
+        else:
+            log_dir = Path(__file__).parent / "logs" / "dataset-results"
         log_dir.mkdir(parents=True, exist_ok=True)
         self.eval_log = log_dir / "AI_EVALUATION.log"
+    
+    def set_vllm_model(self, vllm_model: Any, vllm_tokenizer: Any):
+        """Set vLLM model after initialization (useful for Kaggle)."""
+        self.vllm_model = vllm_model
+        self.vllm_tokenizer = vllm_tokenizer
+        self.use_vllm = True
+        self.use_groq = False
+        print("🔧 AIEvaluator: Switched to vLLM backend")
     
     def _ensure_groq_client(self):
         """Initialize Groq client only when needed."""
         if self.groq_client is None:
             api_key = os.getenv("GROQ_API_KEY")
             if not api_key:
-                raise ValueError("GROQ_API_KEY environment variable not set. Required for AI evaluation.")
+                raise ValueError("GROQ_API_KEY environment variable not set. Required for Groq evaluation.")
             self.groq_client = Groq(api_key=api_key)
         
     def evaluate_response(
@@ -132,7 +219,10 @@ class AIEvaluator:
         expected_info: str,
         forbidden_keywords: List[str]
     ) -> Dict[str, any]:
-        """Use AI to evaluate semantic correctness."""
+        """Use AI to evaluate semantic correctness.
+        
+        Supports both Groq (cloud) and vLLM (local) backends.
+        """
         
         forbidden_str = f"\nFORBIDDEN KEYWORDS (context pollution): {', '.join(forbidden_keywords)}" if forbidden_keywords else ""
         
@@ -163,18 +253,18 @@ Reply in JSON format:
 Respond ONLY with valid JSON, no other text."""
 
         try:
-            self._ensure_groq_client()
-            
-            # Call GROQ API using client (like simple_llm.py)
-            response = self.groq_client.chat.completions.create(
-                model=self.model,
-                messages=[{"role": "user", "content": prompt}],
-                temperature=self.temperature,
-                max_tokens=50
-            )
-            
-            # Extract evaluation
-            eval_text = response.choices[0].message.content.strip()
+            if self.use_groq:
+                eval_text = self._call_groq(prompt)
+            elif self.use_vllm:
+                eval_text = self._call_vllm(prompt)
+            else:
+                # No backend configured
+                return {
+                    "ai_pass": True,
+                    "ai_reason": "No LLM backend configured (no GROQ_API_KEY or vLLM), defaulting to PASS",
+                    "ai_confidence": "none",
+                    "ai_raw_response": "N/A"
+                }
             
             # Parse JSON (handle potential markdown wrapping)
             if "```json" in eval_text:
@@ -200,6 +290,43 @@ Respond ONLY with valid JSON, no other text."""
                 "ai_confidence": "none",
                 "ai_raw_response": str(e)
             }
+    
+    def _call_groq(self, prompt: str) -> str:
+        """Call Groq API for evaluation."""
+        self._ensure_groq_client()
+        
+        response = self.groq_client.chat.completions.create(
+            model=self.model,
+            messages=[{"role": "user", "content": prompt}],
+            temperature=self.temperature,
+            max_tokens=150
+        )
+        
+        return response.choices[0].message.content.strip()
+    
+    def _call_vllm(self, prompt: str) -> str:
+        """Call vLLM model for evaluation."""
+        if self.vllm_model is None or self.vllm_tokenizer is None:
+            raise ValueError("vLLM model or tokenizer not set. Call set_vllm_model() first.")
+        
+        from vllm import SamplingParams
+        
+        # Format as chat message
+        messages = [{"role": "user", "content": prompt}]
+        formatted_prompt = self.vllm_tokenizer.apply_chat_template(
+            messages,
+            tokenize=False,
+            add_generation_prompt=True
+        )
+        
+        sampling_params = SamplingParams(
+            temperature=self.temperature,
+            max_tokens=150,
+            stop=["<|endoftext|>", "<|im_end|>"]
+        )
+        
+        outputs = self.vllm_model.generate([formatted_prompt], sampling_params)
+        return outputs[0].outputs[0].text.strip()
     
     def _log_evaluation(self, result: Dict[str, any]):
         """Log evaluation details for human review with FULL responses."""

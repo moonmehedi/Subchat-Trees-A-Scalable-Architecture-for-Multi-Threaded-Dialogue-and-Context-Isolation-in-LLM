@@ -2,13 +2,24 @@
 """
 Context Classifier for Binary Classification
 Classifies responses as TP, TN, FP, or FN based on context matching
+
+Supports dual backends:
+- Groq (cloud): Used when GROQ_API_KEY is set in environment
+- vLLM (local): Used on Kaggle or when Groq is not available
 """
 
 import os
 import re
 import json
-from groq import Groq
 from typing import Literal, Dict, Any
+
+# Groq import is optional
+try:
+    from groq import Groq
+    GROQ_AVAILABLE = True
+except ImportError:
+    GROQ_AVAILABLE = False
+    Groq = None
 
 # Context keyword definitions - will be matched as whole words with boundaries
 CONTEXT_KEYWORDS = {
@@ -51,31 +62,80 @@ CONTEXT_KEYWORDS = {
 
 
 class ContextClassifier:
-    """Binary classifier for context isolation testing"""
+    """Binary classifier for context isolation testing.
+    
+    Strictly follows LLM_BACKEND setting from environment:
+    - 'groq': Uses Groq cloud API for judging (requires GROQ_API_KEY)
+    - 'vllm': Uses vLLM local GPU for judging (requires vLLM model to be loaded)
+    
+    No silent fallbacks - if specified backend is not available, raises error.
+    """
     
     def __init__(self):
-        """Initialize with vLLM client (Kaggle GPU) - no Groq fallback"""
-        # Import vLLM client from backend services
+        """Initialize with Groq or vLLM client based on LLM_BACKEND setting."""
         import sys
         import os
         backend_path = os.path.join(os.path.dirname(__file__), '..')
         if backend_path not in sys.path:
             sys.path.insert(0, backend_path)
         
-        try:
-            from src.services.vllm_client import vllm_client
-            if not vllm_client.is_available():
+        self.groq_client = None
+        self.vllm_client = None
+        self.use_groq = False
+        self.use_vllm = False
+        
+        # Get LLM_BACKEND from environment (default to 'groq' for backward compatibility)
+        llm_backend = os.getenv("LLM_BACKEND", "groq").strip().strip("'\"")
+        print(f"🔧 ContextClassifier: LLM_BACKEND configured as: '{llm_backend}'")
+        
+        if llm_backend == "groq":
+            # Use Groq for classification - STRICT, no fallback
+            if not GROQ_AVAILABLE:
                 raise RuntimeError(
-                    "❌ vLLM not available for classification!\n"
-                    "   Judge/classifier requires vLLM to avoid Groq API quota limits.\n"
-                    "   Please ensure VLLMClient.set_model(llm) was called in your notebook."
+                    "❌ LLM_BACKEND='groq' specified but groq package not installed!\n"
+                    "   Install with: pip install groq\n"
+                    "   If you want to use vLLM instead, set LLM_BACKEND='vllm' in .env"
                 )
-            self.vllm_client = vllm_client
-            print("✅ ContextClassifier using vLLM for JUDGING/CLASSIFICATION")
-        except ImportError:
+            
+            groq_api_key = os.getenv("GROQ_API_KEY")
+            if not groq_api_key:
+                raise RuntimeError(
+                    "❌ LLM_BACKEND='groq' specified but GROQ_API_KEY not found!\n"
+                    "   Set GROQ_API_KEY in your .env file.\n"
+                    "   If you want to use vLLM instead, set LLM_BACKEND='vllm' in .env"
+                )
+            
+            self.groq_client = Groq(api_key=groq_api_key)
+            self.use_groq = True
+            self.groq_model = "llama-3.1-8b-instant"
+            print("✅ ContextClassifier using GROQ for JUDGING/CLASSIFICATION")
+        
+        elif llm_backend == "vllm":
+            # Use vLLM for classification - STRICT, no fallback
+            try:
+                from src.services.vllm_client import vllm_client
+                if not vllm_client.is_available():
+                    raise RuntimeError(
+                        "❌ LLM_BACKEND='vllm' specified but vLLM model not loaded!\n"
+                        "   Call VLLMClient.set_model(llm) before using ContextClassifier.\n"
+                        "   If you want to use Groq instead, set LLM_BACKEND='groq' in .env"
+                    )
+                self.vllm_client = vllm_client
+                self.use_vllm = True
+                print("✅ ContextClassifier using vLLM for JUDGING/CLASSIFICATION")
+            except ImportError as e:
+                raise RuntimeError(
+                    f"❌ LLM_BACKEND='vllm' specified but vLLM not available!\n"
+                    f"   Import error: {e}\n"
+                    "   Make sure backend/src/services/vllm_client.py is accessible.\n"
+                    "   If you want to use Groq instead, set LLM_BACKEND='groq' in .env"
+                )
+        
+        else:
             raise RuntimeError(
-                "❌ Cannot import vLLM client!\n"
-                "   Make sure backend/src/services/vllm_client.py is accessible."
+                f"❌ Unknown LLM_BACKEND for ContextClassifier: '{llm_backend}'\n"
+                "   Valid options: 'groq', 'vllm'\n"
+                "   Set LLM_BACKEND in your .env file."
             )
     
     def classify(
@@ -152,17 +212,35 @@ Does the response satisfy the requirement?
 Answer only with: yes or no"""
         
         try:
-            # Use vLLM for classification (Kaggle GPU)
-            messages = [
-                {"role": "system", "content": "You are a strict test evaluator. Check if the response contain the right topic name at the beginning. Answer only 'yes' or 'no'."},
-                {"role": "user", "content": prompt}
-            ]
-            
-            result = self.vllm_client.generate(
-                messages=messages,
-                temperature=0,
-                max_tokens=50
-            )
+            # Use appropriate backend for classification
+            if self.use_groq:
+                # Use Groq API
+                response = self.groq_client.chat.completions.create(
+                    model=self.groq_model,
+                    messages=[
+                        {"role": "system", "content": "You are a strict test evaluator. Check if the response contain the right topic name at the beginning. Answer only 'yes' or 'no'."},
+                        {"role": "user", "content": prompt}
+                    ],
+                    temperature=0,
+                    max_tokens=50
+                )
+                result = response.choices[0].message.content.strip()
+            elif self.use_vllm:
+                # Use vLLM for classification (Kaggle GPU)
+                messages = [
+                    {"role": "system", "content": "You are a strict test evaluator. Check if the response contain the right topic name at the beginning. Answer only 'yes' or 'no'."},
+                    {"role": "user", "content": prompt}
+                ]
+                
+                result = self.vllm_client.generate(
+                    messages=messages,
+                    temperature=0,
+                    max_tokens=50
+                )
+            else:
+                # No backend available - default to FN
+                print("⚠️  No LLM backend configured for classification")
+                return "FN"
             
             answer = result.strip().lower()
 

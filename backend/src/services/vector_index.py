@@ -278,7 +278,7 @@ class GlobalVectorIndex:
     Enables semantic search across long conversation history.
     """
     
-    def __init__(self, persist_dir: str = "./chroma_db"):
+    def __init__(self, persist_dir: str = None):
         """
         Initialize vector index with ChromaDB.
         
@@ -286,8 +286,17 @@ class GlobalVectorIndex:
         Every server restart starts with fresh, empty vector storage.
         
         Args:
-            persist_dir: Directory to persist vector database
+            persist_dir: Directory to persist vector database. 
+                         Auto-detects Kaggle environment and uses /kaggle/working/chroma_db
         """
+        # Auto-detect Kaggle environment for writable path
+        if persist_dir is None:
+            if os.path.exists("/kaggle"):
+                persist_dir = "/kaggle/working/chroma_db"
+                print(f"🔧 Kaggle detected: Using writable path {persist_dir}")
+            else:
+                persist_dir = "./chroma_db"
+        
         # 🧹 CLEAR OLD DATA - Fresh start for each test run
         import shutil
         if Path(persist_dir).exists():

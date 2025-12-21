@@ -44,11 +44,8 @@ class ServerlessTestRunner:
         self.chat = SimpleChat(enable_rag=True)
         
         # Setup directories - ALL logs go to dataset/logs/
-        # Detect Kaggle environment
-        if os.path.exists("/kaggle"):
-            self.base_logs_dir = Path("/kaggle/working/logs")
-        else:
-            self.base_logs_dir = Path(__file__).parent / "logs"  # dataset/logs/
+        # Always use path relative to this file (works both locally and on Kaggle)
+        self.base_logs_dir = Path(__file__).parent / "logs"  # dataset/logs/
         
         self.base_logs_dir.mkdir(parents=True, exist_ok=True)
         self.main_log_file = self.base_logs_dir / "test_execution.log"

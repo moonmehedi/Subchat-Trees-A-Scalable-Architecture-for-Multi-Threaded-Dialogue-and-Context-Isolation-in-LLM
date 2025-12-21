@@ -71,14 +71,19 @@ class ContextClassifier:
     No silent fallbacks - if specified backend is not available, raises error.
     """
     
-    def __init__(self):
-        """Initialize with Groq or vLLM client based on LLM_BACKEND setting."""
+    def __init__(self, log_callback=None):
+        """Initialize with Groq or vLLM client based on LLM_BACKEND setting.
+        
+        Args:
+            log_callback: Optional function(message, full=False) for logging LLM judgments
+        """
         import sys
         import os
         backend_path = os.path.join(os.path.dirname(__file__), '..')
         if backend_path not in sys.path:
             sys.path.insert(0, backend_path)
         
+        self.log_callback = log_callback  # External logging function
         self.groq_client = None
         self.vllm_client = None
         self.use_groq = False
@@ -141,7 +146,9 @@ class ContextClassifier:
     def classify(
         self, 
         response: str, 
-        expected_context: str
+        expected_context: str,
+        step: int = None,
+        scenario: str = None
     ) -> Literal["TP", "TN", "FP", "FN"]:
         """
         Classify response using LLM only (more accurate and dynamic)
@@ -149,6 +156,8 @@ class ContextClassifier:
         Args:
             response: AI response text
             expected_context: Expected context (programming, snake, etc.)
+            step: Step number in scenario (for logging)
+            scenario: Scenario name (for logging)
         
         Returns:
             "TP": True Positive - Response matches expected context
@@ -158,12 +167,14 @@ class ContextClassifier:
         """
         
         # Use LLM classification directly - no keyword matching
-        return self._llm_classify(response, expected_context)
+        return self._llm_classify(response, expected_context, step=step, scenario=scenario)
     
     def _llm_classify(
         self, 
         response: str, 
-        expected_context: str
+        expected_context: str,
+        step: int = None,
+        scenario: str = None
     ) -> Literal["TP", "TN", "FP", "FN"]:
         """
         Use LLM to classify responses with strict prefix checking
@@ -171,6 +182,8 @@ class ContextClassifier:
         Args:
             response: AI response text
             expected_context: Expected context or strict prefix requirement
+            step: Step number in scenario (for logging)
+            scenario: Scenario name (for logging)
         
         Returns:
             Classification result (TP/TN/FP/FN)
@@ -244,7 +257,28 @@ Answer only with: yes or no"""
             
             answer = result.strip().lower()
 
-            print('****************** The answer from LLm***************',answer,prompt)
+            # Log LLM judgment with prompt and verdict
+            step_info = f"Step {step}" if step else "Unknown step"
+            scenario_info = scenario if scenario else "Unknown scenario"
+            
+            log_msg = f"""
+================================================================================
+🔍 LLM JUDGMENT - {step_info} | {scenario_info}
+================================================================================
+
+📤 PROMPT SENT TO LLM JUDGE:
+{prompt}
+
+🤖 LLM JUDGE VERDICT: {answer}
+📊 CLASSIFICATION: {'TP (Correct)' if 'yes' in answer else 'FN (Incorrect)'}
+
+================================================================================
+"""
+            print(f'🔍 LLM Judge [{step_info}]: {answer} -> {"TP" if "yes" in answer else "FN"}')
+            
+            # Use callback for external logging if provided
+            if self.log_callback:
+                self.log_callback(log_msg, full=True)
             
             if "yes" in answer:
                 return "TP"
@@ -261,10 +295,18 @@ Answer only with: yes or no"""
     def get_classification_details(
         self,
         response: str,
-        expected_context: str
+        expected_context: str,
+        step: int = None,
+        scenario: str = None
     ) -> Dict[str, Any]:
         """
         Get detailed classification information using LLM
+        
+        Args:
+            response: AI response text
+            expected_context: Expected context or requirement
+            step: Step number in scenario (for logging)
+            scenario: Scenario name (for logging)
         
         Returns:
             - classification: TP/TN/FP/FN
@@ -272,10 +314,12 @@ Answer only with: yes or no"""
             - explanation: Why this classification was chosen
         """
         
-        classification = self.classify(response, expected_context)
+        classification = self.classify(response, expected_context, step=step, scenario=scenario)
         
         return {
             "classification": classification,
             "method": "llm",
+            "step": step,
+            "scenario": scenario,
             "explanation": f"LLM classified response as {classification} for context '{expected_context}'"
         }

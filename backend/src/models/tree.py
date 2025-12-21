@@ -187,22 +187,35 @@ MESSAGES (messages {start_msg_num}-{end_msg_num}, total: {len(all_buffer_message
 Summary:"""
         
         try:
-            # 🎯 Use vLLM ONLY - no fallback to save Groq quota
+            import os
+            llm_backend = os.environ.get("LLM_BACKEND", "groq").lower()
+            new_summary = None
+            
+            # 1. Try vLLM first (Kaggle GPU - preferred)
             if hasattr(self.llm_client, 'vllm_client') and self.llm_client.vllm_client:
-                # Use vLLM (Kaggle GPU)
                 new_summary = self.llm_client.vllm_client.generate(
                     messages=[{"role": "user", "content": prompt}],
-                    temperature=0.3,  # Lower temperature for consistent summarization
+                    temperature=0.3,
                     max_tokens=500
                 )
                 new_summary = new_summary.strip()
-            else:
-                # Hard fail - no fallback to preserve Groq quota
-                raise RuntimeError(
-                    "❌ vLLM not available for summarization!\n"
-                    "   Summarization requires vLLM to avoid Groq API quota limits.\n"
-                    "   Please ensure VLLMClient.set_model(llm) was called in your notebook."
+                print(f"📝 Summarization via vLLM")
+            
+            # 2. Fall back to Groq if LLM_BACKEND allows it
+            elif llm_backend == "groq" and hasattr(self.llm_client, 'groq_client') and self.llm_client.groq_client:
+                response = self.llm_client.groq_client.chat.completions.create(
+                    model="llama-3.1-8b-instant",
+                    messages=[{"role": "user", "content": prompt}],
+                    temperature=0.3,
+                    max_tokens=500
                 )
+                new_summary = response.choices[0].message.content.strip()
+                print(f"📝 Summarization via Groq")
+            
+            # 3. No LLM available - skip summarization gracefully
+            else:
+                print(f"⚠️  Summarization skipped: No LLM available (vLLM={hasattr(self.llm_client, 'vllm_client')}, backend={llm_backend})")
+                return  # Don't crash, just skip
             
             old_summary_len = len(self.summary) if self.summary else 0
             self.summary = new_summary
@@ -212,12 +225,9 @@ Summary:"""
             print(f"   Summary preview: {new_summary[:100]}{'...' if len(new_summary) > 100 else ''}")
             
         except Exception as e:
-            print(f"❌ CRITICAL: Summarization failed: {e}")
-            print("   Server cannot continue without working summarization.")
-            import traceback
-            traceback.print_exc()
-            # Re-raise to stop execution
-            raise
+            # Log error but don't crash - summarization is optional
+            print(f"⚠️  Summarization failed (non-fatal): {e}")
+            print("   Continuing without summary update...")
     
     def inherit_summary(self, parent_summary: str):
         """

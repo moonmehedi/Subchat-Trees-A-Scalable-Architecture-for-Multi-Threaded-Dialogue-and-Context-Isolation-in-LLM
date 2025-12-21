@@ -26,8 +26,8 @@ sys.path.insert(0, str(Path(__file__).parent.parent))  # backend/
 sys.path.insert(0, str(Path(__file__).parent))  # dataset/
 
 from context_classifier import ContextClassifier
-from src.services.simple_llm import SimpleLLMClient
-from src.models.tree import TreeNode
+from src.services.simple_llm import SimpleChat
+from src.utils.debug_logger import set_log_directory
 
 
 class ServerlessTestRunner:
@@ -37,14 +37,11 @@ class ServerlessTestRunner:
     """
     
     def __init__(self, repo_branch: str = "kaggle-run"):
-        self.classifier = ContextClassifier()
         self.repo_branch = repo_branch
         
-        # Enable vector index for message archiving
-        self.llm_client = SimpleLLMClient(enable_vector_index=True)
-        
-        # Track nodes in memory (no server/database)
-        self.nodes: Dict[str, TreeNode] = {}
+        # Use SimpleChat core class (same as frontend/server)
+        # This properly manages nodes via ChatGraphManager and Forest
+        self.chat = SimpleChat(enable_rag=True)
         
         # Setup directories - ALL logs go to dataset/logs/
         # Detect Kaggle environment
@@ -63,6 +60,9 @@ class ServerlessTestRunner:
         
         # Git configuration
         self.repo_root = Path(__file__).parent.parent.parent
+        
+        # Initialize classifier with logging callback (after log methods are defined)
+        self.classifier = ContextClassifier(log_callback=self.log_judge)
 
     def setup_buffer_logs(self, buffer_size: int):
         """Setup buffer-specific log directory with ALL logs in one place"""
@@ -71,6 +71,10 @@ class ServerlessTestRunner:
         # All logs go to buffer_log_dir (e.g., dataset/logs/buffer_40/)
         self.buffer_log_dir = self.base_logs_dir / f"buffer_{buffer_size}"
         self.buffer_log_dir.mkdir(parents=True, exist_ok=True)
+        
+        # Redirect DebugLogger to buffer-specific directory
+        # This makes LocalBuffer and VectorIndex log detailed content here
+        set_log_directory(str(self.buffer_log_dir))
         
         self.baseline_log_file = self.buffer_log_dir / "baseline_test.log"
         self.system_log_file = self.buffer_log_dir / "system_test.log"
@@ -162,10 +166,18 @@ class ServerlessTestRunner:
     def log_cot_thinking(self, message: str, full: bool = False):
         """Log chain-of-thought thinking events"""
         self.log_component("COT_THINKING", message, full)
+    
+    def log_judge(self, message: str, full: bool = False):
+        """Log LLM judge decisions to buffer-specific JUDGE.log"""
+        self.log_component("JUDGE", message, full)
 
     def clear_state(self):
         """Clear all nodes in memory for fresh test"""
-        self.nodes.clear()
+        # Clear nodes from ChatGraphManager and Forest (using core classes)
+        self.chat.chat_manager.node_map.clear()
+        self.chat.forest.trees_map.clear()
+        self.chat.chat_manager.active_node_id = None
+        self.chat.forest.active_tree_id = None
         
         # Clear ChromaDB if it exists
         try:
@@ -177,109 +189,122 @@ class ServerlessTestRunner:
             self.log(f"⚠️  ChromaDB clear warning: {e}", "WARN")
     
     def create_conversation(self, title: str, buffer_size: int = 15) -> Optional[str]:
-        """Create a new root conversation (direct Python, no HTTP)"""
-        import uuid
-        node_id = str(uuid.uuid4())[:8]
-        
+        """Create a new root conversation using SimpleChat core class"""
         try:
-            node = TreeNode(
-                node_id=node_id,
-                title=title,
-                buffer_size=buffer_size,
-                llm_client=self.llm_client,
-                vector_index=self.llm_client.vector_index
-            )
-            self.nodes[node_id] = node
+            # Use SimpleChat.start_new_conversation() - same as frontend/server
+            # This uses Forest.create_tree() which properly sets up TreeNode with
+            # vector_index and llm_client from ChatGraphManager
+            node = self.chat.start_new_conversation(title, buffer_size=buffer_size)
+            node_id = node.node_id
             
             # Log buffer creation
             self.log_buffer(f"🌳 Created root conversation node (id={node_id}, buffer_size={buffer_size})")
             self.log_buffer(f"   Title: {title}", full=True)
-            if self.llm_client.vector_index:
+            if self.chat.llm.vector_index:
                 self.log_vector_store(f"📊 Vector index attached to node {node_id}")
             
             return node_id
         except Exception as e:
             self.log(f"❌ Failed to create conversation: {e}", "ERROR")
+            import traceback
+            traceback.print_exc()
             return None
     
     def create_subchat(self, parent_id: str, title: str, selected_text: Optional[str] = None, buffer_size: int = 15) -> Optional[str]:
-        """Create a subchat under a parent node (direct Python, no HTTP)"""
-        import uuid
+        """Create a subchat under a parent node using ChatGraphManager core class
         
-        parent = self.nodes.get(parent_id)
-        if not parent:
-            self.log(f"❌ Parent node not found: {parent_id}", "ERROR")
-            return None
-        
-        node_id = str(uuid.uuid4())[:8]
-        
+        This uses ChatGraphManager.create_node() which:
+        1. Creates TreeNode with proper parent reference
+        2. COPIES PARENT BUFFER MESSAGES to child (lines 37-41 in chat_manager.py)
+        3. Inherits parent's rolling summary
+        4. Sets follow-up context properly via set_follow_up_context()
+        """
         try:
-            child = TreeNode(
-                node_id=node_id,
+            # Verify parent exists in ChatGraphManager
+            parent = self.chat.chat_manager.node_map.get(parent_id)
+            if not parent:
+                self.log(f"❌ Parent node not found: {parent_id}", "ERROR")
+                return None
+            
+            # Use ChatGraphManager.create_node() - same as endpoints.py (line 134)
+            # This AUTOMATICALLY copies parent buffer messages to child!
+            child = self.chat.chat_manager.create_node(
                 title=title,
-                buffer_size=buffer_size,
-                llm_client=self.llm_client,
-                parent=parent,
-                vector_index=self.llm_client.vector_index
+                parent_id=parent_id,
+                selected_text=selected_text,
+                context_type="follow_up",
+                buffer_size=buffer_size
             )
+            node_id = child.node_id
             
             # Log subchat creation
             self.log_buffer(f"🌿 Created subchat node (id={node_id}, parent={parent_id}, buffer_size={buffer_size})")
             self.log_buffer(f"   Title: {title}", full=True)
             
-            # If selected_text provided, add as context
+            # Log inherited context (parent messages are auto-copied by ChatGraphManager)
+            parent_msg_count = len(parent.buffer.get_recent())
+            self.log_buffer(f"   ✅ Inherited {parent_msg_count} messages from parent buffer", full=True)
             if selected_text:
-                child.buffer.add_message("system", f"Follow-up context: {selected_text}")
-                self.log_buffer(f"   Context inherited: {selected_text}", full=True)
+                self.log_buffer(f"   Follow-up context: {selected_text}", full=True)
+            if parent.buffer.summary:
+                self.log_buffer(f"   ✅ Inherited parent summary ({len(parent.buffer.summary)} chars)", full=True)
             
-            parent.add_child(child)
-            self.nodes[node_id] = child
             return node_id
         except Exception as e:
             self.log(f"❌ Failed to create subchat: {e}", "ERROR")
+            import traceback
+            traceback.print_exc()
             return None
     
     def send_message(self, node_id: str, message: str) -> Optional[Dict]:
-        """Send message and get response (direct Python, no HTTP)"""
-        node = self.nodes.get(node_id)
-        if not node:
-            self.log(f"❌ Node not found: {node_id}", "ERROR")
-            return None
+        """Send message and get response using SimpleChat core class
         
+        Uses SimpleChat.send_message() which:
+        1. Adds user message to buffer
+        2. Calls llm.generate_response() with proper context (including summary)
+        3. Adds assistant response to buffer
+        4. Auto-generates title if needed
+        """
         try:
+            # Get node from ChatGraphManager
+            node = self.chat.chat_manager.node_map.get(node_id)
+            if not node:
+                self.log(f"❌ Node not found: {node_id}", "ERROR")
+                return None
+            
             start_time = time.time()
             
-            # Add user message to buffer
-            node.buffer.add_message("user", message)
-            buffer_size = len(node.buffer.turns)  # LocalBuffer uses 'turns' not 'messages'
-            self.log_buffer(f"📥 Added user message to buffer (node={node_id}, buffer_size={buffer_size})")
+            # Switch to target node (required before send_message)
+            self.chat.chat_manager.switch_node(node_id)
+            
+            # Log before sending
+            self.log_buffer(f"📥 Sending message to node={node_id}")
             self.log_buffer(f"   Message: {message}", full=True)
             
-            # Generate response using LLM
-            response_text = self.llm_client.generate_response(node, message)
+            # Use SimpleChat.send_message() - same as endpoints.py
+            # This handles: add user msg → generate response → add assistant msg
+            response_text = self.chat.send_message(message)
+            
+            latency = time.time() - start_time
+            
+            # Log after response
+            buffer_size = len(node.buffer.turns)
+            self.log_buffer(f"📤 Response received (node={node_id}, buffer_size={buffer_size})")
             self.log_cot_thinking(f"🤖 Generated response for node={node_id}")
             self.log_cot_thinking(f"   Response: {response_text}", full=True)
             
-            # Add assistant response to buffer
-            node.buffer.add_message("assistant", response_text)
-            buffer_size = len(node.buffer.turns)  # LocalBuffer uses 'turns' not 'messages'
-            self.log_buffer(f"📤 Added assistant response to buffer (node={node_id}, buffer_size={buffer_size})")
-            
-            # Check if buffer triggered eviction to vector store
+            # Check if buffer triggered summarization
             if hasattr(node.buffer, 'messages_processed_count'):
                 self.log_vector_store(f"📦 Messages processed: {node.buffer.messages_processed_count}")
                 self.log_vector_store(f"   Node: {node_id}, Buffer max: {node.buffer.max_turns}", full=True)
             
-            latency = time.time() - start_time
+            # Get usage from LLM client
+            usage = self.chat.llm.get_last_usage()
             
             return {
                 "response": response_text,
                 "latency": latency,
-                "usage": {
-                    "prompt_tokens": 0,  # vLLM doesn't easily expose this
-                    "completion_tokens": 0,
-                    "total_tokens": 0
-                }
+                "usage": usage
             }
         except Exception as e:
             self.log(f"❌ Failed to send message: {e}", "ERROR")
@@ -352,8 +377,13 @@ class ServerlessTestRunner:
             self.log(f"  🤖 AI Response:", "INFO", "baseline")
             self.log(f"     {ai_message}", "INFO", "baseline")
             
-            # Classify response
-            classification_details = self.classifier.get_classification_details(ai_message, expected)
+            # Classify response - pass step and scenario for logging
+            classification_details = self.classifier.get_classification_details(
+                ai_message, 
+                expected,
+                step=step,
+                scenario=scenario.get('scenario_name', 'Unknown')
+            )
             classification = classification_details["classification"]
             
             # Log to COT_THINKING for classification reasoning
@@ -472,8 +502,13 @@ class ServerlessTestRunner:
             self.log(f"  🤖 AI Response:", "INFO", "system")
             self.log(f"     {ai_message}", "INFO", "system")
             
-            # Classify response
-            classification_details = self.classifier.get_classification_details(ai_message, expected)
+            # Classify response - pass step and scenario for logging
+            classification_details = self.classifier.get_classification_details(
+                ai_message, 
+                expected,
+                step=step,
+                scenario=scenario.get('scenario_name', 'Unknown')
+            )
             classification = classification_details["classification"]
             
             # Log to COT_THINKING for classification reasoning
@@ -602,7 +637,7 @@ class ServerlessTestRunner:
 
     def generate_table(self, metrics: Dict):
         """Generate markdown tables in buffer-specific folder"""
-        buffer_dir = self.logs_dir / "tables" / f"buffer_{self.current_buffer_size}"
+        buffer_dir = self.base_logs_dir / "tables" / f"buffer_{self.current_buffer_size}"
         buffer_dir.mkdir(parents=True, exist_ok=True)
         
         table1 = metrics["table_1"]
@@ -694,7 +729,7 @@ class ServerlessTestRunner:
         """Push results for completed buffer test"""
         self.log(f"\n📤 PUSHING RESULTS FOR BUFFER SIZE {buffer_size}", "INFO")
         
-        buffer_dir = self.logs_dir / "tables" / f"buffer_{buffer_size}"
+        buffer_dir = self.base_logs_dir / "tables" / f"buffer_{buffer_size}"
         files_to_push = []
         
         for f in buffer_dir.glob("*"):
@@ -722,8 +757,11 @@ class ServerlessTestRunner:
         """Run complete evaluation for a buffer size"""
         self.setup_buffer_logs(buffer_size)
         
+        test_mode = getattr(self, 'test_mode', 'both')
+        
         self.log("="*80, "INFO")
         self.log(f"🚀 STARTING SERVERLESS EVALUATION (buffer_size={buffer_size})", "INFO")
+        self.log(f"   Test mode: {test_mode.upper()}", "INFO")
         self.log("   ✅ No server needed - using direct Python imports", "INFO")
         self.log("="*80, "INFO")
         
@@ -735,17 +773,19 @@ class ServerlessTestRunner:
             if not scenario:
                 continue
             
-            # BASELINE TEST
-            self.log(f"\n🔵 BASELINE TEST: {scenario_file}", "INFO")
-            self.clear_state()
-            baseline_results = self.run_baseline_test(scenario, buffer_size=buffer_size)
-            all_baseline_results.extend(baseline_results)
+            # BASELINE TEST (only if mode is 'baseline' or 'both')
+            if test_mode in ['baseline', 'both']:
+                self.log(f"\n🔵 BASELINE TEST: {scenario_file}", "INFO")
+                self.clear_state()
+                baseline_results = self.run_baseline_test(scenario, buffer_size=buffer_size)
+                all_baseline_results.extend(baseline_results)
             
-            # SYSTEM TEST
-            self.log(f"\n🟢 SYSTEM TEST: {scenario_file}", "INFO")
-            self.clear_state()
-            system_results = self.run_system_test(scenario, buffer_size=buffer_size)
-            all_system_results.extend(system_results)
+            # SYSTEM TEST (only if mode is 'system' or 'both')
+            if test_mode in ['system', 'both']:
+                self.log(f"\n🟢 SYSTEM TEST: {scenario_file}", "INFO")
+                self.clear_state()
+                system_results = self.run_system_test(scenario, buffer_size=buffer_size)
+                all_system_results.extend(system_results)
         
         # Calculate metrics
         self.log("\n📊 Calculating metrics...", "INFO")
@@ -766,7 +806,7 @@ class ServerlessTestRunner:
         self.generate_table(metrics)
         
         # Save raw results
-        buffer_dir = self.logs_dir / "tables" / f"buffer_{self.current_buffer_size}"
+        buffer_dir = self.base_logs_dir / "tables" / f"buffer_{self.current_buffer_size}"
         buffer_dir.mkdir(parents=True, exist_ok=True)
         
         with open(buffer_dir / "raw_metrics_baseline.json", 'w') as f:
@@ -780,7 +820,7 @@ class ServerlessTestRunner:
 
     def generate_comparison_visualization(self, all_metrics: Dict[int, Dict]):
         """Generate HTML visualization comparing all buffer sizes"""
-        viz_dir = self.logs_dir / "visualization"
+        viz_dir = self.base_logs_dir / "visualization"
         viz_dir.mkdir(exist_ok=True)
         
         html_file = viz_dir / "index.html"
@@ -1076,7 +1116,7 @@ class ServerlessTestRunner:
             self.run_full_evaluation(scenario_files, buffer_size=buffer_size)
             
             # Load the generated metrics from buffer-specific directory
-            buffer_dir = self.logs_dir / "tables" / f"buffer_{buffer_size}"
+            buffer_dir = self.base_logs_dir / "tables" / f"buffer_{buffer_size}"
             metrics_file = buffer_dir / "raw_metrics.json"
             if metrics_file.exists():
                 with open(metrics_file, 'r') as f:
@@ -1097,7 +1137,7 @@ class ServerlessTestRunner:
         self.generate_comparison_visualization(all_metrics)
         
         # Push final visualization
-        viz_file = self.logs_dir / "visualization" / "index.html"
+        viz_file = self.base_logs_dir / "visualization" / "index.html"
         if viz_file.exists():
             timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             commit_msg = f"Kaggle Serverless: Final comparison visualization - {timestamp}"
@@ -1113,14 +1153,68 @@ class ServerlessTestRunner:
         
         self.log("\n🎉 KAGGLE SERVERLESS MULTI-BUFFER COMPARISON COMPLETE!", "INFO")
         self.log(f"   All results pushed to branch: {self.repo_branch}", "INFO")
-        self.log(f"   Results directory: {self.logs_dir / 'tables'}", "INFO")
-        self.log(f"   Visualization: {self.logs_dir / 'visualization' / 'index.html'}", "INFO")
+        self.log(f"   Results directory: {self.base_logs_dir / 'tables'}", "INFO")
+        self.log(f"   Visualization: {self.base_logs_dir / 'visualization' / 'index.html'}", "INFO")
 
 
 if __name__ == "__main__":
+    import argparse
+    
+    parser = argparse.ArgumentParser(description="Kaggle Serverless Test Runner")
+    parser.add_argument("--test", "-t", 
+                        choices=["baseline", "system", "both"], 
+                        default="both",
+                        help="Which test to run: baseline, system, or both (default: both)")
+    parser.add_argument("--buffer", "-b", 
+                        type=int, 
+                        nargs="+",
+                        default=[5],
+                        help="Buffer size(s) to test (default: 5). Example: --buffer 5 10 20 40")
+    parser.add_argument("--scenario", "-s",
+                        type=str,
+                        nargs="+",
+                        default=["06_lost_in_conversation_sharded_humaneval.json"],
+                        help="Scenario file(s) to use. Example: --scenario file1.json file2.json OR --scenario all")
+    
+    args = parser.parse_args()
+    
     runner = ServerlessTestRunner()
     
+    # Store test mode for use in run methods
+    runner.test_mode = args.test
+    
+    # Handle "all" keyword to run all scenarios
+    if args.scenario == ["all"] or args.scenario == "all":
+        import glob
+        scenario_dir = Path(__file__).parent / "scenarios"
+        scenario_files = [f.name for f in scenario_dir.glob("*.json")]
+    else:
+        scenario_files = args.scenario
+    
+    print(f"🚀 Running: {args.test.upper()} test(s)")
+    print(f"📦 Buffer sizes: {args.buffer}")
+    print(f"📄 Scenarios: {scenario_files}")
+    
     runner.run_buffer_comparison(
-        ["06_lost_in_conversation_sharded_humaneval.json"],
-        buffer_sizes=[5]
+        scenario_files,
+        buffer_sizes=args.buffer
     )
+
+
+# Usage examples:
+# python kaggle_serverless_runner.py --test baseline --buffer 5
+# python kaggle_serverless_runner.py --test system --buffer 10
+# python kaggle_serverless_runner.py --test both --buffer 5 10 20 40
+# python kaggle_serverless_runner.py -t system -b 5
+# python kaggle_serverless_runner.py -t system -b 5 -s scenario1.json scenario2.json
+# python kaggle_serverless_runner.py -t both -b 5 10 -s all  # Run all scenarios
+
+
+
+# python kaggle_serverless_runner.py --test system --buffer 5 --scenario 06_lost_in_conversation_sharded_humaneval.json 22807e655dd042348cb0ee4023672e70_structured.json
+
+# python kaggle_serverless_runner.py --test system --buffer 5 --scenario all
+
+# python kaggle_serverless_runner.py --test both --buffer 5 10 20 40 --scenario all
+
+# python kaggle_serverless_runner.py -t system -b 5 10 -s all

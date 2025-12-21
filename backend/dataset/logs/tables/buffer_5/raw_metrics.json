@@ -15,14 +15,14 @@
       },
       "system": {
         "precision": 100.0,
-        "recall": 76.47058823529412,
-        "f1": 86.66666666666666,
-        "accuracy": 76.47058823529412,
-        "pollution_rate": 23.52941176470588,
-        "tp": 26,
+        "recall": 79.41176470588235,
+        "f1": 88.52459016393442,
+        "accuracy": 79.41176470588235,
+        "pollution_rate": 20.588235294117645,
+        "tp": 27,
         "tn": 0,
         "fp": 0,
-        "fn": 8
+        "fn": 7
       },
       "improvements": {
         "precision": 0,
@@ -41,7 +41,7 @@
         "avg_input_tokens": 0,
         "avg_output_tokens": 0,
         "avg_total_tokens": 0,
-        "avg_latency": 8.923269776736989,
+        "avg_latency": 9.402878887513104,
         "buffer_hit_rate": 0,
         "archive_hit_rate": 0,
         "tokens_per_correct_answer": 0

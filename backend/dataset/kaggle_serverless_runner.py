@@ -46,11 +46,16 @@ class ServerlessTestRunner:
         # Track nodes in memory (no server/database)
         self.nodes: Dict[str, TreeNode] = {}
         
-        # Setup directories
-        self.logs_dir = Path(__file__).parent / "logs" / "serverless_tests"
-        self.logs_dir.mkdir(parents=True, exist_ok=True)
+        # Setup directories - ALL logs go to dataset/logs/
+        # Detect Kaggle environment
+        if os.path.exists("/kaggle"):
+            self.base_logs_dir = Path("/kaggle/working/logs")
+        else:
+            self.base_logs_dir = Path(__file__).parent / "logs"  # dataset/logs/
         
-        self.main_log_file = self.logs_dir / "test_execution.log"
+        self.base_logs_dir.mkdir(parents=True, exist_ok=True)
+        self.main_log_file = self.base_logs_dir / "test_execution.log"
+        
         self.current_buffer_size = None
         self.buffer_log_dir: Optional[Path] = None
         self.baseline_log_file: Optional[Path] = None
@@ -60,20 +65,44 @@ class ServerlessTestRunner:
         self.repo_root = Path(__file__).parent.parent.parent
 
     def setup_buffer_logs(self, buffer_size: int):
-        """Setup buffer-specific log directories"""
+        """Setup buffer-specific log directory with ALL logs in one place"""
         self.current_buffer_size = buffer_size
-        self.buffer_log_dir = self.logs_dir / f"buffer_{buffer_size}"
+        
+        # All logs go to buffer_log_dir (e.g., dataset/logs/buffer_40/)
+        self.buffer_log_dir = self.base_logs_dir / f"buffer_{buffer_size}"
         self.buffer_log_dir.mkdir(parents=True, exist_ok=True)
         
         self.baseline_log_file = self.buffer_log_dir / "baseline_test.log"
         self.system_log_file = self.buffer_log_dir / "system_test.log"
         
+        # Initialize test log files
         for log_file in [self.baseline_log_file, self.system_log_file]:
             with open(log_file, 'w') as f:
                 f.write(f"{'='*80}\n")
                 f.write(f"{'BASELINE' if 'baseline' in log_file.name else 'SYSTEM'} TEST LOG (Buffer Size: {buffer_size})\n")
                 f.write(f"Started: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
                 f.write(f"{'='*80}\n\n")
+        
+        # Initialize component log files (summary + full pairs)
+        components = ["BUFFER", "VECTOR_STORE", "RETRIEVAL", "COT_THINKING"]
+        for component in components:
+            # Summary log
+            summary_file = self.buffer_log_dir / f"{component}.log"
+            with open(summary_file, 'w') as f:
+                f.write(f"{'='*80}\n")
+                f.write(f"{component} LOG - SUMMARY (Buffer Size: {buffer_size})\n")
+                f.write(f"Started: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+                f.write(f"{'='*80}\n\n")
+            
+            # Full/detailed log
+            full_file = self.buffer_log_dir / f"{component}_full.log"
+            with open(full_file, 'w') as f:
+                f.write(f"{'='*80}\n")
+                f.write(f"{component} LOG - DETAILED (Buffer Size: {buffer_size})\n")
+                f.write(f"Started: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+                f.write(f"{'='*80}\n\n")
+        
+        self.log(f"📁 Created buffer-specific log directory: {self.buffer_log_dir}")
 
     def log(self, message: str, level: str = "INFO", test_type: Optional[str] = None):
         """Log with timestamp"""
@@ -90,6 +119,49 @@ class ServerlessTestRunner:
         else:
             with open(self.main_log_file, 'a') as f:
                 f.write(log_msg + "\n")
+
+    def log_component(self, component: str, message: str, full: bool = False):
+        """
+        Log to component-specific log files in buffer directory.
+        
+        Args:
+            component: One of 'BUFFER', 'VECTOR_STORE', 'RETRIEVAL', 'COT_THINKING'
+            message: The message to log
+            full: If True, log to {component}_full.log only (detailed info).
+                  If False, log to both {component}.log (summary) and {component}_full.log (detailed).
+        """
+        if self.buffer_log_dir is None:
+            return  # Buffer logs not set up yet
+        
+        timestamp = datetime.now().strftime("%H:%M:%S")
+        log_msg = f"[{timestamp}] {message}"
+        
+        # Always log to full/detailed log
+        full_log_file = self.buffer_log_dir / f"{component}_full.log"
+        with open(full_log_file, 'a') as f:
+            f.write(log_msg + "\n")
+        
+        # If not full-only, also log to summary log
+        if not full:
+            summary_log_file = self.buffer_log_dir / f"{component}.log"
+            with open(summary_log_file, 'a') as f:
+                f.write(log_msg + "\n")
+
+    def log_buffer(self, message: str, full: bool = False):
+        """Log buffer-related events"""
+        self.log_component("BUFFER", message, full)
+
+    def log_vector_store(self, message: str, full: bool = False):
+        """Log vector store events"""
+        self.log_component("VECTOR_STORE", message, full)
+
+    def log_retrieval(self, message: str, full: bool = False):
+        """Log retrieval events"""
+        self.log_component("RETRIEVAL", message, full)
+
+    def log_cot_thinking(self, message: str, full: bool = False):
+        """Log chain-of-thought thinking events"""
+        self.log_component("COT_THINKING", message, full)
 
     def clear_state(self):
         """Clear all nodes in memory for fresh test"""
@@ -118,6 +190,13 @@ class ServerlessTestRunner:
                 vector_index=self.llm_client.vector_index
             )
             self.nodes[node_id] = node
+            
+            # Log buffer creation
+            self.log_buffer(f"🌳 Created root conversation node (id={node_id}, buffer_size={buffer_size})")
+            self.log_buffer(f"   Title: {title}", full=True)
+            if self.llm_client.vector_index:
+                self.log_vector_store(f"📊 Vector index attached to node {node_id}")
+            
             return node_id
         except Exception as e:
             self.log(f"❌ Failed to create conversation: {e}", "ERROR")
@@ -144,9 +223,14 @@ class ServerlessTestRunner:
                 vector_index=self.llm_client.vector_index
             )
             
+            # Log subchat creation
+            self.log_buffer(f"🌿 Created subchat node (id={node_id}, parent={parent_id}, buffer_size={buffer_size})")
+            self.log_buffer(f"   Title: {title}", full=True)
+            
             # If selected_text provided, add as context
             if selected_text:
                 child.buffer.add_message("system", f"Follow-up context: {selected_text}")
+                self.log_buffer(f"   Context inherited: {selected_text}", full=True)
             
             parent.add_child(child)
             self.nodes[node_id] = child
@@ -167,12 +251,24 @@ class ServerlessTestRunner:
             
             # Add user message to buffer
             node.buffer.add_message("user", message)
+            buffer_size = len(node.buffer.turns)  # LocalBuffer uses 'turns' not 'messages'
+            self.log_buffer(f"📥 Added user message to buffer (node={node_id}, buffer_size={buffer_size})")
+            self.log_buffer(f"   Message: {message}", full=True)
             
             # Generate response using LLM
             response_text = self.llm_client.generate_response(node, message)
+            self.log_cot_thinking(f"🤖 Generated response for node={node_id}")
+            self.log_cot_thinking(f"   Response: {response_text}", full=True)
             
             # Add assistant response to buffer
             node.buffer.add_message("assistant", response_text)
+            buffer_size = len(node.buffer.turns)  # LocalBuffer uses 'turns' not 'messages'
+            self.log_buffer(f"📤 Added assistant response to buffer (node={node_id}, buffer_size={buffer_size})")
+            
+            # Check if buffer triggered eviction to vector store
+            if hasattr(node.buffer, 'messages_processed_count'):
+                self.log_vector_store(f"📦 Messages processed: {node.buffer.messages_processed_count}")
+                self.log_vector_store(f"   Node: {node_id}, Buffer max: {node.buffer.max_turns}", full=True)
             
             latency = time.time() - start_time
             
@@ -254,11 +350,16 @@ class ServerlessTestRunner:
                 continue
             
             self.log(f"  🤖 AI Response:", "INFO", "baseline")
-            self.log(f"     {ai_message[:200]}...", "INFO", "baseline")
+            self.log(f"     {ai_message}", "INFO", "baseline")
             
             # Classify response
             classification_details = self.classifier.get_classification_details(ai_message, expected)
             classification = classification_details["classification"]
+            
+            # Log to COT_THINKING for classification reasoning
+            self.log_cot_thinking(f"🧠 Classification for step {step}: {classification}")
+            self.log_cot_thinking(f"   Expected: {expected}", full=True)
+            self.log_cot_thinking(f"   Method: {classification_details['method']}", full=True)
             
             if classification == "TP":
                 tp_count += 1
@@ -369,11 +470,16 @@ class ServerlessTestRunner:
                 continue
             
             self.log(f"  🤖 AI Response:", "INFO", "system")
-            self.log(f"     {ai_message[:200]}...", "INFO", "system")
+            self.log(f"     {ai_message}", "INFO", "system")
             
             # Classify response
             classification_details = self.classifier.get_classification_details(ai_message, expected)
             classification = classification_details["classification"]
+            
+            # Log to COT_THINKING for classification reasoning
+            self.log_cot_thinking(f"🧠 System test classification for step {step}: {classification}")
+            self.log_cot_thinking(f"   Node type: {node_type}, Expected: {expected}", full=True)
+            self.log_cot_thinking(f"   Method: {classification_details['method']}", full=True)
             
             if classification == "TP":
                 tp_count += 1
@@ -1015,6 +1121,6 @@ if __name__ == "__main__":
     runner = ServerlessTestRunner()
     
     runner.run_buffer_comparison(
-        ["6c4992f0aed04dd3bf9a4bc225bb4fb0_structured.json", "8d10c143f8fc4a7599a5a18778fec112_structured.json"],
-        buffer_sizes=[40]
+        ["06_lost_in_conversation_sharded_humaneval.json"],
+        buffer_sizes=[5]
     )

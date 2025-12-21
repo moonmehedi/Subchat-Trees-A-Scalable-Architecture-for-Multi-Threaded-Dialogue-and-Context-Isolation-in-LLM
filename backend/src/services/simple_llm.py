@@ -9,7 +9,15 @@ from .tools import ConversationTools
 from ..utils.debug_logger import get_debug_logger
 
 class SimpleLLMClient:
-    """ Simple LLM client using Groq API with optional RAG """
+    """ Simple LLM client using Groq/vLLM/Ollama API with optional RAG.
+    
+    Strictly follows LLM_BACKEND setting from .env:
+    - 'groq': Uses Groq cloud API (requires GROQ_API_KEY)
+    - 'vllm': Uses vLLM local GPU (requires vLLM model to be loaded)
+    - 'ollama': Uses Ollama local server
+    
+    No silent fallbacks - if specified backend is not available, raises error.
+    """
 
     def __init__(self, api_key: str = None, enable_vector_index: bool = False):
         # Initialize LLM client based on backend setting
@@ -18,8 +26,10 @@ class SimpleLLMClient:
         self.ollama_available = False
         self.vllm_client = None
         
+        print(f"🔧 LLM_BACKEND configured as: '{self.llm_backend}'")
+        
         if self.llm_backend == "vllm":
-            # Use vLLM (Kaggle GPU)
+            # Use vLLM (Kaggle GPU) - STRICT, no fallback
             try:
                 from .vllm_client import vllm_client
                 if vllm_client.is_available():
@@ -33,35 +43,55 @@ class SimpleLLMClient:
                         print(f"✅ vLLM connected. Using Kaggle GPU")
                         print(f"✅ vLLM will be used for responses and summarization")
                 else:
-                    print("⚠️  vLLM model not loaded yet. Call VLLMClient.set_model(llm) first.")
-                    print("   Falling back to Groq if available...")
-                    self.llm_backend = "groq"
-            except ImportError:
-                print("⚠️  vLLM not available (install with: pip install vllm)")
-                print("   Falling back to Groq if available...")
-                self.llm_backend = "groq"
+                    raise RuntimeError(
+                        "❌ LLM_BACKEND='vllm' specified but vLLM model not loaded!\n"
+                        "   Call VLLMClient.set_model(llm) before using SimpleLLMClient.\n"
+                        "   If you want to use Groq instead, set LLM_BACKEND='groq' in .env"
+                    )
+            except ImportError as e:
+                raise RuntimeError(
+                    f"❌ LLM_BACKEND='vllm' specified but vLLM not available!\n"
+                    f"   Import error: {e}\n"
+                    "   Install with: pip install vllm\n"
+                    "   If you want to use Groq instead, set LLM_BACKEND='groq' in .env"
+                )
         
         elif self.llm_backend == "ollama":
-            # Use Ollama (local)
+            # Use Ollama (local) - STRICT, no fallback
             try:
                 # Test Ollama connection
                 ollama.list()
                 self.ollama_available = True
                 print(f"✅ Ollama connected. Using model: {settings.model_base}")
             except Exception as e:
-                print(f"⚠️  Ollama not available: {e}")
-                print("   Falling back to Groq if available...")
-                self.llm_backend = "groq"
+                raise RuntimeError(
+                    f"❌ LLM_BACKEND='ollama' specified but Ollama not available!\n"
+                    f"   Error: {e}\n"
+                    "   Make sure Ollama is running: ollama serve\n"
+                    "   If you want to use Groq instead, set LLM_BACKEND='groq' in .env"
+                )
         
-        if self.llm_backend == "groq" or not self.ollama_available:
-            # Use Groq (cloud)
+        elif self.llm_backend == "groq":
+            # Use Groq (cloud) - STRICT, no fallback
             if api_key:
                 self.groq_client = Groq(api_key=api_key)
+                print(f"✅ Groq connected (custom API key). Using model: {settings.model_base}")
             elif settings.groq_api_key:
                 self.groq_client = Groq(api_key=settings.groq_api_key)
+                print(f"✅ Groq connected. Using model: {settings.model_base}")
             else:
-                print("⚠️  Warning: GROQ_API_KEY not found and Ollama unavailable. Using echo mode.")
-                self.groq_client = None
+                raise RuntimeError(
+                    "❌ LLM_BACKEND='groq' specified but GROQ_API_KEY not found!\n"
+                    "   Set GROQ_API_KEY in your .env file.\n"
+                    "   If you want to use vLLM instead, set LLM_BACKEND='vllm' in .env"
+                )
+        
+        else:
+            raise RuntimeError(
+                f"❌ Unknown LLM_BACKEND: '{self.llm_backend}'\n"
+                "   Valid options: 'groq', 'vllm', 'ollama'\n"
+                "   Set LLM_BACKEND in your .env file."
+            )
         
         # Initialize vector index if enabled
         self.vector_index = None

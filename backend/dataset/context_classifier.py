@@ -323,3 +323,100 @@ Answer only with: yes or no"""
             "scenario": scenario,
             "explanation": f"LLM classified response as {classification} for context '{expected_context}'"
         }
+    
+    def detect_topic(
+        self,
+        response: str,
+        available_topics: list,
+        step: int = None,
+        scenario: str = None
+    ) -> Dict[str, Any]:
+        """
+        Detect which topic the response addresses from a list of available topics.
+        Used for per-topic confusion matrix calculation.
+        
+        Args:
+            response: AI response text
+            available_topics: List of valid topic names (e.g., ["by_length", "odd_count", "histogram"])
+            step: Step number in scenario (for logging)
+            scenario: Scenario name (for logging)
+        
+        Returns:
+            Dict with:
+            - detected_topic: The topic name found in response (or "unknown")
+            - confidence: "high", "medium", or "low"
+            - method: "llm" or "regex"
+        """
+        
+        # First try regex-based detection (fast, reliable for prefix format)
+        topics_pattern = "|".join(re.escape(t) for t in available_topics)
+        pattern = rf"^\s*({topics_pattern})\s*:"
+        match = re.match(pattern, response.strip(), re.IGNORECASE)
+        
+        if match:
+            detected = match.group(1).lower()
+            # Find exact case match from available_topics
+            for topic in available_topics:
+                if topic.lower() == detected:
+                    return {
+                        "detected_topic": topic,
+                        "confidence": "high",
+                        "method": "regex"
+                    }
+        
+        # Fallback to LLM detection if regex fails
+        topics_list = ", ".join(available_topics)
+        prompt = f"""Identify which topic this response is addressing.
+
+AVAILABLE TOPICS: {topics_list}
+
+RESPONSE: {response[:500]}
+
+RULES:
+1. Look at the first word or prefix in the response
+2. Match it to one of the available topics
+3. If no clear match, return "unknown"
+
+Answer with ONLY the topic name (one of: {topics_list}, or "unknown"):"""
+        
+        try:
+            if self.use_groq:
+                result = self.groq_client.chat.completions.create(
+                    model=self.groq_model,
+                    messages=[
+                        {"role": "system", "content": "You are a topic classifier. Return only the topic name, nothing else."},
+                        {"role": "user", "content": prompt}
+                    ],
+                    temperature=0,
+                    max_tokens=50
+                )
+                answer = result.choices[0].message.content.strip().lower()
+            elif self.use_vllm:
+                messages = [
+                    {"role": "system", "content": "You are a topic classifier. Return only the topic name, nothing else."},
+                    {"role": "user", "content": prompt}
+                ]
+                answer = self.vllm_client.generate(
+                    messages=messages,
+                    temperature=0,
+                    max_tokens=50
+                ).strip().lower()
+            else:
+                return {"detected_topic": "unknown", "confidence": "low", "method": "none"}
+            
+            # Match answer to available topics
+            for topic in available_topics:
+                if topic.lower() in answer or answer in topic.lower():
+                    step_info = f"Step {step}" if step else "Unknown"
+                    print(f"🔍 Topic Detection [{step_info}]: '{topic}' (LLM)")
+                    return {
+                        "detected_topic": topic,
+                        "confidence": "medium",
+                        "method": "llm"
+                    }
+            
+            return {"detected_topic": "unknown", "confidence": "low", "method": "llm"}
+            
+        except Exception as e:
+            print(f"⚠️ Topic detection failed: {e}")
+            return {"detected_topic": "unknown", "confidence": "low", "method": "error"}

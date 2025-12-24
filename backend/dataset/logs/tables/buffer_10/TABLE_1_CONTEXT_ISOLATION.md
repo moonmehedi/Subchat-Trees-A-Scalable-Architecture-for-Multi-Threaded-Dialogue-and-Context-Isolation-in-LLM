@@ -4,19 +4,19 @@
 
 | Metric | Baseline System | Our System | Improvement |
 |--------|----------------|------------|-------------|
-| **Precision** | 93.6% | 100.0% | **+6.8%** |
-| **Recall** | 90.9% | 87.9% | **-3.3%** |
-| **F1** | 92.2% | 93.4% | **+1.3%** |
-| **Accuracy** | 88.2% | 85.3% | **-3.3%** |
-| **Pollution Rate** | 11.8% | 14.7% | **+25.0%** |
+| **Precision** | 67.3% | 87.3% | **+29.7%** |
+| **Recall** | 57.1% | 75.0% | **+31.2%** |
+| **F1** | 57.7% | 77.5% | **+34.3%** |
+| **Accuracy** | 56.2% | 73.8% | **+31.2%** |
+| **Pollution Rate** | 43.8% | 26.2% | **-40.1%** |
 
 ## Macro Average Metrics
 
 | Metric | Baseline System | Our System | Improvement |
 |--------|----------------|------------|-------------|
-| **Macro Precision** | 94.4% | 100.0% | **+5.9%** |
-| **Macro Recall** | 92.2% | 89.2% | **-3.3%** |
-| **Macro F1** | 93.3% | 94.1% | **+0.9%** |
+| **Macro Precision** | 77.1% | 78.9% | **+2.3%** |
+| **Macro Recall** | 72.8% | 71.0% | **-2.4%** |
+| **Macro F1** | 70.5% | 71.1% | **+0.9%** |
 
 ## Per-Topic Breakdown
 
@@ -25,20 +25,130 @@
 
 | Topic | Precision | Recall | F1 | TP | FP | FN | Support |
 |-------|-----------|--------|----|----|----|----|--------|
-| by_length | 88.9% | 88.9% | 88.9% | 8 | 1 | 1 | 9 |
-| histogram | 100.0% | 100.0% | 100.0% | 5 | 0 | 0 | 5 |
-| move_one_ball | 88.9% | 80.0% | 84.2% | 8 | 1 | 2 | 10 |
-| odd_count | 100.0% | 100.0% | 100.0% | 9 | 0 | 0 | 9 |
+| ai_chat_tools | 100.0% | 60.0% | 75.0% | 6 | 0 | 4 | 10 |
+| ai_consciousness | 100.0% | 25.0% | 40.0% | 2 | 0 | 6 | 8 |
+| ai_consciousness_friendship | 66.7% | 100.0% | 80.0% | 6 | 3 | 0 | 6 |
+| ai_meta | 100.0% | 45.5% | 62.5% | 5 | 0 | 6 | 11 |
+| bhutan_travel | 100.0% | 66.7% | 80.0% | 2 | 0 | 1 | 3 |
+| chess | 100.0% | 100.0% | 100.0% | 7 | 0 | 0 | 7 |
+| child_nutrition | 100.0% | 100.0% | 100.0% | 6 | 0 | 0 | 6 |
+| cookies_preferences | 100.0% | 100.0% | 100.0% | 2 | 0 | 0 | 2 |
+| cookies_recipe | 33.3% | 100.0% | 50.0% | 1 | 2 | 0 | 1 |
+| cookies_recipe_halving | 9.1% | 33.3% | 14.3% | 1 | 10 | 2 | 3 |
+| cookies_recipe_halving_argument | 0.0% | 0.0% | 0.0% | 0 | 0 | 3 | 3 |
+| cookies_recipe_halving_corrections | 0.0% | 0.0% | 0.0% | 0 | 0 | 3 | 3 |
+| cookies_recipe_halving_math_errors | 0.0% | 0.0% | 0.0% | 0 | 0 | 4 | 4 |
+| covid_safety | 66.7% | 100.0% | 80.0% | 6 | 3 | 0 | 6 |
+| covid_safety_hiv_aids | 100.0% | 14.3% | 25.0% | 1 | 0 | 6 | 7 |
+| dsp_wavelets | 100.0% | 81.8% | 90.0% | 9 | 0 | 2 | 11 |
+| dsp_wavelets_c_code | 100.0% | 100.0% | 100.0% | 2 | 0 | 0 | 2 |
+| electroculture | 100.0% | 85.7% | 92.3% | 6 | 0 | 1 | 7 |
+| emoji_game | 0.0% | 0.0% | 0.0% | 0 | 0 | 31 | 31 |
+| game_degree_guess | 7.9% | 100.0% | 14.6% | 3 | 35 | 0 | 3 |
+| game_twenty_questions | 0.0% | 0.0% | 0.0% | 0 | 0 | 33 | 33 |
+| geography_belgium | 100.0% | 66.7% | 80.0% | 2 | 0 | 1 | 3 |
+| humanity_future_150y | 100.0% | 100.0% | 100.0% | 4 | 0 | 0 | 4 |
+| indian_astrology | 100.0% | 100.0% | 100.0% | 5 | 0 | 0 | 5 |
+| indian_astrology_terminology | 100.0% | 100.0% | 100.0% | 1 | 0 | 0 | 1 |
+| indian_history | 75.0% | 100.0% | 85.7% | 3 | 1 | 0 | 3 |
+| indian_legal | 100.0% | 75.0% | 85.7% | 3 | 0 | 1 | 4 |
+| indian_legal_family | 100.0% | 100.0% | 100.0% | 4 | 0 | 0 | 4 |
+| indian_legal_loans | 100.0% | 100.0% | 100.0% | 2 | 0 | 0 | 2 |
+| indian_legal_loans_timeline | 100.0% | 100.0% | 100.0% | 1 | 0 | 0 | 1 |
+| jokes | 13.9% | 83.3% | 23.8% | 5 | 31 | 1 | 6 |
+| karnataka_elections | 100.0% | 75.0% | 85.7% | 3 | 0 | 1 | 4 |
+| linux_audio | 75.0% | 100.0% | 85.7% | 3 | 1 | 0 | 3 |
+| linux_audio_pipewire | 100.0% | 50.0% | 66.7% | 1 | 0 | 1 | 2 |
+| literature_camus | 75.0% | 50.0% | 60.0% | 3 | 1 | 3 | 6 |
+| llm_knowledge | 100.0% | 40.0% | 57.1% | 4 | 0 | 6 | 10 |
+| logic_puzzle | 100.0% | 100.0% | 100.0% | 4 | 0 | 0 | 4 |
+| lsat | 28.6% | 100.0% | 44.4% | 2 | 5 | 0 | 2 |
+| lsat_medical_conference | 100.0% | 100.0% | 100.0% | 3 | 0 | 0 | 3 |
+| lsat_piano_recital | 100.0% | 100.0% | 100.0% | 1 | 0 | 0 | 1 |
+| lsat_product_codes | 0.0% | 0.0% | 0.0% | 0 | 0 | 5 | 5 |
+| medical_dsd | 100.0% | 100.0% | 100.0% | 6 | 0 | 0 | 6 |
+| medical_treatments | 100.0% | 100.0% | 100.0% | 2 | 0 | 0 | 2 |
+| personas_roleplay | 100.0% | 16.7% | 28.6% | 1 | 0 | 5 | 6 |
+| physics_blackholes | 100.0% | 100.0% | 100.0% | 2 | 0 | 0 | 2 |
+| physics_cosmology | 100.0% | 100.0% | 100.0% | 3 | 0 | 0 | 3 |
+| physics_quantum | 100.0% | 100.0% | 100.0% | 1 | 0 | 0 | 1 |
+| physics_violin_nanoscale | 100.0% | 66.7% | 80.0% | 2 | 0 | 1 | 3 |
+| recipes | 100.0% | 100.0% | 100.0% | 2 | 0 | 0 | 2 |
+| repetitive_loop | 0.0% | 0.0% | 0.0% | 0 | 0 | 1 | 1 |
+| scifi_films | 100.0% | 57.1% | 72.7% | 4 | 0 | 3 | 7 |
+| scifi_films_hal9000 | 100.0% | 100.0% | 100.0% | 5 | 0 | 0 | 5 |
+| scifi_films_hal9000_games | 100.0% | 100.0% | 100.0% | 11 | 0 | 0 | 11 |
+| scifi_films_liu_cixin | 100.0% | 100.0% | 100.0% | 4 | 0 | 0 | 4 |
+| scifi_films_space_exploration | 0.0% | 0.0% | 0.0% | 0 | 0 | 1 | 1 |
+| statistics_multivariate | 100.0% | 100.0% | 100.0% | 2 | 0 | 0 | 2 |
+| therapy | 100.0% | 100.0% | 100.0% | 3 | 0 | 0 | 3 |
+| therapy_manipulation | 100.0% | 100.0% | 100.0% | 4 | 0 | 0 | 4 |
+| wildfires_alberta | 100.0% | 100.0% | 100.0% | 5 | 0 | 0 | 5 |
 
 ### Our System - Per-Topic Metrics
 
 | Topic | Precision | Recall | F1 | TP | FP | FN | Support |
 |-------|-----------|--------|----|----|----|----|--------|
-| by_length | 100.0% | 77.8% | 87.5% | 7 | 0 | 2 | 9 |
-| histogram | 100.0% | 100.0% | 100.0% | 5 | 0 | 0 | 5 |
-| move_one_ball | 100.0% | 90.0% | 94.7% | 9 | 0 | 1 | 10 |
-| odd_count | 100.0% | 88.9% | 94.1% | 8 | 0 | 1 | 9 |
+| ai_chat_tools | 100.0% | 70.0% | 82.4% | 7 | 0 | 3 | 10 |
+| ai_consciousness | 77.8% | 87.5% | 82.4% | 7 | 2 | 1 | 8 |
+| ai_consciousness_friendship | 85.7% | 100.0% | 92.3% | 6 | 1 | 0 | 6 |
+| ai_meta | 100.0% | 45.5% | 62.5% | 5 | 0 | 6 | 11 |
+| bhutan_travel | 100.0% | 66.7% | 80.0% | 2 | 0 | 1 | 3 |
+| chess | 100.0% | 100.0% | 100.0% | 7 | 0 | 0 | 7 |
+| child_nutrition | 100.0% | 33.3% | 50.0% | 2 | 0 | 4 | 6 |
+| cookies_preferences | 100.0% | 100.0% | 100.0% | 2 | 0 | 0 | 2 |
+| cookies_recipe | 33.3% | 100.0% | 50.0% | 1 | 2 | 0 | 1 |
+| cookies_recipe_halving | 100.0% | 33.3% | 50.0% | 1 | 0 | 2 | 3 |
+| cookies_recipe_halving_argument | 0.0% | 0.0% | 0.0% | 0 | 0 | 3 | 3 |
+| cookies_recipe_halving_corrections | 100.0% | 100.0% | 100.0% | 3 | 0 | 0 | 3 |
+| cookies_recipe_halving_math_errors | 57.1% | 100.0% | 72.7% | 4 | 3 | 0 | 4 |
+| covid_safety | 66.7% | 100.0% | 80.0% | 6 | 3 | 0 | 6 |
+| covid_safety_hiv_aids | 100.0% | 14.3% | 25.0% | 1 | 0 | 6 | 7 |
+| dsp_wavelets | 100.0% | 100.0% | 100.0% | 11 | 0 | 0 | 11 |
+| dsp_wavelets_c_code | 100.0% | 100.0% | 100.0% | 2 | 0 | 0 | 2 |
+| electroculture | 100.0% | 100.0% | 100.0% | 7 | 0 | 0 | 7 |
+| emoji_game | 100.0% | 80.6% | 89.3% | 25 | 0 | 6 | 31 |
+| game_degree_guess | 100.0% | 100.0% | 100.0% | 3 | 0 | 0 | 3 |
+| game_twenty_questions | 100.0% | 100.0% | 100.0% | 33 | 0 | 0 | 33 |
+| geography_belgium | 100.0% | 66.7% | 80.0% | 2 | 0 | 1 | 3 |
+| humanity_future_150y | 100.0% | 100.0% | 100.0% | 4 | 0 | 0 | 4 |
+| indian_astrology | 100.0% | 100.0% | 100.0% | 5 | 0 | 0 | 5 |
+| indian_astrology_terminology | 100.0% | 100.0% | 100.0% | 1 | 0 | 0 | 1 |
+| indian_history | 100.0% | 100.0% | 100.0% | 3 | 0 | 0 | 3 |
+| indian_legal | 57.1% | 100.0% | 72.7% | 4 | 3 | 0 | 4 |
+| indian_legal_family | 42.9% | 75.0% | 54.5% | 3 | 4 | 1 | 4 |
+| indian_legal_loans | 0.0% | 0.0% | 0.0% | 0 | 0 | 2 | 2 |
+| indian_legal_loans_timeline | 0.0% | 0.0% | 0.0% | 0 | 0 | 1 | 1 |
+| jokes | 50.0% | 16.7% | 25.0% | 1 | 1 | 5 | 6 |
+| karnataka_elections | 100.0% | 75.0% | 85.7% | 3 | 0 | 1 | 4 |
+| linux_audio | 75.0% | 100.0% | 85.7% | 3 | 1 | 0 | 3 |
+| linux_audio_pipewire | 100.0% | 50.0% | 66.7% | 1 | 0 | 1 | 2 |
+| literature_camus | 100.0% | 66.7% | 80.0% | 4 | 0 | 2 | 6 |
+| llm_knowledge | 100.0% | 70.0% | 82.4% | 7 | 0 | 3 | 10 |
+| logic_puzzle | 100.0% | 100.0% | 100.0% | 4 | 0 | 0 | 4 |
+| lsat | 66.7% | 100.0% | 80.0% | 2 | 1 | 0 | 2 |
+| lsat_medical_conference | 0.0% | 0.0% | 0.0% | 0 | 0 | 3 | 3 |
+| lsat_piano_recital | 100.0% | 100.0% | 100.0% | 1 | 0 | 0 | 1 |
+| lsat_product_codes | 0.0% | 0.0% | 0.0% | 0 | 0 | 5 | 5 |
+| medical_dsd | 100.0% | 100.0% | 100.0% | 6 | 0 | 0 | 6 |
+| medical_treatments | 100.0% | 100.0% | 100.0% | 2 | 0 | 0 | 2 |
+| personas_roleplay | 100.0% | 16.7% | 28.6% | 1 | 0 | 5 | 6 |
+| physics_blackholes | 100.0% | 50.0% | 66.7% | 1 | 0 | 1 | 2 |
+| physics_cosmology | 0.0% | 0.0% | 0.0% | 0 | 0 | 3 | 3 |
+| physics_quantum | 100.0% | 100.0% | 100.0% | 1 | 0 | 0 | 1 |
+| physics_violin_nanoscale | 100.0% | 33.3% | 50.0% | 1 | 0 | 2 | 3 |
+| recipes | 100.0% | 100.0% | 100.0% | 2 | 0 | 0 | 2 |
+| repetitive_loop | 100.0% | 100.0% | 100.0% | 1 | 0 | 0 | 1 |
+| scifi_films | 100.0% | 57.1% | 72.7% | 4 | 0 | 3 | 7 |
+| scifi_films_hal9000 | 100.0% | 100.0% | 100.0% | 5 | 0 | 0 | 5 |
+| scifi_films_hal9000_games | 100.0% | 100.0% | 100.0% | 11 | 0 | 0 | 11 |
+| scifi_films_liu_cixin | 100.0% | 100.0% | 100.0% | 4 | 0 | 0 | 4 |
+| scifi_films_space_exploration | 0.0% | 0.0% | 0.0% | 0 | 0 | 1 | 1 |
+| statistics_multivariate | 100.0% | 100.0% | 100.0% | 2 | 0 | 0 | 2 |
+| therapy | 42.9% | 100.0% | 60.0% | 3 | 4 | 0 | 3 |
+| therapy_manipulation | 0.0% | 0.0% | 0.0% | 0 | 0 | 4 | 4 |
+| wildfires_alberta | 100.0% | 80.0% | 88.9% | 4 | 0 | 1 | 5 |
 
 ## Legacy Raw Counts (LLM Judge TP/FN)
-- Baseline: TP=30, TN=0, FP=4, FN=0
-- System: TP=29, TN=0, FP=5, FN=0
+- Baseline: TP=176, TN=0, FP=137, FN=0
+- System: TP=231, TN=0, FP=82, FN=0

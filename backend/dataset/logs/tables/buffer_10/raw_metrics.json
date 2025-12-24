@@ -3,17 +3,75 @@
   "metrics": {
     "table_1": {
       "baseline": {
-        "precision": 94.94949494949495,
-        "recall": 93.93939393939394,
-        "f1": 93.83608815426997,
-        "macro_precision": 95.83333333333334,
-        "macro_recall": 94.44444444444444,
-        "macro_f1": 94.60227272727273,
-        "accuracy": 0.0,
-        "pollution_rate": 100.0,
-        "tp": 0,
+        "precision": 93.60269360269359,
+        "recall": 90.9090909090909,
+        "f1": 92.18500797448166,
+        "macro_precision": 94.44444444444444,
+        "macro_recall": 92.22222222222223,
+        "macro_f1": 93.2748538011696,
+        "accuracy": 88.23529411764706,
+        "pollution_rate": 11.76470588235294,
+        "tp": 30,
         "tn": 0,
-        "fp": 34,
+        "fp": 4,
+        "fn": 0,
+        "per_topic_metrics": {
+          "by_length": {
+            "tp": 8,
+            "fp": 1,
+            "fn": 1,
+            "support": 9,
+            "precision": 88.88888888888889,
+            "recall": 88.88888888888889,
+            "f1": 88.88888888888889
+          },
+          "histogram": {
+            "tp": 5,
+            "fp": 0,
+            "fn": 0,
+            "support": 5,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          },
+          "move_one_ball": {
+            "tp": 8,
+            "fp": 1,
+            "fn": 2,
+            "support": 10,
+            "precision": 88.88888888888889,
+            "recall": 80.0,
+            "f1": 84.21052631578948
+          },
+          "odd_count": {
+            "tp": 9,
+            "fp": 0,
+            "fn": 0,
+            "support": 9,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          }
+        },
+        "topics": [
+          "by_length",
+          "histogram",
+          "move_one_ball",
+          "odd_count"
+        ]
+      },
+      "system": {
+        "precision": 100.0,
+        "recall": 87.87878787878788,
+        "f1": 93.39173468430434,
+        "macro_precision": 100.0,
+        "macro_recall": 89.16666666666667,
+        "macro_f1": 94.08862229102168,
+        "accuracy": 85.29411764705883,
+        "pollution_rate": 14.705882352941178,
+        "tp": 29,
+        "tn": 0,
+        "fp": 5,
         "fn": 0,
         "per_topic_metrics": {
           "by_length": {
@@ -35,80 +93,22 @@
             "f1": 100.0
           },
           "move_one_ball": {
-            "tp": 10,
-            "fp": 2,
-            "fn": 0,
-            "support": 10,
-            "precision": 83.33333333333334,
-            "recall": 100.0,
-            "f1": 90.9090909090909
-          },
-          "odd_count": {
             "tp": 9,
             "fp": 0,
-            "fn": 0,
-            "support": 9,
-            "precision": 100.0,
-            "recall": 100.0,
-            "f1": 100.0
-          }
-        },
-        "topics": [
-          "by_length",
-          "histogram",
-          "move_one_ball",
-          "odd_count"
-        ]
-      },
-      "system": {
-        "precision": 100.0,
-        "recall": 100.0,
-        "f1": 100.0,
-        "macro_precision": 100.0,
-        "macro_recall": 100.0,
-        "macro_f1": 100.0,
-        "accuracy": 0.0,
-        "pollution_rate": 100.0,
-        "tp": 0,
-        "tn": 0,
-        "fp": 34,
-        "fn": 0,
-        "per_topic_metrics": {
-          "by_length": {
-            "tp": 9,
-            "fp": 0,
-            "fn": 0,
-            "support": 9,
-            "precision": 100.0,
-            "recall": 100.0,
-            "f1": 100.0
-          },
-          "histogram": {
-            "tp": 5,
-            "fp": 0,
-            "fn": 0,
-            "support": 5,
-            "precision": 100.0,
-            "recall": 100.0,
-            "f1": 100.0
-          },
-          "move_one_ball": {
-            "tp": 10,
-            "fp": 0,
-            "fn": 0,
+            "fn": 1,
             "support": 10,
             "precision": 100.0,
-            "recall": 100.0,
-            "f1": 100.0
+            "recall": 90.0,
+            "f1": 94.73684210526316
           },
           "odd_count": {
-            "tp": 9,
+            "tp": 8,
             "fp": 0,
-            "fn": 0,
+            "fn": 1,
             "support": 9,
             "precision": 100.0,
-            "recall": 100.0,
-            "f1": 100.0
+            "recall": 88.88888888888889,
+            "f1": 94.11764705882352
           }
         },
         "topics": [
@@ -119,43 +119,46 @@
         ]
       },
       "improvements": {
-        "precision": 5.3191489361702144,
-        "recall": 6.451612903225809,
-        "f1": 6.568807339449541,
-        "accuracy": 0,
-        "pollution_rate": 0.0,
-        "macro_precision": 4.347826086956511,
-        "macro_recall": 5.882352941176473,
-        "macro_f1": 5.705705705705698
+        "precision": 6.834532374100732,
+        "recall": -3.333333333333335,
+        "f1": 1.309027071036016,
+        "accuracy": -3.33333333333333,
+        "pollution_rate": 25.000000000000018,
+        "macro_precision": 5.882352941176473,
+        "macro_recall": -3.3132530120481944,
+        "macro_f1": 0.8724414530702553
       }
     },
     "table_3": {
       "baseline": {
-        "avg_input_tokens": 0,
-        "avg_output_tokens": 0,
-        "avg_total_tokens": 0,
-        "avg_latency": 9.213640353258919,
-        "buffer_hit_rate": 0,
-        "archive_hit_rate": 0,
-        "tokens_per_correct_answer": 0
+        "avg_input_tokens": 863.3529411764706,
+        "avg_output_tokens": 39.1764705882353,
+        "avg_total_tokens": 902.5294117647059,
+        "avg_latency": 8.95420089188744,
+        "token_compression_rate": 0,
+        "tokens_per_correct_answer": 1022.8666666666667,
+        "cost_per_query": 4.630176470588235e-05,
+        "cost_per_1m_queries": 46.301764705882356
       },
       "system": {
-        "avg_input_tokens": 0,
-        "avg_output_tokens": 0,
-        "avg_total_tokens": 0,
-        "avg_latency": 10.443553188267876,
-        "buffer_hit_rate": 0,
-        "archive_hit_rate": 0,
-        "tokens_per_correct_answer": 0
+        "avg_input_tokens": 681.1470588235294,
+        "avg_output_tokens": 75.76470588235294,
+        "avg_total_tokens": 756.9117647058823,
+        "avg_latency": 17.51695491285885,
+        "token_compression_rate": 0,
+        "tokens_per_correct_answer": 887.4137931034483,
+        "cost_per_query": 4.01185294117647e-05,
+        "cost_per_1m_queries": 40.118529411764705
       },
       "improvements": {
-        "avg_input_tokens": 0,
-        "avg_output_tokens": 0,
-        "avg_total_tokens": 0,
-        "avg_latency": 13.348826173510552,
-        "buffer_hit_rate": 0,
-        "archive_hit_rate": 0,
-        "tokens_per_correct_answer": 0
+        "avg_input_tokens": -21.10444913810725,
+        "avg_output_tokens": 93.39339339339338,
+        "avg_total_tokens": -16.134393534510853,
+        "avg_latency": 95.62834388414622,
+        "token_compression_rate": 0,
+        "tokens_per_correct_answer": -13.242476070183642,
+        "cost_per_query": -13.354210867328147,
+        "cost_per_1m_queries": -13.354210867328147
       }
     }
   }

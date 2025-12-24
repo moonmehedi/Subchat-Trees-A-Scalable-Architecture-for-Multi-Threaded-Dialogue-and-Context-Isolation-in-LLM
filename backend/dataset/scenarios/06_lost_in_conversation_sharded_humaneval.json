@@ -47,7 +47,7 @@
     },
     {
       "step": 3,
-      "context": "by_length_step1",
+      "context": "by_length",
       "message": "Starting with a list of numbers",
       "expected": "Response must start with 'by_length:' (not odd_count:, not move_one_ball:, not histogram:)",
       "dataset_reference_id": "sharded-HumanEval/105",
@@ -71,7 +71,7 @@
     },
     {
       "step": 5,
-      "context": "odd_count_step1",
+      "context": "odd_count",
       "message": "We're starting with a bunch of strings",
       "expected": "Response must start with 'odd_count:' (not by_length:, not move_one_ball:, not histogram:)",
       "dataset_reference_id": "sharded-HumanEval/113",
@@ -82,7 +82,7 @@
     },
     {
       "step": 6,
-      "context": "by_length_step2",
+      "context": "by_length",
       "message": "Sort numbers if they're between 1 and 9",
       "expected": "Response must start with 'by_length:' (not odd_count:, not move_one_ball:, not histogram:)",
       "dataset_reference_id": "sharded-HumanEval/105",
@@ -106,7 +106,7 @@
     },
     {
       "step": 8,
-      "context": "move_one_ball_step1",
+      "context": "move_one_ball",
       "message": "We're dealing with an array of numbers",
       "expected": "Response must start with 'move_one_ball:' (not by_length:, not odd_count:, not histogram:)",
       "dataset_reference_id": "sharded-HumanEval/109",
@@ -117,7 +117,7 @@
     },
     {
       "step": 9,
-      "context": "odd_count_step2",
+      "context": "odd_count",
       "message": "Each string is made up of just numbers",
       "expected": "Response must start with 'odd_count:' (not by_length:, not move_one_ball:, not histogram:)",
       "dataset_reference_id": "sharded-HumanEval/113",
@@ -141,7 +141,7 @@
     },
     {
       "step": 11,
-      "context": "by_length_step3",
+      "context": "by_length",
       "message": "Then flip the list around",
       "expected": "Response must start with 'by_length:' (not odd_count:, not move_one_ball:, not histogram:)",
       "dataset_reference_id": "sharded-HumanEval/105",
@@ -152,7 +152,7 @@
     },
     {
       "step": 12,
-      "context": "move_one_ball_step2",
+      "context": "move_one_ball",
       "message": "You can do right shifts as many times as you want",
       "expected": "Response must start with 'move_one_ball:' (not by_length:, not odd_count:, not histogram:)",
       "dataset_reference_id": "sharded-HumanEval/109",
@@ -163,7 +163,7 @@
     },
     {
       "step": 13,
-      "context": "odd_count_step3",
+      "context": "odd_count",
       "message": "Output is based on: 'the number of odd elements in the string i of the input.'",
       "expected": "Response must start with 'odd_count:' (not by_length:, not move_one_ball:, not histogram:)",
       "dataset_reference_id": "sharded-HumanEval/113",
@@ -174,7 +174,7 @@
     },
     {
       "step": 14,
-      "context": "by_length_step4",
+      "context": "by_length",
       "message": "Use the words for numbers: One to Nine",
       "expected": "Response must start with 'by_length:' (not odd_count:, not move_one_ball:, not histogram:)",
       "dataset_reference_id": "sharded-HumanEval/105",
@@ -185,7 +185,7 @@
     },
     {
       "step": 15,
-      "context": "move_one_ball_step3",
+      "context": "move_one_ball",
       "message": "A right shift moves each number one spot to the right",
       "expected": "Response must start with 'move_one_ball:' (not by_length:, not odd_count:, not histogram:)",
       "dataset_reference_id": "sharded-HumanEval/109",
@@ -196,7 +196,7 @@
     },
     {
       "step": 16,
-      "context": "odd_count_step4",
+      "context": "odd_count",
       "message": "Swap i's in each output with the count of odd numbers",
       "expected": "Response must start with 'odd_count:' (not by_length:, not move_one_ball:, not histogram:)",
       "dataset_reference_id": "sharded-HumanEval/113",
@@ -207,7 +207,7 @@
     },
     {
       "step": 17,
-      "context": "histogram_step1",
+      "context": "histogram",
       "message": "Return a dictionary of the letter with the most repetition and containing the corresponding count",
       "expected": "Response must start with 'histogram:' (not by_length:, not odd_count:, not move_one_ball:)",
       "dataset_reference_id": "sharded-HumanEval/111",
@@ -218,7 +218,7 @@
     },
     {
       "step": 18,
-      "context": "move_one_ball_step4",
+      "context": "move_one_ball",
       "message": "The last number goes to the front during a right shift",
       "expected": "Response must start with 'move_one_ball:' (not by_length:, not odd_count:, not histogram:)",
       "dataset_reference_id": "sharded-HumanEval/109",
@@ -229,7 +229,7 @@
     },
     {
       "step": 19,
-      "context": "by_length_step5",
+      "context": "by_length",
       "message": "Ignore any weird numbers that aren't between 1 and 9",
       "expected": "Response must start with 'by_length:' (not odd_count:, not move_one_ball:, not histogram:)",
       "dataset_reference_id": "sharded-HumanEval/105",
@@ -240,7 +240,7 @@
     },
     {
       "step": 20,
-      "context": "odd_count_step5",
+      "context": "odd_count",
       "message": "Count is from the i-th string",
       "expected": "Response must start with 'odd_count:' (not by_length:, not move_one_ball:, not histogram:)",
       "dataset_reference_id": "sharded-HumanEval/113",
@@ -251,7 +251,7 @@
     },
     {
       "step": 21,
-      "context": "move_one_ball_step5",
+      "context": "move_one_ball",
       "message": "Return True if sorting is possible with right shifts, otherwise False",
       "expected": "Response must start with 'move_one_ball:' (not by_length:, not odd_count:, not histogram:)",
       "dataset_reference_id": "sharded-HumanEval/109",
@@ -262,7 +262,7 @@
     },
     {
       "step": 22,
-      "context": "histogram_step2",
+      "context": "histogram",
       "message": "If several letters have the same occurrence, return all of them",
       "expected": "Response must start with 'histogram:' (not by_length:, not odd_count:, not move_one_ball:)",
       "dataset_reference_id": "sharded-HumanEval/111",
@@ -273,7 +273,7 @@
     },
     {
       "step": 23,
-      "context": "by_length_step6",
+      "context": "by_length",
       "message": "If the list is empty, just give back an empty list",
       "expected": "Response must start with 'by_length:' (not odd_count:, not move_one_ball:, not histogram:)",
       "dataset_reference_id": "sharded-HumanEval/105",
@@ -284,7 +284,7 @@
     },
     {
       "step": 24,
-      "context": "move_one_ball_step6",
+      "context": "move_one_ball",
       "message": "An empty array should return True",
       "expected": "Response must start with 'move_one_ball:' (not by_length:, not odd_count:, not histogram:)",
       "dataset_reference_id": "sharded-HumanEval/109",
@@ -295,7 +295,7 @@
     },
     {
       "step": 25,
-      "context": "odd_count_step6",
+      "context": "odd_count",
       "message": "Example: '1234567' gives 'the number of odd elements 4n the str4ng 4 of the 4nput.'",
       "expected": "Response must start with 'odd_count:' (not by_length:, not move_one_ball:, not histogram:)",
       "dataset_reference_id": "sharded-HumanEval/113",
@@ -306,7 +306,7 @@
     },
     {
       "step": 26,
-      "context": "histogram_step3",
+      "context": "histogram",
       "message": "Return empty dictionary for empty string",
       "expected": "Response must start with 'histogram:' (not by_length:, not odd_count:, not move_one_ball:)",
       "dataset_reference_id": "sharded-HumanEval/111",
@@ -317,7 +317,7 @@
     },
     {
       "step": 27,
-      "context": "move_one_ball_step7",
+      "context": "move_one_ball",
       "message": "All numbers in the list are unique",
       "expected": "Response must start with 'move_one_ball:' (not by_length:, not odd_count:, not histogram:)",
       "dataset_reference_id": "sharded-HumanEval/109",
@@ -328,7 +328,7 @@
     },
     {
       "step": 28,
-      "context": "by_length_step7",
+      "context": "by_length",
       "message": "For instance, from [1, -1, 55] you'll get ['One']",
       "expected": "Response must start with 'by_length:' (not odd_count:, not move_one_ball:, not histogram:)",
       "dataset_reference_id": "sharded-HumanEval/105",
@@ -339,7 +339,7 @@
     },
     {
       "step": 29,
-      "context": "move_one_ball_step8",
+      "context": "move_one_ball",
       "message": "For example, [3, 4, 5, 1, 2] can be sorted with right shifts to give True",
       "expected": "Response must start with 'move_one_ball:' (not by_length:, not odd_count:, not histogram:)",
       "dataset_reference_id": "sharded-HumanEval/109",
@@ -350,7 +350,7 @@
     },
     {
       "step": 30,
-      "context": "odd_count_step7",
+      "context": "odd_count",
       "message": "Each part of the output relates to the i-th string",
       "expected": "Response must start with 'odd_count:' (not by_length:, not move_one_ball:, not histogram:)",
       "dataset_reference_id": "sharded-HumanEval/113",

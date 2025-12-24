@@ -6,30 +6,43 @@
         "precision": 0,
         "recall": 0,
         "f1": 0,
+        "macro_precision": 0,
+        "macro_recall": 0,
+        "macro_f1": 0,
         "accuracy": 0,
         "pollution_rate": 0,
         "tp": 0,
         "tn": 0,
         "fp": 0,
-        "fn": 0
+        "fn": 0,
+        "per_topic_metrics": {},
+        "topics": []
       },
       "system": {
-        "precision": 100.0,
-        "recall": 79.41176470588235,
-        "f1": 88.52459016393442,
-        "accuracy": 79.41176470588235,
-        "pollution_rate": 20.588235294117645,
-        "tp": 27,
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "macro_precision": 0,
+        "macro_recall": 0,
+        "macro_f1": 0,
+        "accuracy": 0,
+        "pollution_rate": 0,
+        "tp": 0,
         "tn": 0,
         "fp": 0,
-        "fn": 7
+        "fn": 0,
+        "per_topic_metrics": {},
+        "topics": []
       },
       "improvements": {
         "precision": 0,
         "recall": 0,
         "f1": 0,
         "accuracy": 0,
-        "pollution_rate": 0
+        "pollution_rate": 0,
+        "macro_precision": 0,
+        "macro_recall": 0,
+        "macro_f1": 0
       }
     },
     "table_3": {
@@ -38,12 +51,7 @@
         "tokens_per_correct_answer": 0
       },
       "system": {
-        "avg_input_tokens": 0,
-        "avg_output_tokens": 0,
-        "avg_total_tokens": 0,
-        "avg_latency": 9.402878887513104,
-        "buffer_hit_rate": 0,
-        "archive_hit_rate": 0,
+        "avg_latency": 0,
         "tokens_per_correct_answer": 0
       },
       "improvements": {

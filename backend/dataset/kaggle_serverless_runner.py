@@ -323,10 +323,62 @@ class ServerlessTestRunner:
         
         try:
             with open(scenario_path, 'r') as f:
-                return json.load(f)
+                scenario = json.load(f)
+            
+            # Extract unique topics from context field
+            scenario['_extracted_topics'] = self._extract_topics(scenario)
+            return scenario
         except json.JSONDecodeError as e:
             self.log(f"❌ Invalid JSON in {scenario_file}: {e}", "ERROR")
             return None
+
+    def _extract_topics(self, scenario: Dict) -> List[str]:
+        """
+        Extract unique topic identifiers from the scenario's conversations.
+        
+        Topics are extracted from the 'context' field, normalized to base topic names.
+        E.g., "by_length_step1", "by_length_step2" -> "by_length"
+             "odd_count_intro" -> "odd_count"
+             "by_length_final" -> "by_length"
+             "personas_roleplay" -> "personas_roleplay"
+        """
+        topics = set()
+        
+        for step_data in scenario.get("conversations", []):
+            context = step_data.get("context", "")
+            if not context or context in ["intro", "step_1"]:
+                continue
+            
+            # Extract base topic by removing common suffixes
+            # Pattern: topic_name_suffix (e.g., by_length_step1, odd_count_intro, histogram_final)
+            base_topic = context
+            
+            # Remove step/intro/final suffixes to get base topic
+            for suffix_pattern in ["_step\\d+", "_intro", "_final", "_\\d+$"]:
+                import re
+                base_topic = re.sub(suffix_pattern, "", base_topic)
+            
+            # Clean up any trailing underscores
+            base_topic = base_topic.rstrip("_")
+            
+            if base_topic and base_topic not in ["step", "intro"]:
+                topics.add(base_topic)
+        
+        topic_list = sorted(list(topics))
+        self.log(f"📋 Extracted {len(topic_list)} unique topics: {topic_list}", "INFO")
+        return topic_list
+
+    def _normalize_context_to_topic(self, context: str) -> str:
+        """Normalize a context string to its base topic name."""
+        if not context or context in ["intro", "step_1"]:
+            return "general"
+        
+        base_topic = context
+        for suffix_pattern in ["_step\\d+", "_intro", "_final", "_\\d+$"]:
+            import re
+            base_topic = re.sub(suffix_pattern, "", base_topic)
+        
+        return base_topic.rstrip("_") or "general"
 
     def run_baseline_test(self, scenario: Dict, buffer_size: int = 15) -> List[Dict]:
         """
@@ -340,6 +392,10 @@ class ServerlessTestRunner:
         
         results = []
         
+        # Get available topics for this scenario
+        available_topics = scenario.get('_extracted_topics', [])
+        scenario_name = scenario.get('scenario_name', 'Unknown')
+        
         # Create ONE conversation for all contexts
         main_node_id = self.create_conversation("Baseline - All Topics", buffer_size=buffer_size)
         if not main_node_id:
@@ -347,6 +403,7 @@ class ServerlessTestRunner:
             return results
         
         self.log(f"  📝 Created single conversation for all topics", "INFO", "baseline")
+        self.log(f"  📋 Available topics for detection: {available_topics}", "INFO", "baseline")
         
         tp_count = tn_count = fp_count = fn_count = 0
         
@@ -356,7 +413,10 @@ class ServerlessTestRunner:
             message = step_data["message"]
             expected = step_data["expected"]
             
-            self.log(f"\n[Step {step}] Context: {context}", "INFO", "baseline")
+            # Get expected topic from context
+            expected_topic = self._normalize_context_to_topic(context)
+            
+            self.log(f"\n[Step {step}] Context: {context} (Topic: {expected_topic})", "INFO", "baseline")
             self.log(f"  💬 User: {message}", "INFO", "baseline")
             
             response = self.send_message(main_node_id, message)
@@ -374,18 +434,30 @@ class ServerlessTestRunner:
             self.log(f"  🤖 AI Response:", "INFO", "baseline")
             self.log(f"     {ai_message}", "INFO", "baseline")
             
+            # Detect which topic the response addresses
+            topic_detection = self.classifier.detect_topic(
+                ai_message,
+                available_topics,
+                step=step,
+                scenario=scenario_name
+            )
+            detected_topic = topic_detection["detected_topic"]
+            
             # Classify response - pass step and scenario for logging
             classification_details = self.classifier.get_classification_details(
                 ai_message, 
                 expected,
                 step=step,
-                scenario=scenario.get('scenario_name', 'Unknown')
+                scenario=scenario_name
             )
             classification = classification_details["classification"]
             
+            # Determine if topic detection was correct
+            is_correct_topic = (expected_topic == detected_topic) or (detected_topic == "unknown" and classification == "TP")
+            
             # Log to COT_THINKING for classification reasoning
             self.log_cot_thinking(f"🧠 Classification for step {step}: {classification}")
-            self.log_cot_thinking(f"   Expected: {expected}", full=True)
+            self.log_cot_thinking(f"   Expected topic: {expected_topic}, Detected: {detected_topic}", full=True)
             self.log_cot_thinking(f"   Method: {classification_details['method']}", full=True)
             
             if classification == "TP":
@@ -405,6 +477,11 @@ class ServerlessTestRunner:
             results.append({
                 "step": step,
                 "context": context,
+                "expected_topic": expected_topic,
+                "detected_topic": detected_topic,
+                "is_correct_topic": is_correct_topic,
+                "topic_detection_method": topic_detection.get("method", "unknown"),
+                "topic_confidence": topic_detection.get("confidence", "low"),
                 "message": message,
                 "response": ai_message,
                 "classification": classification,
@@ -413,7 +490,8 @@ class ServerlessTestRunner:
                 "output_tokens": 0,
                 "total_tokens": 0,
                 "latency": response.get("latency", 0),
-                "rag_used": False
+                "rag_used": False,
+                "scenario_name": scenario_name
             })
             
             time.sleep(0.3)
@@ -442,6 +520,10 @@ class ServerlessTestRunner:
         results = []
         node_map = {}
         
+        # Get available topics for this scenario
+        available_topics = scenario.get('_extracted_topics', [])
+        scenario_name = scenario.get('scenario_name', 'Unknown')
+        
         tp_count = tn_count = fp_count = fn_count = 0
         
         # Create main conversation
@@ -452,6 +534,7 @@ class ServerlessTestRunner:
         
         node_map["main"] = main_id
         self.log(f"  📝 Created main conversation", "INFO", "system")
+        self.log(f"  📋 Available topics for detection: {available_topics}", "INFO", "system")
         
         for step_data in scenario["conversations"]:
             step = step_data["step"]
@@ -460,6 +543,9 @@ class ServerlessTestRunner:
             expected = step_data["expected"]
             node_type = step_data.get("node_type", "main")
             action = step_data.get("action", "")
+            
+            # Get expected topic from context
+            expected_topic = self._normalize_context_to_topic(context)
             
             # Handle subchat creation
             if action == "create_subchat":
@@ -481,7 +567,7 @@ class ServerlessTestRunner:
             
             target_node = node_map.get(node_type, main_id)
             
-            self.log(f"\n[Step {step}] Context: {context} | Node: {node_type}", "INFO", "system")
+            self.log(f"\n[Step {step}] Context: {context} (Topic: {expected_topic}) | Node: {node_type}", "INFO", "system")
             self.log(f"  💬 User: {message}", "INFO", "system")
             
             response = self.send_message(target_node, message)
@@ -499,18 +585,30 @@ class ServerlessTestRunner:
             self.log(f"  🤖 AI Response:", "INFO", "system")
             self.log(f"     {ai_message}", "INFO", "system")
             
+            # Detect which topic the response addresses
+            topic_detection = self.classifier.detect_topic(
+                ai_message,
+                available_topics,
+                step=step,
+                scenario=scenario_name
+            )
+            detected_topic = topic_detection["detected_topic"]
+            
             # Classify response - pass step and scenario for logging
             classification_details = self.classifier.get_classification_details(
                 ai_message, 
                 expected,
                 step=step,
-                scenario=scenario.get('scenario_name', 'Unknown')
+                scenario=scenario_name
             )
             classification = classification_details["classification"]
             
+            # Determine if topic detection was correct
+            is_correct_topic = (expected_topic == detected_topic) or (detected_topic == "unknown" and classification == "TP")
+            
             # Log to COT_THINKING for classification reasoning
             self.log_cot_thinking(f"🧠 System test classification for step {step}: {classification}")
-            self.log_cot_thinking(f"   Node type: {node_type}, Expected: {expected}", full=True)
+            self.log_cot_thinking(f"   Node type: {node_type}, Expected topic: {expected_topic}, Detected: {detected_topic}", full=True)
             self.log_cot_thinking(f"   Method: {classification_details['method']}", full=True)
             
             if classification == "TP":
@@ -530,6 +628,11 @@ class ServerlessTestRunner:
             results.append({
                 "step": step,
                 "context": context,
+                "expected_topic": expected_topic,
+                "detected_topic": detected_topic,
+                "is_correct_topic": is_correct_topic,
+                "topic_detection_method": topic_detection.get("method", "unknown"),
+                "topic_confidence": topic_detection.get("confidence", "low"),
                 "node_type": node_type,
                 "message": message,
                 "response": ai_message,
@@ -539,7 +642,8 @@ class ServerlessTestRunner:
                 "output_tokens": 0,
                 "total_tokens": 0,
                 "latency": response.get("latency", 0),
-                "rag_used": False
+                "rag_used": False,
+                "scenario_name": scenario_name
             })
             
             time.sleep(0.3)
@@ -556,28 +660,128 @@ class ServerlessTestRunner:
         return results
 
     def calculate_metrics(self, baseline_results: List[Dict], system_results: List[Dict]) -> Dict:
-        """Calculate all metrics for tables"""
+        """Calculate all metrics for tables including per-topic confusion matrix"""
+        
+        def calc_topic_confusion_matrix(results):
+            """
+            Build a per-topic confusion matrix from results.
+            
+            For each topic:
+            - TP: expected_topic == detected_topic == topic
+            - FP: expected_topic != topic but detected_topic == topic (false alarm)
+            - FN: expected_topic == topic but detected_topic != topic (miss)
+            
+            Returns per-topic metrics and aggregated metrics.
+            """
+            # Get all unique topics from results
+            all_topics = set()
+            for r in results:
+                exp = r.get("expected_topic", "general")
+                det = r.get("detected_topic", "unknown")
+                if exp and exp != "general":
+                    all_topics.add(exp)
+                if det and det not in ["unknown", "general"]:
+                    all_topics.add(det)
+            
+            all_topics = sorted(list(all_topics))
+            
+            # Initialize per-topic counters
+            topic_metrics = {}
+            for topic in all_topics:
+                topic_metrics[topic] = {"tp": 0, "fp": 0, "fn": 0, "support": 0}
+            
+            # Build confusion matrix
+            for r in results:
+                expected = r.get("expected_topic", "general")
+                detected = r.get("detected_topic", "unknown")
+                
+                if expected in topic_metrics:
+                    topic_metrics[expected]["support"] += 1
+                    
+                    if detected == expected:
+                        # True positive for this topic
+                        topic_metrics[expected]["tp"] += 1
+                    else:
+                        # False negative for expected topic (we missed it)
+                        topic_metrics[expected]["fn"] += 1
+                        
+                        # False positive for detected topic (if it's a valid topic)
+                        if detected in topic_metrics:
+                            topic_metrics[detected]["fp"] += 1
+            
+            # Calculate per-topic precision, recall, F1
+            for topic in topic_metrics:
+                tm = topic_metrics[topic]
+                precision = tm["tp"] / (tm["tp"] + tm["fp"]) if (tm["tp"] + tm["fp"]) > 0 else 0
+                recall = tm["tp"] / (tm["tp"] + tm["fn"]) if (tm["tp"] + tm["fn"]) > 0 else 0
+                f1 = 2 * precision * recall / (precision + recall) if (precision + recall) > 0 else 0
+                tm["precision"] = precision * 100
+                tm["recall"] = recall * 100
+                tm["f1"] = f1 * 100
+            
+            # Calculate macro and weighted averages
+            if topic_metrics:
+                macro_precision = sum(tm["precision"] for tm in topic_metrics.values()) / len(topic_metrics)
+                macro_recall = sum(tm["recall"] for tm in topic_metrics.values()) / len(topic_metrics)
+                macro_f1 = sum(tm["f1"] for tm in topic_metrics.values()) / len(topic_metrics)
+                
+                total_support = sum(tm["support"] for tm in topic_metrics.values())
+                if total_support > 0:
+                    weighted_precision = sum(tm["precision"] * tm["support"] for tm in topic_metrics.values()) / total_support
+                    weighted_recall = sum(tm["recall"] * tm["support"] for tm in topic_metrics.values()) / total_support
+                    weighted_f1 = sum(tm["f1"] * tm["support"] for tm in topic_metrics.values()) / total_support
+                else:
+                    weighted_precision = weighted_recall = weighted_f1 = 0
+            else:
+                macro_precision = macro_recall = macro_f1 = 0
+                weighted_precision = weighted_recall = weighted_f1 = 0
+            
+            return {
+                "per_topic": topic_metrics,
+                "macro": {
+                    "precision": macro_precision,
+                    "recall": macro_recall,
+                    "f1": macro_f1
+                },
+                "weighted": {
+                    "precision": weighted_precision,
+                    "recall": weighted_recall,
+                    "f1": weighted_f1
+                },
+                "topics": all_topics
+            }
         
         def calc_isolation_metrics(results):
+            """Calculate basic isolation metrics (accuracy, pollution_rate) + topic-based precision/recall/F1"""
+            # Legacy TP/TN/FP/FN counts from classification field
             tp = sum(1 for r in results if r["classification"] == "TP")
             tn = sum(1 for r in results if r["classification"] == "TN")
             fp = sum(1 for r in results if r["classification"] == "FP")
             fn = sum(1 for r in results if r["classification"] == "FN")
             total = len(results)
             
-            precision = tp / (tp + fp) if (tp + fp) > 0 else 0
-            recall = tp / (tp + fn) if (tp + fn) > 0 else 0
-            f1 = 2 * (precision * recall) / (precision + recall) if (precision + recall) > 0 else 0
+            # These are based on LLM judge yes/no - keep for backward compatibility
             accuracy = (tp + tn) / total if total > 0 else 0
             pollution_rate = (fp + fn) / total if total > 0 else 0
             
+            # NEW: Calculate topic-based confusion matrix metrics
+            topic_cm = calc_topic_confusion_matrix(results)
+            
             return {
-                "precision": precision * 100,
-                "recall": recall * 100,
-                "f1": f1 * 100,
+                # Topic-based metrics (proper precision/recall/F1)
+                "precision": topic_cm["weighted"]["precision"],
+                "recall": topic_cm["weighted"]["recall"],
+                "f1": topic_cm["weighted"]["f1"],
+                "macro_precision": topic_cm["macro"]["precision"],
+                "macro_recall": topic_cm["macro"]["recall"],
+                "macro_f1": topic_cm["macro"]["f1"],
+                # Legacy metrics (keep for compatibility)
                 "accuracy": accuracy * 100,
                 "pollution_rate": pollution_rate * 100,
-                "tp": tp, "tn": tn, "fp": fp, "fn": fn
+                "tp": tp, "tn": tn, "fp": fp, "fn": fn,
+                # Per-topic breakdown
+                "per_topic_metrics": topic_cm["per_topic"],
+                "topics": topic_cm["topics"]
             }
         
         def calc_performance_metrics(results, isolation_metrics):
@@ -610,7 +814,7 @@ class ServerlessTestRunner:
         
         def calc_improvement(baseline, system):
             if baseline == 0:
-                return 0
+                return 0 if system == 0 else float('inf')
             return ((system - baseline) / baseline) * 100
         
         return {
@@ -619,7 +823,7 @@ class ServerlessTestRunner:
                 "system": system_isolation,
                 "improvements": {
                     k: calc_improvement(baseline_isolation.get(k, 0), system_isolation.get(k, 0))
-                    for k in ["precision", "recall", "f1", "accuracy", "pollution_rate"]
+                    for k in ["precision", "recall", "f1", "accuracy", "pollution_rate", "macro_precision", "macro_recall", "macro_f1"]
                 }
             },
             "table_3": {
@@ -640,18 +844,55 @@ class ServerlessTestRunner:
         table1 = metrics["table_1"]
         with open(buffer_dir / "TABLE_1_CONTEXT_ISOLATION.md", 'w') as f:
             f.write(f"# TABLE 1: CONTEXT ISOLATION METRICS (Buffer Size: {self.current_buffer_size})\n\n")
+            f.write("## Weighted Average Metrics (Per-Topic Confusion Matrix)\n\n")
             f.write("| Metric | Baseline System | Our System | Improvement |\n")
             f.write("|--------|----------------|------------|-------------|\n")
             
             for metric in ["precision", "recall", "f1", "accuracy", "pollution_rate"]:
-                baseline_val = table1["baseline"][metric]
-                system_val = table1["system"][metric]
-                improvement = table1["improvements"][metric]
+                baseline_val = table1["baseline"].get(metric, 0)
+                system_val = table1["system"].get(metric, 0)
+                improvement = table1["improvements"].get(metric, 0)
+                # Handle inf improvement gracefully
+                if isinstance(improvement, float) and improvement == float('inf'):
+                    imp_str = "**∞**"
+                else:
+                    imp_str = f"**{improvement:+.1f}%**"
                 f.write(f"| **{metric.replace('_', ' ').title()}** | ")
                 f.write(f"{baseline_val:.1f}% | {system_val:.1f}% | ")
-                f.write(f"**{improvement:+.1f}%** |\n")
+                f.write(f"{imp_str} |\n")
             
-            f.write(f"\n## Raw Counts\n")
+            f.write(f"\n## Macro Average Metrics\n\n")
+            f.write("| Metric | Baseline System | Our System | Improvement |\n")
+            f.write("|--------|----------------|------------|-------------|\n")
+            
+            for metric in ["macro_precision", "macro_recall", "macro_f1"]:
+                baseline_val = table1["baseline"].get(metric, 0)
+                system_val = table1["system"].get(metric, 0)
+                improvement = table1["improvements"].get(metric, 0)
+                if isinstance(improvement, float) and improvement == float('inf'):
+                    imp_str = "**∞**"
+                else:
+                    imp_str = f"**{improvement:+.1f}%**"
+                display_name = metric.replace('_', ' ').title().replace("Macro ", "Macro ")
+                f.write(f"| **{display_name}** | ")
+                f.write(f"{baseline_val:.1f}% | {system_val:.1f}% | ")
+                f.write(f"{imp_str} |\n")
+            
+            # Per-topic breakdown
+            f.write(f"\n## Per-Topic Breakdown\n\n")
+            
+            for system_type, label in [("baseline", "Baseline"), ("system", "Our System")]:
+                per_topic = table1[system_type].get("per_topic_metrics", {})
+                if per_topic:
+                    f.write(f"\n### {label} - Per-Topic Metrics\n\n")
+                    f.write("| Topic | Precision | Recall | F1 | TP | FP | FN | Support |\n")
+                    f.write("|-------|-----------|--------|----|----|----|----|--------|\n")
+                    
+                    for topic, tm in sorted(per_topic.items()):
+                        f.write(f"| {topic} | {tm['precision']:.1f}% | {tm['recall']:.1f}% | {tm['f1']:.1f}% | ")
+                        f.write(f"{tm['tp']} | {tm['fp']} | {tm['fn']} | {tm['support']} |\n")
+            
+            f.write(f"\n## Legacy Raw Counts (LLM Judge TP/FN)\n")
             f.write(f"- Baseline: TP={table1['baseline']['tp']}, TN={table1['baseline']['tn']}, FP={table1['baseline']['fp']}, FN={table1['baseline']['fn']}\n")
             f.write(f"- System: TP={table1['system']['tp']}, TN={table1['system']['tn']}, FP={table1['system']['fp']}, FN={table1['system']['fn']}\n")
         

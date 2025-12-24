@@ -2,4 +2,4 @@
 
 | Metric | Baseline System | Our System | Improvement |
 |--------|----------------|------------|-------------|
-| **Avg Latency** | 0.00s | 0.00s | **+0.0%** |
+| **Avg Latency** | 9.21s | 10.44s | **+13.3%** |

@@ -3,59 +3,158 @@
   "metrics": {
     "table_1": {
       "baseline": {
-        "precision": 0,
-        "recall": 0,
-        "f1": 0,
-        "macro_precision": 0,
-        "macro_recall": 0,
-        "macro_f1": 0,
-        "accuracy": 0,
-        "pollution_rate": 0,
+        "precision": 94.94949494949495,
+        "recall": 93.93939393939394,
+        "f1": 93.83608815426997,
+        "macro_precision": 95.83333333333334,
+        "macro_recall": 94.44444444444444,
+        "macro_f1": 94.60227272727273,
+        "accuracy": 0.0,
+        "pollution_rate": 100.0,
         "tp": 0,
         "tn": 0,
-        "fp": 0,
+        "fp": 34,
         "fn": 0,
-        "per_topic_metrics": {},
-        "topics": []
+        "per_topic_metrics": {
+          "by_length": {
+            "tp": 7,
+            "fp": 0,
+            "fn": 2,
+            "support": 9,
+            "precision": 100.0,
+            "recall": 77.77777777777779,
+            "f1": 87.50000000000001
+          },
+          "histogram": {
+            "tp": 5,
+            "fp": 0,
+            "fn": 0,
+            "support": 5,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          },
+          "move_one_ball": {
+            "tp": 10,
+            "fp": 2,
+            "fn": 0,
+            "support": 10,
+            "precision": 83.33333333333334,
+            "recall": 100.0,
+            "f1": 90.9090909090909
+          },
+          "odd_count": {
+            "tp": 9,
+            "fp": 0,
+            "fn": 0,
+            "support": 9,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          }
+        },
+        "topics": [
+          "by_length",
+          "histogram",
+          "move_one_ball",
+          "odd_count"
+        ]
       },
       "system": {
-        "precision": 0,
-        "recall": 0,
-        "f1": 0,
-        "macro_precision": 0,
-        "macro_recall": 0,
-        "macro_f1": 0,
-        "accuracy": 0,
-        "pollution_rate": 0,
+        "precision": 100.0,
+        "recall": 100.0,
+        "f1": 100.0,
+        "macro_precision": 100.0,
+        "macro_recall": 100.0,
+        "macro_f1": 100.0,
+        "accuracy": 0.0,
+        "pollution_rate": 100.0,
         "tp": 0,
         "tn": 0,
-        "fp": 0,
+        "fp": 34,
         "fn": 0,
-        "per_topic_metrics": {},
-        "topics": []
+        "per_topic_metrics": {
+          "by_length": {
+            "tp": 9,
+            "fp": 0,
+            "fn": 0,
+            "support": 9,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          },
+          "histogram": {
+            "tp": 5,
+            "fp": 0,
+            "fn": 0,
+            "support": 5,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          },
+          "move_one_ball": {
+            "tp": 10,
+            "fp": 0,
+            "fn": 0,
+            "support": 10,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          },
+          "odd_count": {
+            "tp": 9,
+            "fp": 0,
+            "fn": 0,
+            "support": 9,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          }
+        },
+        "topics": [
+          "by_length",
+          "histogram",
+          "move_one_ball",
+          "odd_count"
+        ]
       },
       "improvements": {
-        "precision": 0,
-        "recall": 0,
-        "f1": 0,
+        "precision": 5.3191489361702144,
+        "recall": 6.451612903225809,
+        "f1": 6.568807339449541,
         "accuracy": 0,
-        "pollution_rate": 0,
-        "macro_precision": 0,
-        "macro_recall": 0,
-        "macro_f1": 0
+        "pollution_rate": 0.0,
+        "macro_precision": 4.347826086956511,
+        "macro_recall": 5.882352941176473,
+        "macro_f1": 5.705705705705698
       }
     },
     "table_3": {
       "baseline": {
-        "avg_latency": 0,
+        "avg_input_tokens": 0,
+        "avg_output_tokens": 0,
+        "avg_total_tokens": 0,
+        "avg_latency": 9.213640353258919,
+        "buffer_hit_rate": 0,
+        "archive_hit_rate": 0,
         "tokens_per_correct_answer": 0
       },
       "system": {
-        "avg_latency": 0,
+        "avg_input_tokens": 0,
+        "avg_output_tokens": 0,
+        "avg_total_tokens": 0,
+        "avg_latency": 10.443553188267876,
+        "buffer_hit_rate": 0,
+        "archive_hit_rate": 0,
         "tokens_per_correct_answer": 0
       },
       "improvements": {
-        "avg_latency": 0,
+        "avg_input_tokens": 0,
+        "avg_output_tokens": 0,
+        "avg_total_tokens": 0,
+        "avg_latency": 13.348826173510552,
+        "buffer_hit_rate": 0,
+        "archive_hit_rate": 0,
         "tokens_per_correct_answer": 0
       }
     }

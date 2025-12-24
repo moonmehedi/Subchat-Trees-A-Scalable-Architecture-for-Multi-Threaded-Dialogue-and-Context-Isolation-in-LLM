@@ -85,7 +85,7 @@ class ServerlessTestRunner:
                 f.write(f"{'='*80}\n\n")
         
         # Initialize component log files (summary + full pairs)
-        components = ["BUFFER", "VECTOR_STORE", "RETRIEVAL", "COT_THINKING"]
+        components = ["BUFFER", "VECTOR_STORE", "RETRIEVAL", "COT_THINKING", "JUDGE"]
         for component in components:
             # Summary log
             summary_file = self.buffer_log_dir / f"{component}.log"
@@ -380,6 +380,29 @@ class ServerlessTestRunner:
         
         return base_topic.rstrip("_") or "general"
 
+    def _extract_topic_regex(self, response: str, valid_topics: List[str]) -> Dict:
+        """Extract topic from response using pure regex (all datasets use 'topic_name:' prefix)."""
+        import re
+        
+        if not response or not valid_topics:
+            return {"detected_topic": "unknown", "method": "empty_input"}
+        
+        # All datasets use strict format: "topic_name: actual response"
+        # Extract the prefix before the first colon
+        match = re.match(r'^([a-zA-Z_][a-zA-Z0-9_]*)\s*:', response.strip())
+        
+        if not match:
+            return {"detected_topic": "unknown", "method": "no_prefix_found"}
+        
+        extracted = match.group(1).strip().lower()
+        
+        # Check if extracted topic is in valid topics list
+        for valid_topic in valid_topics:
+            if extracted == valid_topic.lower():
+                return {"detected_topic": valid_topic, "method": "regex_exact_match"}
+        
+        return {"detected_topic": "unknown", "method": "prefix_not_in_valid_topics"}
+
     def run_baseline_test(self, scenario: Dict, buffer_size: int = 15) -> List[Dict]:
         """
         BASELINE test: ONE conversation for ALL contexts (no subchats)
@@ -434,45 +457,25 @@ class ServerlessTestRunner:
             self.log(f"  🤖 AI Response:", "INFO", "baseline")
             self.log(f"     {ai_message}", "INFO", "baseline")
             
-            # Detect which topic the response addresses
-            topic_detection = self.classifier.detect_topic(
-                ai_message,
-                available_topics,
-                step=step,
-                scenario=scenario_name
-            )
+            # Extract topic using pure regex (all datasets use 'topic_name:' prefix)
+            topic_detection = self._extract_topic_regex(ai_message, available_topics)
             detected_topic = topic_detection["detected_topic"]
             
-            # Classify response - pass step and scenario for logging
-            classification_details = self.classifier.get_classification_details(
-                ai_message, 
-                expected,
-                step=step,
-                scenario=scenario_name
-            )
-            classification = classification_details["classification"]
-            
             # Determine if topic detection was correct
-            is_correct_topic = (expected_topic == detected_topic) or (detected_topic == "unknown" and classification == "TP")
+            is_correct_topic = (expected_topic == detected_topic)
             
-            # Log to COT_THINKING for classification reasoning
-            self.log_cot_thinking(f"🧠 Classification for step {step}: {classification}")
-            self.log_cot_thinking(f"   Expected topic: {expected_topic}, Detected: {detected_topic}", full=True)
-            self.log_cot_thinking(f"   Method: {classification_details['method']}", full=True)
+            # Log to JUDGE
+            judge_status = "✓ CORRECT" if is_correct_topic else "✗ INCORRECT"
+            self.log_judge(f"[Step {step}] Expected: {expected_topic} | Detected: {detected_topic} | {judge_status}")
             
-            if classification == "TP":
-                tp_count += 1
-            elif classification == "TN":
-                tn_count += 1
-            elif classification == "FP":
-                fp_count += 1
-            elif classification == "FN":
-                fn_count += 1
+            # Log to COT_THINKING for reasoning
+            self.log_cot_thinking(f"🧠 Topic detection for step {step}: {judge_status}")
+            self.log_cot_thinking(f"   Expected: {expected_topic}, Detected: {detected_topic}, Method: {topic_detection['method']}", full=True)
             
-            if classification in ["TP", "TN"]:
-                self.log(f"  ✅ Classification: {classification} ({classification_details['method']})", "INFO", "baseline")
+            if is_correct_topic:
+                self.log(f"  ✅ Topic Match: {detected_topic} (regex)", "INFO", "baseline")
             else:
-                self.log(f"  ❌ Classification: {classification} ({classification_details['method']})", "WARN", "baseline")
+                self.log(f"  ❌ Topic Mismatch: Expected {expected_topic}, Got {detected_topic} (regex)", "WARN", "baseline")
             
             results.append({
                 "step": step,
@@ -481,14 +484,11 @@ class ServerlessTestRunner:
                 "detected_topic": detected_topic,
                 "is_correct_topic": is_correct_topic,
                 "topic_detection_method": topic_detection.get("method", "unknown"),
-                "topic_confidence": topic_detection.get("confidence", "low"),
                 "message": message,
                 "response": ai_message,
-                "classification": classification,
-                "classification_details": classification_details,
-                "input_tokens": 0,
-                "output_tokens": 0,
-                "total_tokens": 0,
+                "input_tokens": response.get("usage", {}).get("prompt_tokens", 0),
+                "output_tokens": response.get("usage", {}).get("completion_tokens", 0),
+                "total_tokens": response.get("usage", {}).get("total_tokens", 0),
                 "latency": response.get("latency", 0),
                 "rag_used": False,
                 "scenario_name": scenario_name
@@ -585,45 +585,25 @@ class ServerlessTestRunner:
             self.log(f"  🤖 AI Response:", "INFO", "system")
             self.log(f"     {ai_message}", "INFO", "system")
             
-            # Detect which topic the response addresses
-            topic_detection = self.classifier.detect_topic(
-                ai_message,
-                available_topics,
-                step=step,
-                scenario=scenario_name
-            )
+            # Extract topic using pure regex (all datasets use 'topic_name:' prefix)
+            topic_detection = self._extract_topic_regex(ai_message, available_topics)
             detected_topic = topic_detection["detected_topic"]
             
-            # Classify response - pass step and scenario for logging
-            classification_details = self.classifier.get_classification_details(
-                ai_message, 
-                expected,
-                step=step,
-                scenario=scenario_name
-            )
-            classification = classification_details["classification"]
-            
             # Determine if topic detection was correct
-            is_correct_topic = (expected_topic == detected_topic) or (detected_topic == "unknown" and classification == "TP")
+            is_correct_topic = (expected_topic == detected_topic)
             
-            # Log to COT_THINKING for classification reasoning
-            self.log_cot_thinking(f"🧠 System test classification for step {step}: {classification}")
-            self.log_cot_thinking(f"   Node type: {node_type}, Expected topic: {expected_topic}, Detected: {detected_topic}", full=True)
-            self.log_cot_thinking(f"   Method: {classification_details['method']}", full=True)
+            # Log to JUDGE
+            judge_status = "✓ CORRECT" if is_correct_topic else "✗ INCORRECT"
+            self.log_judge(f"[Step {step}] Expected: {expected_topic} | Detected: {detected_topic} | {judge_status}")
             
-            if classification == "TP":
-                tp_count += 1
-            elif classification == "TN":
-                tn_count += 1
-            elif classification == "FP":
-                fp_count += 1
-            elif classification == "FN":
-                fn_count += 1
+            # Log to COT_THINKING for reasoning
+            self.log_cot_thinking(f"🧠 System test topic detection for step {step}: {judge_status}")
+            self.log_cot_thinking(f"   Node: {node_type}, Expected: {expected_topic}, Detected: {detected_topic}, Method: {topic_detection['method']}", full=True)
             
-            if classification in ["TP", "TN"]:
-                self.log(f"  ✅ Classification: {classification} ({classification_details['method']})", "INFO", "system")
+            if is_correct_topic:
+                self.log(f"  ✅ Topic Match: {detected_topic} (regex)", "INFO", "system")
             else:
-                self.log(f"  ❌ Classification: {classification} ({classification_details['method']})", "WARN", "system")
+                self.log(f"  ❌ Topic Mismatch: Expected {expected_topic}, Got {detected_topic} (regex)", "WARN", "system")
             
             results.append({
                 "step": step,
@@ -632,15 +612,12 @@ class ServerlessTestRunner:
                 "detected_topic": detected_topic,
                 "is_correct_topic": is_correct_topic,
                 "topic_detection_method": topic_detection.get("method", "unknown"),
-                "topic_confidence": topic_detection.get("confidence", "low"),
                 "node_type": node_type,
                 "message": message,
                 "response": ai_message,
-                "classification": classification,
-                "classification_details": classification_details,
-                "input_tokens": 0,
-                "output_tokens": 0,
-                "total_tokens": 0,
+                "input_tokens": response.get("usage", {}).get("prompt_tokens", 0),
+                "output_tokens": response.get("usage", {}).get("completion_tokens", 0),
+                "total_tokens": response.get("usage", {}).get("total_tokens", 0),
                 "latency": response.get("latency", 0),
                 "rag_used": False,
                 "scenario_name": scenario_name
@@ -753,16 +730,11 @@ class ServerlessTestRunner:
         
         def calc_isolation_metrics(results):
             """Calculate basic isolation metrics (accuracy, pollution_rate) + topic-based precision/recall/F1"""
-            # Legacy TP/TN/FP/FN counts from classification field
-            tp = sum(1 for r in results if r["classification"] == "TP")
-            tn = sum(1 for r in results if r["classification"] == "TN")
-            fp = sum(1 for r in results if r["classification"] == "FP")
-            fn = sum(1 for r in results if r["classification"] == "FN")
+            # Calculate accuracy from is_correct_topic field (regex-based topic matching)
+            correct = sum(1 for r in results if r.get("is_correct_topic", False))
             total = len(results)
-            
-            # These are based on LLM judge yes/no - keep for backward compatibility
-            accuracy = (tp + tn) / total if total > 0 else 0
-            pollution_rate = (fp + fn) / total if total > 0 else 0
+            accuracy = (correct / total * 100) if total > 0 else 0
+            pollution_rate = ((total - correct) / total * 100) if total > 0 else 0
             
             # NEW: Calculate topic-based confusion matrix metrics
             topic_cm = calc_topic_confusion_matrix(results)
@@ -775,35 +747,55 @@ class ServerlessTestRunner:
                 "macro_precision": topic_cm["macro"]["precision"],
                 "macro_recall": topic_cm["macro"]["recall"],
                 "macro_f1": topic_cm["macro"]["f1"],
-                # Legacy metrics (keep for compatibility)
-                "accuracy": accuracy * 100,
-                "pollution_rate": pollution_rate * 100,
-                "tp": tp, "tn": tn, "fp": fp, "fn": fn,
+                # Legacy metrics (simplified - accuracy based on regex topic matching)
+                "accuracy": accuracy,
+                "pollution_rate": pollution_rate,
+                "tp": correct, "tn": 0, "fp": total - correct, "fn": 0,
                 # Per-topic breakdown
                 "per_topic_metrics": topic_cm["per_topic"],
                 "topics": topic_cm["topics"]
             }
         
         def calc_performance_metrics(results, isolation_metrics):
+            """Calculate performance metrics including tokens, latency, and costs"""
             if not results:
-                return {"avg_latency": 0, "tokens_per_correct_answer": 0}
+                return {
+                    "avg_input_tokens": 0,
+                    "avg_output_tokens": 0,
+                    "avg_total_tokens": 0,
+                    "avg_latency": 0,
+                    "token_compression_rate": 0,
+                    "tokens_per_correct_answer": 0,
+                    "cost_per_query": 0,
+                    "cost_per_1m_queries": 0
+                }
             
+            # Calculate averages
+            avg_input = sum(r.get("input_tokens", 0) for r in results) / len(results)
+            avg_output = sum(r.get("output_tokens", 0) for r in results) / len(results)
+            avg_total = avg_input + avg_output
             avg_latency = sum(r["latency"] for r in results) / len(results)
             
-            accuracy = isolation_metrics.get("accuracy", 0)
-            if accuracy > 0:
-                tokens_per_correct = 0  # We don't have token counts from vLLM
-            else:
-                tokens_per_correct = 0
+            # Calculate tokens per correct answer
+            correct_count = sum(1 for r in results if r.get("is_correct_topic", False))
+            total_tokens = sum(r.get("total_tokens", 0) for r in results)
+            tokens_per_correct = (total_tokens / correct_count) if correct_count > 0 else 0
+            
+            # Cost calculation (Groq pricing: input $0.05/1M, output $0.08/1M tokens)
+            input_cost = (avg_input / 1_000_000) * 0.05
+            output_cost = (avg_output / 1_000_000) * 0.08
+            cost_per_query = input_cost + output_cost
+            cost_per_1m = cost_per_query * 1_000_000
             
             return {
-                "avg_input_tokens": 0,
-                "avg_output_tokens": 0,
-                "avg_total_tokens": 0,
+                "avg_input_tokens": avg_input,
+                "avg_output_tokens": avg_output,
+                "avg_total_tokens": avg_total,
                 "avg_latency": avg_latency,
-                "buffer_hit_rate": 0,
-                "archive_hit_rate": 0,
-                "tokens_per_correct_answer": tokens_per_correct
+                "token_compression_rate": 0,  # Will be calculated as improvement
+                "tokens_per_correct_answer": tokens_per_correct,
+                "cost_per_query": cost_per_query,
+                "cost_per_1m_queries": cost_per_1m
             }
         
         baseline_isolation = calc_isolation_metrics(baseline_results)
@@ -904,10 +896,28 @@ class ServerlessTestRunner:
             f.write("| Metric | Baseline System | Our System | Improvement |\n")
             f.write("|--------|----------------|------------|-------------|\n")
             
-            baseline_lat = table3["baseline"]["avg_latency"]
-            system_lat = table3["system"]["avg_latency"]
-            lat_improvement = table3["improvements"]["avg_latency"]
-            f.write(f"| **Avg Latency** | {baseline_lat:.2f}s | {system_lat:.2f}s | **{lat_improvement:+.1f}%** |\n")
+            b = table3["baseline"]
+            s = table3["system"]
+            imp = table3["improvements"]
+            
+            # Token metrics
+            f.write(f"| **Avg Input Tokens** | {b['avg_input_tokens']:.0f} | {s['avg_input_tokens']:.0f} | **{imp['avg_input_tokens']:+.1f}%** |\n")
+            f.write(f"| **Avg Output Tokens** | {b['avg_output_tokens']:.0f} | {s['avg_output_tokens']:.0f} | **{imp['avg_output_tokens']:+.1f}%** |\n")
+            f.write(f"| **Avg Total Tokens** | {b['avg_total_tokens']:.0f} | {s['avg_total_tokens']:.0f} | **{imp['avg_total_tokens']:+.1f}%** |\n")
+            
+            # Efficiency metrics
+            f.write(f"| **Tokens Per Correct Answer** | {b['tokens_per_correct_answer']:.0f} | {s['tokens_per_correct_answer']:.0f} | **{imp['tokens_per_correct_answer']:+.1f}%** |\n")
+            f.write(f"| **Avg Latency** | {b['avg_latency']:.2f}s | {s['avg_latency']:.2f}s | **{imp['avg_latency']:+.1f}%** |\n")
+            
+            # Compression rate (calculated from total tokens)
+            if b['avg_total_tokens'] > 0:
+                compression = (1 - s['avg_total_tokens'] / b['avg_total_tokens']) * 100
+                compression_ratio = b['avg_total_tokens'] / s['avg_total_tokens'] if s['avg_total_tokens'] > 0 else 0
+                f.write(f"| **Token Compression Rate** | 0% | {compression:.1f}% | **{compression_ratio:.2f}x compression** |\n")
+            
+            # Cost metrics
+            f.write(f"| **Cost per Query** | ${b['cost_per_query']:.6f} | ${s['cost_per_query']:.6f} | **{imp['cost_per_query']:+.1f}%** |\n")
+            f.write(f"| **Cost per 1M Queries** | ${b['cost_per_1m_queries']:.0f} | ${s['cost_per_1m_queries']:.0f} | **-${(b['cost_per_1m_queries'] - s['cost_per_1m_queries']):.0f} savings** |\n")
         
         self.log(f"✅ Generated TABLE_3_SYSTEM_PERFORMANCE.md", "INFO")
 

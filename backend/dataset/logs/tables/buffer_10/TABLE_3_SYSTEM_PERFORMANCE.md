@@ -1,0 +1,5 @@
+# TABLE 3: SYSTEM PERFORMANCE METRICS (Buffer Size: 10)
+
+| Metric | Baseline System | Our System | Improvement |
+|--------|----------------|------------|-------------|
+| **Avg Latency** | 0.00s | 0.00s | **+0.0%** |

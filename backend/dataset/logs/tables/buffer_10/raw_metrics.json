@@ -1,0 +1,63 @@
+{
+  "buffer_size": 10,
+  "metrics": {
+    "table_1": {
+      "baseline": {
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "macro_precision": 0,
+        "macro_recall": 0,
+        "macro_f1": 0,
+        "accuracy": 0,
+        "pollution_rate": 0,
+        "tp": 0,
+        "tn": 0,
+        "fp": 0,
+        "fn": 0,
+        "per_topic_metrics": {},
+        "topics": []
+      },
+      "system": {
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "macro_precision": 0,
+        "macro_recall": 0,
+        "macro_f1": 0,
+        "accuracy": 0,
+        "pollution_rate": 0,
+        "tp": 0,
+        "tn": 0,
+        "fp": 0,
+        "fn": 0,
+        "per_topic_metrics": {},
+        "topics": []
+      },
+      "improvements": {
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "accuracy": 0,
+        "pollution_rate": 0,
+        "macro_precision": 0,
+        "macro_recall": 0,
+        "macro_f1": 0
+      }
+    },
+    "table_3": {
+      "baseline": {
+        "avg_latency": 0,
+        "tokens_per_correct_answer": 0
+      },
+      "system": {
+        "avg_latency": 0,
+        "tokens_per_correct_answer": 0
+      },
+      "improvements": {
+        "avg_latency": 0,
+        "tokens_per_correct_answer": 0
+      }
+    }
+  }
+}

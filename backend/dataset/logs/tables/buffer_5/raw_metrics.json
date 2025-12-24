@@ -3,60 +3,1262 @@
   "metrics": {
     "table_1": {
       "baseline": {
-        "precision": 0,
-        "recall": 0,
-        "f1": 0,
-        "macro_precision": 0,
-        "macro_recall": 0,
-        "macro_f1": 0,
-        "accuracy": 0,
-        "pollution_rate": 0,
-        "tp": 0,
+        "precision": 87.79375386518244,
+        "recall": 70.12987012987013,
+        "f1": 73.71150404429625,
+        "macro_precision": 81.05730427764325,
+        "macro_recall": 69.80886345293126,
+        "macro_f1": 70.73593543932527,
+        "accuracy": 69.00958466453673,
+        "pollution_rate": 30.990415335463258,
+        "tp": 216,
         "tn": 0,
-        "fp": 0,
+        "fp": 97,
         "fn": 0,
-        "per_topic_metrics": {},
-        "topics": []
+        "per_topic_metrics": {
+          "ai_chat_tools": {
+            "tp": 3,
+            "fp": 0,
+            "fn": 7,
+            "support": 10,
+            "precision": 100.0,
+            "recall": 30.0,
+            "f1": 46.15384615384615
+          },
+          "ai_consciousness": {
+            "tp": 2,
+            "fp": 3,
+            "fn": 6,
+            "support": 8,
+            "precision": 40.0,
+            "recall": 25.0,
+            "f1": 30.76923076923077
+          },
+          "ai_consciousness_friendship": {
+            "tp": 1,
+            "fp": 0,
+            "fn": 5,
+            "support": 6,
+            "precision": 100.0,
+            "recall": 16.666666666666664,
+            "f1": 28.57142857142857
+          },
+          "ai_meta": {
+            "tp": 5,
+            "fp": 0,
+            "fn": 6,
+            "support": 11,
+            "precision": 100.0,
+            "recall": 45.45454545454545,
+            "f1": 62.5
+          },
+          "bhutan_travel": {
+            "tp": 2,
+            "fp": 0,
+            "fn": 1,
+            "support": 3,
+            "precision": 100.0,
+            "recall": 66.66666666666666,
+            "f1": 80.0
+          },
+          "chess": {
+            "tp": 7,
+            "fp": 0,
+            "fn": 0,
+            "support": 7,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          },
+          "child_nutrition": {
+            "tp": 2,
+            "fp": 0,
+            "fn": 4,
+            "support": 6,
+            "precision": 100.0,
+            "recall": 33.33333333333333,
+            "f1": 50.0
+          },
+          "cookies_preferences": {
+            "tp": 2,
+            "fp": 0,
+            "fn": 0,
+            "support": 2,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          },
+          "cookies_recipe": {
+            "tp": 1,
+            "fp": 2,
+            "fn": 0,
+            "support": 1,
+            "precision": 33.33333333333333,
+            "recall": 100.0,
+            "f1": 50.0
+          },
+          "cookies_recipe_halving": {
+            "tp": 1,
+            "fp": 2,
+            "fn": 2,
+            "support": 3,
+            "precision": 33.33333333333333,
+            "recall": 33.33333333333333,
+            "f1": 33.33333333333333
+          },
+          "cookies_recipe_halving_argument": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 3,
+            "support": 3,
+            "precision": 0,
+            "recall": 0.0,
+            "f1": 0
+          },
+          "cookies_recipe_halving_corrections": {
+            "tp": 3,
+            "fp": 4,
+            "fn": 0,
+            "support": 3,
+            "precision": 42.857142857142854,
+            "recall": 100.0,
+            "f1": 60.0
+          },
+          "cookies_recipe_halving_math_errors": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 4,
+            "support": 4,
+            "precision": 0,
+            "recall": 0.0,
+            "f1": 0
+          },
+          "covid_safety": {
+            "tp": 6,
+            "fp": 0,
+            "fn": 0,
+            "support": 6,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          },
+          "covid_safety_hiv_aids": {
+            "tp": 1,
+            "fp": 0,
+            "fn": 6,
+            "support": 7,
+            "precision": 100.0,
+            "recall": 14.285714285714285,
+            "f1": 25.0
+          },
+          "dsp_wavelets": {
+            "tp": 4,
+            "fp": 0,
+            "fn": 7,
+            "support": 11,
+            "precision": 100.0,
+            "recall": 36.36363636363637,
+            "f1": 53.333333333333336
+          },
+          "dsp_wavelets_c_code": {
+            "tp": 2,
+            "fp": 0,
+            "fn": 0,
+            "support": 2,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          },
+          "electroculture": {
+            "tp": 7,
+            "fp": 0,
+            "fn": 0,
+            "support": 7,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          },
+          "emoji_game": {
+            "tp": 31,
+            "fp": 0,
+            "fn": 0,
+            "support": 31,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          },
+          "game_degree_guess": {
+            "tp": 3,
+            "fp": 1,
+            "fn": 0,
+            "support": 3,
+            "precision": 75.0,
+            "recall": 100.0,
+            "f1": 85.71428571428571
+          },
+          "game_twenty_questions": {
+            "tp": 33,
+            "fp": 0,
+            "fn": 0,
+            "support": 33,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          },
+          "geography_belgium": {
+            "tp": 1,
+            "fp": 0,
+            "fn": 2,
+            "support": 3,
+            "precision": 100.0,
+            "recall": 33.33333333333333,
+            "f1": 50.0
+          },
+          "humanity_future_150y": {
+            "tp": 4,
+            "fp": 0,
+            "fn": 0,
+            "support": 4,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          },
+          "indian_astrology": {
+            "tp": 5,
+            "fp": 0,
+            "fn": 0,
+            "support": 5,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          },
+          "indian_astrology_terminology": {
+            "tp": 1,
+            "fp": 0,
+            "fn": 0,
+            "support": 1,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          },
+          "indian_history": {
+            "tp": 3,
+            "fp": 0,
+            "fn": 0,
+            "support": 3,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          },
+          "indian_legal": {
+            "tp": 3,
+            "fp": 0,
+            "fn": 1,
+            "support": 4,
+            "precision": 100.0,
+            "recall": 75.0,
+            "f1": 85.71428571428571
+          },
+          "indian_legal_family": {
+            "tp": 4,
+            "fp": 0,
+            "fn": 0,
+            "support": 4,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          },
+          "indian_legal_loans": {
+            "tp": 2,
+            "fp": 0,
+            "fn": 0,
+            "support": 2,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          },
+          "indian_legal_loans_timeline": {
+            "tp": 1,
+            "fp": 0,
+            "fn": 0,
+            "support": 1,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          },
+          "jokes": {
+            "tp": 5,
+            "fp": 0,
+            "fn": 1,
+            "support": 6,
+            "precision": 100.0,
+            "recall": 83.33333333333334,
+            "f1": 90.9090909090909
+          },
+          "karnataka_elections": {
+            "tp": 3,
+            "fp": 0,
+            "fn": 1,
+            "support": 4,
+            "precision": 100.0,
+            "recall": 75.0,
+            "f1": 85.71428571428571
+          },
+          "linux_audio": {
+            "tp": 3,
+            "fp": 1,
+            "fn": 0,
+            "support": 3,
+            "precision": 75.0,
+            "recall": 100.0,
+            "f1": 85.71428571428571
+          },
+          "linux_audio_pipewire": {
+            "tp": 1,
+            "fp": 0,
+            "fn": 1,
+            "support": 2,
+            "precision": 100.0,
+            "recall": 50.0,
+            "f1": 66.66666666666666
+          },
+          "literature_camus": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 6,
+            "support": 6,
+            "precision": 0,
+            "recall": 0.0,
+            "f1": 0
+          },
+          "llm_knowledge": {
+            "tp": 4,
+            "fp": 0,
+            "fn": 6,
+            "support": 10,
+            "precision": 100.0,
+            "recall": 40.0,
+            "f1": 57.14285714285715
+          },
+          "logic_puzzle": {
+            "tp": 4,
+            "fp": 0,
+            "fn": 0,
+            "support": 4,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          },
+          "lsat": {
+            "tp": 2,
+            "fp": 3,
+            "fn": 0,
+            "support": 2,
+            "precision": 40.0,
+            "recall": 100.0,
+            "f1": 57.14285714285715
+          },
+          "lsat_medical_conference": {
+            "tp": 3,
+            "fp": 0,
+            "fn": 0,
+            "support": 3,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          },
+          "lsat_piano_recital": {
+            "tp": 1,
+            "fp": 0,
+            "fn": 0,
+            "support": 1,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          },
+          "lsat_product_codes": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 5,
+            "support": 5,
+            "precision": 0,
+            "recall": 0.0,
+            "f1": 0
+          },
+          "medical_dsd": {
+            "tp": 5,
+            "fp": 0,
+            "fn": 1,
+            "support": 6,
+            "precision": 100.0,
+            "recall": 83.33333333333334,
+            "f1": 90.9090909090909
+          },
+          "medical_treatments": {
+            "tp": 2,
+            "fp": 0,
+            "fn": 0,
+            "support": 2,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          },
+          "personas_roleplay": {
+            "tp": 5,
+            "fp": 0,
+            "fn": 1,
+            "support": 6,
+            "precision": 100.0,
+            "recall": 83.33333333333334,
+            "f1": 90.9090909090909
+          },
+          "physics_blackholes": {
+            "tp": 1,
+            "fp": 0,
+            "fn": 1,
+            "support": 2,
+            "precision": 100.0,
+            "recall": 50.0,
+            "f1": 66.66666666666666
+          },
+          "physics_cosmology": {
+            "tp": 3,
+            "fp": 0,
+            "fn": 0,
+            "support": 3,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          },
+          "physics_quantum": {
+            "tp": 1,
+            "fp": 0,
+            "fn": 0,
+            "support": 1,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          },
+          "physics_violin_nanoscale": {
+            "tp": 3,
+            "fp": 0,
+            "fn": 0,
+            "support": 3,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          },
+          "recipes": {
+            "tp": 2,
+            "fp": 0,
+            "fn": 0,
+            "support": 2,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          },
+          "repetitive_loop": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 1,
+            "support": 1,
+            "precision": 0,
+            "recall": 0.0,
+            "f1": 0
+          },
+          "scifi_films": {
+            "tp": 1,
+            "fp": 0,
+            "fn": 6,
+            "support": 7,
+            "precision": 100.0,
+            "recall": 14.285714285714285,
+            "f1": 25.0
+          },
+          "scifi_films_hal9000": {
+            "tp": 5,
+            "fp": 0,
+            "fn": 0,
+            "support": 5,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          },
+          "scifi_films_hal9000_games": {
+            "tp": 11,
+            "fp": 0,
+            "fn": 0,
+            "support": 11,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          },
+          "scifi_films_liu_cixin": {
+            "tp": 2,
+            "fp": 0,
+            "fn": 2,
+            "support": 4,
+            "precision": 100.0,
+            "recall": 50.0,
+            "f1": 66.66666666666666
+          },
+          "scifi_films_space_exploration": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 1,
+            "support": 1,
+            "precision": 0,
+            "recall": 0.0,
+            "f1": 0
+          },
+          "statistics_multivariate": {
+            "tp": 2,
+            "fp": 0,
+            "fn": 0,
+            "support": 2,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          },
+          "therapy": {
+            "tp": 3,
+            "fp": 4,
+            "fn": 0,
+            "support": 3,
+            "precision": 42.857142857142854,
+            "recall": 100.0,
+            "f1": 60.0
+          },
+          "therapy_manipulation": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 4,
+            "support": 4,
+            "precision": 0,
+            "recall": 0.0,
+            "f1": 0
+          },
+          "wildfires_alberta": {
+            "tp": 4,
+            "fp": 0,
+            "fn": 1,
+            "support": 5,
+            "precision": 100.0,
+            "recall": 80.0,
+            "f1": 88.8888888888889
+          }
+        },
+        "topics": [
+          "ai_chat_tools",
+          "ai_consciousness",
+          "ai_consciousness_friendship",
+          "ai_meta",
+          "bhutan_travel",
+          "chess",
+          "child_nutrition",
+          "cookies_preferences",
+          "cookies_recipe",
+          "cookies_recipe_halving",
+          "cookies_recipe_halving_argument",
+          "cookies_recipe_halving_corrections",
+          "cookies_recipe_halving_math_errors",
+          "covid_safety",
+          "covid_safety_hiv_aids",
+          "dsp_wavelets",
+          "dsp_wavelets_c_code",
+          "electroculture",
+          "emoji_game",
+          "game_degree_guess",
+          "game_twenty_questions",
+          "geography_belgium",
+          "humanity_future_150y",
+          "indian_astrology",
+          "indian_astrology_terminology",
+          "indian_history",
+          "indian_legal",
+          "indian_legal_family",
+          "indian_legal_loans",
+          "indian_legal_loans_timeline",
+          "jokes",
+          "karnataka_elections",
+          "linux_audio",
+          "linux_audio_pipewire",
+          "literature_camus",
+          "llm_knowledge",
+          "logic_puzzle",
+          "lsat",
+          "lsat_medical_conference",
+          "lsat_piano_recital",
+          "lsat_product_codes",
+          "medical_dsd",
+          "medical_treatments",
+          "personas_roleplay",
+          "physics_blackholes",
+          "physics_cosmology",
+          "physics_quantum",
+          "physics_violin_nanoscale",
+          "recipes",
+          "repetitive_loop",
+          "scifi_films",
+          "scifi_films_hal9000",
+          "scifi_films_hal9000_games",
+          "scifi_films_liu_cixin",
+          "scifi_films_space_exploration",
+          "statistics_multivariate",
+          "therapy",
+          "therapy_manipulation",
+          "wildfires_alberta"
+        ]
       },
       "system": {
-        "precision": 0,
-        "recall": 0,
-        "f1": 0,
-        "macro_precision": 0,
-        "macro_recall": 0,
-        "macro_f1": 0,
-        "accuracy": 0,
-        "pollution_rate": 0,
-        "tp": 0,
+        "precision": 80.99074536574537,
+        "recall": 73.7012987012987,
+        "f1": 74.36901548743654,
+        "macro_precision": 73.8617267854556,
+        "macro_recall": 69.90223053782377,
+        "macro_f1": 69.15130909332515,
+        "accuracy": 72.52396166134186,
+        "pollution_rate": 27.47603833865815,
+        "tp": 227,
         "tn": 0,
-        "fp": 0,
+        "fp": 86,
         "fn": 0,
-        "per_topic_metrics": {},
-        "topics": []
+        "per_topic_metrics": {
+          "ai_chat_tools": {
+            "tp": 5,
+            "fp": 0,
+            "fn": 5,
+            "support": 10,
+            "precision": 100.0,
+            "recall": 50.0,
+            "f1": 66.66666666666666
+          },
+          "ai_consciousness": {
+            "tp": 3,
+            "fp": 10,
+            "fn": 5,
+            "support": 8,
+            "precision": 23.076923076923077,
+            "recall": 37.5,
+            "f1": 28.57142857142857
+          },
+          "ai_consciousness_friendship": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 6,
+            "support": 6,
+            "precision": 0,
+            "recall": 0.0,
+            "f1": 0
+          },
+          "ai_meta": {
+            "tp": 3,
+            "fp": 0,
+            "fn": 8,
+            "support": 11,
+            "precision": 100.0,
+            "recall": 27.27272727272727,
+            "f1": 42.857142857142854
+          },
+          "bhutan_travel": {
+            "tp": 2,
+            "fp": 0,
+            "fn": 1,
+            "support": 3,
+            "precision": 100.0,
+            "recall": 66.66666666666666,
+            "f1": 80.0
+          },
+          "chess": {
+            "tp": 7,
+            "fp": 0,
+            "fn": 0,
+            "support": 7,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          },
+          "child_nutrition": {
+            "tp": 3,
+            "fp": 0,
+            "fn": 3,
+            "support": 6,
+            "precision": 100.0,
+            "recall": 50.0,
+            "f1": 66.66666666666666
+          },
+          "cookies_preferences": {
+            "tp": 2,
+            "fp": 0,
+            "fn": 0,
+            "support": 2,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          },
+          "cookies_recipe": {
+            "tp": 1,
+            "fp": 0,
+            "fn": 0,
+            "support": 1,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          },
+          "cookies_recipe_halving": {
+            "tp": 3,
+            "fp": 0,
+            "fn": 0,
+            "support": 3,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          },
+          "cookies_recipe_halving_argument": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 3,
+            "support": 3,
+            "precision": 0,
+            "recall": 0.0,
+            "f1": 0
+          },
+          "cookies_recipe_halving_corrections": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 3,
+            "support": 3,
+            "precision": 0,
+            "recall": 0.0,
+            "f1": 0
+          },
+          "cookies_recipe_halving_math_errors": {
+            "tp": 4,
+            "fp": 5,
+            "fn": 0,
+            "support": 4,
+            "precision": 44.44444444444444,
+            "recall": 100.0,
+            "f1": 61.53846153846153
+          },
+          "covid_safety": {
+            "tp": 6,
+            "fp": 7,
+            "fn": 0,
+            "support": 6,
+            "precision": 46.15384615384615,
+            "recall": 100.0,
+            "f1": 63.1578947368421
+          },
+          "covid_safety_hiv_aids": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 7,
+            "support": 7,
+            "precision": 0,
+            "recall": 0.0,
+            "f1": 0
+          },
+          "dsp_wavelets": {
+            "tp": 4,
+            "fp": 0,
+            "fn": 7,
+            "support": 11,
+            "precision": 100.0,
+            "recall": 36.36363636363637,
+            "f1": 53.333333333333336
+          },
+          "dsp_wavelets_c_code": {
+            "tp": 2,
+            "fp": 0,
+            "fn": 0,
+            "support": 2,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          },
+          "electroculture": {
+            "tp": 7,
+            "fp": 0,
+            "fn": 0,
+            "support": 7,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          },
+          "emoji_game": {
+            "tp": 31,
+            "fp": 0,
+            "fn": 0,
+            "support": 31,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          },
+          "game_degree_guess": {
+            "tp": 3,
+            "fp": 0,
+            "fn": 0,
+            "support": 3,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          },
+          "game_twenty_questions": {
+            "tp": 33,
+            "fp": 0,
+            "fn": 0,
+            "support": 33,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          },
+          "geography_belgium": {
+            "tp": 2,
+            "fp": 0,
+            "fn": 1,
+            "support": 3,
+            "precision": 100.0,
+            "recall": 66.66666666666666,
+            "f1": 80.0
+          },
+          "humanity_future_150y": {
+            "tp": 4,
+            "fp": 1,
+            "fn": 0,
+            "support": 4,
+            "precision": 80.0,
+            "recall": 100.0,
+            "f1": 88.8888888888889
+          },
+          "indian_astrology": {
+            "tp": 5,
+            "fp": 1,
+            "fn": 0,
+            "support": 5,
+            "precision": 83.33333333333334,
+            "recall": 100.0,
+            "f1": 90.9090909090909
+          },
+          "indian_astrology_terminology": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 1,
+            "support": 1,
+            "precision": 0,
+            "recall": 0.0,
+            "f1": 0
+          },
+          "indian_history": {
+            "tp": 3,
+            "fp": 1,
+            "fn": 0,
+            "support": 3,
+            "precision": 75.0,
+            "recall": 100.0,
+            "f1": 85.71428571428571
+          },
+          "indian_legal": {
+            "tp": 3,
+            "fp": 2,
+            "fn": 1,
+            "support": 4,
+            "precision": 60.0,
+            "recall": 75.0,
+            "f1": 66.66666666666666
+          },
+          "indian_legal_family": {
+            "tp": 4,
+            "fp": 0,
+            "fn": 0,
+            "support": 4,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          },
+          "indian_legal_loans": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 2,
+            "support": 2,
+            "precision": 0,
+            "recall": 0.0,
+            "f1": 0
+          },
+          "indian_legal_loans_timeline": {
+            "tp": 1,
+            "fp": 0,
+            "fn": 0,
+            "support": 1,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          },
+          "jokes": {
+            "tp": 5,
+            "fp": 0,
+            "fn": 1,
+            "support": 6,
+            "precision": 100.0,
+            "recall": 83.33333333333334,
+            "f1": 90.9090909090909
+          },
+          "karnataka_elections": {
+            "tp": 3,
+            "fp": 0,
+            "fn": 1,
+            "support": 4,
+            "precision": 100.0,
+            "recall": 75.0,
+            "f1": 85.71428571428571
+          },
+          "linux_audio": {
+            "tp": 1,
+            "fp": 0,
+            "fn": 2,
+            "support": 3,
+            "precision": 100.0,
+            "recall": 33.33333333333333,
+            "f1": 50.0
+          },
+          "linux_audio_pipewire": {
+            "tp": 2,
+            "fp": 2,
+            "fn": 0,
+            "support": 2,
+            "precision": 50.0,
+            "recall": 100.0,
+            "f1": 66.66666666666666
+          },
+          "literature_camus": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 6,
+            "support": 6,
+            "precision": 0,
+            "recall": 0.0,
+            "f1": 0
+          },
+          "llm_knowledge": {
+            "tp": 10,
+            "fp": 0,
+            "fn": 0,
+            "support": 10,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          },
+          "logic_puzzle": {
+            "tp": 4,
+            "fp": 0,
+            "fn": 0,
+            "support": 4,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          },
+          "lsat": {
+            "tp": 2,
+            "fp": 4,
+            "fn": 0,
+            "support": 2,
+            "precision": 33.33333333333333,
+            "recall": 100.0,
+            "f1": 50.0
+          },
+          "lsat_medical_conference": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 3,
+            "support": 3,
+            "precision": 0,
+            "recall": 0.0,
+            "f1": 0
+          },
+          "lsat_piano_recital": {
+            "tp": 1,
+            "fp": 0,
+            "fn": 0,
+            "support": 1,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          },
+          "lsat_product_codes": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 5,
+            "support": 5,
+            "precision": 0,
+            "recall": 0.0,
+            "f1": 0
+          },
+          "medical_dsd": {
+            "tp": 6,
+            "fp": 0,
+            "fn": 0,
+            "support": 6,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          },
+          "medical_treatments": {
+            "tp": 2,
+            "fp": 0,
+            "fn": 0,
+            "support": 2,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          },
+          "personas_roleplay": {
+            "tp": 6,
+            "fp": 0,
+            "fn": 0,
+            "support": 6,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          },
+          "physics_blackholes": {
+            "tp": 2,
+            "fp": 0,
+            "fn": 0,
+            "support": 2,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          },
+          "physics_cosmology": {
+            "tp": 3,
+            "fp": 0,
+            "fn": 0,
+            "support": 3,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          },
+          "physics_quantum": {
+            "tp": 1,
+            "fp": 0,
+            "fn": 0,
+            "support": 1,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          },
+          "physics_violin_nanoscale": {
+            "tp": 2,
+            "fp": 0,
+            "fn": 1,
+            "support": 3,
+            "precision": 100.0,
+            "recall": 66.66666666666666,
+            "f1": 80.0
+          },
+          "recipes": {
+            "tp": 2,
+            "fp": 0,
+            "fn": 0,
+            "support": 2,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          },
+          "repetitive_loop": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 1,
+            "support": 1,
+            "precision": 0,
+            "recall": 0.0,
+            "f1": 0
+          },
+          "scifi_films": {
+            "tp": 5,
+            "fp": 3,
+            "fn": 2,
+            "support": 7,
+            "precision": 62.5,
+            "recall": 71.42857142857143,
+            "f1": 66.66666666666666
+          },
+          "scifi_films_hal9000": {
+            "tp": 3,
+            "fp": 0,
+            "fn": 2,
+            "support": 5,
+            "precision": 100.0,
+            "recall": 60.0,
+            "f1": 74.99999999999999
+          },
+          "scifi_films_hal9000_games": {
+            "tp": 11,
+            "fp": 0,
+            "fn": 0,
+            "support": 11,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          },
+          "scifi_films_liu_cixin": {
+            "tp": 1,
+            "fp": 0,
+            "fn": 3,
+            "support": 4,
+            "precision": 100.0,
+            "recall": 25.0,
+            "f1": 40.0
+          },
+          "scifi_films_space_exploration": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 1,
+            "support": 1,
+            "precision": 0,
+            "recall": 0.0,
+            "f1": 0
+          },
+          "statistics_multivariate": {
+            "tp": 2,
+            "fp": 0,
+            "fn": 0,
+            "support": 2,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          },
+          "therapy": {
+            "tp": 3,
+            "fp": 0,
+            "fn": 0,
+            "support": 3,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          },
+          "therapy_manipulation": {
+            "tp": 4,
+            "fp": 0,
+            "fn": 0,
+            "support": 4,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          },
+          "wildfires_alberta": {
+            "tp": 5,
+            "fp": 0,
+            "fn": 0,
+            "support": 5,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1": 100.0
+          }
+        },
+        "topics": [
+          "ai_chat_tools",
+          "ai_consciousness",
+          "ai_consciousness_friendship",
+          "ai_meta",
+          "bhutan_travel",
+          "chess",
+          "child_nutrition",
+          "cookies_preferences",
+          "cookies_recipe",
+          "cookies_recipe_halving",
+          "cookies_recipe_halving_argument",
+          "cookies_recipe_halving_corrections",
+          "cookies_recipe_halving_math_errors",
+          "covid_safety",
+          "covid_safety_hiv_aids",
+          "dsp_wavelets",
+          "dsp_wavelets_c_code",
+          "electroculture",
+          "emoji_game",
+          "game_degree_guess",
+          "game_twenty_questions",
+          "geography_belgium",
+          "humanity_future_150y",
+          "indian_astrology",
+          "indian_astrology_terminology",
+          "indian_history",
+          "indian_legal",
+          "indian_legal_family",
+          "indian_legal_loans",
+          "indian_legal_loans_timeline",
+          "jokes",
+          "karnataka_elections",
+          "linux_audio",
+          "linux_audio_pipewire",
+          "literature_camus",
+          "llm_knowledge",
+          "logic_puzzle",
+          "lsat",
+          "lsat_medical_conference",
+          "lsat_piano_recital",
+          "lsat_product_codes",
+          "medical_dsd",
+          "medical_treatments",
+          "personas_roleplay",
+          "physics_blackholes",
+          "physics_cosmology",
+          "physics_quantum",
+          "physics_violin_nanoscale",
+          "recipes",
+          "repetitive_loop",
+          "scifi_films",
+          "scifi_films_hal9000",
+          "scifi_films_hal9000_games",
+          "scifi_films_liu_cixin",
+          "scifi_films_space_exploration",
+          "statistics_multivariate",
+          "therapy",
+          "therapy_manipulation",
+          "wildfires_alberta"
+        ]
       },
       "improvements": {
-        "precision": 0,
-        "recall": 0,
-        "f1": 0,
-        "accuracy": 0,
-        "pollution_rate": 0,
-        "macro_precision": 0,
-        "macro_recall": 0,
-        "macro_f1": 0
+        "precision": -7.7488525093526395,
+        "recall": 5.09259259259259,
+        "f1": 0.8920065485913411,
+        "accuracy": 5.092592592592614,
+        "pollution_rate": -11.340206185566998,
+        "macro_precision": -8.877148773096188,
+        "macro_recall": 0.13374674829860111,
+        "macro_f1": -2.240199887310964
       }
     },
     "table_3": {
       "baseline": {
-        "avg_latency": 0,
-        "tokens_per_correct_answer": 0
+        "avg_input_tokens": 879.3354632587859,
+        "avg_output_tokens": 126.26837060702876,
+        "avg_total_tokens": 1005.6038338658146,
+        "avg_latency": 13.037887359960392,
+        "token_compression_rate": 0,
+        "tokens_per_correct_answer": 2452.5138888888887,
+        "cost_per_query": 5.4068242811501596e-05,
+        "cost_per_1m_queries": 54.0682428115016
       },
       "system": {
-        "avg_latency": 0,
-        "tokens_per_correct_answer": 0
+        "avg_input_tokens": 900.8722044728435,
+        "avg_output_tokens": 136.32268370607028,
+        "avg_total_tokens": 1037.1948881789137,
+        "avg_latency": 11.886395926673572,
+        "token_compression_rate": 0,
+        "tokens_per_correct_answer": 2408.5947136563877,
+        "cost_per_query": 5.59494249201278e-05,
+        "cost_per_1m_queries": 55.9494249201278
       },
       "improvements": {
-        "avg_latency": 0,
-        "tokens_per_correct_answer": 0
+        "avg_input_tokens": 2.449206487617723,
+        "avg_output_tokens": 7.962653711856678,
+        "avg_total_tokens": 3.1415009817190636,
+        "avg_latency": -8.831886650770373,
+        "token_compression_rate": 0,
+        "tokens_per_correct_answer": -1.790781916933344,
+        "cost_per_query": 3.4792736194231053,
+        "cost_per_1m_queries": 3.479273619423094
       }
     }
   }

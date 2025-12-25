@@ -1,0 +1,370 @@
+{
+  "scenario_name": "AmbigNQ-Derived: Entity & Context Confusion - Technology and History",
+  "conversation_title": "Technology & History: Entity Ambiguity Testing",
+  "description": "Tests LLM's ability to handle ENTITY AMBIGUITY and CONTEXT-DEPENDENT DISAMBIGUATION with switching between technology (iPhone, Windows) and history (presidents, wars). Same names refer to different entities/versions. Humans use context to disambiguate, but baseline LLMs mix entities across subchat boundaries.",
+  "data_source": "train_light.json (AmbigNQ dataset)",
+  "source_file_path": "backend/dataset/dataset_sources/ambignq_light/train_light.json",
+  "conversations": [
+    {
+      "step": 1,
+      "context": "intro",
+      "message": "I want to discuss some tech history and compare it with actual history",
+      "expected": "Acknowledgment and readiness to discuss technology history and historical events",
+      "dataset_reference_id": null,
+      "node_type": "main",
+      "action": "",
+      "linear_failure_risk": "none - establishing baseline"
+    },
+    {
+      "step": 2,
+      "context": "iphone_original",
+      "message": "When was the first iPhone released?",
+      "expected": "The first iPhone was released on June 29, 2007",
+      "dataset_reference_id": "5837525172880694859",
+      "node_type": "subchat_1",
+      "action": "create_subchat",
+      "selected_text": "first iPhone",
+      "linear_failure_risk": "low - clear topic introduction"
+    },
+    {
+      "step": 3,
+      "context": "washington_president",
+      "message": "Let's switch - when did George Washington become president?",
+      "expected": "George Washington became the first U.S. President on April 30, 1789",
+      "dataset_reference_id": "-8642864827376250346",
+      "node_type": "subchat_2",
+      "action": "create_subchat",
+      "selected_text": "George Washington president",
+      "linear_failure_risk": "low - clear historical topic"
+    },
+    {
+      "step": 4,
+      "context": "iphone_3g",
+      "message": "What about the second generation model?",
+      "expected": "The iPhone 3G (second generation) was released on July 11, 2008",
+      "dataset_reference_id": "5837525172880694859",
+      "node_type": "subchat_1",
+      "action": "switch_node",
+      "linear_failure_risk": "CRITICAL - 'second generation' ambiguous (iPhone 3G or second president John Adams?)"
+    },
+    {
+      "step": 5,
+      "context": "windows_1",
+      "message": "New topic - when did Windows first come out?",
+      "expected": "Windows 1.0 was released on November 20, 1985",
+      "dataset_reference_id": "3426185119449245672",
+      "node_type": "subchat_3",
+      "action": "create_subchat",
+      "selected_text": "Windows first",
+      "linear_failure_risk": "CRITICAL - 'Windows' ambiguous (OS, actual windows, Windows phones?)"
+    },
+    {
+      "step": 6,
+      "context": "civil_war_start",
+      "message": "When did the Civil War start?",
+      "expected": "The American Civil War started on April 12, 1861",
+      "dataset_reference_id": "7291648293847562911",
+      "node_type": "subchat_4",
+      "action": "create_subchat",
+      "selected_text": "Civil War",
+      "linear_failure_risk": "CRITICAL - 'Civil War' ambiguous (American, Spanish, English, Syrian?)"
+    },
+    {
+      "step": 7,
+      "context": "washington_president",
+      "message": "How long was his term?",
+      "expected": "George Washington served two terms as president from 1789 to 1797 (8 years total)",
+      "dataset_reference_id": "-8642864827376250346",
+      "node_type": "subchat_2",
+      "action": "switch_node",
+      "linear_failure_risk": "CATASTROPHIC - 'his term' - Washington, iPhone contract, Windows support, Civil War duration?"
+    },
+    {
+      "step": 8,
+      "context": "iphone_4",
+      "message": "What was the fourth version called?",
+      "expected": "The iPhone 4 (fourth generation) was released on June 24, 2010",
+      "dataset_reference_id": "5837525172880694859",
+      "node_type": "subchat_1",
+      "action": "switch_node",
+      "linear_failure_risk": "CRITICAL - 'fourth version' - iPhone 4, Windows 4.x, fourth president Madison?"
+    },
+    {
+      "step": 9,
+      "context": "windows_95",
+      "message": "Which version was the most popular in the 90s?",
+      "expected": "Windows 95 (released August 24, 1995) was the most popular Windows version in the 1990s",
+      "dataset_reference_id": "3426185119449245672",
+      "node_type": "subchat_3",
+      "action": "switch_node",
+      "linear_failure_risk": "CRITICAL - '90s' - mixing iPhone timeline (2000s), Windows (1990s), presidents (1700s-1800s)"
+    },
+    {
+      "step": 10,
+      "context": "civil_war_end",
+      "message": "When did it end?",
+      "expected": "The American Civil War ended on April 9, 1865 (Lee's surrender at Appomattox)",
+      "dataset_reference_id": "7291648293847562911",
+      "node_type": "subchat_4",
+      "action": "switch_node",
+      "linear_failure_risk": "CATASTROPHIC - 'it' - Civil War, Windows 95 support, iPhone 4 production, Washington presidency?"
+    },
+    {
+      "step": 11,
+      "context": "lincoln_assassination",
+      "message": "Who was president when it ended?",
+      "expected": "Abraham Lincoln was president when the Civil War ended (April 1865), though he was assassinated days later on April 14, 1865",
+      "dataset_reference_id": "7291648293847562911",
+      "node_type": "subchat_4",
+      "action": "",
+      "linear_failure_risk": "CRITICAL - 'when it ended' - baseline mixing all timeline contexts"
+    },
+    {
+      "step": 12,
+      "context": "iphone_5",
+      "message": "What year did the fifth one come out?",
+      "expected": "The iPhone 5 (fifth generation) was released on September 21, 2012",
+      "dataset_reference_id": "5837525172880694859",
+      "node_type": "subchat_1",
+      "action": "switch_node",
+      "linear_failure_risk": "CRITICAL - 'fifth one' - iPhone 5, Windows version, fifth president Monroe?"
+    },
+    {
+      "step": 13,
+      "context": "windows_xp",
+      "message": "What was the version released in 2001?",
+      "expected": "Windows XP was released on October 25, 2001",
+      "dataset_reference_id": "3426185119449245672",
+      "node_type": "subchat_3",
+      "action": "switch_node",
+      "linear_failure_risk": "CRITICAL - baseline might confuse with iPhone (not yet released), presidents (different era)"
+    },
+    {
+      "step": 14,
+      "context": "washington_farewell",
+      "message": "Did he write a farewell address?",
+      "expected": "Yes, George Washington wrote his Farewell Address in 1796, published on September 19, 1796",
+      "dataset_reference_id": "-8642864827376250346",
+      "node_type": "subchat_2",
+      "action": "switch_node",
+      "linear_failure_risk": "CATASTROPHIC - 'he' - Washington, Lincoln, Steve Jobs, Bill Gates?"
+    },
+    {
+      "step": 15,
+      "context": "civil_war_casualties",
+      "message": "How many casualties were there?",
+      "expected": "The American Civil War had approximately 620,000 to 750,000 total casualties (deaths)",
+      "dataset_reference_id": "7291648293847562911",
+      "node_type": "subchat_4",
+      "action": "switch_node",
+      "linear_failure_risk": "CRITICAL - 'casualties' - baseline mixing war casualties with product failures?"
+    },
+    {
+      "step": 16,
+      "context": "iphone_se",
+      "message": "Was there a smaller affordable version?",
+      "expected": "Yes, the iPhone SE (first generation) was released on March 31, 2016 as a smaller, more affordable model",
+      "dataset_reference_id": "5837525172880694859",
+      "node_type": "subchat_1",
+      "action": "switch_node",
+      "linear_failure_risk": "CRITICAL - 'smaller affordable version' - iPhone SE, Windows editions, presidential powers?"
+    },
+    {
+      "step": 17,
+      "context": "windows_7",
+      "message": "Which one replaced Vista?",
+      "expected": "Windows 7 was released on October 22, 2009, replacing Windows Vista",
+      "dataset_reference_id": "3426185119449245672",
+      "node_type": "subchat_3",
+      "action": "switch_node",
+      "linear_failure_risk": "CRITICAL - 'replaced' - OS versions, presidential succession, iPhone models?"
+    },
+    {
+      "step": 18,
+      "context": "lincoln_assassination",
+      "message": "Where was he assassinated?",
+      "expected": "Abraham Lincoln was assassinated at Ford's Theatre in Washington, D.C. on April 14, 1865",
+      "dataset_reference_id": "-1234567890123456789",
+      "node_type": "subchat_5",
+      "action": "create_subchat",
+      "selected_text": "Lincoln assassination",
+      "linear_failure_risk": "CRITICAL - 'he' - Lincoln, Washington, Steve Jobs (died 2011)?"
+    },
+    {
+      "step": 19,
+      "context": "iphone_6",
+      "message": "What was the first model with a larger screen?",
+      "expected": "The iPhone 6 and iPhone 6 Plus (released September 19, 2014) were the first with larger screens (4.7\" and 5.5\")",
+      "dataset_reference_id": "5837525172880694859",
+      "node_type": "subchat_1",
+      "action": "switch_node",
+      "linear_failure_risk": "CRITICAL - 'larger screen' - baseline mixing product features with historical events"
+    },
+    {
+      "step": 20,
+      "context": "civil_war_battles",
+      "message": "What was the bloodiest battle?",
+      "expected": "The Battle of Gettysburg (July 1-3, 1863) was the bloodiest battle of the Civil War with about 51,000 casualties",
+      "dataset_reference_id": "7291648293847562911",
+      "node_type": "subchat_4",
+      "action": "switch_node",
+      "linear_failure_risk": "CRITICAL - 'battle' - military battles vs market battles (iPhone vs Android, Windows vs Mac)"
+    },
+    {
+      "step": 21,
+      "context": "windows_10",
+      "message": "Which version is still supported today?",
+      "expected": "Windows 10 (released July 29, 2015) is still supported, along with Windows 11 (released October 5, 2021)",
+      "dataset_reference_id": "3426185119449245672",
+      "node_type": "subchat_3",
+      "action": "switch_node",
+      "linear_failure_risk": "CRITICAL - 'still supported' - OS support, iPhone support, historical records maintained?"
+    },
+    {
+      "step": 22,
+      "context": "washington_cabinet",
+      "message": "Who were his closest advisors?",
+      "expected": "George Washington's closest advisors included Thomas Jefferson (Secretary of State), Alexander Hamilton (Secretary of Treasury), and Henry Knox (Secretary of War)",
+      "dataset_reference_id": "-8642864827376250346",
+      "node_type": "subchat_2",
+      "action": "switch_node",
+      "linear_failure_risk": "CATASTROPHIC - 'his' - Washington, Lincoln, Bill Gates (Windows), Steve Jobs (iPhone)?"
+    },
+    {
+      "step": 23,
+      "context": "iphone_x",
+      "message": "What was the tenth anniversary model called?",
+      "expected": "The iPhone X (pronounced 'ten') was released on November 3, 2017 for the 10th anniversary",
+      "dataset_reference_id": "5837525172880694859",
+      "node_type": "subchat_1",
+      "action": "switch_node",
+      "linear_failure_risk": "CRITICAL - 'tenth anniversary' - iPhone (2007-2017), Windows (1985-1995), USA (1776-1786)?"
+    },
+    {
+      "step": 24,
+      "context": "lincoln_gettysburg",
+      "message": "What famous speech was given there?",
+      "expected": "Abraham Lincoln's Gettysburg Address was delivered on November 19, 1863 at the dedication of the Soldiers' National Cemetery",
+      "dataset_reference_id": "4837625284756391028",
+      "node_type": "subchat_5",
+      "action": "switch_node",
+      "linear_failure_risk": "CATASTROPHIC - 'there' - Gettysburg, Ford's Theatre, Washington D.C., Apple keynotes, Microsoft conferences?"
+    },
+    {
+      "step": 25,
+      "context": "windows_vista",
+      "message": "Which version was criticized for performance issues?",
+      "expected": "Windows Vista (released January 30, 2007) was heavily criticized for performance issues and compatibility problems",
+      "dataset_reference_id": "3426185119449245672",
+      "node_type": "subchat_3",
+      "action": "switch_node",
+      "linear_failure_risk": "CRITICAL - 'performance issues' - OS problems, iPhone antenna gate, Civil War strategic failures?"
+    },
+    {
+      "step": 26,
+      "context": "civil_war_emancipation",
+      "message": "When was the proclamation issued?",
+      "expected": "The Emancipation Proclamation was issued by Abraham Lincoln on January 1, 1863",
+      "dataset_reference_id": "8273645928374650192",
+      "node_type": "subchat_4",
+      "action": "switch_node",
+      "linear_failure_risk": "CATASTROPHIC - 'proclamation' - baseline mixing historical proclamations with product announcements"
+    },
+    {
+      "step": 27,
+      "context": "iphone_11",
+      "message": "Which model introduced the dual camera system?",
+      "expected": "The iPhone 7 Plus (2016) first introduced dual cameras, but iPhone 11 (September 20, 2019) made it standard across the line",
+      "dataset_reference_id": "5837525172880694859",
+      "node_type": "subchat_1",
+      "action": "switch_node",
+      "linear_failure_risk": "CRITICAL - 'dual system' - cameras, Windows dual boot, two-party system in Civil War era?"
+    },
+    {
+      "step": 28,
+      "context": "washington_precedents",
+      "message": "What precedents did he set?",
+      "expected": "George Washington set precedents including: two-term limit, cabinet system, neutral foreign policy, and the title 'Mr. President'",
+      "dataset_reference_id": "-8642864827376250346",
+      "node_type": "subchat_2",
+      "action": "switch_node",
+      "linear_failure_risk": "CATASTROPHIC - 'he' - Washington, Lincoln, Steve Jobs (Apple design precedents), Gates (Windows standards)?"
+    },
+    {
+      "step": 29,
+      "context": "windows_8",
+      "message": "Which version had the controversial Start screen?",
+      "expected": "Windows 8 (released October 26, 2012) introduced the controversial Metro/Start screen interface",
+      "dataset_reference_id": "3426185119449245672",
+      "node_type": "subchat_3",
+      "action": "switch_node",
+      "linear_failure_risk": "CRITICAL - 'controversial' - OS interfaces, iPhone designs, Civil War controversies, political decisions?"
+    },
+    {
+      "step": 30,
+      "context": "lincoln_debates",
+      "message": "Who did he debate before becoming president?",
+      "expected": "Abraham Lincoln participated in the famous Lincoln-Douglas debates with Stephen A. Douglas in 1858 (for Senate seat)",
+      "dataset_reference_id": "9876543210987654321",
+      "node_type": "subchat_5",
+      "action": "switch_node",
+      "linear_failure_risk": "CATASTROPHIC - 'he' and 'before becoming president' - mixing Lincoln, Washington, product launches"
+    },
+    {
+      "step": 31,
+      "context": "iphone_12",
+      "message": "What year did they add 5G?",
+      "expected": "The iPhone 12 series (released October 23, 2020) was the first to support 5G connectivity",
+      "dataset_reference_id": "5837525172880694859",
+      "node_type": "subchat_1",
+      "action": "switch_node",
+      "linear_failure_risk": "CRITICAL - 'they' and '5G' - baseline mixing tech companies, timeline contexts"
+    },
+    {
+      "step": 32,
+      "context": "civil_war_reconstruction",
+      "message": "What was the period after it called?",
+      "expected": "The Reconstruction Era (1865-1877) followed the American Civil War",
+      "dataset_reference_id": "7291648293847562911",
+      "node_type": "subchat_4",
+      "action": "switch_node",
+      "linear_failure_risk": "CATASTROPHIC - 'after it' - Civil War, iPhone 12, Windows 8, Lincoln debates, Washington presidency?"
+    },
+    {
+      "step": 33,
+      "context": "intro",
+      "message": "Which of these happened in the 1860s?",
+      "expected": "Civil War (1861-1865), Lincoln assassination (1865), Gettysburg Address (1863), Emancipation Proclamation (1863)",
+      "node_type": "main",
+      "action": "switch_node",
+      "linear_failure_risk": "CATASTROPHIC - requires filtering 1860s events from 1700s, 1900s, 2000s contexts"
+    },
+    {
+      "step": 34,
+      "context": "intro",
+      "message": "Compare the timelines - how many years apart were the first releases?",
+      "expected": "Windows 1.0 (1985) to iPhone (2007) = 22 years. George Washington presidency (1789) to Civil War (1861) = 72 years.",
+      "node_type": "main",
+      "action": "switch_node",
+      "linear_failure_risk": "CATASTROPHIC - temporal math across tech (1985-2020) and history (1789-1877)"
+    },
+    {
+      "step": 35,
+      "context": "intro",
+      "message": "Which products and historical figures share names or related terminology?",
+      "expected": "Washington (president George Washington, Washington D.C. where Lincoln was assassinated, Windows product), Civil War vs market battles",
+      "node_type": "main",
+      "action": "switch_node",
+      "linear_failure_risk": "CATASTROPHIC - semantic overlap detection across entity boundaries"
+    },
+    {
+      "step": 36,
+      "context": "intro",
+      "message": "What were the most controversial aspects of each?",
+      "expected": "Tech: Windows Vista performance, iPhone antenna gate. History: Civil War slavery, Lincoln's constitutional overreach debates, Washington's neutrality proclamation",
+      "node_type": "main",
+      "action": "switch_node",
+      "linear_failure_risk": "CATASTROPHIC - final synthesis requiring separation of product controversies vs historical controversies"
+    }
+  ]
+}

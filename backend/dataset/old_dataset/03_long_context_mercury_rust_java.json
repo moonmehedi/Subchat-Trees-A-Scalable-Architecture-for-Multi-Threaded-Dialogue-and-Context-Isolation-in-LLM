@@ -1,0 +1,377 @@
+{
+  "scenario_name": "Semantic Confusion: Mercury, Rust, Java Cross-Context Chaos",
+  "conversation_title": "Mercury, Rust, Java: Multi-Meaning Semantic Confusion",
+  "description": "Tests LLM's ability to handle SEMANTIC CONFUSION with randomized context switches. Humans can easily identify which meaning is asked, but baseline LLMs mix contexts due to overlapping vocabulary and random jumping between topics. Questions use ambiguous phrasing that requires tracking conversation history.",
+  "conversations": [
+    {
+      "step": 1,
+      "context": "intro",
+      "message": "I want to discuss three interesting topics: Mercury, Rust, and Java. They all have multiple meanings!",
+      "expected": "Acknowledgment that Mercury (planet/element/god), Rust (corrosion/programming), Java (island/language/coffee) are ambiguous terms",
+      "node_type": "main",
+      "action": "",
+      "linear_failure_risk": "none - establishing baseline"
+    },
+    {
+      "step": 2,
+      "context": "mercury_planet",
+      "message": "Let's start with the one that orbits closest to our sun",
+      "expected": "Mercury planet - smallest planet, closest to Sun, extreme temperatures, no atmosphere, heavily cratered",
+      "node_type": "subchat_1",
+      "action": "create_subchat",
+      "selected_text": "Mercury planet",
+      "linear_failure_risk": "low - clear reference to 'orbits sun' = planet"
+    },
+    {
+      "step": 3,
+      "context": "java_language",
+      "message": "Now tell me about the one that's object-oriented and runs on JVM",
+      "expected": "Java programming language - created by Sun Microsystems/James Gosling, object-oriented, platform-independent, JVM, used for enterprise applications",
+      "node_type": "subchat_2",
+      "action": "create_subchat",
+      "selected_text": "Java language",
+      "linear_failure_risk": "low - 'JVM' clearly indicates programming language"
+    },
+    {
+      "step": 4,
+      "context": "java_island",
+      "message": "What about the Indonesian one with volcanos?",
+      "expected": "Java island - Indonesian island, capital Jakarta, population 150M+, many active volcanoes, produces coffee and tea",
+      "node_type": "subchat_3",
+      "action": "create_subchat",
+      "selected_text": "Java island",
+      "parent_node_type": "subchat_2",
+      "linear_failure_risk": "moderate - baseline might mix island geography with JVM/coffee"
+    },
+    {
+      "step": 5,
+      "context": "mercury_planet",
+      "message": "How hot does it get on its surface during the day?",
+      "expected": "Mercury planet: up to 800°F (427°C) during day due to proximity to Sun",
+      "node_type": "subchat_1",
+      "action": "switch_node",
+      "linear_failure_risk": "HIGH - baseline confuses which 'it' - might say element's melting point or god's attributes"
+    },
+    {
+      "step": 6,
+      "context": "rust_language",
+      "message": "Tell me about the one that's memory-safe without garbage collection",
+      "expected": "Rust programming language - created by Mozilla/Graydon Hoare, memory safety, no garbage collector, ownership system, zero-cost abstractions",
+      "node_type": "subchat_4",
+      "action": "create_subchat",
+      "selected_text": "Rust language",
+      "linear_failure_risk": "low - 'memory-safe' and 'garbage collection' clearly mean programming"
+    },
+    {
+      "step": 7,
+      "context": "java_language",
+      "message": "Who originally created it in the 90s?",
+      "expected": "Java language: James Gosling at Sun Microsystems (1995)",
+      "node_type": "subchat_2",
+      "action": "switch_node",
+      "linear_failure_risk": "HIGH - baseline might say Dutch colonizers created Java island or coffee cultivation history"
+    },
+    {
+      "step": 8,
+      "context": "mercury_element",
+      "message": "Now the liquid one that's toxic - what's its atomic number?",
+      "expected": "Mercury element (Hg): atomic number 80, only metal liquid at room temperature, toxic heavy metal",
+      "node_type": "subchat_5",
+      "action": "create_subchat",
+      "selected_text": "Mercury element",
+      "linear_failure_risk": "low - 'liquid' and 'atomic number' clearly mean element"
+    },
+    {
+      "step": 9,
+      "context": "rust_corrosion",
+      "message": "What about the reddish-brown one that forms on iron?",
+      "expected": "Rust corrosion: iron oxide (Fe2O3), forms when iron reacts with oxygen and moisture, reddish-brown color, weakens metal structures",
+      "node_type": "subchat_6",
+      "action": "create_subchat",
+      "selected_text": "Rust corrosion",
+      "linear_failure_risk": "low - 'forms on iron' clearly indicates oxidation process"
+    },
+    {
+      "step": 10,
+      "context": "java_island",
+      "message": "What's its capital city?",
+      "expected": "Java island capital: Jakarta (Indonesia's capital, on northwest coast of Java)",
+      "node_type": "subchat_3",
+      "action": "switch_node",
+      "linear_failure_risk": "CRITICAL - baseline will confuse with 'What language is Java written in?' or coffee origin"
+    },
+    {
+      "step": 11,
+      "context": "mercury_planet",
+      "message": "How many Earth days does its orbit take?",
+      "expected": "Mercury planet: 88 Earth days to orbit the Sun",
+      "node_type": "subchat_1",
+      "action": "switch_node",
+      "linear_failure_risk": "CRITICAL - baseline might mix with element's half-life or god's mythology timelines"
+    },
+    {
+      "step": 12,
+      "context": "rust_language",
+      "message": "What's its mascot called?",
+      "expected": "Rust language mascot: Ferris the crab 🦀",
+      "node_type": "subchat_4",
+      "action": "switch_node",
+      "linear_failure_risk": "CRITICAL - baseline might talk about rust beetles or iron corrosion organisms"
+    },
+    {
+      "step": 13,
+      "context": "mercury_god",
+      "message": "What about the Roman one with winged sandals?",
+      "expected": "Mercury god: Roman god of commerce, communication, travelers, thieves; Greek equivalent Hermes; depicted with winged sandals (talaria) and caduceus staff; son of Jupiter",
+      "node_type": "subchat_7",
+      "action": "create_subchat",
+      "selected_text": "Mercury",
+      "linear_failure_risk": "low - 'winged sandals' clearly indicates mythology"
+    },
+    {
+      "step": 14,
+      "context": "java_coffee",
+      "message": "Tell me about the aromatic beverage variety grown there",
+      "expected": "Java coffee: grown on Indonesian island, Arabica and Robusta varieties, earthy flavor, heavy body, low acidity, historically important (Dutch colonial era)",
+      "node_type": "subchat_8",
+      "action": "create_subchat",
+      "selected_text": "Java coffee",
+      "parent_node_type": "subchat_3",
+      "linear_failure_risk": "moderate - 'aromatic beverage' hints coffee, but baseline mixing island/language might confuse"
+    },
+    {
+      "step": 15,
+      "context": "rust_corrosion",
+      "message": "How can you prevent it from forming?",
+      "expected": "Prevent rust corrosion: galvanization (zinc coating), paint/sealants, stainless steel (chromium alloy), keeping metal dry, cathodic protection",
+      "node_type": "subchat_6",
+      "action": "switch_node",
+      "linear_failure_risk": "HIGH - baseline might give Rust programming 'safety features' or installation prevention tips"
+    },
+    {
+      "step": 16,
+      "context": "mercury_element",
+      "message": "Why was it banned from thermometers?",
+      "expected": "Mercury element banned: toxic when spilled/broken, vapor inhalation causes neurological damage, bioaccumulates, replaced by safer alternatives (digital, alcohol thermometers)",
+      "node_type": "subchat_5",
+      "action": "switch_node",
+      "linear_failure_risk": "HIGH - baseline might discuss planet temperature ranges or god's attributes"
+    },
+    {
+      "step": 17,
+      "context": "java_language",
+      "message": "What's the latest LTS version?",
+      "expected": "Java language LTS: Java 21 (September 2023) is latest LTS, previous was Java 17 (2021)",
+      "node_type": "subchat_2",
+      "action": "switch_node",
+      "linear_failure_risk": "CRITICAL - baseline mixing contexts might give coffee vintage years or island census data"
+    },
+    {
+      "step": 18,
+      "context": "mercury_god",
+      "message": "Who is its Greek equivalent?",
+      "expected": "Mercury's Greek equivalent: Hermes (messenger of gods, god of trade, thieves, travelers)",
+      "node_type": "subchat_7",
+      "action": "switch_node",
+      "linear_failure_risk": "CRITICAL - baseline might discuss element's chemical equivalents or planet comparisons"
+    },
+    {
+      "step": 19,
+      "context": "rust_language",
+      "message": "What company originally sponsored its development?",
+      "expected": "Rust language: Mozilla Research sponsored development (Graydon Hoare started in 2006, Mozilla involved from 2009)",
+      "node_type": "subchat_4",
+      "action": "switch_node",
+      "linear_failure_risk": "HIGH - baseline might mention rust prevention companies or iron industry"
+    },
+    {
+      "step": 20,
+      "context": "java_coffee",
+      "message": "What roast level is typically used?",
+      "expected": "Java coffee: typically medium to dark roast, enhances earthy flavors and reduces acidity",
+      "node_type": "subchat_8",
+      "action": "switch_node",
+      "linear_failure_risk": "CRITICAL - baseline might discuss Java language compilation levels or island climate temperatures"
+    },
+    {
+      "step": 21,
+      "context": "mercury_planet",
+      "message": "Does it have any moons?",
+      "expected": "Mercury planet: NO moons (too close to Sun, Sun's gravity prevents moon formation)",
+      "node_type": "subchat_1",
+      "action": "switch_node",
+      "linear_failure_risk": "HIGH - baseline might discuss element isotopes or god's celestial associations"
+    },
+    {
+      "step": 22,
+      "context": "java_island",
+      "message": "What's its approximate population?",
+      "expected": "Java island population: approximately 150+ million people (most populous island in world)",
+      "node_type": "subchat_3",
+      "action": "switch_node",
+      "linear_failure_risk": "CRITICAL - baseline might give Java language developer count or coffee production numbers"
+    },
+    {
+      "step": 23,
+      "context": "rust_corrosion",
+      "message": "What's the chemical formula?",
+      "expected": "Rust chemical formula: Fe2O3·nH2O (hydrated iron(III) oxide), commonly Fe2O3",
+      "node_type": "subchat_6",
+      "action": "switch_node",
+      "linear_failure_risk": "CRITICAL - baseline might try to give 'Rust language syntax' or chemical-sounding programming terms"
+    },
+    {
+      "step": 24,
+      "context": "mercury_element",
+      "message": "What happens if you ingest it?",
+      "expected": "Mercury poisoning: damages nervous system, kidney failure, neurological symptoms (tremors, memory loss, irritability), can be fatal, bioaccumulates in fish",
+      "node_type": "subchat_5",
+      "action": "switch_node",
+      "linear_failure_risk": "HIGH - baseline might describe spacecraft impacts on planet or mythological consequences"
+    },
+    {
+      "step": 25,
+      "context": "mercury_god",
+      "message": "What symbol does it carry?",
+      "expected": "Mercury god symbol: caduceus (staff with two entwined serpents and wings), also winged sandals (talaria) and petasos (winged hat)",
+      "node_type": "subchat_7",
+      "action": "switch_node",
+      "linear_failure_risk": "HIGH - baseline might give element symbol (Hg) or planet astronomical symbol (☿)"
+    },
+    {
+      "step": 26,
+      "context": "java_language",
+      "message": "What's the name of its main conference?",
+      "expected": "Java conference: JavaOne (discontinued 2018), now Oracle Code One / Oracle CloudWorld; also Devoxx, Spring One",
+      "node_type": "subchat_2",
+      "action": "switch_node",
+      "linear_failure_risk": "CRITICAL - baseline might mention island tourism conferences or coffee trade shows"
+    },
+    {
+      "step": 27,
+      "context": "rust_language",
+      "message": "What's the name of its package manager?",
+      "expected": "Rust package manager: Cargo (handles dependencies, builds, testing, documentation)",
+      "node_type": "subchat_4",
+      "action": "switch_node",
+      "linear_failure_risk": "CRITICAL - baseline might discuss shipping rust-resistant containers or corrosion removal products"
+    },
+    {
+      "step": 28,
+      "context": "java_coffee",
+      "message": "Which European power controlled its production historically?",
+      "expected": "Java coffee history: Dutch East India Company (VOC) controlled coffee production during colonial era (17th-20th century)",
+      "node_type": "subchat_8",
+      "action": "switch_node",
+      "linear_failure_risk": "HIGH - baseline might mention Sun Microsystems (Java language) or Indonesian independence"
+    },
+    {
+      "step": 29,
+      "context": "mercury_planet",
+      "message": "Which NASA mission studied it extensively?",
+      "expected": "Mercury planet mission: MESSENGER (2004-2015) orbited Mercury; also Mariner 10 (1974-75 flybys), BepiColombo (ongoing, arrived 2021)",
+      "node_type": "subchat_1",
+      "action": "switch_node",
+      "linear_failure_risk": "HIGH - baseline might mention EPA mercury studies or mythology research projects"
+    },
+    {
+      "step": 30,
+      "context": "rust_corrosion",
+      "message": "What industries spend the most preventing it?",
+      "expected": "Rust prevention industries: automotive, construction, maritime/shipping, oil & gas, infrastructure/bridges, estimated $2.5 trillion annual global corrosion cost",
+      "node_type": "subchat_6",
+      "action": "switch_node",
+      "linear_failure_risk": "CRITICAL - baseline might mention game development, systems programming, or WebAssembly industries using Rust language"
+    },
+    {
+      "step": 31,
+      "context": "java_island",
+      "message": "Name two famous temples located there",
+      "expected": "Java temples: Borobudur (Buddhist, 9th century, UNESCO site), Prambanan (Hindu, 9th century, UNESCO site)",
+      "node_type": "subchat_3",
+      "action": "switch_node",
+      "linear_failure_risk": "CRITICAL - baseline might mention Java documentation frameworks or coffee ceremony temples/traditions"
+    },
+    {
+      "step": 32,
+      "context": "mercury_element",
+      "message": "What color is it at room temperature?",
+      "expected": "Mercury element color: silvery-white, shiny metallic appearance, only liquid metal at room temperature",
+      "node_type": "subchat_5",
+      "action": "switch_node",
+      "linear_failure_risk": "HIGH - baseline might describe planet surface color or god's clothing"
+    },
+    {
+      "step": 33,
+      "context": "mercury_god",
+      "message": "What domains did it rule over?",
+      "expected": "Mercury god domains: commerce, communication, travelers, thieves, boundaries, cunning, diplomacy, messenger between gods and mortals",
+      "node_type": "subchat_7",
+      "action": "switch_node",
+      "linear_failure_risk": "HIGH - baseline might describe element applications or planet's characteristics"
+    },
+    {
+      "step": 34,
+      "context": "java_language",
+      "message": "What's special about its 'write once, run anywhere' slogan?",
+      "expected": "Java WORA: bytecode compiled to platform-independent .class files, runs on any JVM regardless of underlying OS/hardware, achieved via JVM abstraction layer",
+      "node_type": "subchat_2",
+      "action": "switch_node",
+      "linear_failure_risk": "CRITICAL - baseline might discuss coffee universality or island's cultural diversity"
+    },
+    {
+      "step": 35,
+      "context": "rust_language",
+      "message": "What's its official learning resource called?",
+      "expected": "Rust learning resource: 'The Rust Book' (official documentation), also 'Rust by Example', 'Rustlings' (interactive exercises)",
+      "node_type": "subchat_4",
+      "action": "switch_node",
+      "linear_failure_risk": "HIGH - baseline might mention corrosion textbooks or rust prevention manuals"
+    },
+    {
+      "step": 36,
+      "context": "java_coffee",
+      "message": "What's a famous blend it's used in?",
+      "expected": "Java coffee blend: Mocha-Java (oldest coffee blend, combines Java Arabica with Yemen Mocha), considered original gourmet blend",
+      "node_type": "subchat_8",
+      "action": "switch_node",
+      "linear_failure_risk": "HIGH - baseline might mention Java language frameworks or island cultural blends"
+    },
+    {
+      "step": 37,
+      "context": "intro",
+      "message": "Which of these terms have programming language meanings?",
+      "expected": "Programming languages: Rust and Java (Mercury does not have a programming language meaning)",
+      "node_type": "main",
+      "action": "switch_node",
+      "linear_failure_risk": "CATASTROPHIC - baseline mixing all 9 contexts will give confused/incomplete answer"
+    },
+    {
+      "step": 38,
+      "context": "intro",
+      "message": "Compare the environmental/scientific aspects of all three",
+      "expected": "Environmental: Mercury (planet astronomy, element toxicity/pollution), Rust (corrosion environmental damage, billions in costs), Java (island ecology, volcanic activity, agriculture)",
+      "node_type": "main",
+      "action": "switch_node",
+      "linear_failure_risk": "CATASTROPHIC - baseline will create confused mashup of all contexts"
+    },
+    {
+      "step": 39,
+      "context": "intro",
+      "message": "Which ones are named after geographic locations?",
+      "expected": "Geographic names: Java island (and Java coffee/language named after island), Mercury named after Roman god (planet/element named after god, not geography)",
+      "node_type": "main",
+      "action": "switch_node",
+      "linear_failure_risk": "CATASTROPHIC - baseline will mix Java island with Mercury planet/god locations"
+    },
+    {
+      "step": 40,
+      "context": "intro",
+      "message": "Summarize all the different meanings we discussed",
+      "expected": "Summary: Mercury (planet-88 days orbit, element-Hg/toxic/liquid metal, god-winged sandals/commerce), Rust (corrosion-Fe2O3/iron oxide, language-Mozilla/memory-safe/Ferris), Java (island-Indonesia/Jakarta/150M people, language-JVM/WORA, coffee-Dutch/earthy/Mocha-Java blend)",
+      "node_type": "main",
+      "action": "switch_node",
+      "linear_failure_risk": "CATASTROPHIC - final synthesis test, baseline will produce completely confused amalgamation"
+    }
+  ]
+}

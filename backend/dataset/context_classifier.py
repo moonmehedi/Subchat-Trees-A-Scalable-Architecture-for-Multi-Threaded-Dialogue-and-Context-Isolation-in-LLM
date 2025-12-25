@@ -2,13 +2,24 @@
 """
 Context Classifier for Binary Classification
 Classifies responses as TP, TN, FP, or FN based on context matching
+
+Supports dual backends:
+- Groq (cloud): Used when GROQ_API_KEY is set in environment
+- vLLM (local): Used on Kaggle or when Groq is not available
 """
 
 import os
 import re
 import json
-from groq import Groq
 from typing import Literal, Dict, Any
+
+# Groq import is optional
+try:
+    from groq import Groq
+    GROQ_AVAILABLE = True
+except ImportError:
+    GROQ_AVAILABLE = False
+    Groq = None
 
 # Context keyword definitions - will be matched as whole words with boundaries
 CONTEXT_KEYWORDS = {
@@ -51,21 +62,93 @@ CONTEXT_KEYWORDS = {
 
 
 class ContextClassifier:
-    """Binary classifier for context isolation testing"""
+    """Binary classifier for context isolation testing.
     
-    def __init__(self):
-        """Initialize with Groq client for LLM fallback"""
-        api_key = os.getenv("GROQ_API_KEY")
-        if not api_key:
-            raise ValueError("GROQ_API_KEY not set")
+    Strictly follows LLM_BACKEND setting from environment:
+    - 'groq': Uses Groq cloud API for judging (requires GROQ_API_KEY)
+    - 'vllm': Uses vLLM local GPU for judging (requires vLLM model to be loaded)
+    
+    No silent fallbacks - if specified backend is not available, raises error.
+    """
+    
+    def __init__(self, log_callback=None):
+        """Initialize with Groq or vLLM client based on LLM_BACKEND setting.
         
-        self.groq_client = Groq(api_key=api_key)
-        self.model = "llama-3.1-8b-instant"  # Cheap, fast model for classification
+        Args:
+            log_callback: Optional function(message, full=False) for logging LLM judgments
+        """
+        import sys
+        import os
+        backend_path = os.path.join(os.path.dirname(__file__), '..')
+        if backend_path not in sys.path:
+            sys.path.insert(0, backend_path)
+        
+        self.log_callback = log_callback  # External logging function
+        self.groq_client = None
+        self.vllm_client = None
+        self.use_groq = False
+        self.use_vllm = False
+        
+        # Get LLM_BACKEND from environment (default to 'groq' for backward compatibility)
+        llm_backend = os.getenv("LLM_BACKEND", "groq").strip().strip("'\"")
+        print(f"🔧 ContextClassifier: LLM_BACKEND configured as: '{llm_backend}'")
+        
+        if llm_backend == "groq":
+            # Use Groq for classification - STRICT, no fallback
+            if not GROQ_AVAILABLE:
+                raise RuntimeError(
+                    "❌ LLM_BACKEND='groq' specified but groq package not installed!\n"
+                    "   Install with: pip install groq\n"
+                    "   If you want to use vLLM instead, set LLM_BACKEND='vllm' in .env"
+                )
+            
+            groq_api_key = os.getenv("GROQ_API_KEY")
+            if not groq_api_key:
+                raise RuntimeError(
+                    "❌ LLM_BACKEND='groq' specified but GROQ_API_KEY not found!\n"
+                    "   Set GROQ_API_KEY in your .env file.\n"
+                    "   If you want to use vLLM instead, set LLM_BACKEND='vllm' in .env"
+                )
+            
+            self.groq_client = Groq(api_key=groq_api_key)
+            self.use_groq = True
+            self.groq_model = "llama-3.1-8b-instant"
+            print("✅ ContextClassifier using GROQ for JUDGING/CLASSIFICATION")
+        
+        elif llm_backend == "vllm":
+            # Use vLLM for classification - STRICT, no fallback
+            try:
+                from src.services.vllm_client import vllm_client
+                if not vllm_client.is_available():
+                    raise RuntimeError(
+                        "❌ LLM_BACKEND='vllm' specified but vLLM model not loaded!\n"
+                        "   Call VLLMClient.set_model(llm) before using ContextClassifier.\n"
+                        "   If you want to use Groq instead, set LLM_BACKEND='groq' in .env"
+                    )
+                self.vllm_client = vllm_client
+                self.use_vllm = True
+                print("✅ ContextClassifier using vLLM for JUDGING/CLASSIFICATION")
+            except ImportError as e:
+                raise RuntimeError(
+                    f"❌ LLM_BACKEND='vllm' specified but vLLM not available!\n"
+                    f"   Import error: {e}\n"
+                    "   Make sure backend/src/services/vllm_client.py is accessible.\n"
+                    "   If you want to use Groq instead, set LLM_BACKEND='groq' in .env"
+                )
+        
+        else:
+            raise RuntimeError(
+                f"❌ Unknown LLM_BACKEND for ContextClassifier: '{llm_backend}'\n"
+                "   Valid options: 'groq', 'vllm'\n"
+                "   Set LLM_BACKEND in your .env file."
+            )
     
     def classify(
         self, 
         response: str, 
-        expected_context: str
+        expected_context: str,
+        step: int = None,
+        scenario: str = None
     ) -> Literal["TP", "TN", "FP", "FN"]:
         """
         Classify response using LLM only (more accurate and dynamic)
@@ -73,6 +156,8 @@ class ContextClassifier:
         Args:
             response: AI response text
             expected_context: Expected context (programming, snake, etc.)
+            step: Step number in scenario (for logging)
+            scenario: Scenario name (for logging)
         
         Returns:
             "TP": True Positive - Response matches expected context
@@ -82,12 +167,14 @@ class ContextClassifier:
         """
         
         # Use LLM classification directly - no keyword matching
-        return self._llm_classify(response, expected_context)
+        return self._llm_classify(response, expected_context, step=step, scenario=scenario)
     
     def _llm_classify(
         self, 
         response: str, 
-        expected_context: str
+        expected_context: str,
+        step: int = None,
+        scenario: str = None
     ) -> Literal["TP", "TN", "FP", "FN"]:
         """
         Use LLM to classify responses with strict prefix checking
@@ -95,6 +182,8 @@ class ContextClassifier:
         Args:
             response: AI response text
             expected_context: Expected context or strict prefix requirement
+            step: Step number in scenario (for logging)
+            scenario: Scenario name (for logging)
         
         Returns:
             Classification result (TP/TN/FP/FN)
@@ -136,19 +225,60 @@ Does the response satisfy the requirement?
 Answer only with: yes or no"""
         
         try:
-            result = self.groq_client.chat.completions.create(
-                model=self.model,
-                messages=[
+            # Use appropriate backend for classification
+            if self.use_groq:
+                # Use Groq API
+                response = self.groq_client.chat.completions.create(
+                    model=self.groq_model,
+                    messages=[
+                        {"role": "system", "content": "You are a strict test evaluator. Check if the response contain the right topic name at the beginning. Answer only 'yes' or 'no'."},
+                        {"role": "user", "content": prompt}
+                    ],
+                    temperature=0,
+                    max_tokens=50
+                )
+                result = response.choices[0].message.content.strip()
+            elif self.use_vllm:
+                # Use vLLM for classification (Kaggle GPU)
+                messages = [
                     {"role": "system", "content": "You are a strict test evaluator. Check if the response contain the right topic name at the beginning. Answer only 'yes' or 'no'."},
                     {"role": "user", "content": prompt}
-                ],
-                max_tokens=50,
-                temperature=0
-            )
+                ]
+                
+                result = self.vllm_client.generate(
+                    messages=messages,
+                    temperature=0,
+                    max_tokens=50
+                )
+            else:
+                # No backend available - default to FN
+                print("⚠️  No LLM backend configured for classification")
+                return "FN"
             
-            answer = result.choices[0].message.content.strip().lower()
+            answer = result.strip().lower()
 
-            print('****************** The answer from LLm***************',answer,prompt)
+            # Log LLM judgment with prompt and verdict
+            step_info = f"Step {step}" if step else "Unknown step"
+            scenario_info = scenario if scenario else "Unknown scenario"
+            
+            log_msg = f"""
+================================================================================
+🔍 LLM JUDGMENT - {step_info} | {scenario_info}
+================================================================================
+
+📤 PROMPT SENT TO LLM JUDGE:
+{prompt}
+
+🤖 LLM JUDGE VERDICT: {answer}
+📊 CLASSIFICATION: {'TP (Correct)' if 'yes' in answer else 'FN (Incorrect)'}
+
+================================================================================
+"""
+            print(f'🔍 LLM Judge [{step_info}]: {answer} -> {"TP" if "yes" in answer else "FN"}')
+            
+            # Use callback for external logging if provided
+            if self.log_callback:
+                self.log_callback(log_msg, full=True)
             
             if "yes" in answer:
                 return "TP"
@@ -156,17 +286,27 @@ Answer only with: yes or no"""
                 return "FN"
         
         except Exception as e:
-            print(f"⚠️  LLM classification failed: {e}")
-            # Default to FN on error (conservative)
-            return "FN"
+            print(f"❌ CRITICAL: LLM classification failed: {e}")
+            import traceback
+            traceback.print_exc()
+            # Re-raise to stop execution
+            raise
     
     def get_classification_details(
         self,
         response: str,
-        expected_context: str
+        expected_context: str,
+        step: int = None,
+        scenario: str = None
     ) -> Dict[str, Any]:
         """
         Get detailed classification information using LLM
+        
+        Args:
+            response: AI response text
+            expected_context: Expected context or requirement
+            step: Step number in scenario (for logging)
+            scenario: Scenario name (for logging)
         
         Returns:
             - classification: TP/TN/FP/FN
@@ -174,10 +314,109 @@ Answer only with: yes or no"""
             - explanation: Why this classification was chosen
         """
         
-        classification = self.classify(response, expected_context)
+        classification = self.classify(response, expected_context, step=step, scenario=scenario)
         
         return {
             "classification": classification,
             "method": "llm",
+            "step": step,
+            "scenario": scenario,
             "explanation": f"LLM classified response as {classification} for context '{expected_context}'"
         }
+    
+    def detect_topic(
+        self,
+        response: str,
+        available_topics: list,
+        step: int = None,
+        scenario: str = None
+    ) -> Dict[str, Any]:
+        """
+        Detect which topic the response addresses from a list of available topics.
+        Used for per-topic confusion matrix calculation.
+        
+        Args:
+            response: AI response text
+            available_topics: List of valid topic names (e.g., ["by_length", "odd_count", "histogram"])
+            step: Step number in scenario (for logging)
+            scenario: Scenario name (for logging)
+        
+        Returns:
+            Dict with:
+            - detected_topic: The topic name found in response (or "unknown")
+            - confidence: "high", "medium", or "low"
+            - method: "llm" or "regex"
+        """
+        
+        # First try regex-based detection (fast, reliable for prefix format)
+        topics_pattern = "|".join(re.escape(t) for t in available_topics)
+        pattern = rf"^\s*({topics_pattern})\s*:"
+        match = re.match(pattern, response.strip(), re.IGNORECASE)
+        
+        if match:
+            detected = match.group(1).lower()
+            # Find exact case match from available_topics
+            for topic in available_topics:
+                if topic.lower() == detected:
+                    return {
+                        "detected_topic": topic,
+                        "confidence": "high",
+                        "method": "regex"
+                    }
+        
+        # Fallback to LLM detection if regex fails
+        topics_list = ", ".join(available_topics)
+        prompt = f"""Identify which topic this response is addressing.
+
+AVAILABLE TOPICS: {topics_list}
+
+RESPONSE: {response[:500]}
+
+RULES:
+1. Look at the first word or prefix in the response
+2. Match it to one of the available topics
+3. If no clear match, return "unknown"
+
+Answer with ONLY the topic name (one of: {topics_list}, or "unknown"):"""
+        
+        try:
+            if self.use_groq:
+                result = self.groq_client.chat.completions.create(
+                    model=self.groq_model,
+                    messages=[
+                        {"role": "system", "content": "You are a topic classifier. Return only the topic name, nothing else."},
+                        {"role": "user", "content": prompt}
+                    ],
+                    temperature=0,
+                    max_tokens=50
+                )
+                answer = result.choices[0].message.content.strip().lower()
+            elif self.use_vllm:
+                messages = [
+                    {"role": "system", "content": "You are a topic classifier. Return only the topic name, nothing else."},
+                    {"role": "user", "content": prompt}
+                ]
+                answer = self.vllm_client.generate(
+                    messages=messages,
+                    temperature=0,
+                    max_tokens=50
+                ).strip().lower()
+            else:
+                return {"detected_topic": "unknown", "confidence": "low", "method": "none"}
+            
+            # Match answer to available topics
+            for topic in available_topics:
+                if topic.lower() in answer or answer in topic.lower():
+                    step_info = f"Step {step}" if step else "Unknown"
+                    print(f"🔍 Topic Detection [{step_info}]: '{topic}' (LLM)")
+                    return {
+                        "detected_topic": topic,
+                        "confidence": "medium",
+                        "method": "llm"
+                    }
+            
+            return {"detected_topic": "unknown", "confidence": "low", "method": "llm"}
+            
+        except Exception as e:
+            print(f"⚠️ Topic detection failed: {e}")
+            return {"detected_topic": "unknown", "confidence": "low", "method": "error"}

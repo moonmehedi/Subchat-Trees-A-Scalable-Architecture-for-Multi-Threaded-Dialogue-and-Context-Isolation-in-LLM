@@ -56,10 +56,13 @@ coverage.xml
 *.pot
 
 # Django stuff:
-*.log
+# *.log  -- COMMENTED OUT to allow dataset/logs/ to be tracked
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
+
+# Allow Kaggle test logs
+!dataset/logs/**/*.log
 
 # Flask stuff:
 instance/

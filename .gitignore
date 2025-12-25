@@ -37,10 +37,13 @@ ENV/
 *.swo
 *~
 
-# Logs
-*.log
-logs/
+# Logs (but keep backend/logs/ and backend/dataset/logs/ for kaggle-run branch)
+# *.log  -- COMMENTED OUT to allow dataset logs to be tracked
 *.sqlite3
+
+# Allow Kaggle test logs to be tracked
+!backend/dataset/logs/**/*.log
+!demo-logs-for-teacher/**/*.log
 
 # OS
 .DS_Store

@@ -31,7 +31,13 @@ class VLLMClient:
             VLLMClient.set_model(llm)  # Pass the loaded vLLM model
         """
         cls._llm = llm_model
-        print("✅ vLLM model registered with VLLMClient")
+        
+        # Get model name for display
+        try:
+            model_name = getattr(llm_model.llm_engine.model_config, 'model', 'Unknown')
+            print(f"✅ vLLM model registered: {model_name}")
+        except:
+            print("✅ vLLM model registered with VLLMClient")
     
     @classmethod
     def is_available(cls) -> bool:
@@ -42,7 +48,7 @@ class VLLMClient:
         self,
         messages: List[Dict[str, str]],
         temperature: float = 0.0,
-        max_tokens: int = 1000,
+        max_tokens: int = 300,
         top_p: float = 0.9
     ) -> str:
         """
@@ -81,11 +87,11 @@ class VLLMClient:
         # Extract text from output
         generated_text = outputs[0].outputs[0].text
         
-        # Store usage stats (approximate)
+        # Store usage stats (approximate) - MUST be integers for Pydantic validation
         self.last_usage = {
-            "prompt_tokens": len(prompt.split()) * 1.3,  # Rough estimate
-            "completion_tokens": len(generated_text.split()) * 1.3,  # Rough estimate
-            "total_tokens": (len(prompt) + len(generated_text)) * 1.3 / 4  # Rough estimate
+            "prompt_tokens": int(len(prompt.split()) * 1.3),  # Rough estimate
+            "completion_tokens": int(len(generated_text.split()) * 1.3),  # Rough estimate
+            "total_tokens": int((len(prompt) + len(generated_text)) * 1.3 / 4)  # Rough estimate
         }
         
         return generated_text
@@ -94,7 +100,7 @@ class VLLMClient:
         self,
         messages: List[Dict[str, str]],
         temperature: float = 0.0,
-        max_tokens: int = 1000,
+        max_tokens: int = 300,
         top_p: float = 0.9
     ):
         """
@@ -131,26 +137,25 @@ class VLLMClient:
     
     def _messages_to_prompt(self, messages: List[Dict[str, str]]) -> str:
         """
-        Convert OpenAI-style messages to a single prompt string.
-        Follows Qwen chat template format.
+        Convert OpenAI-style messages to Qwen chat template format.
+        Uses the tokenizer's apply_chat_template method for proper formatting.
         """
-        prompt_parts = []
+        if not self.is_available():
+            raise RuntimeError("vLLM model not loaded")
         
-        for msg in messages:
-            role = msg['role']
-            content = msg['content']
-            
-            if role == 'system':
-                prompt_parts.append(f"System: {content}")
-            elif role == 'user':
-                prompt_parts.append(f"User: {content}")
-            elif role == 'assistant':
-                prompt_parts.append(f"Assistant: {content}")
+        # Get tokenizer from the vLLM model
+        tokenizer = self._llm.get_tokenizer()
         
-        # Add final prompt for assistant response
-        prompt_parts.append("Assistant:")
+        # Use the tokenizer's chat template (proper Qwen format)
+        # tokenize=False returns the string prompt instead of token IDs
+        # add_generation_prompt=True adds the assistant prompt marker
+        prompt = tokenizer.apply_chat_template(
+            messages,
+            tokenize=False,
+            add_generation_prompt=True
+        )
         
-        return "\n\n".join(prompt_parts)
+        return prompt
 
 
 # Global singleton instance

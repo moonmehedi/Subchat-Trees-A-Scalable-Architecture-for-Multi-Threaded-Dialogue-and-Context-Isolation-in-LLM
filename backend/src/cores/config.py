@@ -25,7 +25,8 @@ class Setting(BaseModel):
     ollama_base_url: str = 'http://localhost:11434'  # Ollama API endpoint
     
     # vLLM settings (for Kaggle GPU inference)
-    vllm_model_path: str = '/kaggle/input/qwen-3/transformers/14b-awq/1'  # Matches notebook model  # Path to vLLM model
+    # Default path - can be overridden via VLLM_MODEL_PATH environment variable
+    vllm_model_path: str = '/kaggle/input/qwen-3/transformers/14b-awq/1'
     
     # Model configurations - centralized model names
     # Groq models (cloud)
@@ -49,6 +50,9 @@ class Setting(BaseModel):
         
         # Load LLM backend preference
         self.llm_backend = os.getenv("LLM_BACKEND", "groq").lower()
+        
+        # Load vLLM model path from environment (allows Kaggle notebook to override)
+        self.vllm_model_path = os.getenv("VLLM_MODEL_PATH", self.vllm_model_path)
         
         # Set active models based on backend
         if self.llm_backend == "ollama":

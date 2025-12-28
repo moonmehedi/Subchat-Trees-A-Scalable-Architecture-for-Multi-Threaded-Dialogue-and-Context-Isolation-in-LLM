@@ -9,7 +9,15 @@ from .tools import ConversationTools
 from ..utils.debug_logger import get_debug_logger
 
 class SimpleLLMClient:
-    """ Simple LLM client using Groq API with optional RAG """
+    """ Simple LLM client using Groq/vLLM/Ollama API with optional RAG.
+    
+    Strictly follows LLM_BACKEND setting from .env:
+    - 'groq': Uses Groq cloud API (requires GROQ_API_KEY)
+    - 'vllm': Uses vLLM local GPU (requires vLLM model to be loaded)
+    - 'ollama': Uses Ollama local server
+    
+    No silent fallbacks - if specified backend is not available, raises error.
+    """
 
     def __init__(self, api_key: str = None, enable_vector_index: bool = False):
         # Initialize LLM client based on backend setting
@@ -18,43 +26,72 @@ class SimpleLLMClient:
         self.ollama_available = False
         self.vllm_client = None
         
+        print(f"🔧 LLM_BACKEND configured as: '{self.llm_backend}'")
+        
         if self.llm_backend == "vllm":
-            # Use vLLM (Kaggle GPU)
+            # Use vLLM (Kaggle GPU) - STRICT, no fallback
             try:
                 from .vllm_client import vllm_client
                 if vllm_client.is_available():
                     self.vllm_client = vllm_client
-                    print(f"✅ vLLM connected. Using Kaggle GPU")
+                    # Get model name for display
+                    try:
+                        model_name = getattr(vllm_client._llm.llm_engine.model_config, 'model', 'Unknown')
+                        print(f"✅ vLLM connected for RESPONSES: {model_name}")
+                        print(f"✅ vLLM will be used for SUMMARIZATION: {model_name}")
+                    except:
+                        print(f"✅ vLLM connected. Using Kaggle GPU")
+                        print(f"✅ vLLM will be used for responses and summarization")
                 else:
-                    print("⚠️  vLLM model not loaded yet. Call VLLMClient.set_model(llm) first.")
-                    print("   Falling back to Groq if available...")
-                    self.llm_backend = "groq"
-            except ImportError:
-                print("⚠️  vLLM not available (install with: pip install vllm)")
-                print("   Falling back to Groq if available...")
-                self.llm_backend = "groq"
+                    raise RuntimeError(
+                        "❌ LLM_BACKEND='vllm' specified but vLLM model not loaded!\n"
+                        "   Call VLLMClient.set_model(llm) before using SimpleLLMClient.\n"
+                        "   If you want to use Groq instead, set LLM_BACKEND='groq' in .env"
+                    )
+            except ImportError as e:
+                raise RuntimeError(
+                    f"❌ LLM_BACKEND='vllm' specified but vLLM not available!\n"
+                    f"   Import error: {e}\n"
+                    "   Install with: pip install vllm\n"
+                    "   If you want to use Groq instead, set LLM_BACKEND='groq' in .env"
+                )
         
         elif self.llm_backend == "ollama":
-            # Use Ollama (local)
+            # Use Ollama (local) - STRICT, no fallback
             try:
                 # Test Ollama connection
                 ollama.list()
                 self.ollama_available = True
                 print(f"✅ Ollama connected. Using model: {settings.model_base}")
             except Exception as e:
-                print(f"⚠️  Ollama not available: {e}")
-                print("   Falling back to Groq if available...")
-                self.llm_backend = "groq"
+                raise RuntimeError(
+                    f"❌ LLM_BACKEND='ollama' specified but Ollama not available!\n"
+                    f"   Error: {e}\n"
+                    "   Make sure Ollama is running: ollama serve\n"
+                    "   If you want to use Groq instead, set LLM_BACKEND='groq' in .env"
+                )
         
-        if self.llm_backend == "groq" or not self.ollama_available:
-            # Use Groq (cloud)
+        elif self.llm_backend == "groq":
+            # Use Groq (cloud) - STRICT, no fallback
             if api_key:
                 self.groq_client = Groq(api_key=api_key)
+                print(f"✅ Groq connected (custom API key). Using model: {settings.model_base}")
             elif settings.groq_api_key:
                 self.groq_client = Groq(api_key=settings.groq_api_key)
+                print(f"✅ Groq connected. Using model: {settings.model_base}")
             else:
-                print("⚠️  Warning: GROQ_API_KEY not found and Ollama unavailable. Using echo mode.")
-                self.groq_client = None
+                raise RuntimeError(
+                    "❌ LLM_BACKEND='groq' specified but GROQ_API_KEY not found!\n"
+                    "   Set GROQ_API_KEY in your .env file.\n"
+                    "   If you want to use vLLM instead, set LLM_BACKEND='vllm' in .env"
+                )
+        
+        else:
+            raise RuntimeError(
+                f"❌ Unknown LLM_BACKEND: '{self.llm_backend}'\n"
+                "   Valid options: 'groq', 'vllm', 'ollama'\n"
+                "   Set LLM_BACKEND in your .env file."
+            )
         
         # Initialize vector index if enabled
         self.vector_index = None
@@ -72,6 +109,25 @@ class SimpleLLMClient:
         # Build context from node's buffer (inherited from parents)
         context_messages = []
 
+        # Add base system prompt for multi-topic evaluation
+        context_messages.append({
+            'role': 'system',
+            'content': (
+                "You are participating in a multi-topic, multi-turn evaluation where topics persist "
+                "independently of conversational order. Topics are introduced using the format "
+                "topic_name : user query, and sub-topics using topic_name_subtopic_name : user query; "
+                "these topic labels remain available for future reference. For every user query, you must "
+                "analyze its semantic meaning and select the previously introduced topic or sub-topic it "
+                "most strongly refers to, regardless of recency or prior conversational flow. Your selection "
+                "must be based solely on semantic relevance, not on which topic was last used. You must never "
+                "invent new topic or sub-topic names and may only choose from those already introduced; if "
+                "multiple topics are plausible, select the best semantic match, and if none clearly match, "
+                "request clarification while still choosing the closest topic. Every response must begin with "
+                "the selected topic or sub-topic name followed by a colon, in the format "
+                "<topic_or_subtopic_name>: <your answer>."
+            )
+        })
+
         # Add system message with follow-up context if this is a follow-up conversation
         follow_up_prompt = node.get_enhanced_context_prompt()
         if follow_up_prompt:
@@ -85,10 +141,10 @@ class SimpleLLMClient:
         context_messages.extend(buffer_messages)
 
         # Add current user message
-        context_messages.append({
-            'role': 'user',
-            'content': user_message
-        })
+        # context_messages.append({
+        #     'role': 'user',
+        #     'content': user_message
+        # })
         print('*******************context*********************\n',context_messages)
         
         # Try vLLM first (Kaggle GPU)
@@ -97,7 +153,7 @@ class SimpleLLMClient:
                 response = self.vllm_client.generate(
                     messages=context_messages,
                     temperature=0.0,  # Deterministic
-                    max_tokens=1000
+                    max_tokens=512
                 )
                 
                 self.last_usage = self.vllm_client.get_last_usage()
@@ -201,7 +257,7 @@ class SimpleLLMClient:
                 for chunk in self.vllm_client.generate_stream(
                     messages=context_messages,
                     temperature=0.0,
-                    max_tokens=1000
+                    max_tokens=512
                 ):
                     yield chunk
                 return

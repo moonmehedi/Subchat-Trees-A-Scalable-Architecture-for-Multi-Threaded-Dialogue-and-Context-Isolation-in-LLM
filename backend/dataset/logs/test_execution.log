@@ -1,0 +1,71 @@
+================================================================================
+KAGGLE SERVERLESS BUFFER COMPARISON
+Started: 2025-12-24 15:06:49
+Buffer sizes: [10]
+================================================================================
+
+[15:06:49] [INFO] ================================================================================
+[15:06:49] [INFO] 🚀 STARTING KAGGLE SERVERLESS MULTI-BUFFER COMPARISON
+[15:06:49] [INFO]    Buffer sizes: [10]
+[15:06:49] [INFO]    Scenarios: ['06_lost_in_conversation_sharded_humaneval.json']
+[15:06:49] [INFO]    ✅ Using DIRECT Python imports - NO SERVER NEEDED
+[15:06:49] [INFO] ================================================================================
+[15:06:49] [INFO] 
+================================================================================
+[15:06:49] [INFO] 📦 TESTING BUFFER SIZE: 10
+[15:06:49] [INFO] ================================================================================
+[15:06:49] [INFO] 📁 Created buffer-specific log directory: /media/sda3/projects/simple build/Subchat-Trees-A-Scalable-Architecture-for-Multi-Threaded-Dialogue-and-Context-Isolation-in-LLM/backend/dataset/logs/buffer_10
+[15:06:49] [INFO] ================================================================================
+[15:06:49] [INFO] 🚀 STARTING SERVERLESS EVALUATION (buffer_size=10)
+[15:06:49] [INFO]    Test mode: BOTH
+[15:06:49] [INFO]    ✅ No server needed - using direct Python imports
+[15:06:49] [INFO] ================================================================================
+[15:06:49] [INFO] 📋 Extracted 4 unique topics: ['by_length', 'histogram', 'move_one_ball', 'odd_count']
+[15:06:49] [INFO] 
+🔵 BASELINE TEST: 06_lost_in_conversation_sharded_humaneval.json
+[15:12:04] [INFO] 
+🟢 SYSTEM TEST: 06_lost_in_conversation_sharded_humaneval.json
+[15:22:13] [INFO] 
+📊 Calculating metrics...
+[15:22:13] [INFO] 
+================================================================================
+[15:22:13] [INFO] 📊 FINAL METRICS COMPARISON
+[15:22:13] [INFO] ================================================================================
+[15:22:13] [INFO] 
+🔵 BASELINE: Accuracy=88.2%, Pollution=11.8%
+[15:22:13] [INFO] 🟢 SYSTEM:   Accuracy=85.3%, Pollution=14.7%
+[15:22:13] [INFO] ✅ Generated TABLE_1_CONTEXT_ISOLATION.md
+[15:22:13] [INFO] ✅ Generated TABLE_3_SYSTEM_PERFORMANCE.md
+[15:22:13] [INFO] 
+✅ Results saved to: /media/sda3/projects/simple build/Subchat-Trees-A-Scalable-Architecture-for-Multi-Threaded-Dialogue-and-Context-Isolation-in-LLM/backend/dataset/logs/tables/buffer_10
+[15:22:13] [INFO] 
+📤 PUSHING RESULTS FOR BUFFER SIZE 10
+[15:22:13] [INFO] ================================================================================
+[15:22:13] [INFO] 📤 GIT PUSH: Starting commit and push
+[15:22:13] [INFO] ================================================================================
+[15:22:13] [INFO]   ✅ Added: backend/dataset/logs/tables/buffer_10/raw_metrics.json
+[15:22:13] [INFO]   ✅ Added: backend/dataset/logs/tables/buffer_10/raw_metrics_baseline.json
+[15:22:13] [INFO]   ✅ Added: backend/dataset/logs/tables/buffer_10/raw_metrics_system.json
+[15:22:13] [INFO]   ✅ Added: backend/dataset/logs/tables/buffer_10/TABLE_1_CONTEXT_ISOLATION.md
+[15:22:13] [INFO]   ✅ Added: backend/dataset/logs/tables/buffer_10/TABLE_3_SYSTEM_PERFORMANCE.md
+[15:22:13] [INFO]   ✅ Added: backend/dataset/logs/buffer_10/baseline_test.log
+[15:22:13] [INFO]   ✅ Added: backend/dataset/logs/buffer_10/system_test.log
+[15:22:14] [INFO]   ✅ Committed: Kaggle SERVERLESS: Buffer 10 results - 2025-12-24 15:22:13
+[15:22:18] [INFO]   ✅ Push successful!
+[15:22:18] [INFO] ✅ Pushed buffer 10 results
+[15:22:18] [INFO] 
+✅ Completed buffer size 10
+[15:22:18] [INFO] 
+📊 Generating final comparison visualization...
+[15:22:18] [INFO] ✅ Generated Kaggle Serverless visualization: /media/sda3/projects/simple build/Subchat-Trees-A-Scalable-Architecture-for-Multi-Threaded-Dialogue-and-Context-Isolation-in-LLM/backend/dataset/logs/visualization/index.html
+[15:22:18] [INFO] ================================================================================
+[15:22:18] [INFO] 📤 GIT PUSH: Starting commit and push
+[15:22:18] [INFO] ================================================================================
+[15:22:18] [INFO]   ✅ Added: backend/dataset/logs/visualization/index.html
+[15:22:18] [INFO]   ✅ Committed: Kaggle Serverless: Final comparison visualization - 2025-12-24 15:22:18
+[15:22:22] [INFO]   ✅ Push successful!
+[15:22:22] [INFO] 
+🎉 KAGGLE SERVERLESS MULTI-BUFFER COMPARISON COMPLETE!
+[15:22:22] [INFO]    All results pushed to branch: kaggle-run
+[15:22:22] [INFO]    Results directory: /media/sda3/projects/simple build/Subchat-Trees-A-Scalable-Architecture-for-Multi-Threaded-Dialogue-and-Context-Isolation-in-LLM/backend/dataset/logs/tables
+[15:22:22] [INFO]    Visualization: /media/sda3/projects/simple build/Subchat-Trees-A-Scalable-Architecture-for-Multi-Threaded-Dialogue-and-Context-Isolation-in-LLM/backend/dataset/logs/visualization/index.html

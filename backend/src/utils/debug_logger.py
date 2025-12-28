@@ -19,11 +19,12 @@ class DebugLogger:
         self.log_dir.mkdir(parents=True, exist_ok=True)
         self.append_mode = append_mode  # If True, append instead of overwrite
         
-        # File paths
-        self.vector_store_log = self.log_dir / "VECTOR_STORE.log"
-        self.retrieval_log = self.log_dir / "RETRIEVAL.log"
-        self.buffer_log = self.log_dir / "BUFFER.log"
-        self.cot_thinking_log = self.log_dir / "COT_THINKING.log"
+        # File paths - append mode uses _full suffix in filename (same directory)
+        suffix = "_full" if append_mode else ""
+        self.vector_store_log = self.log_dir / f"VECTOR_STORE{suffix}.log"
+        self.retrieval_log = self.log_dir / f"RETRIEVAL{suffix}.log"
+        self.buffer_log = self.log_dir / f"BUFFER{suffix}.log"
+        self.cot_thinking_log = self.log_dir / f"COT_THINKING{suffix}.log"
     
     def log_vector_store(self, messages_by_node: Dict[str, List[Dict[str, Any]]], total_count: int):
         """
@@ -240,6 +241,35 @@ class DebugLogger:
 # Global singleton instances
 _debug_logger = None
 _debug_logger_append = None
+_custom_log_dir = None  # Custom directory for buffer-specific logging
+
+
+def set_log_directory(log_dir: str):
+    """
+    Redirect global debug loggers to a custom directory.
+    Call this BEFORE any logging operations to use buffer-specific paths.
+    
+    Args:
+        log_dir: Path to the buffer-specific log directory (e.g., "logs/buffer_10")
+    
+    Both summary and full logs will go to the same directory.
+    """
+    global _debug_logger, _debug_logger_append, _custom_log_dir
+    
+    _custom_log_dir = log_dir
+    
+    # Create new loggers - BOTH go to the same directory
+    # Summary logger overwrites files each time
+    _debug_logger = DebugLogger(
+        log_dir=log_dir,
+        append_mode=False
+    )
+    # Full logger appends to files (uses _full suffix in filenames, not directory)
+    _debug_logger_append = DebugLogger(
+        log_dir=log_dir,
+        append_mode=True
+    )
+
 
 def get_debug_logger(append_mode: bool = False) -> DebugLogger:
     """
@@ -249,19 +279,24 @@ def get_debug_logger(append_mode: bool = False) -> DebugLogger:
         append_mode: If True, use append-only logger (for full debugging)
                     If False, use overwrite logger (for user viewing)
     """
-    global _debug_logger, _debug_logger_append
+    global _debug_logger, _debug_logger_append, _custom_log_dir
     
     if append_mode:
         if _debug_logger_append is None:
+            # Use custom dir if set, otherwise default
+            # Note: append_mode=True will add _full suffix to filenames
+            log_dir = _custom_log_dir if _custom_log_dir else "./logs/component-testing"
             _debug_logger_append = DebugLogger(
-                log_dir="./logs/component-testing-full",
+                log_dir=log_dir,
                 append_mode=True
             )
         return _debug_logger_append
     else:
         if _debug_logger is None:
+            # Use custom dir if set, otherwise default
+            log_dir = _custom_log_dir if _custom_log_dir else "./logs/component-testing"
             _debug_logger = DebugLogger(
-                log_dir="./logs/component-testing",
+                log_dir=log_dir,
                 append_mode=False
             )
         return _debug_logger

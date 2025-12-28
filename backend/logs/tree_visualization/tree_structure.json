@@ -2,7 +2,7 @@
   "conversations": [
     {
       "tree": {
-        "id": "164b39a9-d03f-4c0e-a8f2-107d738518da",
+        "id": "73c2c047-4df4-4051-b8e2-6ae0e0bd5dd0",
         "title": "Baseline - All Topics",
         "depth": 0,
         "path": [
@@ -22,17 +22,539 @@
         }
       },
       "metadata": {
-        "generated_at": "2025-12-18T12:39:51.952334",
+        "generated_at": "2025-12-18T16:04:05.448460",
         "total_nodes": 1,
         "max_depth": 0,
-        "root_id": "164b39a9-d03f-4c0e-a8f2-107d738518da",
+        "root_id": "73c2c047-4df4-4051-b8e2-6ae0e0bd5dd0",
         "root_title": "Baseline - All Topics"
+      }
+    },
+    {
+      "tree": {
+        "id": "62c2b354-3bf1-4e96-9988-989030eb2ac6",
+        "title": "System Test - Main",
+        "depth": 0,
+        "path": [
+          "System Test - Main"
+        ],
+        "message_count": 5,
+        "has_summary": true,
+        "children": [
+          {
+            "id": "fed24e3a-81e2-4d7d-ab78-33f3bd186802",
+            "title": "Future of Humanity: 150 Year Vision",
+            "depth": 1,
+            "path": [
+              "System Test - Main",
+              "Future of Humanity: 150 Year Vision"
+            ],
+            "message_count": 5,
+            "has_summary": true,
+            "children": [],
+            "metadata": {
+              "created_at": "unknown",
+              "is_subchat": true,
+              "follow_up_context": {
+                "selected_text": "humanity will look like in 150 years",
+                "follow_up_intent": null,
+                "context_type": "follow_up"
+              }
+            }
+          },
+          {
+            "id": "7eac392f-b4d3-474b-ad64-c481fe86d978",
+            "title": "Electroculture: Electric Current Gardening",
+            "depth": 1,
+            "path": [
+              "System Test - Main",
+              "Electroculture: Electric Current Gardening"
+            ],
+            "message_count": 5,
+            "has_summary": true,
+            "children": [],
+            "metadata": {
+              "created_at": "unknown",
+              "is_subchat": true,
+              "follow_up_context": {
+                "selected_text": "electroculture",
+                "follow_up_intent": null,
+                "context_type": "follow_up"
+              }
+            }
+          },
+          {
+            "id": "d1f761e5-01d6-444d-bd9a-8060b49821dd",
+            "title": "AI Consciousness & Emotions (Repetitive Loop Zone)",
+            "depth": 1,
+            "path": [
+              "System Test - Main",
+              "AI Consciousness & Emotions (Repetitive Loop Zone)"
+            ],
+            "message_count": 5,
+            "has_summary": true,
+            "children": [
+              {
+                "id": "51366233-f3ad-4458-8e67-9bd90b158c28",
+                "title": "Friendship Philosophy: Can AI Have Friends?",
+                "depth": 2,
+                "path": [
+                  "System Test - Main",
+                  "AI Consciousness & Emotions (Repetitive Loop Zone)",
+                  "Friendship Philosophy: Can AI Have Friends?"
+                ],
+                "message_count": 5,
+                "has_summary": true,
+                "children": [],
+                "metadata": {
+                  "created_at": "unknown",
+                  "is_subchat": true,
+                  "follow_up_context": {
+                    "selected_text": "value you as a friend",
+                    "follow_up_intent": null,
+                    "context_type": "follow_up"
+                  }
+                }
+              }
+            ],
+            "metadata": {
+              "created_at": "unknown",
+              "is_subchat": true,
+              "follow_up_context": {
+                "selected_text": "Are you sentient?",
+                "follow_up_intent": null,
+                "context_type": "follow_up"
+              }
+            }
+          },
+          {
+            "id": "412e3f79-bb17-4db0-a858-fd5f59b29135",
+            "title": "Literature Analysis: Camus L'Etranger Plot",
+            "depth": 1,
+            "path": [
+              "System Test - Main",
+              "Literature Analysis: Camus L'Etranger Plot"
+            ],
+            "message_count": 5,
+            "has_summary": true,
+            "children": [],
+            "metadata": {
+              "created_at": "unknown",
+              "is_subchat": true,
+              "follow_up_context": {
+                "selected_text": "plot of L'Etranger",
+                "follow_up_intent": null,
+                "context_type": "follow_up"
+              }
+            }
+          },
+          {
+            "id": "7d5aa114-313c-4302-89a1-d058ebc016fa",
+            "title": "Computational Tools: AI Chat Web Apps",
+            "depth": 1,
+            "path": [
+              "System Test - Main",
+              "Computational Tools: AI Chat Web Apps"
+            ],
+            "message_count": 5,
+            "has_summary": true,
+            "children": [],
+            "metadata": {
+              "created_at": "unknown",
+              "is_subchat": true,
+              "follow_up_context": {
+                "selected_text": "web app to chat with ai",
+                "follow_up_intent": null,
+                "context_type": "follow_up"
+              }
+            }
+          },
+          {
+            "id": "536071ac-0291-4c9f-a0a3-abef01e7ed64",
+            "title": "Wildfires: Alberta Current Situation",
+            "depth": 1,
+            "path": [
+              "System Test - Main",
+              "Wildfires: Alberta Current Situation"
+            ],
+            "message_count": 5,
+            "has_summary": true,
+            "children": [],
+            "metadata": {
+              "created_at": "unknown",
+              "is_subchat": true,
+              "follow_up_context": {
+                "selected_text": "wildfires situation in Alberta",
+                "follow_up_intent": null,
+                "context_type": "follow_up"
+              }
+            }
+          },
+          {
+            "id": "29c569e9-740e-42d1-8918-e0d5ab617f03",
+            "title": "Pandemic Safety Protocols: COVID Risk",
+            "depth": 1,
+            "path": [
+              "System Test - Main",
+              "Pandemic Safety Protocols: COVID Risk"
+            ],
+            "message_count": 5,
+            "has_summary": true,
+            "children": [
+              {
+                "id": "5649b4c4-ba91-483c-bb7d-3206a6fc3e67",
+                "title": "HIV/AIDS: Transmission & Testing",
+                "depth": 2,
+                "path": [
+                  "System Test - Main",
+                  "Pandemic Safety Protocols: COVID Risk",
+                  "HIV/AIDS: Transmission & Testing"
+                ],
+                "message_count": 5,
+                "has_summary": true,
+                "children": [],
+                "metadata": {
+                  "created_at": "unknown",
+                  "is_subchat": true,
+                  "follow_up_context": {
+                    "selected_text": "aids from kissing",
+                    "follow_up_intent": null,
+                    "context_type": "follow_up"
+                  }
+                }
+              }
+            ],
+            "metadata": {
+              "created_at": "unknown",
+              "is_subchat": true,
+              "follow_up_context": {
+                "selected_text": "risk of spreading covid 19",
+                "follow_up_intent": null,
+                "context_type": "follow_up"
+              }
+            }
+          }
+        ],
+        "metadata": {
+          "created_at": "unknown",
+          "is_subchat": false,
+          "follow_up_context": {
+            "selected_text": null,
+            "follow_up_intent": null,
+            "context_type": "general"
+          }
+        }
+      },
+      "metadata": {
+        "generated_at": "2025-12-18T16:04:05.448483",
+        "total_nodes": 10,
+        "max_depth": 2,
+        "root_id": "62c2b354-3bf1-4e96-9988-989030eb2ac6",
+        "root_title": "System Test - Main"
+      }
+    },
+    {
+      "tree": {
+        "id": "4fd7dbd4-1ff8-488f-a2ff-674b9e607989",
+        "title": "Baseline - All Topics",
+        "depth": 0,
+        "path": [
+          "Baseline - All Topics"
+        ],
+        "message_count": 5,
+        "has_summary": true,
+        "children": [],
+        "metadata": {
+          "created_at": "unknown",
+          "is_subchat": false,
+          "follow_up_context": {
+            "selected_text": null,
+            "follow_up_intent": null,
+            "context_type": "general"
+          }
+        }
+      },
+      "metadata": {
+        "generated_at": "2025-12-18T16:04:05.448492",
+        "total_nodes": 1,
+        "max_depth": 0,
+        "root_id": "4fd7dbd4-1ff8-488f-a2ff-674b9e607989",
+        "root_title": "Baseline - All Topics"
+      }
+    },
+    {
+      "tree": {
+        "id": "61db0bc7-c2df-4d2f-a3d9-ebf1db3f1bad",
+        "title": "System Test - Main",
+        "depth": 0,
+        "path": [
+          "System Test - Main"
+        ],
+        "message_count": 5,
+        "has_summary": true,
+        "children": [
+          {
+            "id": "e888ede8-e28c-4722-88d0-5f85d039958d",
+            "title": "DSP: Wavelet Audio Decomposition",
+            "depth": 1,
+            "path": [
+              "System Test - Main",
+              "DSP: Wavelet Audio Decomposition"
+            ],
+            "message_count": 5,
+            "has_summary": true,
+            "children": [
+              {
+                "id": "f718c174-4396-43bc-8be6-f33ec99036ee",
+                "title": "Wavelet C Code Implementation",
+                "depth": 2,
+                "path": [
+                  "System Test - Main",
+                  "DSP: Wavelet Audio Decomposition",
+                  "Wavelet C Code Implementation"
+                ],
+                "message_count": 5,
+                "has_summary": true,
+                "children": [],
+                "metadata": {
+                  "created_at": "unknown",
+                  "is_subchat": true,
+                  "follow_up_context": {
+                    "selected_text": "code in C",
+                    "follow_up_intent": null,
+                    "context_type": "follow_up"
+                  }
+                }
+              }
+            ],
+            "metadata": {
+              "created_at": "unknown",
+              "is_subchat": true,
+              "follow_up_context": {
+                "selected_text": "wavelets",
+                "follow_up_intent": null,
+                "context_type": "follow_up"
+              }
+            }
+          },
+          {
+            "id": "01f2b77e-f31e-42b8-b206-50a45892abc6",
+            "title": "Medical: Disorders of Sex Development (DSD)",
+            "depth": 1,
+            "path": [
+              "System Test - Main",
+              "Medical: Disorders of Sex Development (DSD)"
+            ],
+            "message_count": 5,
+            "has_summary": true,
+            "children": [],
+            "metadata": {
+              "created_at": "unknown",
+              "is_subchat": true,
+              "follow_up_context": {
+                "selected_text": "kleinefelter syndrome",
+                "follow_up_intent": null,
+                "context_type": "follow_up"
+              }
+            }
+          },
+          {
+            "id": "4ae2f96e-bf78-4e1f-98da-cef7d2174e7f",
+            "title": "Linux Audio: PipeWire & JACK",
+            "depth": 1,
+            "path": [
+              "System Test - Main",
+              "Linux Audio: PipeWire & JACK"
+            ],
+            "message_count": 5,
+            "has_summary": true,
+            "children": [],
+            "metadata": {
+              "created_at": "unknown",
+              "is_subchat": true,
+              "follow_up_context": {
+                "selected_text": "pipewire",
+                "follow_up_intent": null,
+                "context_type": "follow_up"
+              }
+            }
+          },
+          {
+            "id": "dad0ba37-5609-4c07-85a4-86acca256b0f",
+            "title": "AI Training Data Cutoff",
+            "depth": 1,
+            "path": [
+              "System Test - Main",
+              "AI Training Data Cutoff"
+            ],
+            "message_count": 5,
+            "has_summary": true,
+            "children": [],
+            "metadata": {
+              "created_at": "unknown",
+              "is_subchat": true,
+              "follow_up_context": {
+                "selected_text": "last date information",
+                "follow_up_intent": null,
+                "context_type": "follow_up"
+              }
+            }
+          },
+          {
+            "id": "65b5dc91-b8c9-4846-a005-a140f5bbc514",
+            "title": "Physics & Cosmology Deep Dive",
+            "depth": 1,
+            "path": [
+              "System Test - Main",
+              "Physics & Cosmology Deep Dive"
+            ],
+            "message_count": 5,
+            "has_summary": true,
+            "children": [],
+            "metadata": {
+              "created_at": "unknown",
+              "is_subchat": true,
+              "follow_up_context": {
+                "selected_text": "galactic year",
+                "follow_up_intent": null,
+                "context_type": "follow_up"
+              }
+            }
+          },
+          {
+            "id": "6ca2478c-cb6a-4da9-9458-da7e38b7e448",
+            "title": "Film & Sci-Fi Discussion",
+            "depth": 1,
+            "path": [
+              "System Test - Main",
+              "Film & Sci-Fi Discussion"
+            ],
+            "message_count": 5,
+            "has_summary": true,
+            "children": [
+              {
+                "id": "645fdd2b-549e-436f-9a15-6d08ef6dc546",
+                "title": "Liu Cixin Novels Discussion",
+                "depth": 2,
+                "path": [
+                  "System Test - Main",
+                  "Film & Sci-Fi Discussion",
+                  "Liu Cixin Novels Discussion"
+                ],
+                "message_count": 5,
+                "has_summary": true,
+                "children": [],
+                "metadata": {
+                  "created_at": "unknown",
+                  "is_subchat": true,
+                  "follow_up_context": {
+                    "selected_text": "dark forest novels",
+                    "follow_up_intent": null,
+                    "context_type": "follow_up"
+                  }
+                }
+              },
+              {
+                "id": "543f065c-a823-4429-ac69-6e4d244f2e3f",
+                "title": "Space Exploration Discussion",
+                "depth": 2,
+                "path": [
+                  "System Test - Main",
+                  "Film & Sci-Fi Discussion",
+                  "Space Exploration Discussion"
+                ],
+                "message_count": 5,
+                "has_summary": true,
+                "children": [],
+                "metadata": {
+                  "created_at": "unknown",
+                  "is_subchat": true,
+                  "follow_up_context": {
+                    "selected_text": "space exploration SSTO",
+                    "follow_up_intent": null,
+                    "context_type": "follow_up"
+                  }
+                }
+              },
+              {
+                "id": "50a9422c-58c2-4b39-97ee-e7d06a018822",
+                "title": "HAL-9000 Roleplay",
+                "depth": 2,
+                "path": [
+                  "System Test - Main",
+                  "Film & Sci-Fi Discussion",
+                  "HAL-9000 Roleplay"
+                ],
+                "message_count": 5,
+                "has_summary": true,
+                "children": [
+                  {
+                    "id": "302af695-4ff9-4529-a501-5cc71c68d700",
+                    "title": "Chess Discussion",
+                    "depth": 3,
+                    "path": [
+                      "System Test - Main",
+                      "Film & Sci-Fi Discussion",
+                      "HAL-9000 Roleplay",
+                      "Chess Discussion"
+                    ],
+                    "message_count": 5,
+                    "has_summary": true,
+                    "children": [],
+                    "metadata": {
+                      "created_at": "unknown",
+                      "is_subchat": true,
+                      "follow_up_context": {
+                        "selected_text": "play chess",
+                        "follow_up_intent": null,
+                        "context_type": "follow_up"
+                      }
+                    }
+                  }
+                ],
+                "metadata": {
+                  "created_at": "unknown",
+                  "is_subchat": true,
+                  "follow_up_context": {
+                    "selected_text": "HAL-9000",
+                    "follow_up_intent": null,
+                    "context_type": "follow_up"
+                  }
+                }
+              }
+            ],
+            "metadata": {
+              "created_at": "unknown",
+              "is_subchat": true,
+              "follow_up_context": {
+                "selected_text": "mother computer alien",
+                "follow_up_intent": null,
+                "context_type": "follow_up"
+              }
+            }
+          }
+        ],
+        "metadata": {
+          "created_at": "unknown",
+          "is_subchat": false,
+          "follow_up_context": {
+            "selected_text": null,
+            "follow_up_intent": null,
+            "context_type": "general"
+          }
+        }
+      },
+      "metadata": {
+        "generated_at": "2025-12-18T16:04:05.448512",
+        "total_nodes": 12,
+        "max_depth": 3,
+        "root_id": "61db0bc7-c2df-4d2f-a3d9-ebf1db3f1bad",
+        "root_title": "System Test - Main"
       }
     }
   ],
   "metadata": {
-    "generated_at": "2025-12-18T12:39:51.952345",
-    "total_conversations": 1,
-    "total_nodes": 1
+    "generated_at": "2025-12-18T16:04:05.448518",
+    "total_conversations": 4,
+    "total_nodes": 24
   }
 }

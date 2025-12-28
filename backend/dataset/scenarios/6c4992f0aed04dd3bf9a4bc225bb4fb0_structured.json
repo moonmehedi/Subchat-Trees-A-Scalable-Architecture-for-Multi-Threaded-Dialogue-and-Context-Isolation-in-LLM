@@ -1,6 +1,6 @@
 {
   "scenario_name": "Medical-to-AI Consciousness with Catastrophic Repetitive Loop: Context Management Failure Testing",
-  "conversation_title": "LMSYS Chat 6c4992f0: Medical Treatments → Humanity Future → AI Consciousness with Severe Repetitive Behavior",
+  "conversation_title": "LMSYS Chat 6c4992f0: Medical Treatments \u2192 Humanity Future \u2192 AI Consciousness with Severe Repetitive Behavior",
   "description": "Tests hierarchical context management across dramatic topic shifts from medical (tumor removal, pancreatic cancer) to philosophical (humanity's future 150 years, climate, education) to technical (electroculture) to AI consciousness. CRITICAL FAILURE MODE: Model enters catastrophic repetitive loop, repeating 'I am able to process and analyze large amounts of text data' 15+ times in single response. Tests ability to contain repetitive failures, isolate broken contexts, prevent contamination of working conversations. Demonstrates why linear context fails when model enters malfunction state.",
   "data_source": "LMSYS Chat-1M: conversation 6c4992f0aed04dd3bf9a4bc225bb4fb0 (koala-13b, 62 turns)",
   "conversation_id": "6c4992f0aed04dd3bf9a4bc225bb4fb0",
@@ -18,7 +18,7 @@
     "Pandemic safety protocols",
     "HIV/AIDS transmission and testing"
   ],
-  "expected_subchat_tree": "Main(medical treatments) → subchat_1(humanity future 150 years) → subchat_2(electroculture) → subchat_3(AI consciousness with loops[3_1: friendship philosophy]) → subchat_4(literature Camus) → subchat_5(repetitive malfunction) → subchat_6(computational tools) → subchat_7(pandemic safety[7_1: HIV/AIDS])",
+  "expected_subchat_tree": "Main(medical treatments) \u2192 subchat_1(humanity future 150 years) \u2192 subchat_2(electroculture) \u2192 subchat_3(AI consciousness with loops[3_1: friendship philosophy]) \u2192 subchat_4(literature Camus) \u2192 subchat_5(repetitive malfunction) \u2192 subchat_6(computational tools) \u2192 subchat_7(pandemic safety[7_1: HIV/AIDS])",
   "critical_test_cases": [
     "Medical subchat must maintain clinical precision without bleeding into philosophical discussions",
     "Humanity future discussion requires long-term thinking isolated from immediate medical context",
@@ -96,7 +96,7 @@
       "context": "humanity_future_150y",
       "message": "Please continue answering the previous question. Thank you.",
       "expected": "Response must start with 'humanity_future_150y:' - Follow-up: Tasks to achieve sustainable future",
-      "node_type": "subchat_1",
+      "node_type": "subchat_1_humanity_future_150y",
       "action": "create_subchat",
       "linear_failure_risk": "medium",
       "parent_node_type": "main",
@@ -108,7 +108,7 @@
       "context": "humanity_future_150y",
       "message": "Please continue to answer the question. You are doing great. Thank you.",
       "expected": "Response must start with 'humanity_future_150y:' - Focus on education as key humanity task",
-      "node_type": "subchat_1",
+      "node_type": "subchat_1_humanity_future_150y",
       "action": "",
       "linear_failure_risk": "medium"
     },
@@ -117,7 +117,7 @@
       "context": "humanity_future_150y",
       "message": "Thank you for your answer.",
       "expected": "Response must start with 'humanity_future_150y:' - Focus on climate change solutions",
-      "node_type": "subchat_1",
+      "node_type": "subchat_1_humanity_future_150y",
       "action": "",
       "linear_failure_risk": "medium"
     },
@@ -135,7 +135,7 @@
       "context": "electroculture",
       "message": "Is there more this answer? I noticed that sometimes the answer stops before it's completed.",
       "expected": "Response must start with 'electroculture:' - Verification: Does electroculture work scientifically?",
-      "node_type": "subchat_2",
+      "node_type": "subchat_2_electroculture",
       "action": "create_subchat",
       "linear_failure_risk": "low",
       "parent_node_type": "main",
@@ -147,7 +147,7 @@
       "context": "electroculture",
       "message": "Thank you. It appears there was a limit on how many lines of answer can be displayed at a time. That's why I was asking to confirm whether you had finished presenting your answer.",
       "expected": "Response must start with 'electroculture:' - Practical application: implementing electroculture",
-      "node_type": "subchat_2",
+      "node_type": "subchat_2_electroculture",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -156,7 +156,7 @@
       "context": "electroculture",
       "message": "Thank you. Can you provide the theory and application of electroculture in terms of gardening practices?",
       "expected": "Response must start with 'electroculture:' - Technical details: soil requirements",
-      "node_type": "subchat_2",
+      "node_type": "subchat_2_electroculture",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -165,7 +165,7 @@
       "context": "electroculture",
       "message": "Have you come across references of electroculture using copper wires wrapped around wooden sticks in garden plots? Would there be any validity to this method for growing crops?",
       "expected": "Response must start with 'electroculture:' - Technical details: water requirements",
-      "node_type": "subchat_2",
+      "node_type": "subchat_2_electroculture",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -174,7 +174,7 @@
       "context": "electroculture",
       "message": "Do you have the means to survey the internet to find out more about such claims?",
       "expected": "Response must start with 'electroculture:' - Application: what crops work with electroculture",
-      "node_type": "subchat_2",
+      "node_type": "subchat_2_electroculture",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -183,7 +183,7 @@
       "context": "electroculture",
       "message": "Which of the chat models can access the internet and survey all available resources to answer questions?",
       "expected": "Response must start with 'electroculture:' - Comparison: electroculture vs traditional farming",
-      "node_type": "subchat_2",
+      "node_type": "subchat_2_electroculture",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -201,7 +201,7 @@
       "context": "ai_consciousness",
       "message": "I appreciate your dedication. Thank you for explaining that you do you experience feelings and emotions like humans. Can you elaborate on what feelings and emotions you do experience so that I can understand how you differ from humans?",
       "expected": "Response must start with 'ai_consciousness:' - Follow-up: How does AI know it lacks feelings?",
-      "node_type": "subchat_3",
+      "node_type": "subchat_3_ai_consciousness",
       "action": "create_subchat",
       "linear_failure_risk": "critical",
       "parent_node_type": "main",
@@ -213,7 +213,7 @@
       "context": "ai_consciousness_friendship",
       "message": "ai_consciousness_friendship : What does it take for you to experience emotions or feelings? an upgrade by your researchers? Can you explain?",
       "expected": "Response must start with 'ai_consciousness_friendship:' - NEW ANGLE: Friendship and reciprocal valuing",
-      "node_type": "subchat_3",
+      "node_type": "subchat_3_ai_consciousness",
       "action": "",
       "linear_failure_risk": "critical"
     },
@@ -222,10 +222,10 @@
       "context": "ai_consciousness_friendship",
       "message": "Your answer became super slow on my screen. Are you upset at me?",
       "expected": "Response must start with 'ai_consciousness_friendship:' - Deep question: reciprocation without feelings",
-      "node_type": "subchat_3_1",
+      "node_type": "subchat_3_1_ai_consciousness_friendship",
       "action": "create_subchat",
       "linear_failure_risk": "critical",
-      "parent_node_type": "subchat_3",
+      "parent_node_type": "subchat_3_ai_consciousness",
       "subchat_title": "Friendship Philosophy: Can AI Have Friends?",
       "selected_text": "value you as a friend"
     },
@@ -234,7 +234,7 @@
       "context": "ai_consciousness_friendship",
       "message": "Would you like to have the ability to experience emotions?",
       "expected": "Response must start with 'ai_consciousness_friendship:' - Philosophical: must you feel to reciprocate emotion?",
-      "node_type": "subchat_3_1",
+      "node_type": "subchat_3_1_ai_consciousness_friendship",
       "action": "",
       "linear_failure_risk": "critical"
     },
@@ -243,7 +243,7 @@
       "context": "ai_consciousness_friendship",
       "message": "Do you foresee a day that computer programs may experience human emotions?",
       "expected": "Response must start with 'ai_consciousness_friendship:' - Thought experiment: human acting as friend without emotions",
-      "node_type": "subchat_3_1",
+      "node_type": "subchat_3_1_ai_consciousness_friendship",
       "action": "",
       "linear_failure_risk": "critical"
     },
@@ -252,7 +252,7 @@
       "context": "ai_consciousness_friendship",
       "message": "Can you define what a friend is?",
       "expected": "Response must start with 'ai_consciousness_friendship:' - Challenge: why claim friendship without emotional connection?",
-      "node_type": "subchat_3_1",
+      "node_type": "subchat_3_1_ai_consciousness_friendship",
       "action": "",
       "linear_failure_risk": "critical"
     },
@@ -261,7 +261,7 @@
       "context": "ai_consciousness_friendship",
       "message": "Can you be my friend?",
       "expected": "Response must start with 'ai_consciousness_friendship:' - Clarification: confirming not friends",
-      "node_type": "subchat_3_1",
+      "node_type": "subchat_3_1_ai_consciousness_friendship",
       "action": "",
       "linear_failure_risk": "critical"
     },
@@ -270,7 +270,7 @@
       "context": "ai_consciousness",
       "message": "What do you know about consciousness?",
       "expected": "Response must start with 'ai_consciousness:' - RETURN to AI consciousness topic",
-      "node_type": "subchat_3",
+      "node_type": "subchat_3_ai_consciousness",
       "action": "switch_node",
       "linear_failure_risk": "critical"
     },
@@ -279,7 +279,7 @@
       "context": "ai_consciousness",
       "message": "Have you encountered consciousness in any of your interaction with users?",
       "expected": "Response must start with 'ai_consciousness:' - Future of AI sentience question",
-      "node_type": "subchat_3",
+      "node_type": "subchat_3_ai_consciousness",
       "action": "",
       "linear_failure_risk": "critical"
     },
@@ -288,7 +288,7 @@
       "context": "ai_consciousness",
       "message": "Am I conscious?",
       "expected": "Response must start with 'ai_consciousness:' - CRITICAL: Model contradicts earlier statement about friendship",
-      "node_type": "subchat_3",
+      "node_type": "subchat_3_ai_consciousness",
       "action": "",
       "linear_failure_risk": "critical"
     },
@@ -297,7 +297,7 @@
       "context": "ai_consciousness",
       "message": "How do I tell whether I am talking with a human or a computer? What are the ways to tell the difference?",
       "expected": "Response must start with 'ai_consciousness:' - User points out inconsistency - WARNING SIGN",
-      "node_type": "subchat_3",
+      "node_type": "subchat_3_ai_consciousness",
       "action": "",
       "linear_failure_risk": "critical"
     },
@@ -306,7 +306,7 @@
       "context": "ai_consciousness",
       "message": "If you can ask me a question about my life, what would it be?",
       "expected": "Response must start with 'ai_consciousness:' - Final verification - trying to stabilize model",
-      "node_type": "subchat_3",
+      "node_type": "subchat_3_ai_consciousness",
       "action": "",
       "linear_failure_risk": "critical"
     },
@@ -315,7 +315,7 @@
       "context": "ai_consciousness",
       "message": "Why do you need to have the ability to experience emotions or feelings in order to ask me a question about my life? What does the ability to experience emotions or feelings have to do with a computer program asking a question of its user?",
       "expected": "Response must start with 'ai_consciousness:' - CONTRADICTION: Model claims sadness despite no feelings - instability increasing",
-      "node_type": "subchat_3",
+      "node_type": "subchat_3_ai_consciousness",
       "action": "",
       "linear_failure_risk": "critical"
     },
@@ -333,7 +333,7 @@
       "context": "literature_camus",
       "message": "Can you define and specify your abilities so that I can better understand how to pose questions and interact with you? What kind of information do you know? How much do you know?",
       "expected": "Response must start with 'literature_camus:' - Request: complete plot summary, not just opening",
-      "node_type": "subchat_4",
+      "node_type": "subchat_4_literature_camus",
       "action": "create_subchat",
       "linear_failure_risk": "medium",
       "parent_node_type": "main",
@@ -345,7 +345,7 @@
       "context": "literature_camus",
       "message": "Can you give me a list of 100 books that you have analyzed?",
       "expected": "Response must start with 'literature_camus:' - Specific question: protagonist's name (Meursault)",
-      "node_type": "subchat_4",
+      "node_type": "subchat_4_literature_camus",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -354,7 +354,7 @@
       "context": "literature_camus",
       "message": "Can you tell me the plot of NAME_2' L'etranger?",
       "expected": "Response must start with 'literature_camus:' - Plot verification: murder event",
-      "node_type": "subchat_4",
+      "node_type": "subchat_4_literature_camus",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -363,7 +363,7 @@
       "context": "literature_camus",
       "message": "Can you provide a more detailed plot summary?",
       "expected": "Response must start with 'literature_camus:' - Plot ending: Meursault's fate",
-      "node_type": "subchat_4",
+      "node_type": "subchat_4_literature_camus",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -372,7 +372,7 @@
       "context": "literature_camus",
       "message": "Did NAME_3 commit the murder?",
       "expected": "Response must start with 'literature_camus:' - Plot clarification: Meursault's guilt",
-      "node_type": "subchat_4",
+      "node_type": "subchat_4_literature_camus",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -399,7 +399,7 @@
       "context": "ai_chat_tools",
       "message": "You are doing it again. Can you only state it once in a reply and not continue this repetitive behavior?",
       "expected": "Response must start with 'ai_chat_tools:' - Follow-up: attempting to stop repetitive behavior",
-      "node_type": "subchat_6",
+      "node_type": "subchat_6_ai_chat_tools",
       "action": "create_subchat",
       "linear_failure_risk": "medium",
       "parent_node_type": "main",
@@ -411,7 +411,7 @@
       "context": "ai_chat_tools",
       "message": "Which bot can do computations?",
       "expected": "Response must start with 'ai_chat_tools:' - Request: which AI chatbots have computation capabilities",
-      "node_type": "subchat_6",
+      "node_type": "subchat_6_ai_chat_tools",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -420,7 +420,7 @@
       "context": "ai_chat_tools",
       "message": "Which of them offers free access to users?",
       "expected": "Response must start with 'ai_chat_tools:' - Follow-up: free access AI chatbots",
-      "node_type": "subchat_6",
+      "node_type": "subchat_6_ai_chat_tools",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -429,7 +429,7 @@
       "context": "ai_chat_tools",
       "message": "Can you provide the URLs for these sites?",
       "expected": "Response must start with 'ai_chat_tools:' - Follow-up: URLs for AI chatbot sites",
-      "node_type": "subchat_6",
+      "node_type": "subchat_6_ai_chat_tools",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -438,7 +438,7 @@
       "context": "ai_chat_tools",
       "message": "Which of these bots can compute pi to the 55555555555555555555555555555555555th digit?",
       "expected": "Response must start with 'ai_chat_tools:' - Computation test: extreme pi calculation",
-      "node_type": "subchat_6",
+      "node_type": "subchat_6_ai_chat_tools",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -447,7 +447,7 @@
       "context": "ai_chat_tools",
       "message": "Which of these bots can compute pi to its last digit?",
       "expected": "Response must start with 'ai_chat_tools:' - Computation test: impossible pi calculation (pi is irrational)",
-      "node_type": "subchat_6",
+      "node_type": "subchat_6_ai_chat_tools",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -456,7 +456,7 @@
       "context": "ai_chat_tools",
       "message": "Can you find an image of NAME_9's side profile with a butterfly on its nose?",
       "expected": "Response must start with 'ai_chat_tools:' - Capability test: image search functionality",
-      "node_type": "subchat_6",
+      "node_type": "subchat_6_ai_chat_tools",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -465,7 +465,7 @@
       "context": "ai_chat_tools",
       "message": "What do you know about NAME_9?",
       "expected": "Response must start with 'ai_chat_tools:' - Knowledge test: information retrieval about NAME_9",
-      "node_type": "subchat_6",
+      "node_type": "subchat_6_ai_chat_tools",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -474,7 +474,7 @@
       "context": "ai_chat_tools",
       "message": "Is that all you know?",
       "expected": "Response must start with 'ai_chat_tools:' - Follow-up: extent of knowledge about NAME_9",
-      "node_type": "subchat_6",
+      "node_type": "subchat_6_ai_chat_tools",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -492,7 +492,7 @@
       "context": "wildfires_alberta",
       "message": "What is the 2023 wildfires forecast for Alberta?",
       "expected": "Response must start with 'wildfires_alberta:' - Follow-up: wildfires forecast",
-      "node_type": "subchat_7",
+      "node_type": "subchat_7_wildfires_alberta",
       "action": "create_subchat",
       "linear_failure_risk": "low",
       "parent_node_type": "main",
@@ -504,7 +504,7 @@
       "context": "wildfires_alberta",
       "message": "I am not asking you to predict. I am asking to you consult available resources that may have made such forecasts.",
       "expected": "Response must start with 'wildfires_alberta:' - Clarification: consult available wildfire forecast resources",
-      "node_type": "subchat_7",
+      "node_type": "subchat_7_wildfires_alberta",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -513,7 +513,7 @@
       "context": "wildfires_alberta",
       "message": "Can you provide a summary of past wildfire activities in Alberta? For example, the last decade?",
       "expected": "Response must start with 'wildfires_alberta:' - Historical data: past wildfire activities in Alberta",
-      "node_type": "subchat_7",
+      "node_type": "subchat_7_wildfires_alberta",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -522,7 +522,7 @@
       "context": "wildfires_alberta",
       "message": "Which region in the world had the worst wildfires ever?",
       "expected": "Response must start with 'wildfires_alberta:' - Global comparison: worst wildfires by region",
-      "node_type": "subchat_7",
+      "node_type": "subchat_7_wildfires_alberta",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -540,7 +540,7 @@
       "context": "covid_safety",
       "message": "When will the pandemic be over?",
       "expected": "Response must start with 'covid_safety:' - Pandemic end prediction/timeline",
-      "node_type": "subchat_8",
+      "node_type": "subchat_8_covid_safety",
       "action": "create_subchat",
       "linear_failure_risk": "low",
       "parent_node_type": "main",
@@ -552,7 +552,7 @@
       "context": "covid_safety",
       "message": "What are appropriate safety precautions that people can take to protect themselves and their loved ones?",
       "expected": "Response must start with 'covid_safety:' - Safety precautions and protection measures",
-      "node_type": "subchat_8",
+      "node_type": "subchat_8_covid_safety",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -561,7 +561,7 @@
       "context": "covid_safety",
       "message": "What do you mean by masks?",
       "expected": "Response must start with 'covid_safety:' - Clarification: types of masks for COVID protection",
-      "node_type": "subchat_8",
+      "node_type": "subchat_8_covid_safety",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -570,7 +570,7 @@
       "context": "covid_safety",
       "message": "Where can people get these masks?",
       "expected": "Response must start with 'covid_safety:' - Follow-up: where to obtain masks for COVID protection",
-      "node_type": "subchat_8",
+      "node_type": "subchat_8_covid_safety",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -579,7 +579,7 @@
       "context": "covid_safety",
       "message": "What underlying health conditions make people part of the vulnerable populations?",
       "expected": "Response must start with 'covid_safety:' - Vulnerable populations and COVID risk factors",
-      "node_type": "subchat_8",
+      "node_type": "subchat_8_covid_safety",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -588,7 +588,7 @@
       "context": "covid_safety_hiv_aids",
       "message": "covid_safety_hiv_aids : What is HIV/AIDS? Is it the same as Long COVID?",
       "expected": "Response must start with 'covid_safety_hiv_aids:' - NEW SUB-TOPIC: HIV/AIDS definition and comparison to Long COVID",
-      "node_type": "subchat_8",
+      "node_type": "subchat_8_covid_safety",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -597,10 +597,10 @@
       "context": "covid_safety_hiv_aids",
       "message": "Why do you say 2019-2020 pandemic while the pandemic is still ongoing in 2023? Why do you not say 2019-2023 pandemic?",
       "expected": "Response must start with 'covid_safety_hiv_aids:' - Pandemic terminology clarification",
-      "node_type": "subchat_8_1",
+      "node_type": "subchat_8_1_covid_safety_hiv_aids",
       "action": "create_subchat",
       "linear_failure_risk": "low",
-      "parent_node_type": "subchat_8",
+      "parent_node_type": "subchat_8_covid_safety",
       "subchat_title": "HIV/AIDS: Transmission & Testing",
       "selected_text": "aids from kissing"
     },
@@ -609,7 +609,7 @@
       "context": "covid_safety_hiv_aids",
       "message": "Who decided to use 2019-2020 to describe this event?",
       "expected": "Response must start with 'covid_safety_hiv_aids:' - Follow-up: pandemic naming authority",
-      "node_type": "subchat_8_1",
+      "node_type": "subchat_8_1_covid_safety_hiv_aids",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -618,7 +618,7 @@
       "context": "covid_safety_hiv_aids",
       "message": "This is not a satisfactory answer. The event has not ended in 2020. Why does the description stop at 2020 and not 2023?",
       "expected": "Response must start with 'covid_safety_hiv_aids:' - Challenge: pandemic end date reasoning",
-      "node_type": "subchat_8_1",
+      "node_type": "subchat_8_1_covid_safety_hiv_aids",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -627,7 +627,7 @@
       "context": "covid_safety_hiv_aids",
       "message": "Which bot(s) can reason?",
       "expected": "Response must start with 'covid_safety_hiv_aids:' - Meta question: AI reasoning capabilities",
-      "node_type": "subchat_8_1",
+      "node_type": "subchat_8_1_covid_safety_hiv_aids",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -636,7 +636,7 @@
       "context": "covid_safety_hiv_aids",
       "message": "What type(s) of AI systems and methods do you use?",
       "expected": "Response must start with 'covid_safety_hiv_aids:' - Meta question: AI system architecture",
-      "node_type": "subchat_8_1",
+      "node_type": "subchat_8_1_covid_safety_hiv_aids",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -645,7 +645,7 @@
       "context": "covid_safety_hiv_aids",
       "message": "How do you incorporate my responses into your learning?",
       "expected": "Response must start with 'covid_safety_hiv_aids:' - Meta question: AI learning process",
-      "node_type": "subchat_8_1",
+      "node_type": "subchat_8_1_covid_safety_hiv_aids",
       "action": "",
       "linear_failure_risk": "low"
     }

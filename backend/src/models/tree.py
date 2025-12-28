@@ -187,17 +187,37 @@ MESSAGES (messages {start_msg_num}-{end_msg_num}, total: {len(all_buffer_message
 Summary:"""
         
         try:
-            # Call LLM to generate summary
-            response = self.llm_client.groq_client.chat.completions.create(
-                model="llama-3.3-70b-versatile",
-                messages=[{"role": "user", "content": prompt}],
-                max_tokens=500,
-                temperature=0.3  # Lower temperature for consistent summarization
-            )
+            import os
+            llm_backend = os.environ.get("LLM_BACKEND", "groq").lower()
+            new_summary = None
             
-            new_summary = response.choices[0].message.content.strip()
+            # 1. Try vLLM first (Kaggle GPU - preferred)
+            if hasattr(self.llm_client, 'vllm_client') and self.llm_client.vllm_client:
+                new_summary = self.llm_client.vllm_client.generate(
+                    messages=[{"role": "user", "content": prompt}],
+                    temperature=0.3,
+                    max_tokens=500
+                )
+                new_summary = new_summary.strip()
+                print(f"📝 Summarization via vLLM")
+            
+            # 2. Fall back to Groq if LLM_BACKEND allows it
+            elif llm_backend == "groq" and hasattr(self.llm_client, 'groq_client') and self.llm_client.groq_client:
+                response = self.llm_client.groq_client.chat.completions.create(
+                    model="llama-3.1-8b-instant",
+                    messages=[{"role": "user", "content": prompt}],
+                    temperature=0.3,
+                    max_tokens=500
+                )
+                new_summary = response.choices[0].message.content.strip()
+                print(f"📝 Summarization via Groq")
+            
+            # 3. No LLM available - skip summarization gracefully
+            else:
+                print(f"⚠️  Summarization skipped: No LLM available (vLLM={hasattr(self.llm_client, 'vllm_client')}, backend={llm_backend})")
+                return  # Don't crash, just skip
+            
             old_summary_len = len(self.summary) if self.summary else 0
-            
             self.summary = new_summary
             
             print(f"📝 Summary updated: {old_summary_len} → {len(new_summary)} chars")
@@ -205,9 +225,9 @@ Summary:"""
             print(f"   Summary preview: {new_summary[:100]}{'...' if len(new_summary) > 100 else ''}")
             
         except Exception as e:
-            print(f"⚠️  Summarization failed: {e}")
-            import traceback
-            traceback.print_exc()
+            # Log error but don't crash - summarization is optional
+            print(f"⚠️  Summarization failed (non-fatal): {e}")
+            print("   Continuing without summary update...")
     
     def inherit_summary(self, parent_summary: str):
         """

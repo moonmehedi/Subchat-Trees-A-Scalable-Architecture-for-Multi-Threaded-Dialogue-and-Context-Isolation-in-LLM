@@ -1,0 +1,77 @@
+================================================================================
+INDEXED MESSAGES IN VECTOR STORE (10 total)
+Timestamp: 2025-12-22 13:43:43
+================================================================================
+
+
+================================================================================
+🗂️  Conversation: 1caccd05-26ae-49cd-b28e-5144c5b4abb9 (4 messages) - Friendly Casual Greeting Begins
+================================================================================
+
+1. [USER] @ 1766389256.91
+   FULL TEXT: hi there
+   ----------------------------------------------------------------------------
+
+2. [ASSISTANT] @ 1766389279.54
+   FULL TEXT: Hello. How can I assist you today?
+   ----------------------------------------------------------------------------
+
+3. [USER] @ 1766389309.89
+   FULL TEXT: tell me about quantum computing field
+   ----------------------------------------------------------------------------
+
+4. [ASSISTANT] @ 1766389312.45
+   FULL TEXT: Quantum computing is a rapidly growing field that focuses on developing computers that can process information in a fundamentally different way than classical computers. Classical computers use bits, which are either 0 or 1, to store and process information. In contrast, quantum computers use quantum bits or qubits, which can exist in multiple states simultaneously, allowing for the processing of vast amounts of information in parallel.
+
+This property of qubits enables quantum computers to solve certain problems much faster than classical computers. Some examples of problems
+   ----------------------------------------------------------------------------
+
+
+================================================================================
+🗂️  Conversation: f7278264-a01a-45f8-ba6c-4574b38b9da7 (6 messages) - Breaking Down Complex Ideas
+================================================================================
+
+1. [USER] @ 1766389336.91
+   FULL TEXT: hi there
+   ----------------------------------------------------------------------------
+
+2. [ASSISTANT] @ 1766389337.09
+   FULL TEXT: Hello. How can I assist you today?
+   ----------------------------------------------------------------------------
+
+3. [USER] @ 1766389337.27
+   FULL TEXT: tell me about quantum computing field
+   ----------------------------------------------------------------------------
+
+4. [ASSISTANT] @ 1766389337.49
+   FULL TEXT: Quantum computing is a rapidly growing field that focuses on developing computers that can process information in a fundamentally different way than classical computers. Classical computers use bits, which are either 0 or 1, to store and process information. In contrast, quantum computers use quantum bits or qubits, which can exist in multiple states simultaneously, allowing for the processing of vast amounts of information in parallel.
+
+This property of qubits enables quantum computers to solve certain problems much faster than classical computers. Some examples of problems
+   ----------------------------------------------------------------------------
+
+5. [USER] @ 1766389361.08
+   FULL TEXT: tell me more about this in simple term
+   ----------------------------------------------------------------------------
+
+6. [ASSISTANT] @ 1766389421.54
+   FULL TEXT: Let me break it down in simple terms:
+
+**Classical Computers:**
+
+* Use "bits" that are either 0 or 1
+* Process information one step at a time
+* Can only do one thing at a time
+
+**Quantum Computers:**
+
+* Use "qubits" that can be 0, 1, or both at the same time
+* Can process multiple things at the same time
+* Can try many solutions simultaneously
+
+Think of it like trying to find
+   ----------------------------------------------------------------------------
+
+
+================================================================================
+✅ Total: 10 messages across 2 conversations
+================================================================================

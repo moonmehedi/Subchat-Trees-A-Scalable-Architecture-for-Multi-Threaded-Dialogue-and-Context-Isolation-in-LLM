@@ -195,7 +195,7 @@ class ROUGEEvaluator:
         print("="*60)
         
         rouge = results['rouge_scores']
-        print(f"\n🎯 ROUGE Scores:")
+        print(f"\n🎯 ROUGE Scores (F1):")
         print(f"   ROUGE-1: {rouge['rouge1']:.4f}")
         print(f"   ROUGE-2: {rouge['rouge2']:.4f}")
         print(f"   ROUGE-L: {rouge['rougeL']:.4f}")
@@ -210,7 +210,52 @@ class ROUGEEvaluator:
         print(f"\n📊 Dataset:")
         print(f"   Total Examples: {results['num_examples']}")
         
+        # Paper-ready format
+        print(f"\n📝 FOR YOUR PAPER:")
+        print(f"   ROUGE-1: {rouge['rouge1']:.2f}, ROUGE-2: {rouge['rouge2']:.2f}, ROUGE-L: {rouge['rougeL']:.2f}")
+        print(f"   (N={results['num_examples']} branch summaries)")
+        
         print("="*60)
+    
+    def format_for_paper(self, results: Dict[str, Any]) -> str:
+        """
+        Format results for academic paper reporting.
+        
+        Args:
+            results: Results dictionary
+            
+        Returns:
+            Formatted string ready for LaTeX tables
+        """
+        rouge = results['rouge_scores']
+        n = results['num_examples']
+        
+        latex_table = f"""
+% LaTeX table for your paper
+\\begin{{table}}[h]
+\\centering
+\\caption{{ROUGE scores for branch-level summary generation}}
+\\label{{tab:rouge}}
+\\begin{{tabular}}{{lccc}}
+\\hline
+\\textbf{{Method}} & \\textbf{{ROUGE-1}} & \\textbf{{ROUGE-2}} & \\textbf{{ROUGE-L}} \\\\
+\\hline
+Subchat Trees & {rouge['rouge1']:.2f} & {rouge['rouge2']:.2f} & {rouge['rougeL']:.2f} \\\\
+\\hline
+\\end{{tabular}}
+\\end{{table}}
+
+% Text for results section:
+The hierarchical subchat system achieved ROUGE-1, ROUGE-2, and 
+ROUGE-L scores of {rouge['rouge1']:.2f}, {rouge['rouge2']:.2f}, 
+and {rouge['rougeL']:.2f} respectively (N={n} branch summaries).
+
+% Markdown table:
+| Method        | ROUGE-1 | ROUGE-2 | ROUGE-L |
+|---------------|---------|---------|---------|
+| Subchat Trees | {rouge['rouge1']:.2f}    | {rouge['rouge2']:.2f}    | {rouge['rougeL']:.2f}    |
+"""
+        return latex_table
     
     def compare_evaluations(
         self,

@@ -1,0 +1,3 @@
+# ROUGE Evaluation Dependencies
+# Note: evaluate library includes ROUGE support - no need for rouge-score!
+evaluate>=0.4.0

@@ -15,13 +15,16 @@
 
 ---
 
-## Quick Workflow (30 Minutes)
+## Quick Workflow (~2 Hours Total)
 
-**You need to:**
-1. Create 30 conversation nodes with human-written summaries (20 min)
-2. Run script to generate LLM predictions (5 min)
-3. Calculate ROUGE scores (1 min)
-4. Report in your paper (done!)
+**Realistic time estimate:**
+1. Extract 30 nodes (2 min) 
+2. Write 30 human reference summaries (~2 hours, 3-5 min each)
+3. Generate LLM predictions (5 min)
+4. Calculate ROUGE scores (1 min)
+5. Report in your paper (done!)
+
+**Important:** 30 human-written summaries is the **gold standard** and what top papers use. This is achievable in a single sitting.
 
 ---
 

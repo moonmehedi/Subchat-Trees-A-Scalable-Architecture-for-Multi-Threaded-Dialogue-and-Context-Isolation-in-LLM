@@ -1,3 +1,20 @@
-# ROUGE Evaluation Dependencies
-# Note: evaluate library includes ROUGE support - no need for rouge-score!
-evaluate>=0.4.0
+# ============================================================================
+# MULTI-METRIC SUMMARY EVALUATION SYSTEM
+# ============================================================================
+# Dependencies for ROUGE, METEOR, and BERTScore computation
+# ============================================================================
+
+# Core Metrics
+evaluate>=0.4.0          # ROUGE and METEOR from Hugging Face
+bert-score>=0.3.13       # Semantic similarity via contextual embeddings
+nltk>=3.8                # WordNet data for METEOR synonym matching
+
+# Metric Dependencies
+rouge-score              # ROUGE metric backend
+absl-py                  # Required by rouge-score
+datasets>=2.0.0          # Dataset handling for evaluate library
+transformers>=4.30.0     # Transformer models for BERTScore
+torch>=2.0.0             # PyTorch for BERTScore model
+
+# LLM API
+groq>=0.4.0              # For generating predictions with Groq API

@@ -1,27 +1,27 @@
-# How to Calculate ROUGE Score for Your Paper
+# How to Evaluate Summary Quality for Your Paper
 
 ## Academic Framing (Critical!)
 
 **What you are evaluating:**
 - ✅ **Branch-level conversation summaries** (not general chat quality)
-- ✅ **Lexical overlap** between generated and reference summaries
+- ✅ **Lexical overlap** (ROUGE), **semantic alignment** (METEOR), and **contextual similarity** (BERTScore)
 - ✅ **Summarization quality** (following standard NLP practices)
 
 **How to phrase it in your paper:**
-> "We evaluate branch-level summaries using ROUGE-1, ROUGE-2, and ROUGE-L F1 scores by comparing generated summaries against human-written reference summaries."
+> "We evaluate branch-level summaries using three complementary metrics: ROUGE (lexical overlap), METEOR (alignment with synonym matching), and BERTScore (semantic similarity using contextual embeddings). All metrics compare generated summaries against human-written reference summaries."
 
-**Limitation statement (include this to satisfy reviewers):**
-> "While ROUGE captures lexical overlap, it does not fully reflect semantic correctness or contextual appropriateness in dialogue; therefore, we complement ROUGE with qualitative analysis."
+**Why three metrics:**
+> "ROUGE measures n-gram overlap, METEOR incorporates synonyms and paraphrasing, and BERTScore captures semantic similarity through transformer-based embeddings. This multi-metric approach provides comprehensive evaluation of summarization quality."
 
 ---
 
-## Quick Workflow (~2 Hours Total)
+## Quick Workflow (~2.5 Hours Total)
 
 **Realistic time estimate:**
 1. Extract 30 nodes (2 min) 
 2. Write 30 human reference summaries (~2 hours, 3-5 min each)
 3. Generate LLM predictions (5 min)
-4. Calculate ROUGE scores (1 min)
+4. Calculate all metrics: ROUGE + METEOR + BERTScore (10 min, includes model download)
 5. Report in your paper (done!)
 
 **Important:** 30 human-written summaries is the **gold standard** and what top papers use. This is achievable in a single sitting.

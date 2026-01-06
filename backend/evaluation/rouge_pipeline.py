@@ -16,7 +16,7 @@ sys.path.append(str(Path(__file__).parent.parent))
 
 from evaluation.node_extractor import NodeExtractor
 from evaluation.prediction_generator import PredictionGenerator
-from evaluation.rouge_calculator import ROUGEEvaluator
+from evaluation.summary_evaluator import SummaryEvaluator
 
 
 class ROUGEPipeline:
@@ -45,7 +45,7 @@ class ROUGEPipeline:
         # Initialize components
         self.extractor = NodeExtractor(str(self.datasets_dir))
         self.generator = PredictionGenerator(model_name=model_name)
-        self.evaluator = ROUGEEvaluator()
+        self.evaluator = SummaryEvaluator()
     
     def run_complete_pipeline(
         self,
@@ -239,45 +239,97 @@ class ROUGEPipeline:
             f.write("- No contamination from sibling nodes\n")
             f.write("- Main chat vs subchats maintain separate contexts\n")
         
-        # Paper-ready format
+        # Paper-ready format with ALL metrics
         with open(paper_format_path, 'w') as f:
-            f.write("# Paper-Ready ROUGE Results\n\n")
+            f.write("# Paper-Ready Results (ROUGE + METEOR + BERTScore)\n\n")
+            
+            # Check if we have all metrics
+            has_all = 'meteor_score' in summary_results and 'bertscore' in summary_results
+            
             f.write("## For Methods Section\n\n")
             f.write("```\n")
-            f.write("We evaluate branch-level summaries using ROUGE-1, ROUGE-2, and\n")
-            f.write("ROUGE-L F1 scores by comparing generated summaries against\n")
-            f.write(f"human-written reference summaries. We evaluated {summary_results['num_examples']}\n")
-            f.write("conversation branches (representing main chats, subchats, and\n")
-            f.write("nested subchats) with 3-5 sentence summaries.\n")
+            if has_all:
+                f.write("We evaluate branch-level summaries using ROUGE-1, ROUGE-2, and\n")
+                f.write("ROUGE-L F1 scores to measure lexical overlap with human-written\n")
+                f.write("reference summaries. Since ROUGE primarily captures surface-level\n")
+                f.write("similarity, we additionally report METEOR and BERTScore to account\n")
+                f.write("for semantic similarity. METEOR considers stemming and synonym\n")
+                f.write("alignment, while BERTScore leverages contextual embeddings to\n")
+                f.write("measure semantic correspondence. All scores are averaged across\n")
+                f.write(f"{summary_results['num_examples']} conversation branches.\n")
+            else:
+                f.write("We evaluate branch-level summaries using ROUGE-1, ROUGE-2, and\n")
+                f.write("ROUGE-L F1 scores by comparing generated summaries against\n")
+                f.write(f"human-written reference summaries. We evaluated {summary_results['num_examples']}\n")
+                f.write("conversation branches (representing main chats, subchats, and\n")
+                f.write("nested subchats) with 3-5 sentence summaries.\n")
             f.write("```\n\n")
             
-            f.write("## LaTeX Table\n\n")
-            f.write("```latex\n")
-            f.write("\\begin{table}[h]\n")
-            f.write("\\centering\n")
-            f.write("\\caption{ROUGE scores for branch-level summary generation}\n")
-            f.write("\\label{tab:rouge}\n")
-            f.write("\\begin{tabular}{lccc}\n")
-            f.write("\\hline\n")
-            f.write("\\textbf{Method} & \\textbf{ROUGE-1} & \\textbf{ROUGE-2} & \\textbf{ROUGE-L} \\\\\n")
-            f.write("\\hline\n")
-            f.write(f"Subchat Trees & {rouge['rouge1']:.2f} & {rouge['rouge2']:.2f} & {rouge['rougeL']:.2f} \\\\\n")
-            f.write("\\hline\n")
-            f.write("\\end{tabular}\n")
-            f.write("\\end{table}\n")
-            f.write("```\n\n")
-            
-            f.write("## Markdown Table\n\n")
-            f.write("```markdown\n")
-            f.write("| Method        | ROUGE-1 | ROUGE-2 | ROUGE-L |\n")
-            f.write("|---------------|---------|---------|---------|")
-            f.write(f"\n| Subchat Trees | {rouge['rouge1']:.2f}    | {rouge['rouge2']:.2f}    | {rouge['rougeL']:.2f}    |\n")
-            f.write("```\n\n")
-            
-            f.write("## Results Section Text\n\n")
-            f.write("```\n")
-            f.write(f"The hierarchical subchat system achieved ROUGE-1, ROUGE-2, and\n")
-            f.write(f"ROUGE-L scores of {rouge['rouge1']:.2f}, {rouge['rouge2']:.2f}, and {rouge['rougeL']:.2f}\n")
+            if has_all:
+                # Comprehensive table with all metrics
+                meteor = summary_results['meteor_score']
+                bert = summary_results['bertscore']['f1']
+                
+                f.write("## LaTeX Table (Full Metrics)\n\n")
+                f.write("```latex\n")
+                f.write("\\begin{table}[h]\n")
+                f.write("\\centering\n")
+                f.write("\\caption{Branch-level summary evaluation with multiple metrics}\n")
+                f.write("\\label{tab:summary-eval}\n")
+                f.write("\\begin{tabular}{lccccc}\n")
+                f.write("\\hline\n")
+                f.write("\\textbf{Method} & \\textbf{R-1} & \\textbf{R-2} & \\textbf{R-L} & \\textbf{METEOR} & \\textbf{BERTScore} \\\\\n")
+                f.write("\\hline\n")
+                f.write(f"Subchat Trees & {rouge['rouge1']:.2f} & {rouge['rouge2']:.2f} & {rouge['rougeL']:.2f} & {meteor:.2f} & {bert:.2f} \\\\\n")
+                f.write("\\hline\n")
+                f.write("\\end{tabular}\n")
+                f.write("\\end{table}\n")
+                f.write("```\n\n")
+                
+                f.write("## Markdown Table (Full Metrics)\n\n")
+                f.write("```markdown\n")
+                f.write("| Method        | R-1  | R-2  | R-L  | METEOR | BERTScore |\n")
+                f.write("|---------------|------|------|------|--------|-----------|")
+                f.write(f"\n| Subchat Trees | {rouge['rouge1']:.2f} | {rouge['rouge2']:.2f} | {rouge['rougeL']:.2f} | {meteor:.2f}   | {bert:.2f}     |\n")
+                f.write("```\n\n")
+                
+                f.write("## Results Section Text\n\n")
+                f.write("```\n")
+                f.write(f"The hierarchical subchat system achieved ROUGE-1, ROUGE-2, and\n")
+                f.write(f"ROUGE-L scores of {rouge['rouge1']:.2f}, {rouge['rouge2']:.2f}, and {rouge['rougeL']:.2f}\n")
+                f.write(f"respectively. METEOR score of {meteor:.2f} confirms alignment quality,\n")
+                f.write(f"while BERTScore of {bert:.2f} demonstrates semantic similarity\n")
+                f.write(f"(N={summary_results['num_examples']} branch summaries).\n")
+                f.write("```\n\n")
+            else:
+                # ROUGE-only table
+                f.write("## LaTeX Table\n\n")
+                f.write("```latex\n")
+                f.write("\\begin{table}[h]\n")
+                f.write("\\centering\n")
+                f.write("\\caption{ROUGE scores for branch-level summary generation}\n")
+                f.write("\\label{tab:rouge}\n")
+                f.write("\\begin{tabular}{lccc}\n")
+                f.write("\\hline\n")
+                f.write("\\textbf{Method} & \\textbf{ROUGE-1} & \\textbf{ROUGE-2} & \\textbf{ROUGE-L} \\\\\n")
+                f.write("\\hline\n")
+                f.write(f"Subchat Trees & {rouge['rouge1']:.2f} & {rouge['rouge2']:.2f} & {rouge['rougeL']:.2f} \\\\\n")
+                f.write("\\hline\n")
+                f.write("\\end{tabular}\n")
+                f.write("\\end{table}\n")
+                f.write("```\n\n")
+                
+                f.write("## Markdown Table\n\n")
+                f.write("```markdown\n")
+                f.write("| Method        | ROUGE-1 | ROUGE-2 | ROUGE-L |\n")
+                f.write("|---------------|---------|---------|---------|")
+                f.write(f"\n| Subchat Trees | {rouge['rouge1']:.2f}    | {rouge['rouge2']:.2f}    | {rouge['rougeL']:.2f}    |\n")
+                f.write("```\n\n")
+                
+                f.write("## Results Section Text\n\n")
+                f.write("```\n")
+                f.write(f"The hierarchical subchat system achieved ROUGE-1, ROUGE-2, and\n")
+                f.write(f"ROUGE-L scores of {rouge['rouge1']:.2f}, {rouge['rouge2']:.2f}, and {rouge['rougeL']:.2f}\n")
             f.write(f"respectively (N={summary_results['num_examples']} branch summaries). These results\n")
             f.write("demonstrate effective context isolation, with each branch's\n")
             f.write("summary accurately reflecting its specific conversation topic\n")

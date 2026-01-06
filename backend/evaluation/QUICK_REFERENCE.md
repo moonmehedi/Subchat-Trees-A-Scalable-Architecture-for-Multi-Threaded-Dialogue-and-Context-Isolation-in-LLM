@@ -1,20 +1,21 @@
-# Quick Reference: ROUGE Evaluation Decision Tree
+# Quick Reference: Multi-Metric Evaluation Decision Tree
 
-## ❓ What should I do for my ROUGE evaluation?
+## ❓ What should I do for summary evaluation?
 
 ### START HERE: How much time do you have?
 
 ---
 
-## Path A: I have 2-3 hours (RECOMMENDED ⭐)
+## Path A: I have 2.5-3 hours (RECOMMENDED ⭐)
 
 **Do this:**
 1. Write 30 human reference summaries (2 hours)
-2. Run evaluation pipeline (10 min)
-3. Get publication-quality results
+2. Run comprehensive evaluation: ROUGE + METEOR + BERTScore (15 min)
+3. Get publication-quality results with all metrics
 
 **Why:**
 - ✅ Gold standard - reviewers accept universally
+- ✅ Multi-metric approach shows rigor (ROUGE + METEOR + BERTScore)
 - ✅ Custom to your hierarchical architecture
 - ✅ One-time investment, use forever in paper
 
@@ -23,10 +24,10 @@
 cd backend
 python -m evaluation.rouge_pipeline --nodes 30
 # Edit summary_eval.jsonl - write 30 summaries
-python -m evaluation.rouge_pipeline --continue
+python -m evaluation.rouge_pipeline --continue --use-all-metrics
 ```
 
-**Result:** Main ROUGE table ready for your paper
+**Result:** Complete evaluation table with ROUGE, METEOR, and BERTScore ready for your paper
 
 **See:** `REFERENCE_SUMMARY_OPTIONS.md` → Option B
 

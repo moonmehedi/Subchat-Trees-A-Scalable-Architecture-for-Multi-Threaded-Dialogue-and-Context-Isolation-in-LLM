@@ -12,8 +12,23 @@ import time
 import subprocess
 import shutil
 from pathlib import Path
-from typing import Dict, List, Any, Optional
+from typing import Dict, List, Any, Optional, Tuple
 from datetime import datetime
+from collections import defaultdict
+
+# Recall probe scoring (ROUGE/BLEU)
+try:
+    from rouge_score import rouge_scorer as rouge_scorer_module
+    ROUGE_AVAILABLE = True
+except ImportError:
+    ROUGE_AVAILABLE = False
+
+try:
+    from nltk.translate.bleu_score import sentence_bleu, SmoothingFunction
+    import nltk
+    BLEU_AVAILABLE = True
+except ImportError:
+    BLEU_AVAILABLE = False
 
 # Handle exec() case where __file__ is not defined
 try:
@@ -425,6 +440,9 @@ class ServerlessTestRunner:
             self.log("❌ Failed to create baseline conversation", "ERROR", "baseline")
             return results
         
+        # Store for recall probes (accessed by run_full_evaluation after test)
+        self._last_baseline_node_id = main_node_id
+        
         self.log(f"  📝 Created single conversation for all topics", "INFO", "baseline")
         self.log(f"  📋 Available topics for detection: {available_topics}", "INFO", "baseline")
         
@@ -540,6 +558,8 @@ class ServerlessTestRunner:
             return results
         
         node_map["main"] = main_id
+        # Store for recall probes (accessed by run_full_evaluation after test)
+        self._last_system_node_map = node_map
         self.log(f"  📝 Created main conversation", "INFO", "system")
         self.log(f"  📋 Available topics for detection: {available_topics}", "INFO", "system")
         
@@ -651,6 +671,213 @@ class ServerlessTestRunner:
         self.log("="*80, "INFO", "system")
         
         return results
+
+    # =========================================================================
+    # RECALL PROBES: ROUGE/BLEU Scoring for Topic-Specific Context Retention
+    # =========================================================================
+
+    def _build_topic_references(self, scenario: Dict, max_step: Optional[int] = None) -> Dict[str, str]:
+        """
+        Build reference text per topic from raw user messages in the scenario.
+        
+        Groups turns by their normalized context (topic), filters to topics with 
+        ≥3 turns, and concatenates the raw user messages as the reference text.
+        
+        Args:
+            scenario: The loaded scenario dict with 'conversations' list
+            max_step: If provided, only include turns up to this step number
+            
+        Returns:
+            Dict mapping topic_name -> concatenated user messages (reference text)
+        """
+        topic_messages = defaultdict(list)
+        
+        for step_data in scenario.get("conversations", []):
+            step = step_data.get("step", 0)
+            context = step_data.get("context", "")
+            message = step_data.get("message", "")
+            
+            # Respect checkpoint cutoff
+            if max_step is not None and step > max_step:
+                break
+            
+            # Skip intro/general steps
+            if not context or context in ["intro", "step_1"]:
+                continue
+            
+            topic = self._normalize_context_to_topic(context)
+            if topic and topic != "general":
+                topic_messages[topic].append(message)
+        
+        # Filter to topics with ≥3 turns
+        references = {}
+        for topic, messages in topic_messages.items():
+            if len(messages) >= 3:
+                references[topic] = " ".join(messages)
+        
+        return references
+
+    def _compute_recall_scores(self, summary: str, reference: str) -> Dict[str, float]:
+        """
+        Compute ROUGE-1, ROUGE-L, and BLEU scores between LLM summary and reference.
+        
+        Args:
+            summary: The LLM-generated summary of a topic
+            reference: The concatenated raw user messages for that topic
+            
+        Returns:
+            Dict with rouge1_f, rougeL_f, bleu scores (0-1 scale)
+        """
+        scores = {"rouge1_f": 0.0, "rougeL_f": 0.0, "bleu": 0.0}
+        
+        if not summary or not reference:
+            return scores
+        
+        # ROUGE scores
+        if ROUGE_AVAILABLE:
+            try:
+                scorer = rouge_scorer_module.RougeScorer(['rouge1', 'rougeL'], use_stemmer=True)
+                rouge_results = scorer.score(reference, summary)
+                scores["rouge1_f"] = rouge_results['rouge1'].fmeasure
+                scores["rougeL_f"] = rouge_results['rougeL'].fmeasure
+            except Exception as e:
+                self.log(f"  ⚠️ ROUGE scoring error: {e}", "WARN")
+        
+        # BLEU score
+        if BLEU_AVAILABLE:
+            try:
+                ref_tokens = reference.lower().split()
+                hyp_tokens = summary.lower().split()
+                if ref_tokens and hyp_tokens:
+                    smoothing = SmoothingFunction().method1
+                    scores["bleu"] = sentence_bleu(
+                        [ref_tokens], hyp_tokens,
+                        weights=(0.5, 0.5, 0, 0),  # BLEU-2 (unigram + bigram)
+                        smoothing_function=smoothing
+                    )
+            except Exception as e:
+                self.log(f"  ⚠️ BLEU scoring error: {e}", "WARN")
+        
+        return scores
+
+    def run_recall_probes(
+        self,
+        node_id_or_map: Any,
+        topic_references: Dict[str, str],
+        mode: str = "baseline",
+        checkpoint_label: str = "final"
+    ) -> List[Dict]:
+        """
+        Send recall probe prompts to the LLM and score responses with ROUGE/BLEU.
+        
+        For each eligible topic, sends "Summarize everything we discussed about {topic}"
+        to the appropriate node, then scores the response against the reference text.
+        
+        Args:
+            node_id_or_map: Either a single node_id (baseline) or a dict {node_type: node_id} (system)
+            topic_references: Dict from _build_topic_references (topic -> reference text)
+            mode: "baseline" or "system"
+            checkpoint_label: Label for this checkpoint (e.g., "turn_75", "turn_150", "final")
+            
+        Returns:
+            List of per-topic probe results
+        """
+        if not ROUGE_AVAILABLE and not BLEU_AVAILABLE:
+            self.log("⚠️ Neither rouge-score nor nltk installed, skipping recall probes", "WARN")
+            return []
+        
+        if not topic_references:
+            self.log("⚠️ No eligible topics for recall probes (need ≥3 turns)", "WARN")
+            return []
+        
+        self.log(f"\n{'='*60}", "INFO")
+        self.log(f"🔬 RECALL PROBES [{mode.upper()}] @ {checkpoint_label}", "INFO")
+        self.log(f"   Topics to probe: {len(topic_references)}", "INFO")
+        self.log(f"{'='*60}", "INFO")
+        
+        probe_results = []
+        
+        for topic, reference_text in sorted(topic_references.items()):
+            # Determine target node
+            if mode == "baseline":
+                target_node_id = node_id_or_map  # single node
+            else:
+                # System mode: find the best matching node for this topic
+                # Try exact match first, then fall back to main
+                target_node_id = None
+                if isinstance(node_id_or_map, dict):
+                    # Look for a node whose type contains the topic name
+                    for node_type, nid in node_id_or_map.items():
+                        normalized_type = self._normalize_context_to_topic(node_type)
+                        if normalized_type == topic:
+                            target_node_id = nid
+                            break
+                    # Fallback to main
+                    if target_node_id is None:
+                        target_node_id = node_id_or_map.get("main")
+                else:
+                    target_node_id = node_id_or_map
+            
+            if not target_node_id:
+                self.log(f"  ⚠️ No node found for topic '{topic}', skipping", "WARN")
+                continue
+            
+            # Construct the probe prompt
+            probe_prompt = (
+                f"Summarize everything we have discussed about {topic.replace('_', ' ')}. "
+                f"Include all key points, details, and questions that were raised."
+            )
+            
+            self.log(f"  🔍 Probing: {topic} (node={target_node_id[:8]}...)", "INFO")
+            
+            response = self.send_message(target_node_id, probe_prompt)
+            
+            if not response or not response.get("response"):
+                self.log(f"  ❌ No response for topic '{topic}'", "WARN")
+                probe_results.append({
+                    "topic": topic,
+                    "checkpoint": checkpoint_label,
+                    "mode": mode,
+                    "rouge1_f": 0.0,
+                    "rougeL_f": 0.0,
+                    "bleu": 0.0,
+                    "summary_length": 0,
+                    "reference_length": len(reference_text.split()),
+                    "summary": "",
+                    "probe_tokens": 0,
+                    "probe_latency": 0.0
+                })
+                continue
+            
+            summary = response["response"]
+            scores = self._compute_recall_scores(summary, reference_text)
+            
+            self.log(f"    ROUGE-1={scores['rouge1_f']:.3f}  ROUGE-L={scores['rougeL_f']:.3f}  BLEU={scores['bleu']:.3f}", "INFO")
+            
+            probe_results.append({
+                "topic": topic,
+                "checkpoint": checkpoint_label,
+                "mode": mode,
+                "rouge1_f": scores["rouge1_f"],
+                "rougeL_f": scores["rougeL_f"],
+                "bleu": scores["bleu"],
+                "summary_length": len(summary.split()),
+                "reference_length": len(reference_text.split()),
+                "summary": summary[:500],  # Truncate for storage
+                "probe_tokens": response.get("usage", {}).get("total_tokens", 0),
+                "probe_latency": response.get("latency", 0.0)
+            })
+            
+            time.sleep(0.3)
+        
+        # Log aggregate scores
+        if probe_results:
+            avg_rouge1 = sum(r["rouge1_f"] for r in probe_results) / len(probe_results)
+            avg_rougeL = sum(r["rougeL_f"] for r in probe_results) / len(probe_results)
+            avg_bleu = sum(r["bleu"] for r in probe_results) / len(probe_results)
+            self.log(f"\n  📊 Avg ROUGE-1={avg_rouge1:.3f}  ROUGE-L={avg_rougeL:.3f}  BLEU={avg_bleu:.3f}", "INFO")
+        
+        return probe_results
 
     def calculate_metrics(self, baseline_results: List[Dict], system_results: List[Dict]) -> Dict:
         """Calculate all metrics for tables including per-topic confusion matrix"""
@@ -844,6 +1071,68 @@ class ServerlessTestRunner:
             }
         }
 
+    def _calculate_recall_metrics(
+        self,
+        baseline_probes: List[Dict],
+        system_probes: List[Dict]
+    ) -> Dict:
+        """
+        Aggregate per-topic recall probe results into summary metrics.
+        
+        Returns dict with baseline/system averages and per-topic breakdown,
+        plus improvement calculations.
+        """
+        def _aggregate_probes(probes: List[Dict]) -> Dict:
+            if not probes:
+                return {
+                    "avg_rouge1": 0.0, "avg_rougeL": 0.0, "avg_bleu": 0.0,
+                    "num_topics_probed": 0, "total_probe_tokens": 0,
+                    "total_probe_latency": 0.0, "per_topic": {}
+                }
+            
+            per_topic = {}
+            for p in probes:
+                topic = p["topic"]
+                per_topic[topic] = {
+                    "rouge1_f": p["rouge1_f"],
+                    "rougeL_f": p["rougeL_f"],
+                    "bleu": p["bleu"],
+                    "summary_length": p["summary_length"],
+                    "reference_length": p["reference_length"]
+                }
+            
+            n = len(probes)
+            return {
+                "avg_rouge1": sum(p["rouge1_f"] for p in probes) / n,
+                "avg_rougeL": sum(p["rougeL_f"] for p in probes) / n,
+                "avg_bleu": sum(p["bleu"] for p in probes) / n,
+                "num_topics_probed": n,
+                "total_probe_tokens": sum(p.get("probe_tokens", 0) for p in probes),
+                "total_probe_latency": sum(p.get("probe_latency", 0.0) for p in probes),
+                "per_topic": per_topic
+            }
+        
+        baseline_agg = _aggregate_probes(baseline_probes)
+        system_agg = _aggregate_probes(system_probes)
+        
+        # Calculate improvements
+        def _safe_improvement(baseline_val, system_val):
+            if baseline_val == 0:
+                return 0.0 if system_val == 0 else float('inf')
+            return ((system_val - baseline_val) / baseline_val) * 100
+        
+        improvements = {}
+        for metric_key in ["avg_rouge1", "avg_rougeL", "avg_bleu"]:
+            improvements[metric_key] = _safe_improvement(
+                baseline_agg[metric_key], system_agg[metric_key]
+            )
+        
+        return {
+            "baseline": baseline_agg,
+            "system": system_agg,
+            "improvements": improvements
+        }
+
     def generate_table(self, metrics: Dict):
         """Generate markdown tables in buffer-specific folder"""
         buffer_dir = self.base_logs_dir / "tables" / f"buffer_{self.current_buffer_size}"
@@ -936,6 +1225,81 @@ class ServerlessTestRunner:
             f.write(f"| **Cost per 1M Queries** | ${b['cost_per_1m_queries']:.0f} | ${s['cost_per_1m_queries']:.0f} | **-${(b['cost_per_1m_queries'] - s['cost_per_1m_queries']):.0f} savings** |\n")
         
         self.log(f"✅ Generated TABLE_3_SYSTEM_PERFORMANCE.md", "INFO")
+        
+        # TABLE 2: RECALL PROBE SCORES (ROUGE/BLEU)
+        table2 = metrics.get("table_2")
+        if table2 and (table2.get("baseline", {}).get("num_topics_probed", 0) > 0 or
+                       table2.get("system", {}).get("num_topics_probed", 0) > 0):
+            with open(buffer_dir / "TABLE_2_RECALL_SCORES.md", 'w') as f:
+                f.write(f"# TABLE 2: TOPIC RECALL SCORES (Buffer Size: {self.current_buffer_size})\n\n")
+                f.write("Measures how well each system retains topic-specific information via ROUGE/BLEU scoring.\n")
+                f.write("Higher scores indicate better recall of topic content from conversation history.\n\n")
+                
+                f.write("## Aggregate Scores\n\n")
+                f.write("| Metric | Baseline System | Our System | Improvement |\n")
+                f.write("|--------|----------------|------------|-------------|\n")
+                
+                bl = table2.get("baseline", {})
+                sy = table2.get("system", {})
+                imp = table2.get("improvements", {})
+                
+                for metric_key, display_name in [
+                    ("avg_rouge1", "Avg ROUGE-1 (F1)"),
+                    ("avg_rougeL", "Avg ROUGE-L (F1)"),
+                    ("avg_bleu", "Avg BLEU-2")
+                ]:
+                    bl_val = bl.get(metric_key, 0)
+                    sy_val = sy.get(metric_key, 0)
+                    imp_val = imp.get(metric_key, 0)
+                    if isinstance(imp_val, float) and imp_val == float('inf'):
+                        imp_str = "**∞**"
+                    else:
+                        imp_str = f"**{imp_val:+.1f}%**"
+                    f.write(f"| **{display_name}** | {bl_val:.4f} | {sy_val:.4f} | {imp_str} |\n")
+                
+                f.write(f"\n| **Topics Probed** | {bl.get('num_topics_probed', 0)} | {sy.get('num_topics_probed', 0)} | - |\n")
+                f.write(f"| **Total Probe Tokens** | {bl.get('total_probe_tokens', 0)} | {sy.get('total_probe_tokens', 0)} | - |\n")
+                f.write(f"| **Total Probe Latency** | {bl.get('total_probe_latency', 0):.1f}s | {sy.get('total_probe_latency', 0):.1f}s | - |\n")
+                
+                # Per-topic breakdown (side-by-side)
+                f.write(f"\n## Per-Topic Breakdown\n\n")
+                f.write("| Topic | BL ROUGE-1 | SYS ROUGE-1 | BL ROUGE-L | SYS ROUGE-L | BL BLEU | SYS BLEU |\n")
+                f.write("|-------|-----------|------------|-----------|------------|---------|--------|\n")
+                
+                bl_topics = bl.get("per_topic", {})
+                sy_topics = sy.get("per_topic", {})
+                all_probe_topics = sorted(set(list(bl_topics.keys()) + list(sy_topics.keys())))
+                
+                for topic in all_probe_topics:
+                    bl_t = bl_topics.get(topic, {})
+                    sy_t = sy_topics.get(topic, {})
+                    f.write(f"| {topic} ")
+                    f.write(f"| {bl_t.get('rouge1_f', 0):.4f} | {sy_t.get('rouge1_f', 0):.4f} ")
+                    f.write(f"| {bl_t.get('rougeL_f', 0):.4f} | {sy_t.get('rougeL_f', 0):.4f} ")
+                    f.write(f"| {bl_t.get('bleu', 0):.4f} | {sy_t.get('bleu', 0):.4f} |\n")
+                
+                # Topic winners summary
+                f.write(f"\n## Topic Winners (System vs Baseline)\n\n")
+                system_wins = 0
+                baseline_wins = 0
+                ties = 0
+                for topic in all_probe_topics:
+                    bl_r1 = bl_topics.get(topic, {}).get("rouge1_f", 0)
+                    sy_r1 = sy_topics.get(topic, {}).get("rouge1_f", 0)
+                    if sy_r1 > bl_r1 + 0.01:  # 0.01 threshold for meaningful win
+                        system_wins += 1
+                    elif bl_r1 > sy_r1 + 0.01:
+                        baseline_wins += 1
+                    else:
+                        ties += 1
+                
+                f.write(f"- 🟢 **System wins**: {system_wins} topics\n")
+                f.write(f"- 🔵 **Baseline wins**: {baseline_wins} topics\n")
+                f.write(f"- 🟡 **Ties (±0.01)**: {ties} topics\n")
+            
+            self.log(f"✅ Generated TABLE_2_RECALL_SCORES.md", "INFO")
+        else:
+            self.log(f"ℹ️ Skipping TABLE_2 (no recall probe data available)", "INFO")
 
     def git_commit_and_push(self, files_to_add: List[str], commit_message: str) -> tuple:
         """Commit and push to GitHub"""
@@ -1031,11 +1395,17 @@ class ServerlessTestRunner:
         
         all_baseline_results = []
         all_system_results = []
+        all_baseline_probe_results = []
+        all_system_probe_results = []
         
         for scenario_file in scenario_files:
             scenario = self.load_scenario(scenario_file)
             if not scenario:
                 continue
+            
+            # Build topic references for recall probes
+            topic_references = self._build_topic_references(scenario)
+            self.log(f"  📋 Recall probe topics (≥3 turns): {len(topic_references)}", "INFO")
             
             # BASELINE TEST (only if mode is 'baseline' or 'both')
             if test_mode in ['baseline', 'both']:
@@ -1043,6 +1413,16 @@ class ServerlessTestRunner:
                 self.clear_state()
                 baseline_results = self.run_baseline_test(scenario, buffer_size=buffer_size)
                 all_baseline_results.extend(baseline_results)
+                
+                # Run recall probes BEFORE clearing state (nodes still alive)
+                if topic_references and (ROUGE_AVAILABLE or BLEU_AVAILABLE):
+                    baseline_node_id = getattr(self, '_last_baseline_node_id', None)
+                    if baseline_node_id:
+                        baseline_probes = self.run_recall_probes(
+                            baseline_node_id, topic_references,
+                            mode="baseline", checkpoint_label=f"final_buf{buffer_size}"
+                        )
+                        all_baseline_probe_results.extend(baseline_probes)
             
             # SYSTEM TEST (only if mode is 'system' or 'both')
             if test_mode in ['system', 'both']:
@@ -1050,10 +1430,26 @@ class ServerlessTestRunner:
                 self.clear_state()
                 system_results = self.run_system_test(scenario, buffer_size=buffer_size)
                 all_system_results.extend(system_results)
+                
+                # Run recall probes BEFORE clearing state (nodes still alive)
+                if topic_references and (ROUGE_AVAILABLE or BLEU_AVAILABLE):
+                    system_node_map = getattr(self, '_last_system_node_map', None)
+                    if system_node_map:
+                        system_probes = self.run_recall_probes(
+                            system_node_map, topic_references,
+                            mode="system", checkpoint_label=f"final_buf{buffer_size}"
+                        )
+                        all_system_probe_results.extend(system_probes)
         
-        # Calculate metrics
+        # Calculate metrics (including recall probes)
         self.log("\n📊 Calculating metrics...", "INFO")
         metrics = self.calculate_metrics(all_baseline_results, all_system_results)
+        
+        # Add recall probe metrics to the metrics dict
+        recall_metrics = self._calculate_recall_metrics(
+            all_baseline_probe_results, all_system_probe_results
+        )
+        metrics["table_2"] = recall_metrics
         
         # Print summary
         self.log("\n" + "="*80, "INFO")
@@ -1066,6 +1462,14 @@ class ServerlessTestRunner:
         self.log(f"\n🔵 BASELINE: Accuracy={iso_baseline['accuracy']:.1f}%, Pollution={iso_baseline['pollution_rate']:.1f}%", "INFO")
         self.log(f"🟢 SYSTEM:   Accuracy={iso_system['accuracy']:.1f}%, Pollution={iso_system['pollution_rate']:.1f}%", "INFO")
         
+        # Print recall probe summary
+        if recall_metrics.get("baseline") and recall_metrics.get("system"):
+            bl_r = recall_metrics["baseline"]
+            sy_r = recall_metrics["system"]
+            self.log(f"\n🔬 RECALL PROBES:", "INFO")
+            self.log(f"🔵 BASELINE: ROUGE-1={bl_r['avg_rouge1']:.3f}  ROUGE-L={bl_r['avg_rougeL']:.3f}  BLEU={bl_r['avg_bleu']:.3f}", "INFO")
+            self.log(f"🟢 SYSTEM:   ROUGE-1={sy_r['avg_rouge1']:.3f}  ROUGE-L={sy_r['avg_rougeL']:.3f}  BLEU={sy_r['avg_bleu']:.3f}", "INFO")
+        
         # Generate tables
         self.generate_table(metrics)
         
@@ -1077,6 +1481,10 @@ class ServerlessTestRunner:
             json.dump(all_baseline_results, f, indent=2)
         with open(buffer_dir / "raw_metrics_system.json", 'w') as f:
             json.dump(all_system_results, f, indent=2)
+        with open(buffer_dir / "raw_recall_probes_baseline.json", 'w') as f:
+            json.dump(all_baseline_probe_results, f, indent=2)
+        with open(buffer_dir / "raw_recall_probes_system.json", 'w') as f:
+            json.dump(all_system_probe_results, f, indent=2)
         with open(buffer_dir / "raw_metrics.json", 'w') as f:
             json.dump({"buffer_size": self.current_buffer_size, "metrics": metrics}, f, indent=2)
         
@@ -1107,6 +1515,15 @@ class ServerlessTestRunner:
         
         baseline_pollution = [all_metrics[bs]["table_1"]["baseline"]["pollution_rate"] for bs in buffer_sizes]
         system_pollution = [all_metrics[bs]["table_1"]["system"]["pollution_rate"] for bs in buffer_sizes]
+        
+        # Extract recall probe metrics (safely, may not exist for all buffer sizes)
+        baseline_rouge1 = [all_metrics[bs].get("table_2", {}).get("baseline", {}).get("avg_rouge1", 0) for bs in buffer_sizes]
+        system_rouge1 = [all_metrics[bs].get("table_2", {}).get("system", {}).get("avg_rouge1", 0) for bs in buffer_sizes]
+        baseline_rougeL = [all_metrics[bs].get("table_2", {}).get("baseline", {}).get("avg_rougeL", 0) for bs in buffer_sizes]
+        system_rougeL = [all_metrics[bs].get("table_2", {}).get("system", {}).get("avg_rougeL", 0) for bs in buffer_sizes]
+        baseline_bleu = [all_metrics[bs].get("table_2", {}).get("baseline", {}).get("avg_bleu", 0) for bs in buffer_sizes]
+        system_bleu = [all_metrics[bs].get("table_2", {}).get("system", {}).get("avg_bleu", 0) for bs in buffer_sizes]
+        has_recall_data = any(v > 0 for v in baseline_rouge1 + system_rouge1)
         
         # Generate HTML with Chart.js
         html_content = f'''<!DOCTYPE html>
@@ -1194,6 +1611,12 @@ class ServerlessTestRunner:
         <div class="chart-container">
             <canvas id="pollutionChart"></canvas>
         </div>
+        
+        {'<h2>🔬 Topic Recall Scores (ROUGE/BLEU)</h2>' if has_recall_data else ''}
+        
+        {'<div class="chart-container"><canvas id="rouge1Chart"></canvas></div>' if has_recall_data else ''}
+        {'<div class="chart-container"><canvas id="rougeLChart"></canvas></div>' if has_recall_data else ''}
+        {'<div class="chart-container"><canvas id="bleuChart"></canvas></div>' if has_recall_data else ''}
     </div>
     
     <script>
@@ -1344,6 +1767,91 @@ class ServerlessTestRunner:
                 }}
             }}
         }});
+        
+        // Recall Probe Charts (only if data available)
+        const baselineRouge1 = {json.dumps(baseline_rouge1)};
+        const systemRouge1 = {json.dumps(system_rouge1)};
+        const baselineRougeL = {json.dumps(baseline_rougeL)};
+        const systemRougeL = {json.dumps(system_rougeL)};
+        const baselineBleu = {json.dumps(baseline_bleu)};
+        const systemBleu = {json.dumps(system_bleu)};
+        
+        if (baselineRouge1.some(v => v > 0) || systemRouge1.some(v => v > 0)) {{
+            new Chart(document.getElementById('rouge1Chart'), {{
+                type: 'line',
+                data: {{
+                    labels: bufferSizes,
+                    datasets: [{{
+                        label: 'Baseline ROUGE-1',
+                        data: baselineRouge1,
+                        borderColor: 'rgb(255, 99, 132)',
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    }}, {{
+                        label: 'System ROUGE-1',
+                        data: systemRouge1,
+                        borderColor: 'rgb(75, 192, 192)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    }}]
+                }},
+                options: {{
+                    ...chartOptions,
+                    plugins: {{
+                        ...chartOptions.plugins,
+                        title: {{ display: true, text: 'ROUGE-1 (F1) vs Buffer Size - Higher is Better' }}
+                    }}
+                }}
+            }});
+            
+            new Chart(document.getElementById('rougeLChart'), {{
+                type: 'line',
+                data: {{
+                    labels: bufferSizes,
+                    datasets: [{{
+                        label: 'Baseline ROUGE-L',
+                        data: baselineRougeL,
+                        borderColor: 'rgb(255, 99, 132)',
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    }}, {{
+                        label: 'System ROUGE-L',
+                        data: systemRougeL,
+                        borderColor: 'rgb(75, 192, 192)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    }}]
+                }},
+                options: {{
+                    ...chartOptions,
+                    plugins: {{
+                        ...chartOptions.plugins,
+                        title: {{ display: true, text: 'ROUGE-L (F1) vs Buffer Size - Higher is Better' }}
+                    }}
+                }}
+            }});
+            
+            new Chart(document.getElementById('bleuChart'), {{
+                type: 'line',
+                data: {{
+                    labels: bufferSizes,
+                    datasets: [{{
+                        label: 'Baseline BLEU-2',
+                        data: baselineBleu,
+                        borderColor: 'rgb(255, 99, 132)',
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    }}, {{
+                        label: 'System BLEU-2',
+                        data: systemBleu,
+                        borderColor: 'rgb(75, 192, 192)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    }}]
+                }},
+                options: {{
+                    ...chartOptions,
+                    plugins: {{
+                        ...chartOptions.plugins,
+                        title: {{ display: true, text: 'BLEU-2 Score vs Buffer Size - Higher is Better' }}
+                    }}
+                }}
+            }});
+        }}
     </script>
 </body>
 </html>'''

@@ -320,8 +320,8 @@
       "context": "indian_legal_family",
       "message": "indian_legal_family : A wife leaves a NAME_17's home NAME_3 does not return. She refuses to join her NAME_17 back. what recourse does the NAME_17 have?",
       "expected": "Response must start with 'indian_legal_family:' - NEW LEGAL TOPIC: Family law - wife desertion, IPC section 98",
-      "node_type": "subchat_3_3",
-      "action": "switch_node",
+      "node_type": "subchat_3_3_indian_legal_family",
+      "action": "create_subchat",
       "linear_failure_risk": "medium",
       "parent_node_type": "subchat_3_indian_legal",
       "subchat_title": "Family Law - Desertion Cases"
@@ -331,7 +331,7 @@
       "context": "indian_legal_family",
       "message": "Can you list some sample cases NAME_3 judgements for above",
       "expected": "Response must start with 'indian_legal_family:' - Request for legal precedents and case law",
-      "node_type": "subchat_3_3",
+      "node_type": "subchat_3_3_indian_legal_family",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -340,7 +340,7 @@
       "context": "indian_legal_family",
       "message": "Tell me more about NAME_18. State of Maharashtra, 1975 3 SCC 855",
       "expected": "Response must start with 'indian_legal_family:' - Detailed question about specific case: Kamla v. State of Maharashtra",
-      "node_type": "subchat_3_3",
+      "node_type": "subchat_3_3_indian_legal_family",
       "action": "",
       "linear_failure_risk": "low"
     },
@@ -349,7 +349,7 @@
       "context": "indian_legal_family",
       "message": "Give me the complete judgement of above case",
       "expected": "Response must start with 'indian_legal_family:' - Request for full judgment text",
-      "node_type": "subchat_3_3",
+      "node_type": "subchat_3_3_indian_legal_family",
       "action": "",
       "linear_failure_risk": "low"
     },

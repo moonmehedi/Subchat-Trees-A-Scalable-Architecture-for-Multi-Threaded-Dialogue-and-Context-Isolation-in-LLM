@@ -457,12 +457,19 @@ class ServerlessTestRunner:
             self.log(f"  🤖 AI Response:", "INFO", "baseline")
             self.log(f"     {ai_message}", "INFO", "baseline")
             
-            # Extract topic using pure regex (all datasets use 'topic_name:' prefix)
-            topic_detection = self._extract_topic_regex(ai_message, available_topics)
-            detected_topic = topic_detection["detected_topic"]
-            
-            # Determine if topic detection was correct
-            is_correct_topic = (expected_topic == detected_topic)
+            # Skip topic-prefix detection for intro/step_1 (acknowledgment, no topic prefix expected)
+            if context in ["intro", "step_1"]:
+                is_correct_topic = bool(ai_message.strip())
+                detected_topic = "general"
+                topic_detection = {"method": "intro_skip", "detected_topic": "general"}
+                self.log(f"  ℹ️ Intro step - skipping topic detection (non-empty response = correct)", "INFO", "baseline")
+            else:
+                # Extract topic using pure regex (all datasets use 'topic_name:' prefix)
+                topic_detection = self._extract_topic_regex(ai_message, available_topics)
+                detected_topic = topic_detection["detected_topic"]
+                
+                # Determine if topic detection was correct
+                is_correct_topic = (expected_topic == detected_topic)
             
             # Log to JUDGE
             judge_status = "✓ CORRECT" if is_correct_topic else "✗ INCORRECT"
@@ -564,6 +571,8 @@ class ServerlessTestRunner:
                         self.log(f"  🌿 Created subchat: {node_type} under {parent_node_type}", "INFO", "system")
                 else:
                     self.log(f"  ❌ Failed to create subchat: {node_type}", "ERROR", "system")
+            elif action == "switch_node" and node_type not in node_map and node_type != "main":
+                self.log(f"  ⚠️ switch_node to unknown '{node_type}', falling back to main", "WARN", "system")
             
             target_node = node_map.get(node_type, main_id)
             
@@ -585,12 +594,19 @@ class ServerlessTestRunner:
             self.log(f"  🤖 AI Response:", "INFO", "system")
             self.log(f"     {ai_message}", "INFO", "system")
             
-            # Extract topic using pure regex (all datasets use 'topic_name:' prefix)
-            topic_detection = self._extract_topic_regex(ai_message, available_topics)
-            detected_topic = topic_detection["detected_topic"]
-            
-            # Determine if topic detection was correct
-            is_correct_topic = (expected_topic == detected_topic)
+            # Skip topic-prefix detection for intro/step_1 (acknowledgment, no topic prefix expected)
+            if context in ["intro", "step_1"]:
+                is_correct_topic = bool(ai_message.strip())
+                detected_topic = "general"
+                topic_detection = {"method": "intro_skip", "detected_topic": "general"}
+                self.log(f"  ℹ️ Intro step - skipping topic detection (non-empty response = correct)", "INFO", "system")
+            else:
+                # Extract topic using pure regex (all datasets use 'topic_name:' prefix)
+                topic_detection = self._extract_topic_regex(ai_message, available_topics)
+                detected_topic = topic_detection["detected_topic"]
+                
+                # Determine if topic detection was correct
+                is_correct_topic = (expected_topic == detected_topic)
             
             # Log to JUDGE
             judge_status = "✓ CORRECT" if is_correct_topic else "✗ INCORRECT"

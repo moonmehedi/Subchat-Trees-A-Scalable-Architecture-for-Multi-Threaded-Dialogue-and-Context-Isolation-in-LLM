@@ -340,6 +340,8 @@ class MetricsTestRunner:
                         self.log(f"  🌿 Created subchat: {node_type} under {parent_node_type}", "INFO", "system")
                 else:
                     self.log(f"  ❌ Failed to create subchat: {node_type}", "ERROR", "system")
+            elif action == "switch_node" and node_type not in node_map and node_type != "main":
+                self.log(f"  ⚠️ switch_node to unknown '{node_type}', falling back to main", "WARN", "system")
             
             # Get target node
             target_node = node_map.get(node_type, main_id)

@@ -22,8 +22,13 @@ from pathlib import Path
 from unittest.mock import patch, MagicMock
 from datetime import datetime
 
-# ── Path setup ──────────────────────────────────────────────────────────────
-DATASET_DIR = Path(__file__).parent
+# ── Path setup (guard for Kaggle exec() where __file__ may be undefined) ────
+try:
+    _THIS_FILE = Path(__file__).resolve()
+except NameError:
+    _THIS_FILE = Path(os.getcwd()) / "dataset" / "test_recall_probes.py"
+
+DATASET_DIR = _THIS_FILE.parent
 BACKEND_DIR = DATASET_DIR.parent
 sys.path.insert(0, str(BACKEND_DIR))
 sys.path.insert(0, str(DATASET_DIR))
@@ -35,14 +40,30 @@ sys.path.insert(0, str(DATASET_DIR))
 class TestProbeDataIntegrity(unittest.TestCase):
     """Verify the merged scenario JSON contains correct recall probe steps."""
 
+    _SKIP_REASON: str = ""
+
     @classmethod
     def setUpClass(cls):
         merged_path = DATASET_DIR / "scenarios" / "merged_realistic_interleaved.json"
-        with open(merged_path) as f:
-            cls.data = json.load(f)
+        try:
+            with open(merged_path) as f:
+                cls.data = json.load(f)
+        except FileNotFoundError:
+            cls._SKIP_REASON = (
+                f"merged_realistic_interleaved.json not found at {merged_path}. "
+                "Run `git lfs pull` to download dataset files."
+            )
+            cls.data = {"conversations": [], "total_turns": 0}
+        except json.JSONDecodeError as e:
+            cls._SKIP_REASON = f"Invalid JSON in merged scenario file: {e}"
+            cls.data = {"conversations": [], "total_turns": 0}
         cls.all_steps = cls.data["conversations"]
         cls.probes = [s for s in cls.all_steps if s.get("is_recall_probe")]
         cls.regular = [s for s in cls.all_steps if not s.get("is_recall_probe")]
+
+    def setUp(self):
+        if self._SKIP_REASON:
+            self.skipTest(self._SKIP_REASON)
 
     def test_probes_exist(self):
         """At least 1 recall probe must be present."""

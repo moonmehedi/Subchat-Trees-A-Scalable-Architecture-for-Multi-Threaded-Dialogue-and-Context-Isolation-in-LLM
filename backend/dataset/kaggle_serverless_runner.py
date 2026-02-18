@@ -6,6 +6,7 @@ This allows the test to run in the same process as the loaded vLLM model
 """
 
 import os
+import re
 import sys
 import json
 import time
@@ -446,7 +447,6 @@ class ServerlessTestRunner:
             
             # Remove step/intro/final suffixes to get base topic
             for suffix_pattern in ["_step\\d+", "_intro", "_final", "_\\d+$"]:
-                import re
                 base_topic = re.sub(suffix_pattern, "", base_topic)
             
             # Clean up any trailing underscores
@@ -466,15 +466,12 @@ class ServerlessTestRunner:
         
         base_topic = context
         for suffix_pattern in ["_step\\d+", "_intro", "_final", "_\\d+$"]:
-            import re
             base_topic = re.sub(suffix_pattern, "", base_topic)
         
         return base_topic.rstrip("_") or "general"
 
     def _extract_topic_regex(self, response: str, valid_topics: List[str]) -> Dict:
         """Extract topic from response using pure regex (all datasets use 'topic_name:' prefix)."""
-        import re
-        
         if not response or not valid_topics:
             return {"detected_topic": "unknown", "method": "empty_input"}
         
@@ -519,7 +516,6 @@ class ServerlessTestRunner:
         self.log(f"  📝 Created single conversation for all topics", "INFO", "baseline")
         self.log(f"  📋 Available topics for detection: {available_topics}", "INFO", "baseline")
         
-        tp_count = tn_count = fp_count = fn_count = 0
         recall_probe_results = []  # Collect inline recall probe results
         
         for step_data in scenario["conversations"]:
@@ -663,10 +659,12 @@ class ServerlessTestRunner:
             avg_r1 = sum(r["rouge1_f"] for r in recall_probe_results) / len(recall_probe_results)
             avg_bl = sum(r["bleu"] for r in recall_probe_results) / len(recall_probe_results)
             self.log(f"   Recall Avg ROUGE-1={avg_r1:.3f}  BLEU={avg_bl:.3f}", "INFO", "baseline")
-        self.log(f"   ✅ Correct (TP+TN): {tp_count + tn_count}", "INFO", "baseline")
-        self.log(f"   ❌ Incorrect (FP+FN): {fp_count + fn_count}", "INFO", "baseline")
+        correct = sum(1 for r in results if r.get("is_correct_topic", False))
+        incorrect = len(results) - correct
+        self.log(f"   ✅ Correct: {correct}", "INFO", "baseline")
+        self.log(f"   ❌ Incorrect: {incorrect}", "INFO", "baseline")
         if results:
-            self.log(f"   Accuracy: {((tp_count + tn_count) / len(results) * 100):.1f}%", "INFO", "baseline")
+            self.log(f"   Accuracy: {(correct / len(results) * 100):.1f}%", "INFO", "baseline")
         self.log("="*80, "INFO", "baseline")
         
         return results
@@ -687,8 +685,6 @@ class ServerlessTestRunner:
         # Get available topics for this scenario
         available_topics = scenario.get('_extracted_topics', [])
         scenario_name = scenario.get('scenario_name', 'Unknown')
-        
-        tp_count = tn_count = fp_count = fn_count = 0
         
         # Create main conversation
         main_id = self.create_conversation("System Test - Main", buffer_size=buffer_size)
@@ -872,10 +868,12 @@ class ServerlessTestRunner:
             avg_r1 = sum(r["rouge1_f"] for r in recall_probe_results) / len(recall_probe_results)
             avg_bl = sum(r["bleu"] for r in recall_probe_results) / len(recall_probe_results)
             self.log(f"   Recall Avg ROUGE-1={avg_r1:.3f}  BLEU={avg_bl:.3f}", "INFO", "system")
-        self.log(f"   ✅ Correct (TP+TN): {tp_count + tn_count}", "INFO", "system")
-        self.log(f"   ❌ Incorrect (FP+FN): {fp_count + fn_count}", "INFO", "system")
+        correct = sum(1 for r in results if r.get("is_correct_topic", False))
+        incorrect = len(results) - correct
+        self.log(f"   ✅ Correct: {correct}", "INFO", "system")
+        self.log(f"   ❌ Incorrect: {incorrect}", "INFO", "system")
         if results:
-            self.log(f"   Accuracy: {((tp_count + tn_count) / len(results) * 100):.1f}%", "INFO", "system")
+            self.log(f"   Accuracy: {(correct / len(results) * 100):.1f}%", "INFO", "system")
         self.log("="*80, "INFO", "system")
         
         return results

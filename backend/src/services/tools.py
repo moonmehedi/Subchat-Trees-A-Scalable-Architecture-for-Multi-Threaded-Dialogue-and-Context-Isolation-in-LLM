@@ -79,13 +79,13 @@ class ConversationTools:
         print(f"   Searching ACROSS ALL CONVERSATIONS for: '{query}'")
         print(f"   Retrieving top {top_k} relevant messages")
         
-        # 🔍 Use ENHANCED multi-query retrieval with context windows
+        # 🔍 Use ENHANCED multi-query retrieval with turn-based context windows
         results = vector_index.retrieve_with_multi_query(
             query=query,
             top_k=top_k,
             node_id=None,  # ✅ Search globally across all conversations
             exclude_buffer_cutoff=buffer_cutoff,
-            use_context_windows=True  # ✅ Get ±60s context around relevant messages
+            use_context_windows=True  # ✅ Get ±2 turn context around relevant messages
         )
         
         if not results:

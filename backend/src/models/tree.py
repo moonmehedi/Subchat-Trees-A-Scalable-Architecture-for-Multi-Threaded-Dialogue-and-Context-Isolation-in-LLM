@@ -49,6 +49,7 @@ class LocalBuffer:
                     metadata={
                         'role': role,
                         'timestamp': msg_timestamp,  # ← Use SAME timestamp!
+                        'turn_number': self.messages_processed_count + 1,  # ← Turn-based indexing (1-indexed)
                         'indexed_immediately': True,  # Flag for debugging
                         'conversation_title': self.node_title or 'Untitled'  # Add title for logging
                     }

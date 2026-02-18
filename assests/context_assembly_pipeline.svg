@@ -1,0 +1,179 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="1180" viewBox="0 0 920 1180" font-family="'Georgia', 'Times New Roman', serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 7" refX="9" refY="3.5" markerWidth="10" markerHeight="7" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#444"/>
+    </marker>
+    <marker id="arrow-dashed" viewBox="0 0 10 7" refX="9" refY="3.5" markerWidth="10" markerHeight="7" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#1a6b8a"/>
+    </marker>
+    <marker id="arrow-gray" viewBox="0 0 10 7" refX="9" refY="3.5" markerWidth="10" markerHeight="7" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#aaa"/>
+    </marker>
+    <linearGradient id="stepGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f9f9fb"/>
+      <stop offset="100%" stop-color="#eef1f6"/>
+    </linearGradient>
+    <linearGradient id="branchGradStd" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f0f7f0"/>
+      <stop offset="100%" stop-color="#dceadc"/>
+    </linearGradient>
+    <linearGradient id="branchGradFollow" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#e8f4f8"/>
+      <stop offset="100%" stop-color="#d0e8f0"/>
+    </linearGradient>
+    <linearGradient id="decisionGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fff8e8"/>
+      <stop offset="100%" stop-color="#f5ecd0"/>
+    </linearGradient>
+    <linearGradient id="ragGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f3f0fa"/>
+      <stop offset="100%" stop-color="#e0d8f0"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="920" height="1180" fill="white"/>
+
+  <!-- ======== STEP 1: User Query ======== -->
+  <rect x="210" y="20" width="500" height="60" rx="8" fill="url(#stepGrad)" stroke="#555" stroke-width="1.8"/>
+  <text x="245" y="48" font-size="15" font-weight="bold" fill="#222">①  User Query</text>
+  <text x="245" y="70" font-size="13" fill="#555" font-style="italic">Input:  q = "What languages have we discussed?"</text>
+
+  <!-- Arrow ① → ② -->
+  <line x1="460" y1="80" x2="460" y2="108" stroke="#444" stroke-width="1.8" marker-end="url(#arrow)"/>
+
+  <!-- ======== STEP 2: Store in Buffer ======== -->
+  <rect x="210" y="112" width="500" height="90" rx="8" fill="url(#stepGrad)" stroke="#555" stroke-width="1.8"/>
+  <text x="245" y="140" font-size="15" font-weight="bold" fill="#222">②  Store in Buffer</text>
+  <text x="245" y="162" font-size="13" fill="#444">Append to circular buffer   B = deque(maxlen = C)</text>
+  <text x="245" y="182" font-size="13" fill="#444">If |B| exceeds C  →  FIFO eviction of oldest message</text>
+  <text x="245" y="196" font-size="13" fill="#444">Index immediately to ChromaDB with turn number τ(m)</text>
+
+  <!-- Arrow ② → ③ -->
+  <line x1="460" y1="202" x2="460" y2="230" stroke="#444" stroke-width="1.8" marker-end="url(#arrow)"/>
+
+  <!-- ======== STEP 3: RAG Retrieval Pipeline (single reference box) ======== -->
+  <rect x="210" y="234" width="500" height="80" rx="8" fill="url(#ragGrad)" stroke="#7a5ea8" stroke-width="1.8"/>
+  <text x="245" y="264" font-size="15" font-weight="bold" fill="#4a3070">③  RAG Retrieval Pipeline</text>
+  <text x="245" y="286" font-size="13" fill="#444">Decompose → Embed → Search ChromaDB → Dedup</text>
+  <text x="245" y="304" font-size="13" fill="#444">→ Re-rank top-k anchors → Expand ±2 turns into blocks</text>
+  <text x="518" y="264" font-size="12" fill="#7a5ea8" font-style="italic">(see Fig. retrieval pipeline)</text>
+
+  <!-- Arrow ③ → ④ -->
+  <line x1="460" y1="314" x2="460" y2="354" stroke="#444" stroke-width="1.8" marker-end="url(#arrow)"/>
+
+  <!-- ======== STEP 4: Branching Decision (diamond) ======== -->
+  <polygon points="460,356 600,412 460,468 320,412" fill="url(#decisionGrad)" stroke="#b08820" stroke-width="1.8"/>
+  <text x="460" y="406" text-anchor="middle" font-size="14" font-weight="bold" fill="#6b5010">④  Follow-up</text>
+  <text x="460" y="426" text-anchor="middle" font-size="14" font-weight="bold" fill="#6b5010">subchat node?</text>
+
+  <!-- NO branch (left) -->
+  <line x1="320" y1="412" x2="240" y2="412" stroke="#444" stroke-width="1.8"/>
+  <line x1="240" y1="412" x2="240" y2="490" stroke="#444" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <text x="260" y="406" font-size="14" font-weight="bold" fill="#333">NO</text>
+
+  <!-- YES branch (right) -->
+  <line x1="600" y1="412" x2="680" y2="412" stroke="#1a6b8a" stroke-width="1.8" stroke-dasharray="6,3"/>
+  <line x1="680" y1="412" x2="680" y2="490" stroke="#1a6b8a" stroke-width="1.8" stroke-dasharray="6,3" marker-end="url(#arrow-dashed)"/>
+  <text x="614" y="406" font-size="14" font-weight="bold" fill="#1a6b8a">YES</text>
+
+  <!-- ======== Standard Assembly (left box) ======== -->
+  <rect x="60" y="494" width="350" height="200" rx="8" fill="url(#branchGradStd)" stroke="#4a8a4a" stroke-width="1.8"/>
+  <text x="95" y="522" font-size="15" font-weight="bold" fill="#2d5a2d">Standard Assembly</text>
+  <text x="95" y="544" font-size="13" fill="#3a6a3a">(all nodes)</text>
+  <line x1="80" y1="554" x2="390" y2="554" stroke="#4a8a4a" stroke-width="0.6" stroke-dasharray="3,3"/>
+
+  <text x="95" y="580" font-size="14" fill="#222">S</text>
+  <text x="107" y="584" font-size="9" fill="#222">sys</text>
+  <text x="140" y="580" font-size="13" fill="#444">System prompt</text>
+  <text x="130" y="598" font-size="13" fill="#aaa">↓</text>
+
+  <text x="95" y="616" font-size="14" fill="#222">S</text>
+  <text x="107" y="620" font-size="9" fill="#222">sum</text>
+  <text x="140" y="616" font-size="13" fill="#444">Rolling summary (if any)</text>
+  <text x="130" y="634" font-size="13" fill="#aaa">↓</text>
+
+  <text x="95" y="652" font-size="14" fill="#222">B</text>
+  <text x="140" y="652" font-size="13" fill="#444">Buffer messages (chronological)</text>
+  <text x="130" y="670" font-size="13" fill="#aaa">↓</text>
+
+  <text x="95" y="688" font-size="14" fill="#222">R</text>
+  <text x="140" y="688" font-size="13" fill="#444">Retrieved blocks (anchors ± 2 turns)</text>
+
+  <!-- ======== Follow-up Assembly (right box) ======== -->
+  <rect x="510" y="494" width="370" height="200" rx="8" fill="url(#branchGradFollow)" stroke="#1a6b8a" stroke-width="1.8" stroke-dasharray="6,3"/>
+  <text x="545" y="522" font-size="15" font-weight="bold" fill="#0e4a5e">Follow-up Assembly</text>
+  <text x="545" y="544" font-size="13" fill="#2a7a9a">(subchat nodes only)</text>
+  <line x1="530" y1="554" x2="860" y2="554" stroke="#1a6b8a" stroke-width="0.6" stroke-dasharray="3,3"/>
+
+  <text x="545" y="580" font-size="14" fill="#222">S</text>
+  <text x="557" y="584" font-size="9" fill="#222">sys</text>
+  <text x="590" y="580" font-size="13" fill="#444">System prompt</text>
+  <text x="580" y="598" font-size="13" fill="#88b0c0">↓</text>
+
+  <text x="545" y="616" font-size="14" font-weight="bold" fill="#0e4a5e">F</text>
+  <text x="590" y="616" font-size="13" fill="#444">Follow-up context (selected text)</text>
+  <text x="580" y="634" font-size="13" fill="#88b0c0">↓</text>
+
+  <text x="545" y="652" font-size="14" fill="#222">S</text>
+  <text x="557" y="656" font-size="9" fill="#222">sum</text>
+  <text x="575" y="658" font-size="7" fill="#222">parent</text>
+  <text x="624" y="652" font-size="13" fill="#444">Inherited parent summary</text>
+  <text x="580" y="670" font-size="13" fill="#88b0c0">↓</text>
+
+  <text x="545" y="688" font-size="14" fill="#222">B</text>
+  <text x="557" y="692" font-size="9" fill="#222">p→c</text>
+  <text x="590" y="688" font-size="13" fill="#444">Copied parent buffer + R</text>
+
+  <!-- Equation boxes -->
+  <rect x="76" y="700" width="318" height="34" rx="5" fill="white" stroke="#4a8a4a" stroke-width="1.2"/>
+  <text x="96" y="722" font-size="13" fill="#2d5a2d" font-weight="bold" font-style="italic">𝒞 = S_sys ‖ S_sum ‖ B ‖ R</text>
+
+  <rect x="522" y="700" width="346" height="34" rx="5" fill="white" stroke="#1a6b8a" stroke-width="1.2"/>
+  <text x="536" y="722" font-size="12.5" fill="#0e4a5e" font-weight="bold" font-style="italic">𝒞_follow = S_sys ‖ F ‖ S_sum^parent ‖ B_p→c ‖ R</text>
+
+  <!-- Merge arrows into step ⑤ -->
+  <line x1="235" y1="734" x2="235" y2="770" stroke="#444" stroke-width="1.5"/>
+  <line x1="235" y1="770" x2="460" y2="770" stroke="#444" stroke-width="1.5"/>
+  <line x1="695" y1="734" x2="695" y2="770" stroke="#1a6b8a" stroke-width="1.5" stroke-dasharray="6,3"/>
+  <line x1="695" y1="770" x2="465" y2="770" stroke="#1a6b8a" stroke-width="1.5" stroke-dasharray="6,3"/>
+  <line x1="460" y1="770" x2="460" y2="800" stroke="#444" stroke-width="1.8" marker-end="url(#arrow)"/>
+
+  <!-- ======== STEP 5: LLM Generation ======== -->
+  <rect x="210" y="804" width="500" height="76" rx="8" fill="url(#stepGrad)" stroke="#555" stroke-width="1.8"/>
+  <text x="245" y="832" font-size="15" font-weight="bold" fill="#222">⑤  LLM Generation</text>
+  <text x="245" y="854" font-size="13" fill="#444">Send assembled context  𝒞  (or 𝒞_follow)  to LLM backend</text>
+  <text x="245" y="872" font-size="13" fill="#444">Backend:  Groq / vLLM / Ollama   (streaming via SSE)</text>
+
+  <!-- Arrow ⑤ → ⑥ -->
+  <line x1="460" y1="880" x2="460" y2="908" stroke="#444" stroke-width="1.8" marker-end="url(#arrow)"/>
+
+  <!-- ======== STEP 6: Return & Store ======== -->
+  <rect x="210" y="912" width="500" height="96" rx="8" fill="url(#stepGrad)" stroke="#555" stroke-width="1.8"/>
+  <text x="245" y="940" font-size="15" font-weight="bold" fill="#222">⑥  Return and Store Response</text>
+  <text x="245" y="962" font-size="13" fill="#444">Stream response to user</text>
+  <text x="245" y="982" font-size="13" fill="#444">Store in buffer with turn number:  B ← B ∪ {(r, τ_new)}</text>
+  <text x="245" y="1002" font-size="13" fill="#444">Index to vector store:  𝒱 ← 𝒱 ∪ {(e(r), metadata, τ)}</text>
+
+  <!-- Feedback loop (right side going back up to step ②) -->
+  <line x1="710" y1="960" x2="780" y2="960" stroke="#aaa" stroke-width="1.2" stroke-dasharray="4,3"/>
+  <line x1="780" y1="960" x2="780" y2="156" stroke="#aaa" stroke-width="1.2" stroke-dasharray="4,3"/>
+  <line x1="780" y1="156" x2="714" y2="156" stroke="#aaa" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#arrow-gray)"/>
+  <text x="788" y="560" font-size="11" fill="#aaa" transform="rotate(-90 788 560)">feedback: next turn re-enters at ②</text>
+
+  <!-- ======== LEGEND ======== -->
+  <rect x="210" y="1040" width="500" height="110" rx="8" fill="#fafafa" stroke="#ccc" stroke-width="1.2"/>
+  <text x="245" y="1068" font-size="14" font-weight="bold" fill="#444">Legend</text>
+
+  <line x1="245" y1="1090" x2="310" y2="1090" stroke="#444" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <text x="320" y="1095" font-size="13" fill="#444">Standard path (all queries)</text>
+
+  <line x1="245" y1="1115" x2="310" y2="1115" stroke="#1a6b8a" stroke-width="1.8" stroke-dasharray="6,3" marker-end="url(#arrow-dashed)"/>
+  <text x="320" y="1120" font-size="13" fill="#444">Follow-up branch (subchat nodes only)</text>
+
+  <line x1="500" y1="1090" x2="565" y2="1090" stroke="#aaa" stroke-width="1.2" stroke-dasharray="4,3"/>
+  <text x="575" y="1095" font-size="13" fill="#444">Feedback loop</text>
+
+  <text x="500" y="1120" font-size="13" fill="#333">‖ = ordered concatenation</text>
+
+  <text x="460" y="1170" text-anchor="middle" font-size="12" fill="#888">Context assembly pipeline with follow-up branching.  Retrieval details in Fig. retrieval pipeline.</text>
+</svg>

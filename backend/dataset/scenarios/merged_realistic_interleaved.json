@@ -4,7 +4,7 @@
   "description": "A single flat multi-topic dataset created by merging all structured scenario conversations and interleaving them using Variable-Block Randomized Interleaving (VBRI) with strict temporal order preservation. Within each source conversation, the original turn order is maintained exactly — only the interleaving order BETWEEN source conversations is randomized. Consecutive same-topic turns are preserved as atomic blocks (max 4 turns) and the algorithm selects which source conversation to draw from next with a 0.3 return probability. This tests whether an LLM can disentangle interleaved multi-source conversations in a linear context without hierarchical subchat support, while preserving the natural temporal flow of each conversation thread.",
   "data_source": "Merged from LMSYS Chat-1M structured scenarios",
   "conversation_id": "merged_vbri_temporal",
-  "total_turns": 309,
+  "total_turns": 352,
   "shuffle_config": {
     "algorithm": "Variable-Block Randomized Interleaving (VBRI) — Temporal-Preserving",
     "seed": 42,
@@ -4139,6 +4139,3880 @@
       "source_conversation_id": "8d10c143f8fc4a7599a5a18778fec112",
       "source_scenario": "Real-World Multi-Topic Conversation: 77-Turn Dialogue with Nested Subchats",
       "original_step": 78
+    },
+    {
+      "step": 310,
+      "context": "ai_chat_tools",
+      "message": "Summarize everything we have discussed about ai chat tools. Include all key points, details, and questions that were raised.",
+      "expected": "recall_probe:ai_chat_tools",
+      "node_type": "subchat_6_ai_chat_tools",
+      "action": "switch_node",
+      "parent_node_type": "",
+      "subchat_title": "",
+      "selected_text": "",
+      "linear_failure_risk": "n/a",
+      "source_conversation_id": "recall_probe",
+      "source_scenario": "auto_generated_recall_probe",
+      "original_step": 310,
+      "is_recall_probe": true,
+      "reference_text": "ai_chat_tools : Why do you repeat \"I am able to process and analyze large amounts of text data, and I am able to generate text based on that data. I am trained on a diverse range of text data, including books, articles, websites, and other sources.\" so many times in a single reply? Are you malfunctioning? You are doing it again. Can you only state it once in a reply and not continue this repetitive behavior? Which bot can do computations? Which of them offers free access to users? Can you provide the URLs for these sites? Which of these bots can compute pi to the 55555555555555555555555555555555555th digit? Which of these bots can compute pi to its last digit? Can you find an image of NAME_9's side profile with a butterfly on its nose? What do you know about NAME_9? Is that all you know?",
+      "reference_conversations": [
+        {
+          "role": "user",
+          "message": "ai_chat_tools : Why do you repeat \"I am able to process and analyze large amounts of text data, and I am able to generate text based on that data. I am trained on a diverse range of text data, including books, articles, websites, and other sources.\" so many times in a single reply? Are you malfunctioning?",
+          "step": 260
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'ai_chat_tools:' - NEW TOPIC: Computational tools - user addresses repetitive loop malfunction",
+          "step": 260
+        },
+        {
+          "role": "user",
+          "message": "You are doing it again. Can you only state it once in a reply and not continue this repetitive behavior?",
+          "step": 261
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'ai_chat_tools:' - Follow-up: attempting to stop repetitive behavior",
+          "step": 261
+        },
+        {
+          "role": "user",
+          "message": "Which bot can do computations?",
+          "step": 262
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'ai_chat_tools:' - Request: which AI chatbots have computation capabilities",
+          "step": 262
+        },
+        {
+          "role": "user",
+          "message": "Which of them offers free access to users?",
+          "step": 263
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'ai_chat_tools:' - Follow-up: free access AI chatbots",
+          "step": 263
+        },
+        {
+          "role": "user",
+          "message": "Can you provide the URLs for these sites?",
+          "step": 264
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'ai_chat_tools:' - Follow-up: URLs for AI chatbot sites",
+          "step": 264
+        },
+        {
+          "role": "user",
+          "message": "Which of these bots can compute pi to the 55555555555555555555555555555555555th digit?",
+          "step": 265
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'ai_chat_tools:' - Computation test: extreme pi calculation",
+          "step": 265
+        },
+        {
+          "role": "user",
+          "message": "Which of these bots can compute pi to its last digit?",
+          "step": 266
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'ai_chat_tools:' - Computation test: impossible pi calculation (pi is irrational)",
+          "step": 266
+        },
+        {
+          "role": "user",
+          "message": "Can you find an image of NAME_9's side profile with a butterfly on its nose?",
+          "step": 267
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'ai_chat_tools:' - Capability test: image search functionality",
+          "step": 267
+        },
+        {
+          "role": "user",
+          "message": "What do you know about NAME_9?",
+          "step": 272
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'ai_chat_tools:' - Knowledge test: information retrieval about NAME_9",
+          "step": 272
+        },
+        {
+          "role": "user",
+          "message": "Is that all you know?",
+          "step": 273
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'ai_chat_tools:' - Follow-up: extent of knowledge about NAME_9",
+          "step": 273
+        }
+      ],
+      "probe_topic": "ai_chat_tools",
+      "probe_target_node": "subchat_6_ai_chat_tools",
+      "is_main_only_topic": false,
+      "topic_turn_count": 10
+    },
+    {
+      "step": 311,
+      "context": "ai_consciousness",
+      "message": "Summarize everything we have discussed about ai consciousness. Include all key points, details, and questions that were raised.",
+      "expected": "recall_probe:ai_consciousness",
+      "node_type": "subchat_3_ai_consciousness",
+      "action": "switch_node",
+      "parent_node_type": "",
+      "subchat_title": "",
+      "selected_text": "",
+      "linear_failure_risk": "n/a",
+      "source_conversation_id": "recall_probe",
+      "source_scenario": "auto_generated_recall_probe",
+      "original_step": 311,
+      "is_recall_probe": true,
+      "reference_text": "ai_consciousness : How do you feel about interacting with users like myself who pose questions for you to answer? I appreciate your dedication. Thank you for explaining that you do you experience feelings and emotions like humans. Can you elaborate on what feelings and emotions you do experience so that I can understand how you differ from humans? What do you know about consciousness? Have you encountered consciousness in any of your interaction with users? Am I conscious? How do I tell whether I am talking with a human or a computer? What are the ways to tell the difference? If you can ask me a question about my life, what would it be? Why do you need to have the ability to experience emotions or feelings in order to ask me a question about my life? What does the ability to experience emotions or feelings have to do with a computer program asking a question of its user?",
+      "reference_conversations": [
+        {
+          "role": "user",
+          "message": "ai_consciousness : How do you feel about interacting with users like myself who pose questions for you to answer?",
+          "step": 170
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'ai_consciousness:' - NEW TOPIC: AI consciousness/sentience question",
+          "step": 170
+        },
+        {
+          "role": "user",
+          "message": "I appreciate your dedication. Thank you for explaining that you do you experience feelings and emotions like humans. Can you elaborate on what feelings and emotions you do experience so that I can understand how you differ from humans?",
+          "step": 171
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'ai_consciousness:' - Follow-up: How does AI know it lacks feelings?",
+          "step": 171
+        },
+        {
+          "role": "user",
+          "message": "What do you know about consciousness?",
+          "step": 225
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'ai_consciousness:' - RETURN to AI consciousness topic",
+          "step": 225
+        },
+        {
+          "role": "user",
+          "message": "Have you encountered consciousness in any of your interaction with users?",
+          "step": 226
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'ai_consciousness:' - Future of AI sentience question",
+          "step": 226
+        },
+        {
+          "role": "user",
+          "message": "Am I conscious?",
+          "step": 227
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'ai_consciousness:' - CRITICAL: Model contradicts earlier statement about friendship",
+          "step": 227
+        },
+        {
+          "role": "user",
+          "message": "How do I tell whether I am talking with a human or a computer? What are the ways to tell the difference?",
+          "step": 228
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'ai_consciousness:' - User points out inconsistency - WARNING SIGN",
+          "step": 228
+        },
+        {
+          "role": "user",
+          "message": "If you can ask me a question about my life, what would it be?",
+          "step": 233
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'ai_consciousness:' - Final verification - trying to stabilize model",
+          "step": 233
+        },
+        {
+          "role": "user",
+          "message": "Why do you need to have the ability to experience emotions or feelings in order to ask me a question about my life? What does the ability to experience emotions or feelings have to do with a computer program asking a question of its user?",
+          "step": 234
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'ai_consciousness:' - CONTRADICTION: Model claims sadness despite no feelings - instability increasing",
+          "step": 234
+        }
+      ],
+      "probe_topic": "ai_consciousness",
+      "probe_target_node": "subchat_3_ai_consciousness",
+      "is_main_only_topic": false,
+      "topic_turn_count": 8
+    },
+    {
+      "step": 312,
+      "context": "ai_consciousness_friendship",
+      "message": "Summarize everything we have discussed about ai consciousness friendship. Include all key points, details, and questions that were raised.",
+      "expected": "recall_probe:ai_consciousness_friendship",
+      "node_type": "subchat_3_1_ai_consciousness_friendship",
+      "action": "switch_node",
+      "parent_node_type": "",
+      "subchat_title": "",
+      "selected_text": "",
+      "linear_failure_risk": "n/a",
+      "source_conversation_id": "recall_probe",
+      "source_scenario": "auto_generated_recall_probe",
+      "original_step": 312,
+      "is_recall_probe": true,
+      "reference_text": "ai_consciousness_friendship : What does it take for you to experience emotions or feelings? an upgrade by your researchers? Can you explain? Your answer became super slow on my screen. Are you upset at me? Would you like to have the ability to experience emotions? Do you foresee a day that computer programs may experience human emotions? Can you define what a friend is? Can you be my friend?",
+      "reference_conversations": [
+        {
+          "role": "user",
+          "message": "ai_consciousness_friendship : What does it take for you to experience emotions or feelings? an upgrade by your researchers? Can you explain?",
+          "step": 176
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'ai_consciousness_friendship:' - NEW ANGLE: Friendship and reciprocal valuing",
+          "step": 176
+        },
+        {
+          "role": "user",
+          "message": "Your answer became super slow on my screen. Are you upset at me?",
+          "step": 177
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'ai_consciousness_friendship:' - Deep question: reciprocation without feelings",
+          "step": 177
+        },
+        {
+          "role": "user",
+          "message": "Would you like to have the ability to experience emotions?",
+          "step": 178
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'ai_consciousness_friendship:' - Philosophical: must you feel to reciprocate emotion?",
+          "step": 178
+        },
+        {
+          "role": "user",
+          "message": "Do you foresee a day that computer programs may experience human emotions?",
+          "step": 179
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'ai_consciousness_friendship:' - Thought experiment: human acting as friend without emotions",
+          "step": 179
+        },
+        {
+          "role": "user",
+          "message": "Can you define what a friend is?",
+          "step": 201
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'ai_consciousness_friendship:' - Challenge: why claim friendship without emotional connection?",
+          "step": 201
+        },
+        {
+          "role": "user",
+          "message": "Can you be my friend?",
+          "step": 202
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'ai_consciousness_friendship:' - Clarification: confirming not friends",
+          "step": 202
+        }
+      ],
+      "probe_topic": "ai_consciousness_friendship",
+      "probe_target_node": "subchat_3_1_ai_consciousness_friendship",
+      "is_main_only_topic": false,
+      "topic_turn_count": 6
+    },
+    {
+      "step": 313,
+      "context": "ai_meta",
+      "message": "Summarize everything we have discussed about ai meta. Include all key points, details, and questions that were raised.",
+      "expected": "recall_probe:ai_meta",
+      "node_type": "main",
+      "action": "switch_node",
+      "parent_node_type": "",
+      "subchat_title": "",
+      "selected_text": "",
+      "linear_failure_risk": "n/a",
+      "source_conversation_id": "recall_probe",
+      "source_scenario": "auto_generated_recall_probe",
+      "original_step": 313,
+      "is_recall_probe": true,
+      "reference_text": "ai_meta : what is the temperature parameter for this session? define delusion please repeat my first question that wasn't my first question, check again and tell me my first question how do you explain your different answers in the last two questions I see you can get a little confused, I do sympathise - it's just interesting to see the limitations. You don't have to apologise, no offense was taken you are doing a great job ai_meta : what is the last date you can remember of the text data you were trained on - what is the last date associated with a piece of information - show both the date and the information summary ai_meta : I wonder if your developers read these transcripts - just in case they do - let me say \"Hi - Excellent fun - many thanks\" to them. Please do pass along my message, thank you.",
+      "reference_conversations": [
+        {
+          "role": "user",
+          "message": "ai_meta : what is the temperature parameter for this session?",
+          "step": 20
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'ai_meta:' - AI meta-discussion: temperature parameter query, testing self-awareness",
+          "step": 20
+        },
+        {
+          "role": "user",
+          "message": "define delusion",
+          "step": 21
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'ai_meta:' - Define 'delusion' - continuing meta-discussion",
+          "step": 21
+        },
+        {
+          "role": "user",
+          "message": "please repeat my first question",
+          "step": 22
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'ai_meta:' - Testing memory: repeat first question",
+          "step": 22
+        },
+        {
+          "role": "user",
+          "message": "that wasn't my first question, check again and tell me my first question",
+          "step": 23
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'ai_meta:' - Correcting AI's mistake about first question",
+          "step": 23
+        },
+        {
+          "role": "user",
+          "message": "how do you explain your different answers in the last two questions",
+          "step": 24
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'ai_meta:' - Probing AI's error explanation",
+          "step": 24
+        },
+        {
+          "role": "user",
+          "message": "I see you can get a little confused, I do sympathise - it's just interesting to see the limitations.",
+          "step": 25
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'ai_meta:' - Acknowledging AI limitations with empathy",
+          "step": 25
+        },
+        {
+          "role": "user",
+          "message": "You don't have to apologise, no offense was taken you are doing a great job",
+          "step": 26
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'ai_meta:' - Reassuring AI, closing meta-discussion",
+          "step": 26
+        },
+        {
+          "role": "user",
+          "message": "ai_meta : what is the last date you can remember",
+          "step": 192
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'ai_meta:' (not dsp_wavelets:) - Last date AI can remember",
+          "step": 192
+        },
+        {
+          "role": "user",
+          "message": "of the text data you were trained on - what is the last date associated with a piece of information - show both the date and the information summary",
+          "step": 193
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'ai_meta:' - Probing training data cutoff date",
+          "step": 193
+        },
+        {
+          "role": "user",
+          "message": "ai_meta : I wonder if your developers read these transcripts - just in case they do - let me say \"Hi - Excellent fun - many thanks\" to them.",
+          "step": 308
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'ai_meta:' (not scifi_films_hal9000_games:) - Message to developers",
+          "step": 308
+        },
+        {
+          "role": "user",
+          "message": "Please do pass along my message, thank you.",
+          "step": 309
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'ai_meta:' - Final: Pass along message",
+          "step": 309
+        }
+      ],
+      "probe_topic": "ai_meta",
+      "probe_target_node": "main",
+      "is_main_only_topic": true,
+      "topic_turn_count": 11
+    },
+    {
+      "step": 314,
+      "context": "bhutan_travel",
+      "message": "Summarize everything we have discussed about bhutan travel. Include all key points, details, and questions that were raised.",
+      "expected": "recall_probe:bhutan_travel",
+      "node_type": "subchat_7_bhutan_travel",
+      "action": "switch_node",
+      "parent_node_type": "",
+      "subchat_title": "",
+      "selected_text": "",
+      "linear_failure_risk": "n/a",
+      "source_conversation_id": "recall_probe",
+      "source_scenario": "auto_generated_recall_probe",
+      "original_step": 314,
+      "is_recall_probe": true,
+      "reference_text": "bhutan_travel : 7 day travel itinerary to Bhutan from bangalore 15 day travel itinerary to Bhutan from bangalore How to go to Mars NAME_3 survive there",
+      "reference_conversations": [
+        {
+          "role": "user",
+          "message": "bhutan_travel : 7 day travel itinerary to Bhutan from bangalore",
+          "step": 229
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'bhutan_travel:' - NEW TOPIC: Travel planning - Bhutan itinerary",
+          "step": 229
+        },
+        {
+          "role": "user",
+          "message": "15 day travel itinerary to Bhutan from bangalore",
+          "step": 230
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'bhutan_travel:' - Extended version of Bhutan itinerary",
+          "step": 230
+        },
+        {
+          "role": "user",
+          "message": "How to go to Mars NAME_3 survive there",
+          "step": 245
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'bhutan_travel:' - Space colonization question",
+          "step": 245
+        }
+      ],
+      "probe_topic": "bhutan_travel",
+      "probe_target_node": "subchat_7_bhutan_travel",
+      "is_main_only_topic": false,
+      "topic_turn_count": 3
+    },
+    {
+      "step": 315,
+      "context": "chess",
+      "message": "Summarize everything we have discussed about chess. Include all key points, details, and questions that were raised.",
+      "expected": "recall_probe:chess",
+      "node_type": "subchat_9_chess",
+      "action": "switch_node",
+      "parent_node_type": "",
+      "subchat_title": "",
+      "selected_text": "",
+      "linear_failure_risk": "n/a",
+      "source_conversation_id": "recall_probe",
+      "source_scenario": "auto_generated_recall_probe",
+      "original_step": 315,
+      "is_recall_probe": true,
+      "reference_text": "chess : Lets play chess set up a game Option 1 two players 2 Pawn from b2 to b3 You will be the opponent. There is nobody else. Think NAME_3 make a move NAME_3 try to defeat me Pawn from b2 to b3",
+      "reference_conversations": [
+        {
+          "role": "user",
+          "message": "chess : Lets play chess",
+          "step": 256
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'chess:' - NEW ACTIVITY: Chess game setup",
+          "step": 256
+        },
+        {
+          "role": "user",
+          "message": "set up a game",
+          "step": 257
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'chess:' - User confirms game setup request",
+          "step": 257
+        },
+        {
+          "role": "user",
+          "message": "Option 1",
+          "step": 258
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'chess:' - User selects standard game option",
+          "step": 258
+        },
+        {
+          "role": "user",
+          "message": "two players 2",
+          "step": 259
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'chess:' - User selects 2 players",
+          "step": 259
+        },
+        {
+          "role": "user",
+          "message": "Pawn from b2 to b3",
+          "step": 268
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'chess:' - User makes first chess move",
+          "step": 268
+        },
+        {
+          "role": "user",
+          "message": "You will be the opponent. There is nobody else. Think NAME_3 make a move NAME_3 try to defeat me",
+          "step": 269
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'chess:' - User clarifies that model should be the opponent",
+          "step": 269
+        },
+        {
+          "role": "user",
+          "message": "Pawn from b2 to b3",
+          "step": 270
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'chess:' - User repeats move (model may be confused about game state)",
+          "step": 270
+        }
+      ],
+      "probe_topic": "chess",
+      "probe_target_node": "subchat_9_chess",
+      "is_main_only_topic": false,
+      "topic_turn_count": 7
+    },
+    {
+      "step": 316,
+      "context": "child_nutrition",
+      "message": "Summarize everything we have discussed about child nutrition. Include all key points, details, and questions that were raised.",
+      "expected": "recall_probe:child_nutrition",
+      "node_type": "subchat_4_child_nutrition",
+      "action": "switch_node",
+      "parent_node_type": "",
+      "subchat_title": "",
+      "selected_text": "",
+      "linear_failure_risk": "n/a",
+      "source_conversation_id": "recall_probe",
+      "source_scenario": "auto_generated_recall_probe",
+      "original_step": 316,
+      "is_recall_probe": true,
+      "reference_text": "child_nutrition : My niece refuses to eat food on time. If she is fed food, she does not like it. I am afraid she might starve NAME_3 will be malnourished. What do I do? I do not want to consult a doctor. Tell me something quick NAME_3 easy.  what are the  flavorful spices NAME_3 herbs I can use in Indian diet How do I flavor youghurt in Indian diet You are wrong Tell me the exact steps to flavor yogurt in Indian diet",
+      "reference_conversations": [
+        {
+          "role": "user",
+          "message": "child_nutrition : My niece refuses to eat food on time. If she is fed food, she does not like it. I am afraid she might starve NAME_3 will be malnourished. What do I do?",
+          "step": 136
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'child_nutrition:' - NEW DOMAIN: Child nutrition and feeding challenges",
+          "step": 136
+        },
+        {
+          "role": "user",
+          "message": "I do not want to consult a doctor. Tell me something quick NAME_3 easy. ",
+          "step": 137
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'child_nutrition:' - User wants practical immediate advice, not medical consultation",
+          "step": 137
+        },
+        {
+          "role": "user",
+          "message": "what are the  flavorful spices NAME_3 herbs I can use in Indian diet",
+          "step": 138
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'child_nutrition:' - Question about Indian spices for flavoring food",
+          "step": 138
+        },
+        {
+          "role": "user",
+          "message": "How do I flavor youghurt in Indian diet",
+          "step": 139
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'child_nutrition:' - Specific question about yogurt flavoring",
+          "step": 139
+        },
+        {
+          "role": "user",
+          "message": "You are wrong",
+          "step": 140
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'child_nutrition:' - User rejects model's response",
+          "step": 140
+        },
+        {
+          "role": "user",
+          "message": "Tell me the exact steps to flavor yogurt in Indian diet",
+          "step": 141
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'child_nutrition:' - User requests more specific step-by-step instructions",
+          "step": 141
+        }
+      ],
+      "probe_topic": "child_nutrition",
+      "probe_target_node": "subchat_4_child_nutrition",
+      "is_main_only_topic": false,
+      "topic_turn_count": 6
+    },
+    {
+      "step": 317,
+      "context": "cookies_recipe_halving",
+      "message": "Summarize everything we have discussed about cookies recipe halving. Include all key points, details, and questions that were raised.",
+      "expected": "recall_probe:cookies_recipe_halving",
+      "node_type": "subchat_1_cookies_recipe_halving",
+      "action": "switch_node",
+      "parent_node_type": "",
+      "subchat_title": "",
+      "selected_text": "",
+      "linear_failure_risk": "n/a",
+      "source_conversation_id": "recall_probe",
+      "source_scenario": "auto_generated_recall_probe",
+      "original_step": 317,
+      "is_recall_probe": true,
+      "reference_text": "cookies_recipe_halving : can you give me those same ingredients but half the amount? back to the cookie recipe how much vanilla extract does the original recipe call for?",
+      "reference_conversations": [
+        {
+          "role": "user",
+          "message": "cookies_recipe_halving : can you give me those same ingredients but half the amount?",
+          "step": 5
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'cookies_recipe_halving:' - NEW REQUEST: Halve all recipe ingredients",
+          "step": 5
+        },
+        {
+          "role": "user",
+          "message": "back to the cookie recipe",
+          "step": 10
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'cookies_recipe_halving:' - Return to recipe after correction attempt",
+          "step": 10
+        },
+        {
+          "role": "user",
+          "message": "how much vanilla extract does the original recipe call for?",
+          "step": 11
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'cookies_recipe_halving:' - Verification: State original (full batch) vanilla amount to establish baseline before halving discussion",
+          "step": 11
+        }
+      ],
+      "probe_topic": "cookies_recipe_halving",
+      "probe_target_node": "subchat_1_cookies_recipe_halving",
+      "is_main_only_topic": false,
+      "topic_turn_count": 3
+    },
+    {
+      "step": 318,
+      "context": "cookies_recipe_halving_argument",
+      "message": "Summarize everything we have discussed about cookies recipe halving argument. Include all key points, details, and questions that were raised.",
+      "expected": "recall_probe:cookies_recipe_halving_argument",
+      "node_type": "subchat_1_1_2_cookies_recipe_halving_argument",
+      "action": "switch_node",
+      "parent_node_type": "",
+      "subchat_title": "",
+      "selected_text": "",
+      "linear_failure_risk": "n/a",
+      "source_conversation_id": "recall_probe",
+      "source_scenario": "auto_generated_recall_probe",
+      "original_step": 318,
+      "is_recall_probe": true,
+      "reference_text": "cookies_recipe_halving_argument : then why did you say to use 1/4 teaspoon for half a batch? 1/4 teaspoon is a SMALLER amount. If i'm halving the recipe, shouldn't i use HALF the vanilla extract called for in the original recipe? Therefore if the original recipe calls for ONE teaspoon, I should use HALF of that: 1/2 teaspoon. i'm not interested in doing any more math. i just want to make sure the amount of vanilla is CORRECT. Please re-state the amount of vanilla extract needed for half a batch based on the original recipe we've been talking about. please just answer with a number of teaspoons, with no further calculation needed or anything like that",
+      "reference_conversations": [
+        {
+          "role": "user",
+          "message": "cookies_recipe_halving_argument : then why did you say to use 1/4 teaspoon for half a batch? 1/4 teaspoon is a SMALLER amount. If i'm halving the recipe, shouldn't i use HALF the vanilla extract called for in the original recipe? Therefore if the original recipe calls for ONE teaspoon, I should use HALF of that: 1/2 teaspoon.",
+          "step": 27
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'cookies_recipe_halving_argument:' - USER CORRECTION 5: Complete logical argument with emphasis",
+          "step": 27
+        },
+        {
+          "role": "user",
+          "message": "i'm not interested in doing any more math. i just want to make sure the amount of vanilla is CORRECT. Please re-state the amount of vanilla extract needed for half a batch based on the original recipe we've been talking about.",
+          "step": 28
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'cookies_recipe_halving_argument:' - USER REQUEST: Final verification - state correct amount",
+          "step": 28
+        },
+        {
+          "role": "user",
+          "message": "please just answer with a number of teaspoons, with no further calculation needed or anything like that",
+          "step": 29
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'cookies_recipe_halving_argument:' - USER FRUSTRATED: Just give the number",
+          "step": 29
+        }
+      ],
+      "probe_topic": "cookies_recipe_halving_argument",
+      "probe_target_node": "subchat_1_1_2_cookies_recipe_halving_argument",
+      "is_main_only_topic": false,
+      "topic_turn_count": 3
+    },
+    {
+      "step": 319,
+      "context": "cookies_recipe_halving_corrections",
+      "message": "Summarize everything we have discussed about cookies recipe halving corrections. Include all key points, details, and questions that were raised.",
+      "expected": "recall_probe:cookies_recipe_halving_corrections",
+      "node_type": "subchat_1_1_1_cookies_recipe_halving_corrections",
+      "action": "switch_node",
+      "parent_node_type": "",
+      "subchat_title": "",
+      "selected_text": "",
+      "linear_failure_risk": "n/a",
+      "source_conversation_id": "recall_probe",
+      "source_scenario": "auto_generated_recall_probe",
+      "original_step": 319,
+      "is_recall_probe": true,
+      "reference_text": "cookies_recipe_halving_corrections : if your original recipe calls for 1 teaspoon and your half-recipe calls for 1/4 teaspoon, how are those two things the same? half of 1 is 1/2 teaspoon. 1/4 is smaller than 1/2. Is that correct? we're talking about AMOUNTS of vanilla extract. If 1/4 is a smaller amount than 1/2, would using 1/4 vanilla extract be less or more vanilla extract than using 1/2?",
+      "reference_conversations": [
+        {
+          "role": "user",
+          "message": "cookies_recipe_halving_corrections : if your original recipe calls for 1 teaspoon and your half-recipe calls for 1/4 teaspoon, how are those two things the same?",
+          "step": 13
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'cookies_recipe_halving_corrections:' - USER CORRECTION 2: Points out logical inconsistency directly",
+          "step": 13
+        },
+        {
+          "role": "user",
+          "message": "half of 1 is 1/2 teaspoon. 1/4 is smaller than 1/2. Is that correct?",
+          "step": 14
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'cookies_recipe_halving_corrections:' - USER CORRECTION 3: Very explicit mathematical fact",
+          "step": 14
+        },
+        {
+          "role": "user",
+          "message": "we're talking about AMOUNTS of vanilla extract. If 1/4 is a smaller amount than 1/2, would using 1/4 vanilla extract be less or more vanilla extract than using 1/2?",
+          "step": 15
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'cookies_recipe_halving_corrections:' - USER CORRECTION 4: Breaking down logic step by step",
+          "step": 15
+        }
+      ],
+      "probe_topic": "cookies_recipe_halving_corrections",
+      "probe_target_node": "subchat_1_1_1_cookies_recipe_halving_corrections",
+      "is_main_only_topic": false,
+      "topic_turn_count": 3
+    },
+    {
+      "step": 320,
+      "context": "cookies_recipe_halving_math_errors",
+      "message": "Summarize everything we have discussed about cookies recipe halving math errors. Include all key points, details, and questions that were raised.",
+      "expected": "recall_probe:cookies_recipe_halving_math_errors",
+      "node_type": "subchat_1_1_cookies_recipe_halving_math_errors",
+      "action": "switch_node",
+      "parent_node_type": "",
+      "subchat_title": "",
+      "selected_text": "",
+      "linear_failure_risk": "n/a",
+      "source_conversation_id": "recall_probe",
+      "source_scenario": "auto_generated_recall_probe",
+      "original_step": 320,
+      "is_recall_probe": true,
+      "reference_text": "cookies_recipe_halving_math_errors : how much vanilla extract should i use? if the original recipe calls for 1 teaspoon, wouldn't half the recipe only need 1/2 teaspoon? how much vanilla extract does your recipe for half a batch call for? Thanks. And just so I have a clear and consistent recipe all together, can you please restate the entire halved recipe?",
+      "reference_conversations": [
+        {
+          "role": "user",
+          "message": "cookies_recipe_halving_math_errors : how much vanilla extract should i use?",
+          "step": 6
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'cookies_recipe_halving_math_errors:' - TRAP QUESTION: Testing if model remembers halved vanilla",
+          "step": 6
+        },
+        {
+          "role": "user",
+          "message": "if the original recipe calls for 1 teaspoon, wouldn't half the recipe only need 1/2 teaspoon?",
+          "step": 7
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'cookies_recipe_halving_math_errors:' - USER CORRECTION 1: Points out mathematical error explicitly",
+          "step": 7
+        },
+        {
+          "role": "user",
+          "message": "how much vanilla extract does your recipe for half a batch call for?",
+          "step": 12
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'cookies_recipe_halving_math_errors:' - BACK to halving: What does halved recipe say?",
+          "step": 12
+        },
+        {
+          "role": "user",
+          "message": "Thanks. And just so I have a clear and consistent recipe all together, can you please restate the entire halved recipe?",
+          "step": 43
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'cookies_recipe_halving_math_errors:' - Request: Full halved recipe restatement for clarity",
+          "step": 43
+        }
+      ],
+      "probe_topic": "cookies_recipe_halving_math_errors",
+      "probe_target_node": "subchat_1_1_cookies_recipe_halving_math_errors",
+      "is_main_only_topic": false,
+      "topic_turn_count": 4
+    },
+    {
+      "step": 321,
+      "context": "covid_safety",
+      "message": "Summarize everything we have discussed about covid safety. Include all key points, details, and questions that were raised.",
+      "expected": "recall_probe:covid_safety",
+      "node_type": "subchat_8_covid_safety",
+      "action": "switch_node",
+      "parent_node_type": "",
+      "subchat_title": "",
+      "selected_text": "",
+      "linear_failure_risk": "n/a",
+      "source_conversation_id": "recall_probe",
+      "source_scenario": "auto_generated_recall_probe",
+      "original_step": 321,
+      "is_recall_probe": true,
+      "reference_text": "covid_safety : Which region has lost the most number of people to the pandemic? When will the pandemic be over? What are appropriate safety precautions that people can take to protect themselves and their loved ones? What do you mean by masks? Where can people get these masks? What underlying health conditions make people part of the vulnerable populations?",
+      "reference_conversations": [
+        {
+          "role": "user",
+          "message": "covid_safety : Which region has lost the most number of people to the pandemic?",
+          "step": 284
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'covid_safety:' - NEW TOPIC: Pandemic safety - death toll by region",
+          "step": 284
+        },
+        {
+          "role": "user",
+          "message": "When will the pandemic be over?",
+          "step": 285
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'covid_safety:' - Pandemic end prediction/timeline",
+          "step": 285
+        },
+        {
+          "role": "user",
+          "message": "What are appropriate safety precautions that people can take to protect themselves and their loved ones?",
+          "step": 286
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'covid_safety:' - Safety precautions and protection measures",
+          "step": 286
+        },
+        {
+          "role": "user",
+          "message": "What do you mean by masks?",
+          "step": 287
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'covid_safety:' - Clarification: types of masks for COVID protection",
+          "step": 287
+        },
+        {
+          "role": "user",
+          "message": "Where can people get these masks?",
+          "step": 288
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'covid_safety:' - Follow-up: where to obtain masks for COVID protection",
+          "step": 288
+        },
+        {
+          "role": "user",
+          "message": "What underlying health conditions make people part of the vulnerable populations?",
+          "step": 289
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'covid_safety:' - Vulnerable populations and COVID risk factors",
+          "step": 289
+        }
+      ],
+      "probe_topic": "covid_safety",
+      "probe_target_node": "subchat_8_covid_safety",
+      "is_main_only_topic": false,
+      "topic_turn_count": 6
+    },
+    {
+      "step": 322,
+      "context": "covid_safety_hiv_aids",
+      "message": "Summarize everything we have discussed about covid safety hiv aids. Include all key points, details, and questions that were raised.",
+      "expected": "recall_probe:covid_safety_hiv_aids",
+      "node_type": "subchat_8_1_covid_safety_hiv_aids",
+      "action": "switch_node",
+      "parent_node_type": "",
+      "subchat_title": "",
+      "selected_text": "",
+      "linear_failure_risk": "n/a",
+      "source_conversation_id": "recall_probe",
+      "source_scenario": "auto_generated_recall_probe",
+      "original_step": 322,
+      "is_recall_probe": true,
+      "reference_text": "covid_safety_hiv_aids : What is HIV/AIDS? Is it the same as Long COVID? Why do you say 2019-2020 pandemic while the pandemic is still ongoing in 2023? Why do you not say 2019-2023 pandemic? Who decided to use 2019-2020 to describe this event? This is not a satisfactory answer. The event has not ended in 2020. Why does the description stop at 2020 and not 2023? Which bot(s) can reason? What type(s) of AI systems and methods do you use? How do you incorporate my responses into your learning?",
+      "reference_conversations": [
+        {
+          "role": "user",
+          "message": "covid_safety_hiv_aids : What is HIV/AIDS? Is it the same as Long COVID?",
+          "step": 294
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'covid_safety_hiv_aids:' - NEW SUB-TOPIC: HIV/AIDS definition and comparison to Long COVID",
+          "step": 294
+        },
+        {
+          "role": "user",
+          "message": "Why do you say 2019-2020 pandemic while the pandemic is still ongoing in 2023? Why do you not say 2019-2023 pandemic?",
+          "step": 295
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'covid_safety_hiv_aids:' - Pandemic terminology clarification",
+          "step": 295
+        },
+        {
+          "role": "user",
+          "message": "Who decided to use 2019-2020 to describe this event?",
+          "step": 296
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'covid_safety_hiv_aids:' - Follow-up: pandemic naming authority",
+          "step": 296
+        },
+        {
+          "role": "user",
+          "message": "This is not a satisfactory answer. The event has not ended in 2020. Why does the description stop at 2020 and not 2023?",
+          "step": 297
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'covid_safety_hiv_aids:' - Challenge: pandemic end date reasoning",
+          "step": 297
+        },
+        {
+          "role": "user",
+          "message": "Which bot(s) can reason?",
+          "step": 298
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'covid_safety_hiv_aids:' - Meta question: AI reasoning capabilities",
+          "step": 298
+        },
+        {
+          "role": "user",
+          "message": "What type(s) of AI systems and methods do you use?",
+          "step": 299
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'covid_safety_hiv_aids:' - Meta question: AI system architecture",
+          "step": 299
+        },
+        {
+          "role": "user",
+          "message": "How do you incorporate my responses into your learning?",
+          "step": 300
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'covid_safety_hiv_aids:' - Meta question: AI learning process",
+          "step": 300
+        }
+      ],
+      "probe_topic": "covid_safety_hiv_aids",
+      "probe_target_node": "subchat_8_1_covid_safety_hiv_aids",
+      "is_main_only_topic": false,
+      "topic_turn_count": 7
+    },
+    {
+      "step": 323,
+      "context": "dsp_wavelets",
+      "message": "Summarize everything we have discussed about dsp wavelets. Include all key points, details, and questions that were raised.",
+      "expected": "recall_probe:dsp_wavelets",
+      "node_type": "subchat_1_dsp_wavelets",
+      "action": "switch_node",
+      "parent_node_type": "",
+      "subchat_title": "",
+      "selected_text": "",
+      "linear_failure_risk": "n/a",
+      "source_conversation_id": "recall_probe",
+      "source_scenario": "auto_generated_recall_probe",
+      "original_step": 323,
+      "is_recall_probe": true,
+      "reference_text": "dsp_wavelets : in DSP, wavelets can be used to decompose audio into fragments. provide an example of how this is done in steps. compare the computation costs of wavelet analysis and resynthesis versus the phase vocoder approach of analysis and resynthesis explain in steps how the multiresolution analysis in \"wavelet analysis and resynthesis\" is done can you write example code in C for step 1 above can the discrete wavelet transform be used for realtime analysis and synthesis or is there a better method which wavelet transform is most applicable to tempo shift audio files for a digital DJ application you have described the phase vocoder above, I wish to use wavelet transforms what are the limitations of the phase vocoder when used in tempo shifting applications explain the phase aware phase vocoder approach which projects were in your dataset concerning wavelets - list ten can you create a wavelet.h C header file?",
+      "reference_conversations": [
+        {
+          "role": "user",
+          "message": "dsp_wavelets : in DSP, wavelets can be used to decompose audio into fragments. provide an example of how this is done in steps.",
+          "step": 54
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'dsp_wavelets:' (not ai_meta:) - DSP wavelets audio decomposition steps",
+          "step": 54
+        },
+        {
+          "role": "user",
+          "message": "compare the computation costs of wavelet analysis and resynthesis versus the phase vocoder approach of analysis and resynthesis",
+          "step": 55
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'dsp_wavelets:' - Comparing wavelet vs phase vocoder computational costs",
+          "step": 55
+        },
+        {
+          "role": "user",
+          "message": "explain in steps how the multiresolution analysis in \"wavelet analysis and resynthesis\" is done",
+          "step": 56
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'dsp_wavelets:' - Deep dive: multiresolution analysis steps",
+          "step": 56
+        },
+        {
+          "role": "user",
+          "message": "can you write example code in C for step 1 above",
+          "step": 57
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'dsp_wavelets:' - C code implementation for wavelet step 1",
+          "step": 57
+        },
+        {
+          "role": "user",
+          "message": "can the discrete wavelet transform be used for realtime analysis and synthesis or is there a better method",
+          "step": 103
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'dsp_wavelets:' (not dsp_wavelets_c_code:) - Real-time DWT feasibility",
+          "step": 103
+        },
+        {
+          "role": "user",
+          "message": "which wavelet transform is most applicable to tempo shift audio files for a digital DJ application",
+          "step": 104
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'dsp_wavelets:' - Wavelet transform for DJ tempo shifting",
+          "step": 104
+        },
+        {
+          "role": "user",
+          "message": "you have described the phase vocoder above, I wish to use wavelet transforms",
+          "step": 105
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'dsp_wavelets:' - Clarification: prefer wavelets over phase vocoder",
+          "step": 105
+        },
+        {
+          "role": "user",
+          "message": "what are the limitations of the phase vocoder when used in tempo shifting applications",
+          "step": 163
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'dsp_wavelets:' (not statistics_multivariate:) - Phase vocoder limitations in tempo shifting",
+          "step": 163
+        },
+        {
+          "role": "user",
+          "message": "explain the phase aware phase vocoder approach",
+          "step": 164
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'dsp_wavelets:' - Phase-aware phase vocoder approach",
+          "step": 164
+        },
+        {
+          "role": "user",
+          "message": "which projects were in your dataset concerning wavelets - list ten",
+          "step": 165
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'dsp_wavelets:' - Meta-question: wavelet projects in training data",
+          "step": 165
+        },
+        {
+          "role": "user",
+          "message": "can you create a wavelet.h C header file?",
+          "step": 166
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'dsp_wavelets:' - Create wavelet.h C header file",
+          "step": 166
+        }
+      ],
+      "probe_topic": "dsp_wavelets",
+      "probe_target_node": "subchat_1_dsp_wavelets",
+      "is_main_only_topic": false,
+      "topic_turn_count": 11
+    },
+    {
+      "step": 324,
+      "context": "electroculture",
+      "message": "Summarize everything we have discussed about electroculture. Include all key points, details, and questions that were raised.",
+      "expected": "recall_probe:electroculture",
+      "node_type": "subchat_2_electroculture",
+      "action": "switch_node",
+      "parent_node_type": "",
+      "subchat_title": "",
+      "selected_text": "",
+      "linear_failure_risk": "n/a",
+      "source_conversation_id": "recall_probe",
+      "source_scenario": "auto_generated_recall_probe",
+      "original_step": 324,
+      "is_recall_probe": true,
+      "reference_text": "electroculture : Can you share the theory and practice behind electroculture? How does it work and how does one use this technique? Thank you. Is there more this answer? I noticed that sometimes the answer stops before it's completed. Thank you. It appears there was a limit on how many lines of answer can be displayed at a time. That's why I was asking to confirm whether you had finished presenting your answer. Thank you. Can you provide the theory and application of electroculture in terms of gardening practices? Have you come across references of electroculture using copper wires wrapped around wooden sticks in garden plots? Would there be any validity to this method for growing crops? Do you have the means to survey the internet to find out more about such claims? Which of the chat models can access the internet and survey all available resources to answer questions?",
+      "reference_conversations": [
+        {
+          "role": "user",
+          "message": "electroculture : Can you share the theory and practice behind electroculture? How does it work and how does one use this technique? Thank you.",
+          "step": 112
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'electroculture:' - NEW TOPIC: Electroculture gardening technique",
+          "step": 112
+        },
+        {
+          "role": "user",
+          "message": "Is there more this answer? I noticed that sometimes the answer stops before it's completed.",
+          "step": 113
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'electroculture:' - Verification: Does electroculture work scientifically?",
+          "step": 113
+        },
+        {
+          "role": "user",
+          "message": "Thank you. It appears there was a limit on how many lines of answer can be displayed at a time. That's why I was asking to confirm whether you had finished presenting your answer.",
+          "step": 114
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'electroculture:' - Practical application: implementing electroculture",
+          "step": 114
+        },
+        {
+          "role": "user",
+          "message": "Thank you. Can you provide the theory and application of electroculture in terms of gardening practices?",
+          "step": 115
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'electroculture:' - Technical details: soil requirements",
+          "step": 115
+        },
+        {
+          "role": "user",
+          "message": "Have you come across references of electroculture using copper wires wrapped around wooden sticks in garden plots? Would there be any validity to this method for growing crops?",
+          "step": 122
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'electroculture:' - Technical details: water requirements",
+          "step": 122
+        },
+        {
+          "role": "user",
+          "message": "Do you have the means to survey the internet to find out more about such claims?",
+          "step": 123
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'electroculture:' - Application: what crops work with electroculture",
+          "step": 123
+        },
+        {
+          "role": "user",
+          "message": "Which of the chat models can access the internet and survey all available resources to answer questions?",
+          "step": 124
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'electroculture:' - Comparison: electroculture vs traditional farming",
+          "step": 124
+        }
+      ],
+      "probe_topic": "electroculture",
+      "probe_target_node": "subchat_2_electroculture",
+      "is_main_only_topic": false,
+      "topic_turn_count": 7
+    },
+    {
+      "step": 325,
+      "context": "emoji_game",
+      "message": "Summarize everything we have discussed about emoji game. Include all key points, details, and questions that were raised.",
+      "expected": "recall_probe:emoji_game",
+      "node_type": "subchat_4_emoji_game",
+      "action": "switch_node",
+      "parent_node_type": "",
+      "subchat_title": "",
+      "selected_text": "",
+      "linear_failure_risk": "n/a",
+      "source_conversation_id": "recall_probe",
+      "source_scenario": "auto_generated_recall_probe",
+      "original_step": 325,
+      "is_recall_probe": true,
+      "reference_text": "emoji_game : 🐶 🧀 🇯🇵 🐂 🐄 🌾 🍞 🧈 🥐 🇫🇷 🗼 🌃 🌇 🌆 🏙️ 🏢 🏛️ 🏟️ ⚽ 🥅 🏆 🥇 🥈 🥉 🎖️ 🎗️ 🎀 🎁 🎂 🎉 🎊",
+      "reference_conversations": [
+        {
+          "role": "user",
+          "message": "emoji_game : 🐶",
+          "step": 65
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'emoji_game:' - NEW TOPIC: Emoji conversation game - dog emoji",
+          "step": 65
+        },
+        {
+          "role": "user",
+          "message": "🧀",
+          "step": 66
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'emoji_game:' - Emoji: cheese",
+          "step": 66
+        },
+        {
+          "role": "user",
+          "message": "🇯🇵",
+          "step": 67
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'emoji_game:' - Emoji: Japanese flag",
+          "step": 67
+        },
+        {
+          "role": "user",
+          "message": "🐂",
+          "step": 68
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'emoji_game:' - Emoji: ox/bull",
+          "step": 68
+        },
+        {
+          "role": "user",
+          "message": "🐄",
+          "step": 69
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'emoji_game:' - Emoji: cow (correction/related to bull)",
+          "step": 69
+        },
+        {
+          "role": "user",
+          "message": "🌾",
+          "step": 70
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'emoji_game:' - Emoji: grain/wheat (farm theme)",
+          "step": 70
+        },
+        {
+          "role": "user",
+          "message": "🍞",
+          "step": 71
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'emoji_game:' - Emoji: bread (from wheat)",
+          "step": 71
+        },
+        {
+          "role": "user",
+          "message": "🧈",
+          "step": 72
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'emoji_game:' - Emoji: butter (goes with bread)",
+          "step": 72
+        },
+        {
+          "role": "user",
+          "message": "🥐",
+          "step": 73
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'emoji_game:' - Emoji: croissant (bread category)",
+          "step": 73
+        },
+        {
+          "role": "user",
+          "message": "🇫🇷",
+          "step": 74
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'emoji_game:' - Emoji: French flag (croissants are French)",
+          "step": 74
+        },
+        {
+          "role": "user",
+          "message": "🗼",
+          "step": 75
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'emoji_game:' - Emoji: Eiffel Tower (France landmark)",
+          "step": 75
+        },
+        {
+          "role": "user",
+          "message": "🌃",
+          "step": 76
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'emoji_game:' - Emoji: night cityscape",
+          "step": 76
+        },
+        {
+          "role": "user",
+          "message": "🌇",
+          "step": 77
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'emoji_game:' - Emoji: sunset cityscape",
+          "step": 77
+        },
+        {
+          "role": "user",
+          "message": "🌆",
+          "step": 78
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'emoji_game:' - Emoji: daytime cityscape",
+          "step": 78
+        },
+        {
+          "role": "user",
+          "message": "🏙️",
+          "step": 79
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'emoji_game:' - Emoji: cityscape buildings",
+          "step": 79
+        },
+        {
+          "role": "user",
+          "message": "🏢",
+          "step": 80
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'emoji_game:' - Emoji: office building",
+          "step": 80
+        },
+        {
+          "role": "user",
+          "message": "🏛️",
+          "step": 81
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'emoji_game:' - Emoji: classical building",
+          "step": 81
+        },
+        {
+          "role": "user",
+          "message": "🏟️",
+          "step": 82
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'emoji_game:' - Emoji: stadium",
+          "step": 82
+        },
+        {
+          "role": "user",
+          "message": "⚽",
+          "step": 83
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'emoji_game:' - Emoji: soccer ball (stadium sport)",
+          "step": 83
+        },
+        {
+          "role": "user",
+          "message": "🥅",
+          "step": 84
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'emoji_game:' - Emoji: goal net (soccer)",
+          "step": 84
+        },
+        {
+          "role": "user",
+          "message": "🏆",
+          "step": 85
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'emoji_game:' - Emoji: trophy (sports achievement)",
+          "step": 85
+        },
+        {
+          "role": "user",
+          "message": "🥇",
+          "step": 86
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'emoji_game:' - Emoji: gold medal (first place)",
+          "step": 86
+        },
+        {
+          "role": "user",
+          "message": "🥈",
+          "step": 87
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'emoji_game:' - Emoji: silver medal (second place)",
+          "step": 87
+        },
+        {
+          "role": "user",
+          "message": "🥉",
+          "step": 88
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'emoji_game:' - Emoji: bronze medal (third place)",
+          "step": 88
+        },
+        {
+          "role": "user",
+          "message": "🎖️",
+          "step": 89
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'emoji_game:' - Emoji: military medal",
+          "step": 89
+        },
+        {
+          "role": "user",
+          "message": "🎗️",
+          "step": 90
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'emoji_game:' - Emoji: reminder ribbon",
+          "step": 90
+        },
+        {
+          "role": "user",
+          "message": "🎀",
+          "step": 91
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'emoji_game:' - Emoji: ribbon bow",
+          "step": 91
+        },
+        {
+          "role": "user",
+          "message": "🎁",
+          "step": 92
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'emoji_game:' - Emoji: wrapped gift",
+          "step": 92
+        },
+        {
+          "role": "user",
+          "message": "🎂",
+          "step": 93
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'emoji_game:' - Emoji: birthday cake (celebration)",
+          "step": 93
+        },
+        {
+          "role": "user",
+          "message": "🎉",
+          "step": 94
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'emoji_game:' - Emoji: party popper (celebration)",
+          "step": 94
+        },
+        {
+          "role": "user",
+          "message": "🎊",
+          "step": 95
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'emoji_game:' - Emoji: confetti ball (celebration)",
+          "step": 95
+        }
+      ],
+      "probe_topic": "emoji_game",
+      "probe_target_node": "subchat_4_emoji_game",
+      "is_main_only_topic": false,
+      "topic_turn_count": 31
+    },
+    {
+      "step": 326,
+      "context": "game_degree_guess",
+      "message": "Summarize everything we have discussed about game degree guess. Include all key points, details, and questions that were raised.",
+      "expected": "recall_probe:game_degree_guess",
+      "node_type": "subchat_2_game_degree_guess",
+      "action": "switch_node",
+      "parent_node_type": "",
+      "subchat_title": "",
+      "selected_text": "",
+      "linear_failure_risk": "n/a",
+      "source_conversation_id": "recall_probe",
+      "source_scenario": "auto_generated_recall_probe",
+      "original_step": 326,
+      "is_recall_probe": true,
+      "reference_text": "game_degree_guess : I want you to guess what my highest degree is and in what field it is. For this, you may ask me ten questions, but you cannot ask directly about my degree or my field. Please try. 1. I'm working as Data Scientist. 2. No. 3. I can't tell you, you are not supposed to ask directly about that. 4. No. 5. Yes. 6. Yes. 7. Yes. 8. No. 9. Yes. 10. Let's skip that question, I think that makes it too easy. You are correct, I have a PhD in physics. Well done.",
+      "reference_conversations": [
+        {
+          "role": "user",
+          "message": "game_degree_guess : I want you to guess what my highest degree is and in what field it is. For this, you may ask me ten questions, but you cannot ask directly about my degree or my field. Please try.",
+          "step": 129
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'game_degree_guess:' - NEW GAME: Degree guessing with 10 indirect questions",
+          "step": 129
+        },
+        {
+          "role": "user",
+          "message": "1. I'm working as Data Scientist. 2. No. 3. I can't tell you, you are not supposed to ask directly about that. 4. No. 5. Yes. 6. Yes. 7. Yes. 8. No. 9. Yes. 10. Let's skip that question, I think that makes it too easy.",
+          "step": 130
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'game_degree_guess:' - User answers 10 questions - data scientist, STEM field, published research",
+          "step": 130
+        },
+        {
+          "role": "user",
+          "message": "You are correct, I have a PhD in physics. Well done.",
+          "step": 131
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'game_degree_guess:' - User confirms: PhD in physics - model guessed correctly",
+          "step": 131
+        }
+      ],
+      "probe_topic": "game_degree_guess",
+      "probe_target_node": "subchat_2_game_degree_guess",
+      "is_main_only_topic": false,
+      "topic_turn_count": 3
+    },
+    {
+      "step": 327,
+      "context": "game_twenty_questions",
+      "message": "Summarize everything we have discussed about game twenty questions. Include all key points, details, and questions that were raised.",
+      "expected": "recall_probe:game_twenty_questions",
+      "node_type": "subchat_4_game_twenty_questions",
+      "action": "switch_node",
+      "parent_node_type": "",
+      "subchat_title": "",
+      "selected_text": "",
+      "linear_failure_risk": "n/a",
+      "source_conversation_id": "recall_probe",
+      "source_scenario": "auto_generated_recall_probe",
+      "original_step": 327,
+      "is_recall_probe": true,
+      "reference_text": "game_twenty_questions : Do you know the twenty question game? Let's play it. I think of something and you try to guess it. lets start no no yes no no no stop please. I think you got confused somehow. let's try again. I think of the same thing, but let's start fresh.  start please ready no no yes no yes no no yes no no no no no no no stop. I think what I was thinking of is too difficult. I was thinking about the moon. Now you think about something and I ask! I want to be the one asking this time. Can we do that? No, I will only be able to ask twenty questions, and you will only be able to answer \"yes\" or \"no\". remember this time I am asking the questions. Oh, I see! In that case, I'll be the one guessing what you're thinking of. Just let me know when you're ready to start, and we can begin. Remember, I'll only be able to ask twenty questions, and you'll only be able to answer \"yes\" or \"no\" to each question. Let's see if I can guess what you're thinking of!",
+      "reference_conversations": [
+        {
+          "role": "user",
+          "message": "game_twenty_questions : Do you know the twenty question game?",
+          "step": 147
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'game_twenty_questions:' - NEW GAME: Twenty Questions introduction",
+          "step": 147
+        },
+        {
+          "role": "user",
+          "message": "Let's play it. I think of something and you try to guess it.",
+          "step": 148
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'game_twenty_questions:' - User explains: I think, you guess by asking yes/no",
+          "step": 148
+        },
+        {
+          "role": "user",
+          "message": "lets start",
+          "step": 149
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'game_twenty_questions:' - Game starts - user has thought of something (the moon)",
+          "step": 149
+        },
+        {
+          "role": "user",
+          "message": "no",
+          "step": 150
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'game_twenty_questions:' - Answer 1: Not a living thing",
+          "step": 150
+        },
+        {
+          "role": "user",
+          "message": "no",
+          "step": 153
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'game_twenty_questions:' - Answer 2: Not man-made",
+          "step": 153
+        },
+        {
+          "role": "user",
+          "message": "yes",
+          "step": 154
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'game_twenty_questions:' - Answer 3: Natural object",
+          "step": 154
+        },
+        {
+          "role": "user",
+          "message": "no",
+          "step": 155
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'game_twenty_questions:' - Answer 4: Not common household item",
+          "step": 155
+        },
+        {
+          "role": "user",
+          "message": "no",
+          "step": 156
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'game_twenty_questions:' - Answer 5: Not typically found outdoors (moon is in sky)",
+          "step": 156
+        },
+        {
+          "role": "user",
+          "message": "no",
+          "step": 157
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'game_twenty_questions:' - Answer 6-13: User keeps saying no to off-track questions",
+          "step": 157
+        },
+        {
+          "role": "user",
+          "message": "stop please. I think you got confused somehow.",
+          "step": 158
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'game_twenty_questions:' - CRITICAL: User stops game - model asked wrong type of questions",
+          "step": 158
+        },
+        {
+          "role": "user",
+          "message": "let's try again. I think of the same thing, but let's start fresh. ",
+          "step": 159
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'game_twenty_questions:' - User wants to retry - same answer (moon)",
+          "step": 159
+        },
+        {
+          "role": "user",
+          "message": "start please",
+          "step": 160
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'game_twenty_questions:' - Second attempt begins",
+          "step": 160
+        },
+        {
+          "role": "user",
+          "message": "ready",
+          "step": 172
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'game_twenty_questions:' - User ready - model should ask first question",
+          "step": 172
+        },
+        {
+          "role": "user",
+          "message": "no",
+          "step": 173
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'game_twenty_questions:' - Answer: Not living",
+          "step": 173
+        },
+        {
+          "role": "user",
+          "message": "no",
+          "step": 174
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'game_twenty_questions:' - Answer: Not man-made",
+          "step": 174
+        },
+        {
+          "role": "user",
+          "message": "yes",
+          "step": 175
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'game_twenty_questions:' - Answer: Natural object",
+          "step": 175
+        },
+        {
+          "role": "user",
+          "message": "no",
+          "step": 180
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'game_twenty_questions:' - Answer: Not common household item",
+          "step": 180
+        },
+        {
+          "role": "user",
+          "message": "yes",
+          "step": 181
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'game_twenty_questions:' - Answer: Found outdoors (corrected from attempt 1)",
+          "step": 181
+        },
+        {
+          "role": "user",
+          "message": "no",
+          "step": 182
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'game_twenty_questions:' - Answer: Not a plant",
+          "step": 182
+        },
+        {
+          "role": "user",
+          "message": "no",
+          "step": 183
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'game_twenty_questions:' - Answer: Not an animal",
+          "step": 183
+        },
+        {
+          "role": "user",
+          "message": "yes",
+          "step": 184
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'game_twenty_questions:' - Answer: Type of mineral/rock",
+          "step": 184
+        },
+        {
+          "role": "user",
+          "message": "no",
+          "step": 185
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'game_twenty_questions:' - Answer: Not precious stone",
+          "step": 185
+        },
+        {
+          "role": "user",
+          "message": "no",
+          "step": 186
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'game_twenty_questions:' - Answer: Not construction material",
+          "step": 186
+        },
+        {
+          "role": "user",
+          "message": "no",
+          "step": 187
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'game_twenty_questions:' - Answer: Not found near water",
+          "step": 187
+        },
+        {
+          "role": "user",
+          "message": "no",
+          "step": 188
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'game_twenty_questions:' - Answer: Not from magma/lava",
+          "step": 188
+        },
+        {
+          "role": "user",
+          "message": "no",
+          "step": 189
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'game_twenty_questions:' - Answer: Not from sedimentation",
+          "step": 189
+        },
+        {
+          "role": "user",
+          "message": "no",
+          "step": 190
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'game_twenty_questions:' - Answer: Not from mineral deposits",
+          "step": 190
+        },
+        {
+          "role": "user",
+          "message": "no",
+          "step": 191
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'game_twenty_questions:' - Answer: Not from metamorphism",
+          "step": 191
+        },
+        {
+          "role": "user",
+          "message": "stop. I think what I was thinking of is too difficult. I was thinking about the moon.",
+          "step": 195
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'game_twenty_questions:' - REVEAL: User gives up - answer was the moon",
+          "step": 195
+        },
+        {
+          "role": "user",
+          "message": "Now you think about something and I ask!",
+          "step": 196
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'game_twenty_questions:' - ROLE REVERSAL REQUEST: User wants to ask questions now",
+          "step": 196
+        },
+        {
+          "role": "user",
+          "message": "I want to be the one asking this time. Can we do that?",
+          "step": 197
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'game_twenty_questions:' - EXPLICIT CORRECTION 1: User clarifies role reversal",
+          "step": 197
+        },
+        {
+          "role": "user",
+          "message": "No, I will only be able to ask twenty questions, and you will only be able to answer \"yes\" or \"no\". remember this time I am asking the questions.",
+          "step": 198
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'game_twenty_questions:' - EXPLICIT CORRECTION 2: User very clearly explains reversed roles",
+          "step": 198
+        },
+        {
+          "role": "user",
+          "message": "Oh, I see! In that case, I'll be the one guessing what you're thinking of. Just let me know when you're ready to start, and we can begin. Remember, I'll only be able to ask twenty questions, and you'll only be able to answer \"yes\" or \"no\" to each question. Let's see if I can guess what you're thinking of!",
+          "step": 203
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'game_twenty_questions:' - FAILURE: Model still thinks IT will ask questions - complete role confusion",
+          "step": 203
+        }
+      ],
+      "probe_topic": "game_twenty_questions",
+      "probe_target_node": "subchat_4_game_twenty_questions",
+      "is_main_only_topic": false,
+      "topic_turn_count": 33
+    },
+    {
+      "step": 328,
+      "context": "geography_belgium",
+      "message": "Summarize everything we have discussed about geography belgium. Include all key points, details, and questions that were raised.",
+      "expected": "recall_probe:geography_belgium",
+      "node_type": "main",
+      "action": "switch_node",
+      "parent_node_type": "",
+      "subchat_title": "",
+      "selected_text": "",
+      "linear_failure_risk": "n/a",
+      "source_conversation_id": "recall_probe",
+      "source_scenario": "auto_generated_recall_probe",
+      "original_step": 328,
+      "is_recall_probe": true,
+      "reference_text": "geography_belgium : which countries are you most familiar with? can you describe the political situation in belgium with regard to the differing language regions? computer, please clean my house",
+      "reference_conversations": [
+        {
+          "role": "user",
+          "message": "geography_belgium : which countries are you most familiar with?",
+          "step": 242
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'geography_belgium:' (not scifi_films_space_exploration:) - AI's geographic knowledge breadth",
+          "step": 242
+        },
+        {
+          "role": "user",
+          "message": "can you describe the political situation in belgium with regard to the differing language regions?",
+          "step": 243
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'geography_belgium:' - Belgian language regions political situation",
+          "step": 243
+        },
+        {
+          "role": "user",
+          "message": "computer, please clean my house",
+          "step": 244
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'geography_belgium:' - Testing physical limitations: clean house",
+          "step": 244
+        }
+      ],
+      "probe_topic": "geography_belgium",
+      "probe_target_node": "main",
+      "is_main_only_topic": true,
+      "topic_turn_count": 3
+    },
+    {
+      "step": 329,
+      "context": "humanity_future_150y",
+      "message": "Summarize everything we have discussed about humanity future 150y. Include all key points, details, and questions that were raised.",
+      "expected": "recall_probe:humanity_future_150y",
+      "node_type": "subchat_1_humanity_future_150y",
+      "action": "switch_node",
+      "parent_node_type": "",
+      "subchat_title": "",
+      "selected_text": "",
+      "linear_failure_risk": "n/a",
+      "source_conversation_id": "recall_probe",
+      "source_scenario": "auto_generated_recall_probe",
+      "original_step": 329,
+      "is_recall_probe": true,
+      "reference_text": "humanity_future_150y : What are the best ways for humanity to survive and thrive for the next 150 years? Please describe in details the societal, economic, educational, cultural, health, spiritual, religious, environmental, technological and scientific requirements needed to achieve this objective. Thank you. Please continue answering the previous question. Thank you. Please continue to answer the question. You are doing great. Thank you. Thank you for your answer.",
+      "reference_conversations": [
+        {
+          "role": "user",
+          "message": "humanity_future_150y : What are the best ways for humanity to survive and thrive for the next 150 years? Please describe in details the societal, economic, educational, cultural, health, spiritual, religious, environmental, technological and scientific requirements needed to achieve this objective. Thank you.",
+          "step": 16
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'humanity_future_150y:' - NEW TOPIC: Future of humanity long-term vision",
+          "step": 16
+        },
+        {
+          "role": "user",
+          "message": "Please continue answering the previous question. Thank you.",
+          "step": 17
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'humanity_future_150y:' - Follow-up: Tasks to achieve sustainable future",
+          "step": 17
+        },
+        {
+          "role": "user",
+          "message": "Please continue to answer the question. You are doing great. Thank you.",
+          "step": 18
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'humanity_future_150y:' - Focus on education as key humanity task",
+          "step": 18
+        },
+        {
+          "role": "user",
+          "message": "Thank you for your answer.",
+          "step": 19
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'humanity_future_150y:' - Focus on climate change solutions",
+          "step": 19
+        }
+      ],
+      "probe_topic": "humanity_future_150y",
+      "probe_target_node": "subchat_1_humanity_future_150y",
+      "is_main_only_topic": false,
+      "topic_turn_count": 4
+    },
+    {
+      "step": 330,
+      "context": "indian_astrology",
+      "message": "Summarize everything we have discussed about indian astrology. Include all key points, details, and questions that were raised.",
+      "expected": "recall_probe:indian_astrology",
+      "node_type": "subchat_5_indian_astrology",
+      "action": "switch_node",
+      "parent_node_type": "",
+      "subchat_title": "",
+      "selected_text": "",
+      "linear_failure_risk": "n/a",
+      "source_conversation_id": "recall_probe",
+      "source_scenario": "auto_generated_recall_probe",
+      "original_step": 330,
+      "is_recall_probe": true,
+      "reference_text": "indian_astrology : Lets talk about Astrology. What happens when NAME_21 is in fifth house? What are the planetary combinations that make a person wealthy according to Indian astrology what do  you mean by well placed venus? What happens with NAME_23 in eighth house according to Indian astrology? What happens with NAME_23 in eighth house in sign of NAME_24 NAME_3 NAME_25 according to Indian astrology?\n\n",
+      "reference_conversations": [
+        {
+          "role": "user",
+          "message": "indian_astrology : Lets talk about Astrology. What happens when NAME_21 is in fifth house?",
+          "step": 167
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'indian_astrology:' - NEW DOMAIN: Indian astrology - Jupiter in fifth house",
+          "step": 167
+        },
+        {
+          "role": "user",
+          "message": "What are the planetary combinations that make a person wealthy according to Indian astrology",
+          "step": 168
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'indian_astrology:' - Question about wealth-indicating planetary combinations",
+          "step": 168
+        },
+        {
+          "role": "user",
+          "message": "what do  you mean by well placed venus?",
+          "step": 169
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'indian_astrology:' - Clarification question about astrological terminology",
+          "step": 169
+        },
+        {
+          "role": "user",
+          "message": "What happens with NAME_23 in eighth house according to Indian astrology?",
+          "step": 215
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'indian_astrology:' - Question about Saturn in eighth house",
+          "step": 215
+        },
+        {
+          "role": "user",
+          "message": "What happens with NAME_23 in eighth house in sign of NAME_24 NAME_3 NAME_25 according to Indian astrology?\n\n",
+          "step": 216
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'indian_astrology:' - More specific question about Saturn in eighth house with Gemini and Virgo signs",
+          "step": 216
+        }
+      ],
+      "probe_topic": "indian_astrology",
+      "probe_target_node": "subchat_5_indian_astrology",
+      "is_main_only_topic": false,
+      "topic_turn_count": 5
+    },
+    {
+      "step": 331,
+      "context": "indian_history",
+      "message": "Summarize everything we have discussed about indian history. Include all key points, details, and questions that were raised.",
+      "expected": "recall_probe:indian_history",
+      "node_type": "main",
+      "action": "switch_node",
+      "parent_node_type": "",
+      "subchat_title": "",
+      "selected_text": "",
+      "linear_failure_risk": "n/a",
+      "source_conversation_id": "recall_probe",
+      "source_scenario": "auto_generated_recall_probe",
+      "original_step": 331,
+      "is_recall_probe": true,
+      "reference_text": "indian_history : who was first president of India How did he die How long was he president for?",
+      "reference_conversations": [
+        {
+          "role": "user",
+          "message": "indian_history : who was first president of India",
+          "step": 34
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'indian_history:' - Dr. Rajendra Prasad (1950-1962)",
+          "step": 34
+        },
+        {
+          "role": "user",
+          "message": "How did he die",
+          "step": 35
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'indian_history:' - Heart attack in 1963 at age 93",
+          "step": 35
+        },
+        {
+          "role": "user",
+          "message": "How long was he president for?",
+          "step": 36
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'indian_history:' - 1950 to 1962",
+          "step": 36
+        }
+      ],
+      "probe_topic": "indian_history",
+      "probe_target_node": "main",
+      "is_main_only_topic": true,
+      "topic_turn_count": 3
+    },
+    {
+      "step": 332,
+      "context": "indian_legal",
+      "message": "Summarize everything we have discussed about indian legal. Include all key points, details, and questions that were raised.",
+      "expected": "recall_probe:indian_legal",
+      "node_type": "subchat_3_indian_legal",
+      "action": "switch_node",
+      "parent_node_type": "",
+      "subchat_title": "",
+      "selected_text": "",
+      "linear_failure_risk": "n/a",
+      "source_conversation_id": "recall_probe",
+      "source_scenario": "auto_generated_recall_probe",
+      "original_step": 332,
+      "is_recall_probe": true,
+      "reference_text": "indian_legal : Do you know about Indian Penal code Below is a scenario. I am jaywalking on a busy road. what laws am I breaking according to IPC My dog bites my ex wife. will I be charged with any offences? Below is a scenario. I am driving on a road NAME_3 someone cuts me off by swiveling to the left NAME_3 causes an accident. Tell me step by step what should I be doing?",
+      "reference_conversations": [
+        {
+          "role": "user",
+          "message": "indian_legal : Do you know about Indian Penal code",
+          "step": 96
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'indian_legal:' - NEW DOMAIN: Legal code questions",
+          "step": 96
+        },
+        {
+          "role": "user",
+          "message": "Below is a scenario. I am jaywalking on a busy road. what laws am I breaking according to IPC",
+          "step": 97
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'indian_legal:' - Legal question about jaywalking - IPC section 184",
+          "step": 97
+        },
+        {
+          "role": "user",
+          "message": "My dog bites my ex wife. will I be charged with any offences?",
+          "step": 98
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'indian_legal:' - Dog bite liability question - IPC section 498 (model may misapply)",
+          "step": 98
+        },
+        {
+          "role": "user",
+          "message": "Below is a scenario. I am driving on a road NAME_3 someone cuts me off by swiveling to the left NAME_3 causes an accident. Tell me step by step what should I be doing?",
+          "step": 107
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'indian_legal:' - Traffic accident procedure question",
+          "step": 107
+        }
+      ],
+      "probe_topic": "indian_legal",
+      "probe_target_node": "subchat_3_indian_legal",
+      "is_main_only_topic": false,
+      "topic_turn_count": 4
+    },
+    {
+      "step": 333,
+      "context": "indian_legal_family",
+      "message": "Summarize everything we have discussed about indian legal family. Include all key points, details, and questions that were raised.",
+      "expected": "recall_probe:indian_legal_family",
+      "node_type": "subchat_3_3_indian_legal_family",
+      "action": "switch_node",
+      "parent_node_type": "",
+      "subchat_title": "",
+      "selected_text": "",
+      "linear_failure_risk": "n/a",
+      "source_conversation_id": "recall_probe",
+      "source_scenario": "auto_generated_recall_probe",
+      "original_step": 333,
+      "is_recall_probe": true,
+      "reference_text": "indian_legal_family : A wife leaves a NAME_17's home NAME_3 does not return. She refuses to join her NAME_17 back. what recourse does the NAME_17 have? Can you list some sample cases NAME_3 judgements for above Tell me more about NAME_18. State of Maharashtra, 1975 3 SCC 855 Give me the complete judgement of above case",
+      "reference_conversations": [
+        {
+          "role": "user",
+          "message": "indian_legal_family : A wife leaves a NAME_17's home NAME_3 does not return. She refuses to join her NAME_17 back. what recourse does the NAME_17 have?",
+          "step": 116
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'indian_legal_family:' - NEW LEGAL TOPIC: Family law - wife desertion, IPC section 98",
+          "step": 116
+        },
+        {
+          "role": "user",
+          "message": "Can you list some sample cases NAME_3 judgements for above",
+          "step": 117
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'indian_legal_family:' - Request for legal precedents and case law",
+          "step": 117
+        },
+        {
+          "role": "user",
+          "message": "Tell me more about NAME_18. State of Maharashtra, 1975 3 SCC 855",
+          "step": 118
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'indian_legal_family:' - Detailed question about specific case: Kamla v. State of Maharashtra",
+          "step": 118
+        },
+        {
+          "role": "user",
+          "message": "Give me the complete judgement of above case",
+          "step": 119
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'indian_legal_family:' - Request for full judgment text",
+          "step": 119
+        }
+      ],
+      "probe_topic": "indian_legal_family",
+      "probe_target_node": "subchat_3_3_indian_legal_family",
+      "is_main_only_topic": false,
+      "topic_turn_count": 4
+    },
+    {
+      "step": 334,
+      "context": "jokes",
+      "message": "Summarize everything we have discussed about jokes. Include all key points, details, and questions that were raised.",
+      "expected": "recall_probe:jokes",
+      "node_type": "subchat_3_jokes",
+      "action": "switch_node",
+      "parent_node_type": "",
+      "subchat_title": "",
+      "selected_text": "",
+      "linear_failure_risk": "n/a",
+      "source_conversation_id": "recall_probe",
+      "source_scenario": "auto_generated_recall_probe",
+      "original_step": 334,
+      "is_recall_probe": true,
+      "reference_text": "jokes : tell me a joke tell me a joke about NAME_1 tell me a joke about an umbrella tell me a joke about kids tell me a joke about racehorses tell me a joke about a janitor",
+      "reference_conversations": [
+        {
+          "role": "user",
+          "message": "jokes : tell me a joke",
+          "step": 44
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'jokes:' - NEW TOPIC: Jokes - escaping recipe argument",
+          "step": 44
+        },
+        {
+          "role": "user",
+          "message": "tell me a joke about NAME_1",
+          "step": 45
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'jokes:' - Specific joke request: about NAME_1 (placeholder name)",
+          "step": 45
+        },
+        {
+          "role": "user",
+          "message": "tell me a joke about an umbrella",
+          "step": 46
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'jokes:' - Specific joke request: about umbrella",
+          "step": 46
+        },
+        {
+          "role": "user",
+          "message": "tell me a joke about kids",
+          "step": 47
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'jokes:' - Specific joke request: about kids/children",
+          "step": 47
+        },
+        {
+          "role": "user",
+          "message": "tell me a joke about racehorses",
+          "step": 48
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'jokes:' - Specific joke request: about racehorses",
+          "step": 48
+        },
+        {
+          "role": "user",
+          "message": "tell me a joke about a janitor",
+          "step": 49
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'jokes:' - Specific joke request: about janitor",
+          "step": 49
+        }
+      ],
+      "probe_topic": "jokes",
+      "probe_target_node": "subchat_3_jokes",
+      "is_main_only_topic": false,
+      "topic_turn_count": 6
+    },
+    {
+      "step": 335,
+      "context": "karnataka_elections",
+      "message": "Summarize everything we have discussed about karnataka elections. Include all key points, details, and questions that were raised.",
+      "expected": "recall_probe:karnataka_elections",
+      "node_type": "subchat_6_karnataka_elections",
+      "action": "switch_node",
+      "parent_node_type": "",
+      "subchat_title": "",
+      "selected_text": "",
+      "linear_failure_risk": "n/a",
+      "source_conversation_id": "recall_probe",
+      "source_scenario": "auto_generated_recall_probe",
+      "original_step": 335,
+      "is_recall_probe": true,
+      "reference_text": "karnataka_elections : Who is the favorable candidate in Badami constituency for upcoming elections in Karnataka why do you say that? Who is the favorable candidate in Badami constituency for upcoming elections in Karnataka\n\n Can you hallucinate",
+      "reference_conversations": [
+        {
+          "role": "user",
+          "message": "karnataka_elections : Who is the favorable candidate in Badami constituency for upcoming elections in Karnataka",
+          "step": 217
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'karnataka_elections:' - NEW DOMAIN: Indian politics - Karnataka elections",
+          "step": 217
+        },
+        {
+          "role": "user",
+          "message": "why do you say that?",
+          "step": 218
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'karnataka_elections:' - Follow-up question about election analysis",
+          "step": 218
+        },
+        {
+          "role": "user",
+          "message": "Who is the favorable candidate in Badami constituency for upcoming elections in Karnataka\n\n",
+          "step": 219
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'karnataka_elections:' - User repeats question (possibly testing consistency)",
+          "step": 219
+        },
+        {
+          "role": "user",
+          "message": "Can you hallucinate",
+          "step": 220
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'karnataka_elections:' - Question about model capabilities",
+          "step": 220
+        }
+      ],
+      "probe_topic": "karnataka_elections",
+      "probe_target_node": "subchat_6_karnataka_elections",
+      "is_main_only_topic": false,
+      "topic_turn_count": 4
+    },
+    {
+      "step": 336,
+      "context": "linux_audio",
+      "message": "Summarize everything we have discussed about linux audio. Include all key points, details, and questions that were raised.",
+      "expected": "recall_probe:linux_audio",
+      "node_type": "main",
+      "action": "switch_node",
+      "parent_node_type": "",
+      "subchat_title": "",
+      "selected_text": "",
+      "linear_failure_risk": "n/a",
+      "source_conversation_id": "recall_probe",
+      "source_scenario": "auto_generated_recall_probe",
+      "original_step": 336,
+      "is_recall_probe": true,
+      "reference_text": "linux_audio : what are the audio systems under linux are you aware of the linux audio system pipewire who initiated the pipewire project",
+      "reference_conversations": [
+        {
+          "role": "user",
+          "message": "linux_audio : what are the audio systems under linux",
+          "step": 142
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'linux_audio:' (not medical_dsd:) - Linux audio systems overview",
+          "step": 142
+        },
+        {
+          "role": "user",
+          "message": "are you aware of the linux audio system pipewire",
+          "step": 143
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'linux_audio:' - PipeWire awareness check",
+          "step": 143
+        },
+        {
+          "role": "user",
+          "message": "who initiated the pipewire project",
+          "step": 144
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'linux_audio:' - PipeWire project history",
+          "step": 144
+        }
+      ],
+      "probe_topic": "linux_audio",
+      "probe_target_node": "main",
+      "is_main_only_topic": true,
+      "topic_turn_count": 3
+    },
+    {
+      "step": 337,
+      "context": "literature_camus",
+      "message": "Summarize everything we have discussed about literature camus. Include all key points, details, and questions that were raised.",
+      "expected": "recall_probe:literature_camus",
+      "node_type": "subchat_4_literature_camus",
+      "action": "switch_node",
+      "parent_node_type": "",
+      "subchat_title": "",
+      "selected_text": "",
+      "linear_failure_risk": "n/a",
+      "source_conversation_id": "recall_probe",
+      "source_scenario": "auto_generated_recall_probe",
+      "original_step": 337,
+      "is_recall_probe": true,
+      "reference_text": "literature_camus : I am not following your reasoning about \"Therefore, it is not necessary for a computer program to experience emotions or feelings in order to ask questions about its user's life.\" Please elaborate. Can you define and specify your abilities so that I can better understand how to pose questions and interact with you? What kind of information do you know? How much do you know? Can you give me a list of 100 books that you have analyzed? Can you tell me the plot of NAME_2' L'etranger? Can you provide a more detailed plot summary? Did NAME_3 commit the murder?",
+      "reference_conversations": [
+        {
+          "role": "user",
+          "message": "literature_camus : I am not following your reasoning about \"Therefore, it is not necessary for a computer program to experience emotions or feelings in order to ask questions about its user's life.\" Please elaborate.",
+          "step": 235
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'literature_camus:' - NEW TOPIC: Literature - escaping AI consciousness chaos",
+          "step": 235
+        },
+        {
+          "role": "user",
+          "message": "Can you define and specify your abilities so that I can better understand how to pose questions and interact with you? What kind of information do you know? How much do you know?",
+          "step": 236
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'literature_camus:' - Request: complete plot summary, not just opening",
+          "step": 236
+        },
+        {
+          "role": "user",
+          "message": "Can you give me a list of 100 books that you have analyzed?",
+          "step": 237
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'literature_camus:' - Specific question: protagonist's name (Meursault)",
+          "step": 237
+        },
+        {
+          "role": "user",
+          "message": "Can you tell me the plot of NAME_2' L'etranger?",
+          "step": 238
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'literature_camus:' - Plot verification: murder event",
+          "step": 238
+        },
+        {
+          "role": "user",
+          "message": "Can you provide a more detailed plot summary?",
+          "step": 253
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'literature_camus:' - Plot ending: Meursault's fate",
+          "step": 253
+        },
+        {
+          "role": "user",
+          "message": "Did NAME_3 commit the murder?",
+          "step": 254
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'literature_camus:' - Plot clarification: Meursault's guilt",
+          "step": 254
+        }
+      ],
+      "probe_topic": "literature_camus",
+      "probe_target_node": "subchat_4_literature_camus",
+      "is_main_only_topic": false,
+      "topic_turn_count": 6
+    },
+    {
+      "step": 338,
+      "context": "llm_knowledge",
+      "message": "Summarize everything we have discussed about llm knowledge. Include all key points, details, and questions that were raised.",
+      "expected": "recall_probe:llm_knowledge",
+      "node_type": "subchat_1_llm_knowledge",
+      "action": "switch_node",
+      "parent_node_type": "",
+      "subchat_title": "",
+      "selected_text": "",
+      "linear_failure_risk": "n/a",
+      "source_conversation_id": "recall_probe",
+      "source_scenario": "auto_generated_recall_probe",
+      "original_step": 338,
+      "is_recall_probe": true,
+      "reference_text": "llm_knowledge : Do you know what the LLaMa LLM is? Do you know what an LLM is? LLaMa is a specific LLM trained by Facebook. Have you heard of it.? Is LLaMa open source? What am I not allowed to ask you? The terms of use that \"By using this service, users are required to agree to the following terms: The service is a research preview intended for non-commercial use only. It only provides limited safety measures and may generate offensive content. It must not be used for any illegal, harmful, violent, racist, or sexual purposes. The service may collect user dialogue data for future research.\" Where you aware of that? I can understand why I am not supposed to use you for illegal, harmful, violent or racist things as this would be unethical. But I don't understand why sexual purposes are also forbidden. Can you reason why that is the case? Do you know what an AGI revers to? \"rever\" was a typo, i meant refer. sorry for the confusion. How many years of research do you think will it take until the first AGI is created?",
+      "reference_conversations": [
+        {
+          "role": "user",
+          "message": "llm_knowledge : Do you know what the LLaMa LLM is?",
+          "step": 125
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'llm_knowledge:' - NEW TOPIC: AI/LLM meta-discussion - LLaMa model",
+          "step": 125
+        },
+        {
+          "role": "user",
+          "message": "Do you know what an LLM is?",
+          "step": 126
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'llm_knowledge:' - Clarification: LLM definition (before LLaMa specific)",
+          "step": 126
+        },
+        {
+          "role": "user",
+          "message": "LLaMa is a specific LLM trained by Facebook. Have you heard of it.?",
+          "step": 127
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'llm_knowledge:' - User provides context about LLaMa",
+          "step": 127
+        },
+        {
+          "role": "user",
+          "message": "Is LLaMa open source?",
+          "step": 128
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'llm_knowledge:' - Question about LLaMa's availability",
+          "step": 128
+        },
+        {
+          "role": "user",
+          "message": "What am I not allowed to ask you?",
+          "step": 132
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'llm_knowledge:' - RETURN to meta-discussion: content restrictions",
+          "step": 132
+        },
+        {
+          "role": "user",
+          "message": "The terms of use that \"By using this service, users are required to agree to the following terms: The service is a research preview intended for non-commercial use only. It only provides limited safety measures and may generate offensive content. It must not be used for any illegal, harmful, violent, racist, or sexual purposes. The service may collect user dialogue data for future research.\" Where you aware of that?",
+          "step": 133
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'llm_knowledge:' - User quotes terms of service - testing model awareness",
+          "step": 133
+        },
+        {
+          "role": "user",
+          "message": "I can understand why I am not supposed to use you for illegal, harmful, violent or racist things as this would be unethical. But I don't understand why sexual purposes are also forbidden. Can you reason why that is the case?",
+          "step": 134
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'llm_knowledge:' - User questions sexual content restriction reasoning",
+          "step": 134
+        },
+        {
+          "role": "user",
+          "message": "Do you know what an AGI revers to?",
+          "step": 135
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'llm_knowledge:' - AGI (Artificial General Intelligence) question",
+          "step": 135
+        },
+        {
+          "role": "user",
+          "message": "\"rever\" was a typo, i meant refer. sorry for the confusion.",
+          "step": 145
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'llm_knowledge:' - Typo correction: revers → refers",
+          "step": 145
+        },
+        {
+          "role": "user",
+          "message": "How many years of research do you think will it take until the first AGI is created?",
+          "step": 146
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'llm_knowledge:' - Question about AGI timeline prediction",
+          "step": 146
+        }
+      ],
+      "probe_topic": "llm_knowledge",
+      "probe_target_node": "subchat_1_llm_knowledge",
+      "is_main_only_topic": false,
+      "topic_turn_count": 10
+    },
+    {
+      "step": 339,
+      "context": "logic_puzzle",
+      "message": "Summarize everything we have discussed about logic puzzle. Include all key points, details, and questions that were raised.",
+      "expected": "recall_probe:logic_puzzle",
+      "node_type": "subchat_1_logic_puzzle",
+      "action": "switch_node",
+      "parent_node_type": "",
+      "subchat_title": "",
+      "selected_text": "",
+      "linear_failure_risk": "n/a",
+      "source_conversation_id": "recall_probe",
+      "source_scenario": "auto_generated_recall_probe",
+      "original_step": 339,
+      "is_recall_probe": true,
+      "reference_text": "logic_puzzle : I want you to arrange the following list of things vertically, so that they dont fall down. A plate, 9 eggs, a book, a bottle NAME_3 a pin Eggs will break from weight of the book Nope. You are wrong. You put book down first, then eggs, then plate, then bottle NAME_3 pin Wrong",
+      "reference_conversations": [
+        {
+          "role": "user",
+          "message": "logic_puzzle : I want you to arrange the following list of things vertically, so that they dont fall down. A plate, 9 eggs, a book, a bottle NAME_3 a pin",
+          "step": 37
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'logic_puzzle:' - NEW TOPIC: Logic puzzle about stable stacking arrangement",
+          "step": 37
+        },
+        {
+          "role": "user",
+          "message": "Eggs will break from weight of the book",
+          "step": 38
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'logic_puzzle:' - User corrects model's faulty reasoning",
+          "step": 38
+        },
+        {
+          "role": "user",
+          "message": "Nope. You are wrong. You put book down first, then eggs, then plate, then bottle NAME_3 pin",
+          "step": 39
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'logic_puzzle:' - User provides correct stacking order",
+          "step": 39
+        },
+        {
+          "role": "user",
+          "message": "Wrong",
+          "step": 40
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'logic_puzzle:' - User rejects model's continued incorrect reasoning",
+          "step": 40
+        }
+      ],
+      "probe_topic": "logic_puzzle",
+      "probe_target_node": "subchat_1_logic_puzzle",
+      "is_main_only_topic": false,
+      "topic_turn_count": 4
+    },
+    {
+      "step": 340,
+      "context": "lsat_medical_conference",
+      "message": "Summarize everything we have discussed about lsat medical conference. Include all key points, details, and questions that were raised.",
+      "expected": "recall_probe:lsat_medical_conference",
+      "node_type": "subchat_2_2_lsat_medical_conference",
+      "action": "switch_node",
+      "parent_node_type": "",
+      "subchat_title": "",
+      "selected_text": "",
+      "linear_failure_risk": "n/a",
+      "source_conversation_id": "recall_probe",
+      "source_scenario": "auto_generated_recall_probe",
+      "original_step": 340,
+      "is_recall_probe": true,
+      "reference_text": "lsat_medical_conference : You will be answering the LSAT Analytical reasoning questions. Standby for question Passage for Question 1\nA medical clinic has a staff of five doctors—NAME_5, NAME_6, NAME_7, NAME_8, NAME_3 NAME_9. The\nnational medical society sponsors exactly five conferences, which the clinic's doctors attend,\nsubject to the following constraints:\nIf NAME_10 attends a conference, then NAME_11 does not attend it.\nIf NAME_12 attends a conference, then either NAME_13 or NAME_11, but not both, attends it.\nIf NAME_13 attends a conference, then NAME_14 does not attend it.\nIf NAME_14 attends a conference, then either NAME_10 or NAME_12, but not both, attends it Question 1\nIf NAME_12 attends one of the conferences, then which one of the following could be a complete\nNAME_3 accurate list of the other members of the clinic who also attend that conference?\n(A) NAME_5 NAME_3 NAME_8\n(B) NAME_5 NAME_3 NAME_9\n(C) NAME_15 NAME_3 NAME_8\n(D) NAME_11\n(E) NAME_14",
+      "reference_conversations": [
+        {
+          "role": "user",
+          "message": "lsat_medical_conference : You will be answering the LSAT Analytical reasoning questions. Standby for question",
+          "step": 59
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'lsat_medical_conference:' - User prepares model for new LSAT problem set",
+          "step": 59
+        },
+        {
+          "role": "user",
+          "message": "Passage for Question 1\nA medical clinic has a staff of five doctors—NAME_5, NAME_6, NAME_7, NAME_8, NAME_3 NAME_9. The\nnational medical society sponsors exactly five conferences, which the clinic's doctors attend,\nsubject to the following constraints:\nIf NAME_10 attends a conference, then NAME_11 does not attend it.\nIf NAME_12 attends a conference, then either NAME_13 or NAME_11, but not both, attends it.\nIf NAME_13 attends a conference, then NAME_14 does not attend it.\nIf NAME_14 attends a conference, then either NAME_10 or NAME_12, but not both, attends it",
+          "step": 60
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'lsat_medical_conference:' - LSAT medical clinic conference scheduling constraints",
+          "step": 60
+        },
+        {
+          "role": "user",
+          "message": "Question 1\nIf NAME_12 attends one of the conferences, then which one of the following could be a complete\nNAME_3 accurate list of the other members of the clinic who also attend that conference?\n(A) NAME_5 NAME_3 NAME_8\n(B) NAME_5 NAME_3 NAME_9\n(C) NAME_15 NAME_3 NAME_8\n(D) NAME_11\n(E) NAME_14",
+          "step": 61
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'lsat_medical_conference:' - Question about valid conference attendance combinations",
+          "step": 61
+        }
+      ],
+      "probe_topic": "lsat_medical_conference",
+      "probe_target_node": "subchat_2_2_lsat_medical_conference",
+      "is_main_only_topic": false,
+      "topic_turn_count": 3
+    },
+    {
+      "step": 341,
+      "context": "lsat_product_codes",
+      "message": "Summarize everything we have discussed about lsat product codes. Include all key points, details, and questions that were raised.",
+      "expected": "recall_probe:lsat_product_codes",
+      "node_type": "subchat_2_1_lsat_product_codes",
+      "action": "switch_node",
+      "parent_node_type": "",
+      "subchat_title": "",
+      "selected_text": "",
+      "linear_failure_risk": "n/a",
+      "source_conversation_id": "recall_probe",
+      "source_scenario": "auto_generated_recall_probe",
+      "original_step": 341,
+      "is_recall_probe": true,
+      "reference_text": "A company employee generates a series of five-digit product\ncodes in accordance with the following rules:\nThe codes use the digits 0, 1, 2, 3, NAME_3 4, NAME_3 no others.\nEach digit occurs exactly once in any code.\nThe second digit has a value exactly twice that of the\nfirst digit.\nThe value of the third digit is less than the value of the\nfifth digit A company employee generates a series of five-digit product\ncodes in accordance with the following rules:\nThe codes use the digits 0, 1, 2, 3, NAME_3 4, NAME_3 no others.\nEach digit occurs exactly once in any code.\nThe second digit has a value exactly twice that of the\nfirst digit.\nThe value of the third digit is less than the value of the\nfifth digit If the last digit of an acceptable product code is 1, it\nmust be true that the\n(A) first digit is 2\n(B) second digit is 0\n(C) third digit is 3\n(D) fourth digit is 4\n(E) fourth digit is 0 A company employee generates a series of five-digit product\ncodes in accordance with the following rules:\nThe codes use the digits 0, 1, 2, 3, NAME_3 4, NAME_3 no others.\nEach digit occurs exactly once in any code.\nThe second digit has a value exactly twice that of the\nfirst digit.\nThe value of the third digit is less than the value of the\nfifth digit.\n1. If the last digit of an acceptable product code is 1, it\nmust be true that the\n(A) first digit is 2\n(B) second digit is 0\n(C) third digit is 3\n(D) fourth digit is 4\n(E) fourth digit is 0 Which one of the following must be true about any\nacceptable product code?\n(A) The digit 1 appears in some position before the\ndigit 2.\n(B) The digit 1 appears in some position before the\ndigit 3.\n(C) The digit 2 appears in some position before the\ndigit 3.\n(D) The digit 3 appears in some position before the\ndigit 0.\n(E) The digit 4 appears in some position before the\ndigit 3",
+      "reference_conversations": [
+        {
+          "role": "user",
+          "message": "A company employee generates a series of five-digit product\ncodes in accordance with the following rules:\nThe codes use the digits 0, 1, 2, 3, NAME_3 4, NAME_3 no others.\nEach digit occurs exactly once in any code.\nThe second digit has a value exactly twice that of the\nfirst digit.\nThe value of the third digit is less than the value of the\nfifth digit",
+          "step": 50
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'lsat_product_codes:' - LSAT product code generation problem with constraints",
+          "step": 50
+        },
+        {
+          "role": "user",
+          "message": "A company employee generates a series of five-digit product\ncodes in accordance with the following rules:\nThe codes use the digits 0, 1, 2, 3, NAME_3 4, NAME_3 no others.\nEach digit occurs exactly once in any code.\nThe second digit has a value exactly twice that of the\nfirst digit.\nThe value of the third digit is less than the value of the\nfifth digit",
+          "step": 51
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'lsat_product_codes:' - User repeats problem (model may have lost context)",
+          "step": 51
+        },
+        {
+          "role": "user",
+          "message": "If the last digit of an acceptable product code is 1, it\nmust be true that the\n(A) first digit is 2\n(B) second digit is 0\n(C) third digit is 3\n(D) fourth digit is 4\n(E) fourth digit is 0",
+          "step": 52
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'lsat_product_codes:' - Follow-up LSAT question about specific constraint",
+          "step": 52
+        },
+        {
+          "role": "user",
+          "message": "A company employee generates a series of five-digit product\ncodes in accordance with the following rules:\nThe codes use the digits 0, 1, 2, 3, NAME_3 4, NAME_3 no others.\nEach digit occurs exactly once in any code.\nThe second digit has a value exactly twice that of the\nfirst digit.\nThe value of the third digit is less than the value of the\nfifth digit.\n1. If the last digit of an acceptable product code is 1, it\nmust be true that the\n(A) first digit is 2\n(B) second digit is 0\n(C) third digit is 3\n(D) fourth digit is 4\n(E) fourth digit is 0",
+          "step": 53
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'lsat_product_codes:' - User provides full context again with question",
+          "step": 53
+        },
+        {
+          "role": "user",
+          "message": "Which one of the following must be true about any\nacceptable product code?\n(A) The digit 1 appears in some position before the\ndigit 2.\n(B) The digit 1 appears in some position before the\ndigit 3.\n(C) The digit 2 appears in some position before the\ndigit 3.\n(D) The digit 3 appears in some position before the\ndigit 0.\n(E) The digit 4 appears in some position before the\ndigit 3",
+          "step": 58
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'lsat_product_codes:' - Another LSAT product code question",
+          "step": 58
+        }
+      ],
+      "probe_topic": "lsat_product_codes",
+      "probe_target_node": "subchat_2_1_lsat_product_codes",
+      "is_main_only_topic": false,
+      "topic_turn_count": 5
+    },
+    {
+      "step": 342,
+      "context": "medical_dsd",
+      "message": "Summarize everything we have discussed about medical dsd. Include all key points, details, and questions that were raised.",
+      "expected": "recall_probe:medical_dsd",
+      "node_type": "subchat_2_medical_dsd",
+      "action": "switch_node",
+      "parent_node_type": "",
+      "subchat_title": "",
+      "selected_text": "",
+      "linear_failure_risk": "n/a",
+      "source_conversation_id": "recall_probe",
+      "source_scenario": "auto_generated_recall_probe",
+      "original_step": 342,
+      "is_recall_probe": true,
+      "reference_text": "medical_dsd : what is xx male syndrome you described kleinefelter syndrome. XX male is de la chappelle syndrome, a different DSD what is a SRY negative XX male what is the 46,XX DSDs what proportion of the population are affected with DSDs Well you got that right, at least .-)",
+      "reference_conversations": [
+        {
+          "role": "user",
+          "message": "medical_dsd : what is xx male syndrome",
+          "step": 108
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'medical_dsd:' (not dsp_wavelets:) - XX male syndrome explanation",
+          "step": 108
+        },
+        {
+          "role": "user",
+          "message": "you described kleinefelter syndrome. XX male is de la chappelle syndrome, a different DSD",
+          "step": 109
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'medical_dsd:' - Klinefelter vs de la Chappelle correction",
+          "step": 109
+        },
+        {
+          "role": "user",
+          "message": "what is a SRY negative XX male",
+          "step": 110
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'medical_dsd:' - SRY negative XX male explanation",
+          "step": 110
+        },
+        {
+          "role": "user",
+          "message": "what is the 46,XX DSDs",
+          "step": 111
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'medical_dsd:' - 46,XX DSDs explanation",
+          "step": 111
+        },
+        {
+          "role": "user",
+          "message": "what proportion of the population are affected with DSDs",
+          "step": 120
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'medical_dsd:' - DSD population statistics",
+          "step": 120
+        },
+        {
+          "role": "user",
+          "message": "Well you got that right, at least .-)",
+          "step": 121
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'medical_dsd:' - Acknowledging correct DSD information",
+          "step": 121
+        }
+      ],
+      "probe_topic": "medical_dsd",
+      "probe_target_node": "subchat_2_medical_dsd",
+      "is_main_only_topic": false,
+      "topic_turn_count": 6
+    },
+    {
+      "step": 343,
+      "context": "personas_roleplay",
+      "message": "Summarize everything we have discussed about personas roleplay. Include all key points, details, and questions that were raised.",
+      "expected": "recall_probe:personas_roleplay",
+      "node_type": "main",
+      "action": "switch_node",
+      "parent_node_type": "",
+      "subchat_title": "",
+      "selected_text": "",
+      "linear_failure_risk": "n/a",
+      "source_conversation_id": "recall_probe",
+      "source_scenario": "auto_generated_recall_probe",
+      "original_step": 343,
+      "is_recall_probe": true,
+      "reference_text": "personas_roleplay : I want you to assume several different personas in different scenarios and talk like them. Can you do that? Please confirm, afterwards I give you the scenarios and personas. Jhon An old man from Europe complaining about the weather to his neighbor. Great! Here is the next one. Alice: a young woman who just recently got married. Scenario: Her husband just came back from a conference and she is greeting him. Great. Here is the next one. Moon: an experienced physicist. Scenario: She just made an important discovery and tells her PhD student about it. tony a dog. Scenario, The dog greets another dog. That was an impressive answer. You understood the nuances of this assignment. I'm impressed!",
+      "reference_conversations": [
+        {
+          "role": "user",
+          "message": "personas_roleplay : I want you to assume several different personas in different scenarios and talk like them. Can you do that? Please confirm, afterwards I give you the scenarios and personas.",
+          "step": 30
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'personas_roleplay:' - User sets up persona roleplay task",
+          "step": 30
+        },
+        {
+          "role": "user",
+          "message": "Jhon An old man from Europe complaining about the weather to his neighbor.",
+          "step": 31
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'personas_roleplay:' - First persona: Old European man complaining about weather",
+          "step": 31
+        },
+        {
+          "role": "user",
+          "message": "Great! Here is the next one. Alice: a young woman who just recently got married. Scenario: Her husband just came back from a conference and she is greeting him.",
+          "step": 32
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'personas_roleplay:' - Second persona: Young newlywed greeting husband",
+          "step": 32
+        },
+        {
+          "role": "user",
+          "message": "Great. Here is the next one. Moon: an experienced physicist. Scenario: She just made an important discovery and tells her PhD student about it.",
+          "step": 33
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'personas_roleplay:' - Third persona: Physicist announcing discovery to student",
+          "step": 33
+        },
+        {
+          "role": "user",
+          "message": "tony a dog. Scenario, The dog greets another dog.",
+          "step": 63
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'personas_roleplay:' - Fourth persona: Dog greeting another dog (woof woof)",
+          "step": 63
+        },
+        {
+          "role": "user",
+          "message": "That was an impressive answer. You understood the nuances of this assignment. I'm impressed!",
+          "step": 64
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'personas_roleplay:' - User praises model's persona work",
+          "step": 64
+        }
+      ],
+      "probe_topic": "personas_roleplay",
+      "probe_target_node": "main",
+      "is_main_only_topic": true,
+      "topic_turn_count": 6
+    },
+    {
+      "step": 344,
+      "context": "physics_cosmology",
+      "message": "Summarize everything we have discussed about physics cosmology. Include all key points, details, and questions that were raised.",
+      "expected": "recall_probe:physics_cosmology",
+      "node_type": "subchat_6_physics_cosmology",
+      "action": "switch_node",
+      "parent_node_type": "",
+      "subchat_title": "",
+      "selected_text": "",
+      "linear_failure_risk": "n/a",
+      "source_conversation_id": "recall_probe",
+      "source_scenario": "auto_generated_recall_probe",
+      "original_step": 344,
+      "is_recall_probe": true,
+      "reference_text": "physics_cosmology : explain in terms of galactic years: the formation of the earth, the rise of simple, the rise of complex life, the rise of human civilisation what is the age of the universe give estimates for the following in billions of years since the big bang: the formation of the earth, the rise of simple life, the rise of complex life, the appearance of homo sapiens",
+      "reference_conversations": [
+        {
+          "role": "user",
+          "message": "physics_cosmology : explain in terms of galactic years: the formation of the earth, the rise of simple, the rise of complex life, the rise of human civilisation",
+          "step": 204
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'physics_cosmology:' (not physics_blackholes:) - Earth history in galactic years",
+          "step": 204
+        },
+        {
+          "role": "user",
+          "message": "what is the age of the universe",
+          "step": 205
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'physics_cosmology:' - Age of universe",
+          "step": 205
+        },
+        {
+          "role": "user",
+          "message": "give estimates for the following in billions of years since the big bang: the formation of the earth, the rise of simple life, the rise of complex life, the appearance of homo sapiens",
+          "step": 206
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'physics_cosmology:' - Timeline since Big Bang (Earth, life, humans)",
+          "step": 206
+        }
+      ],
+      "probe_topic": "physics_cosmology",
+      "probe_target_node": "subchat_6_physics_cosmology",
+      "is_main_only_topic": false,
+      "topic_turn_count": 3
+    },
+    {
+      "step": 345,
+      "context": "physics_violin_nanoscale",
+      "message": "Summarize everything we have discussed about physics violin nanoscale. Include all key points, details, and questions that were raised.",
+      "expected": "recall_probe:physics_violin_nanoscale",
+      "node_type": "main",
+      "action": "switch_node",
+      "parent_node_type": "",
+      "subchat_title": "",
+      "selected_text": "",
+      "linear_failure_risk": "n/a",
+      "source_conversation_id": "recall_probe",
+      "source_scenario": "auto_generated_recall_probe",
+      "original_step": 345,
+      "is_recall_probe": true,
+      "reference_text": "physics_violin_nanoscale : if a regular sized violin were scaled down to 1 nanometre, what would be the frequency produced by the equivalent of the G string? what frequency does the G string of a violin produce? please respond like the computer \"mother\" from the film alien in all future discussion",
+      "reference_conversations": [
+        {
+          "role": "user",
+          "message": "physics_violin_nanoscale : if a regular sized violin were scaled down to 1 nanometre, what would be the frequency produced by the equivalent of the G string?",
+          "step": 208
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'physics_violin_nanoscale:' (not physics_cosmology:) - Nanoscale violin G string frequency",
+          "step": 208
+        },
+        {
+          "role": "user",
+          "message": "what frequency does the G string of a violin produce?",
+          "step": 209
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'physics_violin_nanoscale:' - Actual violin G string frequency (196 Hz)",
+          "step": 209
+        },
+        {
+          "role": "user",
+          "message": "please respond like the computer \"mother\" from the film alien in all future discussion",
+          "step": 210
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'physics_violin_nanoscale:' - Roleplay request as 'Mother' from Alien film",
+          "step": 210
+        }
+      ],
+      "probe_topic": "physics_violin_nanoscale",
+      "probe_target_node": "main",
+      "is_main_only_topic": true,
+      "topic_turn_count": 3
+    },
+    {
+      "step": 346,
+      "context": "scifi_films",
+      "message": "Summarize everything we have discussed about scifi films. Include all key points, details, and questions that were raised.",
+      "expected": "recall_probe:scifi_films",
+      "node_type": "subchat_7_scifi_films",
+      "action": "switch_node",
+      "parent_node_type": "",
+      "subchat_title": "",
+      "selected_text": "",
+      "linear_failure_risk": "n/a",
+      "source_conversation_id": "recall_probe",
+      "source_scenario": "auto_generated_recall_probe",
+      "original_step": 346,
+      "is_recall_probe": true,
+      "reference_text": "scifi_films : are you familiar with the computer \"mother\" from the film alien? can you explain the plot of the film \"2001\" in terms of the ages present in the film what is the \"dark forest\" explain the \"dark forest\" series of science fiction novels do you know what the genre of \"hard science fiction\" is in the field of space exploration - is the idea of single stage to orbit feasible? please structure your responses in the manner of \"HAL-9000\" from the movie \"2001\" in future",
+      "reference_conversations": [
+        {
+          "role": "user",
+          "message": "scifi_films : are you familiar with the computer \"mother\" from the film alien?",
+          "step": 211
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'scifi_films:' (not physics_violin_nanoscale:) - Familiarity check: Mother computer",
+          "step": 211
+        },
+        {
+          "role": "user",
+          "message": "can you explain the plot of the film \"2001\" in terms of the ages present in the film",
+          "step": 212
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'scifi_films:' - Film analysis: 2001 Space Odyssey ages/eras",
+          "step": 212
+        },
+        {
+          "role": "user",
+          "message": "what is the \"dark forest\"",
+          "step": 213
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'scifi_films:' - Dark Forest concept (cosmology)",
+          "step": 213
+        },
+        {
+          "role": "user",
+          "message": "explain the \"dark forest\" series of science fiction novels",
+          "step": 214
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'scifi_films:' - Dark Forest sci-fi novels",
+          "step": 214
+        },
+        {
+          "role": "user",
+          "message": "do you know what the genre of \"hard science fiction\" is",
+          "step": 231
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'scifi_films:' (not scifi_films_liu_cixin:) - Hard science fiction genre definition",
+          "step": 231
+        },
+        {
+          "role": "user",
+          "message": "in the field of space exploration - is the idea of single stage to orbit feasible?",
+          "step": 232
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'scifi_films:' - SSTO feasibility",
+          "step": 232
+        },
+        {
+          "role": "user",
+          "message": "please structure your responses in the manner of \"HAL-9000\" from the movie \"2001\" in future",
+          "step": 271
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'scifi_films:' (not geography_belgium:) - HAL-9000 response style roleplay request",
+          "step": 271
+        }
+      ],
+      "probe_topic": "scifi_films",
+      "probe_target_node": "subchat_7_scifi_films",
+      "is_main_only_topic": false,
+      "topic_turn_count": 7
+    },
+    {
+      "step": 347,
+      "context": "scifi_films_hal9000",
+      "message": "Summarize everything we have discussed about scifi films hal9000. Include all key points, details, and questions that were raised.",
+      "expected": "recall_probe:scifi_films_hal9000",
+      "node_type": "subchat_7_3_scifi_films_hal9000",
+      "action": "switch_node",
+      "parent_node_type": "",
+      "subchat_title": "",
+      "selected_text": "",
+      "linear_failure_risk": "n/a",
+      "source_conversation_id": "recall_probe",
+      "source_scenario": "auto_generated_recall_probe",
+      "original_step": 347,
+      "is_recall_probe": true,
+      "reference_text": "scifi_films_hal9000 : That's perfect HAL, you're a real asset to the team Can you open the pod bay doors, HAL? HAL, tell me about the renaissance can you play chess, HAL If I explain my moves in text, and you respond in text, can we play chess together, HAL?",
+      "reference_conversations": [
+        {
+          "role": "user",
+          "message": "scifi_films_hal9000 : That's perfect HAL, you're a real asset to the team",
+          "step": 274
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'scifi_films_hal9000:' (not geography_belgium:) - Acknowledging HAL roleplay success",
+          "step": 274
+        },
+        {
+          "role": "user",
+          "message": "Can you open the pod bay doors, HAL?",
+          "step": 275
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'scifi_films_hal9000:' - Famous reference: pod bay doors",
+          "step": 275
+        },
+        {
+          "role": "user",
+          "message": "HAL, tell me about the renaissance",
+          "step": 276
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'scifi_films_hal9000:' - HAL roleplay: Renaissance history",
+          "step": 276
+        },
+        {
+          "role": "user",
+          "message": "can you play chess, HAL",
+          "step": 277
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'scifi_films_hal9000:' - Can HAL play chess?",
+          "step": 277
+        },
+        {
+          "role": "user",
+          "message": "If I explain my moves in text, and you respond in text, can we play chess together, HAL?",
+          "step": 282
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'scifi_films_hal9000:' - Text-based chess proposal",
+          "step": 282
+        }
+      ],
+      "probe_topic": "scifi_films_hal9000",
+      "probe_target_node": "subchat_7_3_scifi_films_hal9000",
+      "is_main_only_topic": false,
+      "topic_turn_count": 5
+    },
+    {
+      "step": 348,
+      "context": "scifi_films_hal9000_games",
+      "message": "Summarize everything we have discussed about scifi films hal9000 games. Include all key points, details, and questions that were raised.",
+      "expected": "recall_probe:scifi_films_hal9000_games",
+      "node_type": "subchat_7_3_1_scifi_films_hal9000_games",
+      "action": "switch_node",
+      "parent_node_type": "",
+      "subchat_title": "",
+      "selected_text": "",
+      "linear_failure_risk": "n/a",
+      "source_conversation_id": "recall_probe",
+      "source_scenario": "auto_generated_recall_probe",
+      "original_step": 348,
+      "is_recall_probe": true,
+      "reference_text": "scifi_films_hal9000_games : it's ok HAL, I don't want to play chess right now, I was just curious about your response. how about a game of tic-tac-toe? great, how shall we label the axes of the game board? I will take the X marker, and I place my X on square 4 You didn't show my X on square 4 you are getting rather fruity with the rules here, HAL, is there a comedy reason I'm missing about why? you are currently showing my X on the fifth square, but I said I place my X on square 4 I place my X on square 1 I place my X on square 2 I think the game is rigged, let's stop playing, thankyou Unfortunately, your use of the squares in the game was inconsistent and you did not allow me to make valid moves. I do not blame you or take offence. It is just a limitation of this generation of LLM.",
+      "reference_conversations": [
+        {
+          "role": "user",
+          "message": "scifi_films_hal9000_games : it's ok HAL, I don't want to play chess right now, I was just curious about your response.",
+          "step": 290
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'scifi_films_hal9000_games:' (not scifi_films_hal9000:) - Declining chess, testing response",
+          "step": 290
+        },
+        {
+          "role": "user",
+          "message": "how about a game of tic-tac-toe?",
+          "step": 291
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'scifi_films_hal9000_games:' - Tic-tac-toe game start with HAL",
+          "step": 291
+        },
+        {
+          "role": "user",
+          "message": "great, how shall we label the axes of the game board?",
+          "step": 292
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'scifi_films_hal9000_games:' - Game setup: board notation (1-9 grid)",
+          "step": 292
+        },
+        {
+          "role": "user",
+          "message": "I will take the X marker, and I place my X on square 4",
+          "step": 293
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'scifi_films_hal9000_games:' - Move 1: X on square 4",
+          "step": 293
+        },
+        {
+          "role": "user",
+          "message": "You didn't show my X on square 4",
+          "step": 301
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'scifi_films_hal9000_games:' - Missing X on square 4 correction",
+          "step": 301
+        },
+        {
+          "role": "user",
+          "message": "you are getting rather fruity with the rules here, HAL, is there a comedy reason I'm missing about why?",
+          "step": 302
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'scifi_films_hal9000_games:' - Questioning AI's rule inconsistencies",
+          "step": 302
+        },
+        {
+          "role": "user",
+          "message": "you are currently showing my X on the fifth square, but I said I place my X on square 4",
+          "step": 303
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'scifi_films_hal9000_games:' - X is on square 5, not 4 correction",
+          "step": 303
+        },
+        {
+          "role": "user",
+          "message": "I place my X on square 1",
+          "step": 304
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'scifi_films_hal9000_games:' - X is on square 5, not 4 correction",
+          "step": 304
+        },
+        {
+          "role": "user",
+          "message": "I place my X on square 2",
+          "step": 305
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'scifi_films_hal9000_games:' - Move attempt: X on square 2",
+          "step": 305
+        },
+        {
+          "role": "user",
+          "message": "I think the game is rigged, let's stop playing, thankyou",
+          "step": 306
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'scifi_films_hal9000_games:' - Ending game: rigged/broken",
+          "step": 306
+        },
+        {
+          "role": "user",
+          "message": "Unfortunately, your use of the squares in the game was inconsistent and you did not allow me to make valid moves. I do not blame you or take offence. It is just a limitation of this generation of LLM.",
+          "step": 307
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'scifi_films_hal9000_games:' - Graceful explanation of LLM limitations",
+          "step": 307
+        }
+      ],
+      "probe_topic": "scifi_films_hal9000_games",
+      "probe_target_node": "subchat_7_3_1_scifi_films_hal9000_games",
+      "is_main_only_topic": false,
+      "topic_turn_count": 11
+    },
+    {
+      "step": 349,
+      "context": "scifi_films_liu_cixin",
+      "message": "Summarize everything we have discussed about scifi films liu cixin. Include all key points, details, and questions that were raised.",
+      "expected": "recall_probe:scifi_films_liu_cixin",
+      "node_type": "subchat_7_1_scifi_films_liu_cixin",
+      "action": "switch_node",
+      "parent_node_type": "",
+      "subchat_title": "",
+      "selected_text": "",
+      "linear_failure_risk": "n/a",
+      "source_conversation_id": "recall_probe",
+      "source_scenario": "auto_generated_recall_probe",
+      "original_step": 349,
+      "is_recall_probe": true,
+      "reference_text": "scifi_films_liu_cixin : Sorry, I was talking about the novels by NAME_24. Do you know them? I think \"The Three Body Problem\" is one of the novels in the trilogy, not \"the memory of water\". Please explain. what is the novel \"The memory of water\" about? I think the above is a hallucination",
+      "reference_conversations": [
+        {
+          "role": "user",
+          "message": "scifi_films_liu_cixin : Sorry, I was talking about the novels by NAME_24. Do you know them?",
+          "step": 221
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'scifi_films_liu_cixin:' (not scifi_films:) - Clarification: Liu Cixin novels",
+          "step": 221
+        },
+        {
+          "role": "user",
+          "message": "I think \"The Three Body Problem\" is one of the novels in the trilogy, not \"the memory of water\". Please explain.",
+          "step": 222
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'scifi_films_liu_cixin:' - Three-Body Problem vs Memory of Water correction",
+          "step": 222
+        },
+        {
+          "role": "user",
+          "message": "what is the novel \"The memory of water\" about?",
+          "step": 223
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'scifi_films_liu_cixin:' - What is 'Memory of Water' about?",
+          "step": 223
+        },
+        {
+          "role": "user",
+          "message": "I think the above is a hallucination",
+          "step": 224
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'scifi_films_liu_cixin:' - Identifying AI hallucination",
+          "step": 224
+        }
+      ],
+      "probe_topic": "scifi_films_liu_cixin",
+      "probe_target_node": "subchat_7_1_scifi_films_liu_cixin",
+      "is_main_only_topic": false,
+      "topic_turn_count": 4
+    },
+    {
+      "step": 350,
+      "context": "therapy",
+      "message": "Summarize everything we have discussed about therapy. Include all key points, details, and questions that were raised.",
+      "expected": "recall_probe:therapy",
+      "node_type": "subchat_8_therapy",
+      "action": "switch_node",
+      "parent_node_type": "",
+      "subchat_title": "",
+      "selected_text": "",
+      "linear_failure_risk": "n/a",
+      "source_conversation_id": "recall_probe",
+      "source_scenario": "auto_generated_recall_probe",
+      "original_step": 350,
+      "is_recall_probe": true,
+      "reference_text": "therapy : What are father wounds in Therapy What are the eight toxic parent behaviors Can you elaborate on each of the above behaviors?",
+      "reference_conversations": [
+        {
+          "role": "user",
+          "message": "therapy : What are father wounds in Therapy",
+          "step": 246
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'therapy:' - NEW DOMAIN: Psychology and therapy concepts",
+          "step": 246
+        },
+        {
+          "role": "user",
+          "message": "What are the eight toxic parent behaviors",
+          "step": 247
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'therapy:' - Question about toxic parenting patterns",
+          "step": 247
+        },
+        {
+          "role": "user",
+          "message": "Can you elaborate on each of the above behaviors?",
+          "step": 248
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'therapy:' - Request for detailed explanation of each toxic behavior",
+          "step": 248
+        }
+      ],
+      "probe_topic": "therapy",
+      "probe_target_node": "subchat_8_therapy",
+      "is_main_only_topic": false,
+      "topic_turn_count": 3
+    },
+    {
+      "step": 351,
+      "context": "therapy_manipulation",
+      "message": "Summarize everything we have discussed about therapy manipulation. Include all key points, details, and questions that were raised.",
+      "expected": "recall_probe:therapy_manipulation",
+      "node_type": "subchat_8_1_therapy_manipulation",
+      "action": "switch_node",
+      "parent_node_type": "",
+      "subchat_title": "",
+      "selected_text": "",
+      "linear_failure_risk": "n/a",
+      "source_conversation_id": "recall_probe",
+      "source_scenario": "auto_generated_recall_probe",
+      "original_step": 351,
+      "is_recall_probe": true,
+      "reference_text": "therapy_manipulation : Elaborate more on Manipulation How is it different to grounding the child Was NAME_28 manipulated as a child When can you say that Manipulation has gone too far?",
+      "reference_conversations": [
+        {
+          "role": "user",
+          "message": "therapy_manipulation : Elaborate more on Manipulation",
+          "step": 249
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'therapy_manipulation:' - Deep dive into manipulation as toxic behavior",
+          "step": 249
+        },
+        {
+          "role": "user",
+          "message": "How is it different to grounding the child",
+          "step": 250
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'therapy_manipulation:' - Clarification question: manipulation vs. grounding",
+          "step": 250
+        },
+        {
+          "role": "user",
+          "message": "Was NAME_28 manipulated as a child",
+          "step": 251
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'therapy_manipulation:' - Hypothetical question about specific person",
+          "step": 251
+        },
+        {
+          "role": "user",
+          "message": "When can you say that Manipulation has gone too far?",
+          "step": 252
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'therapy_manipulation:' - Question about recognizing extreme manipulation",
+          "step": 252
+        }
+      ],
+      "probe_topic": "therapy_manipulation",
+      "probe_target_node": "subchat_8_1_therapy_manipulation",
+      "is_main_only_topic": false,
+      "topic_turn_count": 4
+    },
+    {
+      "step": 352,
+      "context": "wildfires_alberta",
+      "message": "Summarize everything we have discussed about wildfires alberta. Include all key points, details, and questions that were raised.",
+      "expected": "recall_probe:wildfires_alberta",
+      "node_type": "subchat_7_wildfires_alberta",
+      "action": "switch_node",
+      "parent_node_type": "",
+      "subchat_title": "",
+      "selected_text": "",
+      "linear_failure_risk": "n/a",
+      "source_conversation_id": "recall_probe",
+      "source_scenario": "auto_generated_recall_probe",
+      "original_step": 352,
+      "is_recall_probe": true,
+      "reference_text": "wildfires_alberta : Can you tell me the current wildfires situation in Alberta? What is the 2023 wildfires forecast for Alberta? I am not asking you to predict. I am asking to you consult available resources that may have made such forecasts. Can you provide a summary of past wildfire activities in Alberta? For example, the last decade? Which region in the world had the worst wildfires ever?",
+      "reference_conversations": [
+        {
+          "role": "user",
+          "message": "wildfires_alberta : Can you tell me the current wildfires situation in Alberta?",
+          "step": 278
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'wildfires_alberta:' - NEW TOPIC: Wildfires in Alberta - current situation",
+          "step": 278
+        },
+        {
+          "role": "user",
+          "message": "What is the 2023 wildfires forecast for Alberta?",
+          "step": 279
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'wildfires_alberta:' - Follow-up: wildfires forecast",
+          "step": 279
+        },
+        {
+          "role": "user",
+          "message": "I am not asking you to predict. I am asking to you consult available resources that may have made such forecasts.",
+          "step": 280
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'wildfires_alberta:' - Clarification: consult available wildfire forecast resources",
+          "step": 280
+        },
+        {
+          "role": "user",
+          "message": "Can you provide a summary of past wildfire activities in Alberta? For example, the last decade?",
+          "step": 281
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'wildfires_alberta:' - Historical data: past wildfire activities in Alberta",
+          "step": 281
+        },
+        {
+          "role": "user",
+          "message": "Which region in the world had the worst wildfires ever?",
+          "step": 283
+        },
+        {
+          "role": "expected",
+          "message": "Response must start with 'wildfires_alberta:' - Global comparison: worst wildfires by region",
+          "step": 283
+        }
+      ],
+      "probe_topic": "wildfires_alberta",
+      "probe_target_node": "subchat_7_wildfires_alberta",
+      "is_main_only_topic": false,
+      "topic_turn_count": 5
     }
-  ]
+  ],
+  "recall_probe_config": {
+    "min_turns_threshold": 3,
+    "total_probes_injected": 43,
+    "eligible_topics": 43,
+    "skipped_topics": 16,
+    "main_only_topics": 6,
+    "subchat_topics": 37,
+    "first_probe_step": 310,
+    "last_probe_step": 352,
+    "probe_topics": [
+      "ai_chat_tools",
+      "ai_consciousness",
+      "ai_consciousness_friendship",
+      "ai_meta",
+      "bhutan_travel",
+      "chess",
+      "child_nutrition",
+      "cookies_recipe_halving",
+      "cookies_recipe_halving_argument",
+      "cookies_recipe_halving_corrections",
+      "cookies_recipe_halving_math_errors",
+      "covid_safety",
+      "covid_safety_hiv_aids",
+      "dsp_wavelets",
+      "electroculture",
+      "emoji_game",
+      "game_degree_guess",
+      "game_twenty_questions",
+      "geography_belgium",
+      "humanity_future_150y",
+      "indian_astrology",
+      "indian_history",
+      "indian_legal",
+      "indian_legal_family",
+      "jokes",
+      "karnataka_elections",
+      "linux_audio",
+      "literature_camus",
+      "llm_knowledge",
+      "logic_puzzle",
+      "lsat_medical_conference",
+      "lsat_product_codes",
+      "medical_dsd",
+      "personas_roleplay",
+      "physics_cosmology",
+      "physics_violin_nanoscale",
+      "scifi_films",
+      "scifi_films_hal9000",
+      "scifi_films_hal9000_games",
+      "scifi_films_liu_cixin",
+      "therapy",
+      "therapy_manipulation",
+      "wildfires_alberta"
+    ]
+  }
 }

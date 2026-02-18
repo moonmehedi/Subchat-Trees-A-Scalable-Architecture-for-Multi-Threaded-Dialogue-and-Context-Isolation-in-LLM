@@ -4,7 +4,8 @@ Auto-archives messages when they're evicted from LocalBuffer.
 
 ENHANCED WITH:
 - Multi-query decomposition for better retrieval
-- Context window retrieval (±60s around relevant messages)
+- Turn-based context window retrieval (±2 turns around relevant messages)
+- Rank-then-expand pipeline: re-rank anchors first, expand winners with context
 - Intent-aware query generation
 """
 
@@ -184,14 +185,18 @@ Example: {example}"""
 
 class ContextWindowRetriever:
     """
-    Retrieves context windows (±60 seconds) around relevant messages.
+    Retrieves context windows (±k turns) around relevant messages.
     
-    PROBLEM: Single messages lack context
-    SOLUTION: Retrieve surrounding messages within ±60s window
+    PROBLEM: Single messages lack conversational context
+    SOLUTION: Retrieve surrounding messages by turn number (±2 turns)
+    
+    Turn-based windows are more reliable than temporal windows because
+    user response times vary unpredictably (seconds to minutes), while
+    turn ordering is deterministic and preserves conversational structure.
     
     Example:
-        Relevant message at 12:00:00
-        Window: All messages from 11:59:00 to 12:01:00
+        Anchor message at turn 15
+        Window: All messages from turn 13 to turn 17
     """
     
     def __init__(self, collection):
@@ -200,51 +205,55 @@ class ContextWindowRetriever:
             collection: ChromaDB collection to query
         """
         self.collection = collection
-        self.window_seconds = 60  # ±60 second window
+        self.window_turns = 2  # ±2 turns around anchor
     
     def get_context_window(
         self,
-        anchor_timestamp: float,
+        anchor_turn_number: int,
         node_id: str,
         exclude_buffer_cutoff: Optional[float] = None
     ) -> List[Dict[str, Any]]:
         """
-        Get all messages within ±60s of anchor timestamp.
+        Get all messages within ±2 turns of anchor turn number.
         
         Args:
-            anchor_timestamp: Timestamp of relevant message
+            anchor_turn_number: Turn number of the anchor message
             node_id: Conversation node to search within
-            exclude_buffer_cutoff: Don't retrieve messages newer than this
+            exclude_buffer_cutoff: Don't retrieve messages newer than this timestamp
         
         Returns:
-            List of messages in time window, sorted by timestamp
+            List of messages in turn window, sorted by turn_number
         """
         try:
-            # Calculate window bounds
-            window_start = anchor_timestamp - self.window_seconds
-            window_end = anchor_timestamp + self.window_seconds
+            if anchor_turn_number <= 0:
+                print(f"⚠️  Invalid turn number: {anchor_turn_number}")
+                return []
             
-            # Apply buffer cutoff if provided
+            # Calculate turn window bounds
+            turn_start = max(1, anchor_turn_number - self.window_turns)
+            turn_end = anchor_turn_number + self.window_turns
+            
+            # Build where clause using turn_number range
+            where_conditions = [
+                {"archived": {"$eq": True}},
+                {"node_id": {"$eq": node_id}},
+                {"turn_number": {"$gte": turn_start}},
+                {"turn_number": {"$lte": turn_end}}
+            ]
+            
+            # Optionally exclude messages still in buffer (by timestamp cutoff)
             if exclude_buffer_cutoff:
-                window_end = min(window_end, exclude_buffer_cutoff)
+                where_conditions.append({"timestamp": {"$lt": exclude_buffer_cutoff}})
             
-            # Build where clause
-            where_clause = {
-                "$and": [
-                    {"archived": {"$eq": True}},
-                    {"node_id": {"$eq": node_id}},
-                    {"timestamp": {"$gte": window_start}},
-                    {"timestamp": {"$lte": window_end}}
-                ]
-            }
+            where_clause = {"$and": where_conditions}
             
-            # Get all messages in window
+            # Get all messages in turn window
             results = self.collection.get(
                 where=where_clause,
                 include=["documents", "metadatas"]
             )
             
-            # Parse and sort by timestamp
+            # Parse and sort by turn_number (deterministic ordering)
             messages = []
             if results and results['documents']:
                 for i, doc in enumerate(results['documents']):
@@ -252,11 +261,12 @@ class ContextWindowRetriever:
                     messages.append({
                         "text": doc,
                         "metadata": metadata,
+                        "turn_number": metadata.get("turn_number", 0),
                         "timestamp": metadata.get("timestamp", 0)
                     })
             
-            # Sort chronologically
-            messages.sort(key=lambda x: x["timestamp"])
+            # Sort by turn number (chronological within the conversation)
+            messages.sort(key=lambda x: x["turn_number"])
             
             return messages
             
@@ -271,7 +281,8 @@ class GlobalVectorIndex:
     
     ENHANCED WITH:
     - Multi-query decomposition for better retrieval
-    - Context window retrieval (±60s around relevant messages)
+    - Turn-based context window retrieval (±2 turns around relevant messages)
+    - Re-rank-then-expand pipeline: select top-k anchors first, then expand
     - Backward compatible retrieve_relevant() method
     
     Messages are automatically added when evicted from LocalBuffer (10+ messages old).
@@ -433,6 +444,7 @@ class GlobalVectorIndex:
                 "node_id": node_id,
                 "role": metadata.get("role", "unknown"),
                 "timestamp": float(metadata.get("timestamp", time.time())),
+                "turn_number": int(metadata.get("turn_number", 0)),  # Turn-based ordering within node
                 "conversation_title": metadata.get("conversation_title", "Untitled"),  # Store title
                 "archived": True  # Mark as archived (not in buffer)
             }
@@ -516,23 +528,24 @@ class GlobalVectorIndex:
         use_context_windows: bool = True
     ) -> List[Dict[str, Any]]:
         """
-        ENHANCED RETRIEVAL with multi-query decomposition + context windows.
+        ENHANCED RETRIEVAL with multi-query decomposition + turn-based context windows.
         
-        This is the NEW method that should be used for all retrieval.
-        It dramatically improves recall by:
-        1. Decomposing vague queries into 5-7 specific sub-queries
-        2. Retrieving context windows (±60s) around relevant messages
-        3. Merging and deduplicating results
+        Pipeline:
+        1. Decompose query into sub-queries (multi-query decomposition)
+        2. Retrieve candidates per sub-query, deduplicate across all
+        3. Re-rank the deduplicated anchors by cosine similarity → select top-k
+        4. For each top-k winner, expand ±2 turns to form coherent context blocks
         
         Args:
             query: Search query (user's message or question)
-            top_k: Number of final results to return
+            top_k: Number of anchor messages to return
             node_id: Limit search to specific conversation node
             exclude_buffer_cutoff: Don't retrieve messages newer than this timestamp
-            use_context_windows: Whether to retrieve ±60s context around hits
+            use_context_windows: Whether to retrieve ±2 turn context around hits
         
         Returns:
-            List of retrieved messages with metadata and relevance scores
+            List of retrieved messages with metadata, relevance scores, and
+            coherent context blocks (neighbours grouped with their anchors)
         """
         try:
             # Check if collection is empty
@@ -555,16 +568,16 @@ class GlobalVectorIndex:
                 print("⚠️  Query decomposer not available, using single query")
                 sub_queries = [query]
             
-            # PHASE 2: Retrieve with each sub-query
+            # PHASE 2: Retrieve with each sub-query (deduplicated across all)
             all_results = []
             seen_message_ids: Set[str] = set()
-            seen_texts: Set[str] = set()  # 🆕 Track seen message texts for deduplication
-            sub_query_results = {}  # Track results per sub-query for logging
+            seen_texts: Set[str] = set()
+            sub_query_results = {}
             
             for i, sub_query in enumerate(sub_queries, 1):
                 print(f"\n📋 Sub-query {i}/{len(sub_queries)}: {sub_query}")
                 
-                sub_query_results[sub_query] = []  # Initialize results list for this sub-query
+                sub_query_results[sub_query] = []
                 
                 # Build where clause
                 where_clause = None
@@ -586,7 +599,7 @@ class GlobalVectorIndex:
                 )
                 
                 # Parse results and deduplicate by text
-                unique_count = 0  # Track unique results for this sub-query
+                unique_count = 0
                 if results and results['documents'] and results['documents'][0]:
                     for j, doc in enumerate(results['documents'][0]):
                         # Stop if we already have 5 unique results for this sub-query
@@ -595,120 +608,141 @@ class GlobalVectorIndex:
                         
                         metadata = results['metadatas'][0][j] if results['metadatas'] else {}
                         distance = results['distances'][0][j] if results['distances'] else 1.0
-                        score = max(0.0, 1.0 - distance)  # Fix: Clamp negative scores to 0
+                        score = max(0.0, 1.0 - distance)  # Clamp negative scores to 0
                         
                         # Filter by timestamp if cutoff provided
                         if exclude_buffer_cutoff:
                             msg_timestamp = metadata.get('timestamp', 0)
                             if msg_timestamp >= exclude_buffer_cutoff:
                                 print(f"   ⏭️  Skipped (in buffer): {doc[:80]}...")
-                                continue  # Skip messages still in buffer
+                                continue
                         
-                        # 🆕 Check for duplicate text (normalize for comparison)
+                        # Check for duplicate text (normalize for comparison)
                         normalized_text = doc.strip().lower()
                         if normalized_text in seen_texts:
                             print(f"   ⏭️  Skipped duplicate: {doc[:80]}...")
-                            continue  # Skip duplicate, search for next unique
+                            continue
                         
                         # Create unique ID for deduplication by message ID
                         msg_id = f"{metadata.get('node_id', '')}_{metadata.get('timestamp', 0)}"
                         
                         if msg_id not in seen_message_ids:
-                            # First time seeing this text and message ID - keep it
                             seen_message_ids.add(msg_id)
-                            seen_texts.add(normalized_text)  # 🆕 Track text
-                            unique_count += 1  # Increment unique counter
+                            seen_texts.add(normalized_text)
+                            unique_count += 1
                             
                             all_results.append({
                                 "text": doc,
                                 "score": score,
                                 "metadata": metadata,
-                                "sub_query": sub_query,  # Track which sub-query found this
+                                "sub_query": sub_query,
                                 "message_id": msg_id
                             })
                             
-                            # ✅ Store result for this sub-query AFTER deduplication (for logging)
                             sub_query_results[sub_query].append({
                                 "text": doc,
                                 "score": score,
                                 "metadata": metadata
                             })
                             
-                            print(f"   ✓ Found: {doc[:80]}... (score: {score:.3f})")
+                            print(f"   ✓ Found: {doc[:80]}... (score: {score:.3f}, turn: {metadata.get('turn_number', '?')})")
                 else:
                     print(f"   ✗ No results found")
             
-            print(f"\n📊 Total unique messages from {len(sub_queries)} sub-queries: {len(all_results)}")
+            print(f"\n📊 Total unique anchor messages from {len(sub_queries)} sub-queries: {len(all_results)}")
             
-            # PHASE 3: Context Window Expansion
+            # PHASE 3: Re-Rank ANCHORS ONLY → select top-k
+            print(f"\n{'='*80}")
+            print(f"🎯 PHASE 3: RE-RANKING ANCHORS ({len(all_results)} candidates → top {top_k})")
+            print(f"{'='*80}")
+            
+            # Sort anchors by cosine similarity score, timestamp as tiebreaker
+            all_results.sort(key=lambda x: (x['score'], x['metadata'].get('timestamp', 0)), reverse=True)
+            top_anchors = all_results[:top_k]
+            
+            for i, anchor in enumerate(top_anchors, 1):
+                turn = anchor['metadata'].get('turn_number', '?')
+                print(f"   #{i} [turn {turn}] score={anchor['score']:.3f}: {anchor['text'][:80]}...")
+            
+            print(f"✅ Selected top {len(top_anchors)} anchors by embedding similarity")
+            
+            # PHASE 4: Turn-Based Context Window Expansion (±2 turns per anchor)
+            final_results = []
+            
             if use_context_windows and self.context_retriever and node_id:
-                print(f"\n🔍 PHASE 3: Context Window Expansion (±60s)")
+                print(f"\n🔍 PHASE 4: Turn-Based Context Expansion (±{self.context_retriever.window_turns} turns per anchor)")
                 
-                expanded_results = []
-                context_message_ids: Set[str] = set()
+                seen_context_ids: Set[str] = set()
                 
-                # For each result, get context window
-                for result in all_results:
-                    anchor_timestamp = result['metadata'].get('timestamp', 0)
+                for anchor in top_anchors:
+                    anchor_turn = anchor['metadata'].get('turn_number', 0)
+                    anchor_node = anchor['metadata'].get('node_id', node_id)
                     
-                    # Get context window
+                    if anchor_turn <= 0:
+                        # Fallback: no turn_number available, return anchor only
+                        print(f"   ⚠️  No turn_number for anchor, returning without context")
+                        final_results.append(anchor)
+                        continue
+                    
+                    # Get ±2 turn context window around this anchor
                     context_messages = self.context_retriever.get_context_window(
-                        anchor_timestamp=anchor_timestamp,
-                        node_id=node_id,
+                        anchor_turn_number=anchor_turn,
+                        node_id=anchor_node,
                         exclude_buffer_cutoff=exclude_buffer_cutoff
                     )
                     
-                    # Add context messages
+                    # Build coherent block: anchor + its neighbours
+                    block_messages = []
                     for ctx_msg in context_messages:
                         ctx_id = f"{ctx_msg['metadata'].get('node_id', '')}_{ctx_msg['metadata'].get('timestamp', 0)}"
+                        ctx_turn = ctx_msg.get('turn_number', ctx_msg['metadata'].get('turn_number', 0))
                         
-                        if ctx_id not in context_message_ids:
-                            context_message_ids.add(ctx_id)
+                        if ctx_id not in seen_context_ids:
+                            seen_context_ids.add(ctx_id)
                             
-                            # Check if this is the anchor message (already in results)
-                            if ctx_id == result['message_id']:
-                                expanded_results.append(result)  # Keep original score
-                            else:
-                                # Add as context with lower score
-                                expanded_results.append({
-                                    "text": ctx_msg['text'],
-                                    "score": result['score'] * 0.8,  # Slightly lower score for context
-                                    "metadata": ctx_msg['metadata'],
-                                    "is_context": True,  # Mark as context
-                                    "message_id": ctx_id
-                                })
+                            is_anchor = (ctx_turn == anchor_turn)
+                            block_messages.append({
+                                "text": ctx_msg['text'],
+                                "score": anchor['score'] if is_anchor else anchor['score'] * 0.8,
+                                "metadata": ctx_msg['metadata'],
+                                "is_context": not is_anchor,
+                                "is_anchor": is_anchor,
+                                "anchor_turn": anchor_turn,
+                                "message_id": ctx_id
+                            })
+                    
+                    # If context window returned nothing (edge case), at least keep the anchor
+                    if not block_messages:
+                        block_messages.append({
+                            **anchor,
+                            "is_context": False,
+                            "is_anchor": True,
+                            "anchor_turn": anchor_turn
+                        })
+                    
+                    print(f"   ✓ Anchor turn {anchor_turn}: expanded to {len(block_messages)} messages (turns {block_messages[0]['metadata'].get('turn_number', '?')}–{block_messages[-1]['metadata'].get('turn_number', '?')})")
+                    final_results.extend(block_messages)
                 
-                print(f"   ✓ Expanded to {len(expanded_results)} messages (including context)")
-                all_results = expanded_results
-            
-            # PHASE 4: Re-Ranking
-            print(f"\n{'='*80}")
-            print(f"🎯 RE-RANKING ({len(all_results)} candidates)")
-            print(f"{'='*80}")
-            
-            # Sort by embedding similarity score (all-mpnet-base-v2 is quite good!)
-            # Higher scores are better (similarity scores), recent timestamps as tiebreaker
-            all_results.sort(key=lambda x: (x['score'], x['metadata'].get('timestamp', 0)), reverse=True)
-            final_results = all_results[:top_k]
-            
-            print(f"✅ Selected top {len(final_results)} results by embedding similarity")
+                print(f"   ✅ Total: {len(final_results)} messages in {len(top_anchors)} coherent blocks")
+            else:
+                # No context expansion — just return the top anchors
+                final_results = top_anchors
             
             # Log retrieval to BOTH loggers
-            logger_overwrite = get_debug_logger(append_mode=False)  # For user viewing
-            logger_append = get_debug_logger(append_mode=True)      # For full debugging
+            logger_overwrite = get_debug_logger(append_mode=False)
+            logger_append = get_debug_logger(append_mode=True)
             
             for logger in [logger_overwrite, logger_append]:
                 logger.log_retrieval(
                     query=query,
                     intent=intent if self.query_decomposer else "unknown",
                     sub_queries=sub_queries,
-                    sub_query_results=sub_query_results,  # Pass detailed sub-query results
+                    sub_query_results=sub_query_results,
                     retrieved_results=final_results,
                     node_id=node_id
                 )
             
-            # Print brief summary to terminal
-            print(f"✅ Retrieved {len(final_results)} results (logged to file)")
+            print(f"✅ Retrieved {len(final_results)} results in coherent blocks (logged to file)")
             
             return final_results
             

@@ -99,6 +99,14 @@ class ServerlessTestRunner:
                 f.write(f"Started: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
                 f.write(f"{'='*80}\n\n")
         
+        # Initialize recall probe detail log
+        recall_log = self.buffer_log_dir / "recall_probes_detail.log"
+        with open(recall_log, 'w') as f:
+            f.write(f"{'='*80}\n")
+            f.write(f"RECALL PROBES DETAIL LOG (Buffer Size: {buffer_size})\n")
+            f.write(f"Started: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+            f.write(f"{'='*80}\n\n")
+
         # Initialize component log files (summary + full pairs)
         components = ["BUFFER", "VECTOR_STORE", "RETRIEVAL", "COT_THINKING", "JUDGE"]
         for component in components:
@@ -182,6 +190,74 @@ class ServerlessTestRunner:
     def log_judge(self, message: str, full: bool = False):
         """Log LLM judge decisions to buffer-specific JUDGE.log"""
         self.log_component("JUDGE", message, full)
+
+    def _log_recall_probe_detail(
+        self,
+        topic: str,
+        target_node: str,
+        probe_message: str,
+        llm_response: str,
+        reference_conversations: list,
+        reference_text: str,
+        scores: dict,
+        mode: str,
+        is_main_only: bool = False,
+    ):
+        """
+        Write detailed recall probe information to recall_probes_detail.log.
+
+        Logs: topic, target node, probe question, full LLM summary,
+        all true conversations on that node, BLEU/ROUGE scores.
+        """
+        if self.buffer_log_dir is None:
+            return
+
+        log_file = self.buffer_log_dir / "recall_probes_detail.log"
+        with open(log_file, "a") as f:
+            f.write(f"{'='*80}\n")
+            f.write(f"RECALL PROBE — [{mode.upper()}] Topic: {topic}\n")
+            f.write(f"Target Node: {target_node}")
+            if is_main_only:
+                f.write(" (⚠️ main-only topic — no subchat exists)")
+            f.write(f"\n")
+            f.write(f"{'-'*80}\n")
+
+            # 1. The probe question
+            f.write(f"\n📝 PROBE QUESTION:\n")
+            f.write(f"   {probe_message}\n")
+
+            # 2. The LLM's summary response
+            f.write(f"\n🤖 LLM SUMMARY RESPONSE:\n")
+            for line in llm_response.split("\n"):
+                f.write(f"   {line}\n")
+
+            # 3. True reference conversations (what actually happened on this node)
+            f.write(f"\n📚 TRUE CONVERSATIONS ON THIS TOPIC ({len(reference_conversations)} entries):\n")
+            f.write(f"{'-'*60}\n")
+            for entry in reference_conversations:
+                role = entry.get("role", "unknown")
+                msg = entry.get("message", "")
+                step = entry.get("step", "?")
+                if role == "user":
+                    f.write(f"   [Step {step}] 👤 User: {msg}\n")
+                elif role == "expected":
+                    f.write(f"   [Step {step}] 📋 Expected: {msg}\n")
+                else:
+                    f.write(f"   [Step {step}] {role}: {msg}\n")
+            f.write(f"{'-'*60}\n")
+
+            # 4. Scores
+            f.write(f"\n📊 SCORES:\n")
+            f.write(f"   ROUGE-1 (F1): {scores.get('rouge1_f', 0):.4f}\n")
+            f.write(f"   ROUGE-L (F1): {scores.get('rougeL_f', 0):.4f}\n")
+            f.write(f"   BLEU-2:       {scores.get('bleu', 0):.4f}\n")
+
+            # 5. Quick reference text length comparison
+            ref_words = len(reference_text.split()) if reference_text else 0
+            resp_words = len(llm_response.split()) if llm_response else 0
+            f.write(f"\n   Reference length: {ref_words} words\n")
+            f.write(f"   Response length:  {resp_words} words\n")
+            f.write(f"{'='*80}\n\n")
 
     def clear_state(self):
         """Clear all nodes in memory for fresh test"""
@@ -440,13 +516,11 @@ class ServerlessTestRunner:
             self.log("❌ Failed to create baseline conversation", "ERROR", "baseline")
             return results
         
-        # Store for recall probes (accessed by run_full_evaluation after test)
-        self._last_baseline_node_id = main_node_id
-        
         self.log(f"  📝 Created single conversation for all topics", "INFO", "baseline")
         self.log(f"  📋 Available topics for detection: {available_topics}", "INFO", "baseline")
         
         tp_count = tn_count = fp_count = fn_count = 0
+        recall_probe_results = []  # Collect inline recall probe results
         
         for step_data in scenario["conversations"]:
             step = step_data["step"]
@@ -454,6 +528,63 @@ class ServerlessTestRunner:
             message = step_data["message"]
             expected = step_data["expected"]
             
+            # ── RECALL PROBE HANDLING (baseline: everything goes to main) ──
+            if step_data.get("is_recall_probe", False):
+                probe_topic = step_data.get("probe_topic", context)
+                self.log(f"\n🔬 [Recall Probe] Topic: {probe_topic} → main node", "INFO", "baseline")
+                self.log(f"  💬 Probe: {message}", "INFO", "baseline")
+                
+                response = self.send_message(main_node_id, message)
+                if not response or not response.get("response"):
+                    self.log(f"  ❌ No response for recall probe '{probe_topic}'", "WARN", "baseline")
+                    recall_probe_results.append({
+                        "topic": probe_topic, "mode": "baseline",
+                        "rouge1_f": 0.0, "rougeL_f": 0.0, "bleu": 0.0,
+                        "summary_length": 0,
+                        "reference_length": len(step_data.get("reference_text", "").split()),
+                        "summary": "", "probe_tokens": 0, "probe_latency": 0.0,
+                        "is_main_only": step_data.get("is_main_only_topic", False),
+                        "target_node": "main",
+                    })
+                    continue
+                
+                ai_summary = response["response"]
+                ref_text = step_data.get("reference_text", "")
+                scores = self._compute_recall_scores(ai_summary, ref_text)
+                
+                self.log(f"  🤖 Summary: {ai_summary[:200]}...", "INFO", "baseline")
+                self.log(f"  📊 ROUGE-1={scores['rouge1_f']:.3f}  ROUGE-L={scores['rougeL_f']:.3f}  BLEU={scores['bleu']:.3f}", "INFO", "baseline")
+                
+                # Detailed log
+                self._log_recall_probe_detail(
+                    topic=probe_topic,
+                    target_node="main",
+                    probe_message=message,
+                    llm_response=ai_summary,
+                    reference_conversations=step_data.get("reference_conversations", []),
+                    reference_text=ref_text,
+                    scores=scores,
+                    mode="baseline",
+                    is_main_only=step_data.get("is_main_only_topic", False),
+                )
+                
+                recall_probe_results.append({
+                    "topic": probe_topic, "mode": "baseline",
+                    "rouge1_f": scores["rouge1_f"],
+                    "rougeL_f": scores["rougeL_f"],
+                    "bleu": scores["bleu"],
+                    "summary_length": len(ai_summary.split()),
+                    "reference_length": len(ref_text.split()),
+                    "summary": ai_summary[:500],
+                    "probe_tokens": response.get("usage", {}).get("total_tokens", 0),
+                    "probe_latency": response.get("latency", 0.0),
+                    "is_main_only": step_data.get("is_main_only_topic", False),
+                    "target_node": "main",
+                })
+                time.sleep(0.3)
+                continue  # Skip normal judge/topic evaluation for probes
+            
+            # ── NORMAL CONVERSATION STEP ──
             # Get expected topic from context
             expected_topic = self._normalize_context_to_topic(context)
             
@@ -521,9 +652,17 @@ class ServerlessTestRunner:
             
             time.sleep(0.3)
         
+        # Store inline recall probe results for aggregation
+        self._last_baseline_recall_probes = recall_probe_results
+        
         self.log("\n" + "="*80, "INFO", "baseline")
         self.log("📊 BASELINE TEST SUMMARY", "INFO", "baseline")
         self.log(f"   Total Steps: {len(results)}", "INFO", "baseline")
+        self.log(f"   Recall Probes: {len(recall_probe_results)}", "INFO", "baseline")
+        if recall_probe_results:
+            avg_r1 = sum(r["rouge1_f"] for r in recall_probe_results) / len(recall_probe_results)
+            avg_bl = sum(r["bleu"] for r in recall_probe_results) / len(recall_probe_results)
+            self.log(f"   Recall Avg ROUGE-1={avg_r1:.3f}  BLEU={avg_bl:.3f}", "INFO", "baseline")
         self.log(f"   ✅ Correct (TP+TN): {tp_count + tn_count}", "INFO", "baseline")
         self.log(f"   ❌ Incorrect (FP+FN): {fp_count + fn_count}", "INFO", "baseline")
         if results:
@@ -558,10 +697,10 @@ class ServerlessTestRunner:
             return results
         
         node_map["main"] = main_id
-        # Store for recall probes (accessed by run_full_evaluation after test)
-        self._last_system_node_map = node_map
         self.log(f"  📝 Created main conversation", "INFO", "system")
         self.log(f"  📋 Available topics for detection: {available_topics}", "INFO", "system")
+        
+        recall_probe_results = []  # Collect inline recall probe results
         
         for step_data in scenario["conversations"]:
             step = step_data["step"]
@@ -571,6 +710,67 @@ class ServerlessTestRunner:
             node_type = step_data.get("node_type", "main")
             action = step_data.get("action", "")
             
+            # ── RECALL PROBE HANDLING (system: route to correct subchat) ──
+            if step_data.get("is_recall_probe", False):
+                probe_topic = step_data.get("probe_topic", context)
+                target_node = node_map.get(node_type, main_id)
+                is_main_only = step_data.get("is_main_only_topic", False)
+                actual_target = node_type if node_type in node_map else "main (fallback)"
+                
+                self.log(f"\n🔬 [Recall Probe] Topic: {probe_topic} → Node: {actual_target}", "INFO", "system")
+                self.log(f"  💬 Probe: {message}", "INFO", "system")
+                
+                response = self.send_message(target_node, message)
+                if not response or not response.get("response"):
+                    self.log(f"  ❌ No response for recall probe '{probe_topic}'", "WARN", "system")
+                    recall_probe_results.append({
+                        "topic": probe_topic, "mode": "system",
+                        "rouge1_f": 0.0, "rougeL_f": 0.0, "bleu": 0.0,
+                        "summary_length": 0,
+                        "reference_length": len(step_data.get("reference_text", "").split()),
+                        "summary": "", "probe_tokens": 0, "probe_latency": 0.0,
+                        "is_main_only": is_main_only,
+                        "target_node": actual_target,
+                    })
+                    continue
+                
+                ai_summary = response["response"]
+                ref_text = step_data.get("reference_text", "")
+                scores = self._compute_recall_scores(ai_summary, ref_text)
+                
+                self.log(f"  🤖 Summary: {ai_summary[:200]}...", "INFO", "system")
+                self.log(f"  📊 ROUGE-1={scores['rouge1_f']:.3f}  ROUGE-L={scores['rougeL_f']:.3f}  BLEU={scores['bleu']:.3f}", "INFO", "system")
+                
+                # Detailed log
+                self._log_recall_probe_detail(
+                    topic=probe_topic,
+                    target_node=actual_target,
+                    probe_message=message,
+                    llm_response=ai_summary,
+                    reference_conversations=step_data.get("reference_conversations", []),
+                    reference_text=ref_text,
+                    scores=scores,
+                    mode="system",
+                    is_main_only=is_main_only,
+                )
+                
+                recall_probe_results.append({
+                    "topic": probe_topic, "mode": "system",
+                    "rouge1_f": scores["rouge1_f"],
+                    "rougeL_f": scores["rougeL_f"],
+                    "bleu": scores["bleu"],
+                    "summary_length": len(ai_summary.split()),
+                    "reference_length": len(ref_text.split()),
+                    "summary": ai_summary[:500],
+                    "probe_tokens": response.get("usage", {}).get("total_tokens", 0),
+                    "probe_latency": response.get("latency", 0.0),
+                    "is_main_only": is_main_only,
+                    "target_node": actual_target,
+                })
+                time.sleep(0.3)
+                continue  # Skip normal judge/topic evaluation for probes
+            
+            # ── NORMAL CONVERSATION STEP ──
             # Get expected topic from context
             expected_topic = self._normalize_context_to_topic(context)
             
@@ -661,9 +861,17 @@ class ServerlessTestRunner:
             
             time.sleep(0.3)
         
+        # Store inline recall probe results for aggregation
+        self._last_system_recall_probes = recall_probe_results
+        
         self.log("\n" + "="*80, "INFO", "system")
         self.log("📊 SYSTEM TEST SUMMARY", "INFO", "system")
         self.log(f"   Total Steps: {len(results)}", "INFO", "system")
+        self.log(f"   Recall Probes: {len(recall_probe_results)}", "INFO", "system")
+        if recall_probe_results:
+            avg_r1 = sum(r["rouge1_f"] for r in recall_probe_results) / len(recall_probe_results)
+            avg_bl = sum(r["bleu"] for r in recall_probe_results) / len(recall_probe_results)
+            self.log(f"   Recall Avg ROUGE-1={avg_r1:.3f}  BLEU={avg_bl:.3f}", "INFO", "system")
         self.log(f"   ✅ Correct (TP+TN): {tp_count + tn_count}", "INFO", "system")
         self.log(f"   ❌ Incorrect (FP+FN): {fp_count + fn_count}", "INFO", "system")
         if results:
@@ -674,48 +882,9 @@ class ServerlessTestRunner:
 
     # =========================================================================
     # RECALL PROBES: ROUGE/BLEU Scoring for Topic-Specific Context Retention
+    # Probes are now embedded directly in the scenario JSON as is_recall_probe steps.
+    # Detection & scoring happens inline in run_baseline_test() and run_system_test().
     # =========================================================================
-
-    def _build_topic_references(self, scenario: Dict, max_step: Optional[int] = None) -> Dict[str, str]:
-        """
-        Build reference text per topic from raw user messages in the scenario.
-        
-        Groups turns by their normalized context (topic), filters to topics with 
-        ≥3 turns, and concatenates the raw user messages as the reference text.
-        
-        Args:
-            scenario: The loaded scenario dict with 'conversations' list
-            max_step: If provided, only include turns up to this step number
-            
-        Returns:
-            Dict mapping topic_name -> concatenated user messages (reference text)
-        """
-        topic_messages = defaultdict(list)
-        
-        for step_data in scenario.get("conversations", []):
-            step = step_data.get("step", 0)
-            context = step_data.get("context", "")
-            message = step_data.get("message", "")
-            
-            # Respect checkpoint cutoff
-            if max_step is not None and step > max_step:
-                break
-            
-            # Skip intro/general steps
-            if not context or context in ["intro", "step_1"]:
-                continue
-            
-            topic = self._normalize_context_to_topic(context)
-            if topic and topic != "general":
-                topic_messages[topic].append(message)
-        
-        # Filter to topics with ≥3 turns
-        references = {}
-        for topic, messages in topic_messages.items():
-            if len(messages) >= 3:
-                references[topic] = " ".join(messages)
-        
-        return references
 
     def _compute_recall_scores(self, summary: str, reference: str) -> Dict[str, float]:
         """
@@ -759,125 +928,6 @@ class ServerlessTestRunner:
                 self.log(f"  ⚠️ BLEU scoring error: {e}", "WARN")
         
         return scores
-
-    def run_recall_probes(
-        self,
-        node_id_or_map: Any,
-        topic_references: Dict[str, str],
-        mode: str = "baseline",
-        checkpoint_label: str = "final"
-    ) -> List[Dict]:
-        """
-        Send recall probe prompts to the LLM and score responses with ROUGE/BLEU.
-        
-        For each eligible topic, sends "Summarize everything we discussed about {topic}"
-        to the appropriate node, then scores the response against the reference text.
-        
-        Args:
-            node_id_or_map: Either a single node_id (baseline) or a dict {node_type: node_id} (system)
-            topic_references: Dict from _build_topic_references (topic -> reference text)
-            mode: "baseline" or "system"
-            checkpoint_label: Label for this checkpoint (e.g., "turn_75", "turn_150", "final")
-            
-        Returns:
-            List of per-topic probe results
-        """
-        if not ROUGE_AVAILABLE and not BLEU_AVAILABLE:
-            self.log("⚠️ Neither rouge-score nor nltk installed, skipping recall probes", "WARN")
-            return []
-        
-        if not topic_references:
-            self.log("⚠️ No eligible topics for recall probes (need ≥3 turns)", "WARN")
-            return []
-        
-        self.log(f"\n{'='*60}", "INFO")
-        self.log(f"🔬 RECALL PROBES [{mode.upper()}] @ {checkpoint_label}", "INFO")
-        self.log(f"   Topics to probe: {len(topic_references)}", "INFO")
-        self.log(f"{'='*60}", "INFO")
-        
-        probe_results = []
-        
-        for topic, reference_text in sorted(topic_references.items()):
-            # Determine target node
-            if mode == "baseline":
-                target_node_id = node_id_or_map  # single node
-            else:
-                # System mode: find the best matching node for this topic
-                # Try exact match first, then fall back to main
-                target_node_id = None
-                if isinstance(node_id_or_map, dict):
-                    # Look for a node whose type contains the topic name
-                    for node_type, nid in node_id_or_map.items():
-                        normalized_type = self._normalize_context_to_topic(node_type)
-                        if normalized_type == topic:
-                            target_node_id = nid
-                            break
-                    # Fallback to main
-                    if target_node_id is None:
-                        target_node_id = node_id_or_map.get("main")
-                else:
-                    target_node_id = node_id_or_map
-            
-            if not target_node_id:
-                self.log(f"  ⚠️ No node found for topic '{topic}', skipping", "WARN")
-                continue
-            
-            # Construct the probe prompt
-            probe_prompt = (
-                f"Summarize everything we have discussed about {topic.replace('_', ' ')}. "
-                f"Include all key points, details, and questions that were raised."
-            )
-            
-            self.log(f"  🔍 Probing: {topic} (node={target_node_id[:8]}...)", "INFO")
-            
-            response = self.send_message(target_node_id, probe_prompt)
-            
-            if not response or not response.get("response"):
-                self.log(f"  ❌ No response for topic '{topic}'", "WARN")
-                probe_results.append({
-                    "topic": topic,
-                    "checkpoint": checkpoint_label,
-                    "mode": mode,
-                    "rouge1_f": 0.0,
-                    "rougeL_f": 0.0,
-                    "bleu": 0.0,
-                    "summary_length": 0,
-                    "reference_length": len(reference_text.split()),
-                    "summary": "",
-                    "probe_tokens": 0,
-                    "probe_latency": 0.0
-                })
-                continue
-            
-            summary = response["response"]
-            scores = self._compute_recall_scores(summary, reference_text)
-            
-            self.log(f"    ROUGE-1={scores['rouge1_f']:.3f}  ROUGE-L={scores['rougeL_f']:.3f}  BLEU={scores['bleu']:.3f}", "INFO")
-            
-            probe_results.append({
-                "topic": topic,
-                "checkpoint": checkpoint_label,
-                "mode": mode,
-                "rouge1_f": scores["rouge1_f"],
-                "rougeL_f": scores["rougeL_f"],
-                "bleu": scores["bleu"],
-                "summary_length": len(summary.split()),
-                "reference_length": len(reference_text.split()),
-                "summary": summary[:500],  # Truncate for storage
-                "probe_tokens": response.get("usage", {}).get("total_tokens", 0),
-                "probe_latency": response.get("latency", 0.0)
-            })
-            
-            time.sleep(0.3)
-        
-        # Log aggregate scores
-        if probe_results:
-            avg_rouge1 = sum(r["rouge1_f"] for r in probe_results) / len(probe_results)
-            avg_rougeL = sum(r["rougeL_f"] for r in probe_results) / len(probe_results)
-            avg_bleu = sum(r["bleu"] for r in probe_results) / len(probe_results)
-            self.log(f"\n  📊 Avg ROUGE-1={avg_rouge1:.3f}  ROUGE-L={avg_rougeL:.3f}  BLEU={avg_bleu:.3f}", "INFO")
-        
-        return probe_results
 
     def calculate_metrics(self, baseline_results: List[Dict], system_results: List[Dict]) -> Dict:
         """Calculate all metrics for tables including per-topic confusion matrix"""
@@ -1403,9 +1453,9 @@ class ServerlessTestRunner:
             if not scenario:
                 continue
             
-            # Build topic references for recall probes
-            topic_references = self._build_topic_references(scenario)
-            self.log(f"  📋 Recall probe topics (≥3 turns): {len(topic_references)}", "INFO")
+            # Check if scenario has embedded recall probes
+            probe_count = sum(1 for s in scenario.get("conversations", []) if s.get("is_recall_probe"))
+            self.log(f"  📋 Embedded recall probes: {probe_count}", "INFO")
             
             # BASELINE TEST (only if mode is 'baseline' or 'both')
             if test_mode in ['baseline', 'both']:
@@ -1414,15 +1464,9 @@ class ServerlessTestRunner:
                 baseline_results = self.run_baseline_test(scenario, buffer_size=buffer_size)
                 all_baseline_results.extend(baseline_results)
                 
-                # Run recall probes BEFORE clearing state (nodes still alive)
-                if topic_references and (ROUGE_AVAILABLE or BLEU_AVAILABLE):
-                    baseline_node_id = getattr(self, '_last_baseline_node_id', None)
-                    if baseline_node_id:
-                        baseline_probes = self.run_recall_probes(
-                            baseline_node_id, topic_references,
-                            mode="baseline", checkpoint_label=f"final_buf{buffer_size}"
-                        )
-                        all_baseline_probe_results.extend(baseline_probes)
+                # Collect inline recall probe results (stored by run_baseline_test)
+                baseline_probes = getattr(self, '_last_baseline_recall_probes', [])
+                all_baseline_probe_results.extend(baseline_probes)
             
             # SYSTEM TEST (only if mode is 'system' or 'both')
             if test_mode in ['system', 'both']:
@@ -1431,15 +1475,9 @@ class ServerlessTestRunner:
                 system_results = self.run_system_test(scenario, buffer_size=buffer_size)
                 all_system_results.extend(system_results)
                 
-                # Run recall probes BEFORE clearing state (nodes still alive)
-                if topic_references and (ROUGE_AVAILABLE or BLEU_AVAILABLE):
-                    system_node_map = getattr(self, '_last_system_node_map', None)
-                    if system_node_map:
-                        system_probes = self.run_recall_probes(
-                            system_node_map, topic_references,
-                            mode="system", checkpoint_label=f"final_buf{buffer_size}"
-                        )
-                        all_system_probe_results.extend(system_probes)
+                # Collect inline recall probe results (stored by run_system_test)
+                system_probes = getattr(self, '_last_system_recall_probes', [])
+                all_system_probe_results.extend(system_probes)
         
         # Calculate metrics (including recall probes)
         self.log("\n📊 Calculating metrics...", "INFO")

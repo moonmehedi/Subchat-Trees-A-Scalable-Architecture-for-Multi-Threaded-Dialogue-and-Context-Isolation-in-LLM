@@ -3,6 +3,7 @@
 Kaggle SERVERLESS Test Runner
 Uses DIRECT Python imports instead of HTTP requests
 This allows the test to run in the same process as the loaded vLLM model
+serverless
 """
 
 import os
@@ -1350,82 +1351,14 @@ class ServerlessTestRunner:
             self.log(f"ℹ️ Skipping TABLE_2 (no recall probe data available)", "INFO")
 
     def git_commit_and_push(self, files_to_add: List[str], commit_message: str) -> tuple:
-        """Commit and push to GitHub"""
-        try:
-            original_cwd = os.getcwd()
-            os.chdir(self.repo_root)
-            
-            self.log("="*80, "INFO")
-            self.log("📤 GIT PUSH: Starting commit and push", "INFO")
-            self.log("="*80, "INFO")
-            
-            for file_path in files_to_add:
-                try:
-                    rel_path = Path(file_path).relative_to(self.repo_root)
-                except ValueError:
-                    rel_path = Path(file_path)
-                subprocess.run(["git", "add", str(rel_path)], capture_output=True)
-                self.log(f"  ✅ Added: {rel_path}", "INFO")
-            
-            commit_result = subprocess.run(
-                ["git", "commit", "-m", commit_message],
-                capture_output=True, text=True
-            )
-            
-            if commit_result.returncode != 0:
-                if "nothing to commit" in commit_result.stdout.lower():
-                    self.log("  ℹ️  No changes to commit", "INFO")
-                    return True, "No changes"
-                return False, f"Commit failed: {commit_result.stderr}"
-            
-            self.log(f"  ✅ Committed: {commit_message}", "INFO")
-            
-            if "GITHUB_TOKEN" not in os.environ:
-                return False, "GITHUB_TOKEN not found"
-            
-            repo_url = f"https://{os.environ['GITHUB_TOKEN']}@github.com/moonmehedi/Subchat-Trees-A-Scalable-Architecture-for-Multi-Threaded-Dialogue-and-Context-Isolation-in-LLM.git"
-            subprocess.run(["git", "remote", "set-url", "origin", repo_url], capture_output=True)
-            
-            push_result = subprocess.run(
-                ["git", "push", "origin", self.repo_branch],
-                capture_output=True, text=True
-            )
-            
-            if push_result.returncode == 0:
-                self.log("  ✅ Push successful!", "INFO")
-                return True, "Push successful"
-            else:
-                return False, f"Push failed: {push_result.stderr}"
-        except Exception as e:
-            return False, f"Exception: {e}"
-        finally:
-            os.chdir(original_cwd)
+        """Git push disabled - output is saved directly on Kaggle."""
+        self.log("ℹ️  Git push disabled (output saved on Kaggle)", "INFO")
+        return True, "Push disabled"
 
     def push_buffer_results(self, buffer_size: int) -> bool:
-        """Push results for completed buffer test"""
-        self.log(f"\n📤 PUSHING RESULTS FOR BUFFER SIZE {buffer_size}", "INFO")
-        
-        buffer_dir = self.base_logs_dir / "tables" / f"buffer_{buffer_size}"
-        files_to_push = []
-        
-        for f in buffer_dir.glob("*"):
-            files_to_push.append(str(f))
-        
-        # Also add log files
-        if self.baseline_log_file and self.baseline_log_file.exists():
-            files_to_push.append(str(self.baseline_log_file))
-        if self.system_log_file and self.system_log_file.exists():
-            files_to_push.append(str(self.system_log_file))
-        
-        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        commit_msg = f"Kaggle SERVERLESS: Buffer {buffer_size} results - {timestamp}"
-        
-        success, message = self.git_commit_and_push(files_to_push, commit_msg)
-        
-        if success:
-            self.log(f"✅ Pushed buffer {buffer_size} results", "INFO")
-        else:
-            self.log(f"❌ Push failed: {message}", "ERROR")
+        """Git push disabled - output is saved directly on Kaggle."""
+        self.log(f"ℹ️  Skipping push for buffer {buffer_size} (output saved on Kaggle)", "INFO")
+        return True
         
         return success
 
@@ -1931,36 +1864,13 @@ class ServerlessTestRunner:
                     results = json.load(f)
                     all_metrics[buffer_size] = results["metrics"]
             
-            # Push after each buffer
-            push_success = self.push_buffer_results(buffer_size)
-            
-            if not push_success:
-                self.log("❌ CRITICAL: Git push failed! Stopping.", "ERROR")
-                return
-            
             self.log(f"\n✅ Completed buffer size {buffer_size}", "INFO")
         
         # Generate comparison visualization
         self.log("\n📊 Generating final comparison visualization...", "INFO")
         self.generate_comparison_visualization(all_metrics)
         
-        # Push final visualization
-        viz_file = self.base_logs_dir / "visualization" / "index.html"
-        if viz_file.exists():
-            timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            commit_msg = f"Kaggle Serverless: Final comparison visualization - {timestamp}"
-            success, message = self.git_commit_and_push([str(viz_file)], commit_msg)
-            
-            if not success:
-                # Log warning to both console AND file so it's visible in Kaggle logs
-                warning_msg = f"⚠️  Warning: Could not push visualization: {message}"
-                self.log(warning_msg, "WARN")
-                # Also write to main log explicitly
-                with open(self.main_log_file, 'a') as f:
-                    f.write(f"[{datetime.now().strftime('%H:%M:%S')}] [WARN] {warning_msg}\n")
-        
         self.log("\n🎉 KAGGLE SERVERLESS MULTI-BUFFER COMPARISON COMPLETE!", "INFO")
-        self.log(f"   All results pushed to branch: {self.repo_branch}", "INFO")
         self.log(f"   Results directory: {self.base_logs_dir / 'tables'}", "INFO")
         self.log(f"   Visualization: {self.base_logs_dir / 'visualization' / 'index.html'}", "INFO")
 

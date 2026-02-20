@@ -97,8 +97,7 @@ class TestProbeDataIntegrity(unittest.TestCase):
     def test_each_probe_has_required_fields(self):
         """Every probe must have the essential fields."""
         required = [
-            "is_recall_probe", "probe_topic", "reference_text",
-            "reference_conversations", "node_type", "message",
+            "is_recall_probe", "probe_topic", "node_type", "message",
             "action", "is_main_only_topic", "topic_turn_count",
         ]
         for p in self.probes:
@@ -108,28 +107,9 @@ class TestProbeDataIntegrity(unittest.TestCase):
                     f"Probe step {p['step']} missing field '{field}'"
                 )
 
-    def test_reference_text_not_empty(self):
-        """Every probe must have non-empty reference text."""
-        for p in self.probes:
-            self.assertTrue(
-                len(p["reference_text"].strip()) > 0,
-                f"Probe step {p['step']} ({p['probe_topic']}) has empty reference_text"
-            )
-
-    def test_reference_conversations_not_empty(self):
-        """Every probe must have at least one reference conversation entry."""
-        for p in self.probes:
-            self.assertGreater(
-                len(p["reference_conversations"]), 0,
-                f"Probe step {p['step']} ({p['probe_topic']}) has empty reference_conversations"
-            )
-
-    def test_reference_conversations_have_role_and_message(self):
-        """Each entry in reference_conversations must have 'role' and 'message'."""
-        for p in self.probes:
-            for i, entry in enumerate(p["reference_conversations"]):
-                self.assertIn("role", entry, f"Probe {p['probe_topic']} conv entry {i} missing 'role'")
-                self.assertIn("message", entry, f"Probe {p['probe_topic']} conv entry {i} missing 'message'")
+    # NOTE: reference_text and reference_conversations are no longer required in JSON.
+    # References are now built dynamically at runtime from real AI responses
+    # collected during the test run (see _build_recall_reference).
 
     def test_probe_topics_are_unique(self):
         """No two probes should target the same topic."""
@@ -306,11 +286,7 @@ class TestLogRecallProbeDetail(unittest.TestCase):
             target_node="subchat_1_cookies_recipe_halving",
             probe_message="Summarize everything about cookies recipe halving",
             llm_response="We discussed halving a cookie recipe. The user asked to divide ingredients by 2.",
-            reference_conversations=[
-                {"role": "user", "message": "Can you halve this recipe?", "step": 5},
-                {"role": "expected", "message": "Response about halving", "step": 5},
-            ],
-            reference_text="Can you halve this recipe? Response about halving",
+            reference_text="User: Can you halve this recipe? Assistant: Sure, divide all ingredients by 2.",
             scores={"rouge1_f": 0.65, "rougeL_f": 0.58, "bleu": 0.42},
             mode="system",
             is_main_only=False,
@@ -325,14 +301,14 @@ class TestLogRecallProbeDetail(unittest.TestCase):
         self.assertIn("SYSTEM", content)
         self.assertIn("PROBE QUESTION", content)
         self.assertIn("LLM SUMMARY RESPONSE", content)
-        self.assertIn("TRUE CONVERSATIONS", content)
+        self.assertIn("REFERENCE", content)
         self.assertIn("SCORES", content)
         self.assertIn("0.6500", content)  # ROUGE-1
         self.assertIn("0.5800", content)  # ROUGE-L
         self.assertIn("0.4200", content)  # BLEU
         self.assertIn("subchat_1_cookies_recipe_halving", content)
         self.assertIn("👤 User:", content)
-        self.assertIn("📋 Expected:", content)
+        self.assertIn("🤖 AI:", content)
 
     def test_main_only_flag_in_log(self):
         """main-only topics should show a warning marker."""
@@ -341,10 +317,7 @@ class TestLogRecallProbeDetail(unittest.TestCase):
             target_node="main",
             probe_message="Summarize ai meta discussions",
             llm_response="We talked about AI capabilities.",
-            reference_conversations=[
-                {"role": "user", "message": "Tell me about yourself", "step": 10},
-            ],
-            reference_text="Tell me about yourself",
+            reference_text="User: Tell me about yourself Assistant: I am an AI assistant.",
             scores={"rouge1_f": 0.3, "rougeL_f": 0.25, "bleu": 0.1},
             mode="baseline",
             is_main_only=True,
@@ -360,7 +333,7 @@ class TestLogRecallProbeDetail(unittest.TestCase):
         # Should not raise
         self.runner._log_recall_probe_detail(
             topic="test", target_node="main", probe_message="test",
-            llm_response="test", reference_conversations=[], reference_text="test",
+            llm_response="test", reference_text="test",
             scores={"rouge1_f": 0, "rougeL_f": 0, "bleu": 0}, mode="system"
         )
 
@@ -751,12 +724,14 @@ class TestProbeDetectionInTestLoop(unittest.TestCase):
         self.runner.create_subchat = MagicMock(return_value=fake_subchat_id)
 
         call_log = []
-        def track_send(node_id, message):
-            call_log.append({"node_id": node_id, "message": message})
+        def track_send(node_id, message, enable_rag=False):
+            call_log.append({"node_id": node_id, "message": message, "enable_rag": enable_rag})
             return {
                 "response": "cookies_recipe_halving: response text",
                 "usage": {"prompt_tokens": 50, "completion_tokens": 30, "total_tokens": 80},
-                "latency": 0.2
+                "latency": 0.2,
+                "rag_used": False,
+                "rag_decision": "disabled"
             }
 
         self.runner.send_message = track_send

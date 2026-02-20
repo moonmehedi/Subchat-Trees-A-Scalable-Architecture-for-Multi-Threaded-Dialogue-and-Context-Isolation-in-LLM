@@ -8,6 +8,9 @@ from ..cores.config import settings  # Use your existing config
 from .tools import ConversationTools
 from ..utils.debug_logger import get_debug_logger
 
+
+
+
 class SimpleLLMClient:
     """ Simple LLM client using Groq/vLLM/Ollama API with optional RAG.
     
@@ -134,6 +137,14 @@ class SimpleLLMClient:
             context_messages.append({
                 'role': 'system',
                 'content': f"FOLLOW-UP CONTEXT: {follow_up_prompt}"
+            })
+
+        # Inject RAG retrieved context if available (set by generate_response_with_rag Phase 2)
+        rag_context = getattr(node, '_rag_retrieved_context', None)
+        if rag_context:
+            context_messages.append({
+                'role': 'system',
+                'content': rag_context
             })
 
         # ✅ GET BUFFER MESSAGES WITH SUMMARY (for non-streaming too!)
@@ -679,6 +690,259 @@ Never mention tools or searching.
             # Fallback to standard streaming if no API key
             yield from self.generate_response_stream(node, user_message)
 
+    def _llm_call(self, messages, max_tokens=512, temperature=0.0):
+        """
+        Unified LLM call helper. Returns (response_text, usage_dict).
+        Works with vLLM, Groq, and Ollama backends.
+        """
+        if self.vllm_client:
+            text = self.vllm_client.generate(
+                messages=messages, temperature=temperature, max_tokens=max_tokens
+            )
+            return text, self.vllm_client.get_last_usage()
+        elif self.groq_client:
+            resp = self.groq_client.chat.completions.create(
+                model=settings.model_base, messages=messages,
+                max_tokens=max_tokens, temperature=temperature, stream=False
+            )
+            usage = {
+                "prompt_tokens": resp.usage.prompt_tokens if resp.usage else 0,
+                "completion_tokens": resp.usage.completion_tokens if resp.usage else 0,
+                "total_tokens": resp.usage.total_tokens if resp.usage else 0
+            }
+            return resp.choices[0].message.content.strip(), usage
+        elif self.ollama_available:
+            resp = ollama.chat(
+                model=settings.model_base, messages=messages,
+                options={"temperature": temperature, "num_predict": max_tokens}
+            )
+            usage = {
+                "prompt_tokens": resp.get('prompt_eval_count', 0),
+                "completion_tokens": resp.get('eval_count', 0),
+                "total_tokens": resp.get('prompt_eval_count', 0) + resp.get('eval_count', 0)
+            }
+            return resp['message']['content'], usage
+        else:
+            return None, {"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0}
+
+    @staticmethod
+    def _sum_usage(*usages):
+        """Sum multiple usage dicts into one."""
+        total = {"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0}
+        for u in usages:
+            if u:
+                total["prompt_tokens"] += u.get("prompt_tokens", 0)
+                total["completion_tokens"] += u.get("completion_tokens", 0)
+                total["total_tokens"] += u.get("total_tokens", 0)
+        return total
+
+    def generate_response_with_rag(self, node: TreeNode, user_message: str) -> tuple:
+        """
+        Generate NON-STREAMING response with two-phase RAG pipeline.
+        
+        Works with ANY backend (vLLM, Groq, Ollama) — no tool-calling API needed.
+        
+        Pipeline:
+        Phase 1 — DECISION: Tiny JSON prompt asks LLM if retrieval is needed.
+                  Output: {"retrieve": false} or {"retrieve": true, "query": "..."}
+        Phase 2 — ANSWER:   If retrieve=true, run multi-query retrieval, inject
+                  archived context, then call generate_response() (reuses baseline
+                  topic-routing prompt). If retrieve=false, call generate_response()
+                  directly — identical path to baseline.
+        
+        All token usage is aggregated: decision call + QueryDecomposer + answer call.
+        
+        Returns:
+            Tuple of (response_text: str, rag_metadata: dict)
+        """
+        rag_metadata = {
+            "rag_used": False,
+            "rag_query": None,
+            "rag_results_count": 0,
+            "rag_decision": "no_vector_index"
+        }
+        
+        if not self.vector_index:
+            response = self.generate_response(node, user_message)
+            return response, rag_metadata
+        
+        # ============================================================
+        # PHASE 1 — RETRIEVAL DECISION (tiny focused JSON prompt)
+        # ============================================================
+        decision_messages = [{
+            'role': 'system',
+            'content': (
+                "You are a retrieval decision module inside a RAG pipeline. "
+                "You will see recent conversation messages (buffer). Older messages exist in an archive you cannot see.\n\n"
+                "YOUR ONLY JOB: Decide whether the user's latest query needs information from the archive.\n\n"
+                "Answer with ONLY a JSON object — no other text:\n"
+                '  {"retrieve": false}  — if the buffer already has enough info to answer, or the question is general knowledge / follow-up / chit-chat.\n'
+                '  {"retrieve": true, "query": "<search query>"}  — if the user asks about something from the past NOT visible in the buffer '
+                '(e.g. "that I mentioned before", "recall what I said", "do you remember").\n\n'
+                "Rules:\n"
+                "- If unsure, default to {\"retrieve\": false}.\n"
+                "- Output ONLY valid JSON. No explanation, no extra text."
+            )
+        }]
+        
+        # Add buffer messages so LLM can see what's available
+        buffer_messages = node.buffer.get_context_messages(include_summary=True)
+        decision_messages.extend(buffer_messages)
+        
+        print(f'🧠 RAG Phase 1: LLM deciding whether retrieval needed...')
+        
+        try:
+            # Small max_tokens — output is just a JSON object
+            decision_text, decision_usage = self._llm_call(
+                decision_messages, max_tokens=80, temperature=0.0
+            )
+            
+            if decision_text is None:
+                rag_metadata["rag_decision"] = "no_backend"
+                return f"Echo: {user_message}", rag_metadata
+            
+            # Parse JSON decision
+            retrieve = False
+            search_query = None
+            try:
+                # Strip markdown code fences if LLM wraps output
+                clean = decision_text.strip()
+                if clean.startswith('```'):
+                    clean = clean.split('\n', 1)[-1].rsplit('```', 1)[0].strip()
+                decision = json.loads(clean)
+                retrieve = decision.get("retrieve", False)
+                search_query = decision.get("query", None) if retrieve else None
+            except (json.JSONDecodeError, AttributeError):
+                # Malformed JSON → safe default: no retrieval
+                print(f"⚠️  Decision JSON parse failed, defaulting to no retrieval. Raw: {decision_text[:100]}")
+                retrieve = False
+            
+            print(f"{'🔍' if retrieve else '✅'} Decision: retrieve={retrieve}"
+                  f"{f', query={search_query!r}' if search_query else ''}")
+            
+            # Build detailed reasoning string for debug log
+            # Includes: buffer messages fed to decision LLM + raw JSON output
+            decision_reasoning_parts = [
+                f"PHASE 1: RETRIEVAL DECISION (JSON mode)",
+                f"",
+                f"--- INPUT MESSAGES FED TO DECISION LLM ({len(decision_messages)} messages) ---",
+            ]
+            for i, msg in enumerate(decision_messages):
+                role = msg.get('role', '?')
+                content = msg.get('content', '')
+                # Truncate very long messages for readability
+                if len(content) > 300:
+                    content = content[:300] + f"... [truncated, {len(content)} chars total]"
+                decision_reasoning_parts.append(f"  [{i}] {role}: {content}")
+            decision_reasoning_parts.extend([
+                f"",
+                f"--- RAW LLM OUTPUT ---",
+                f"  {decision_text}",
+                f"",
+                f"--- PARSED RESULT ---",
+                f"  retrieve={retrieve}, search_query={search_query!r}",
+            ])
+            decision_reasoning = "\n".join(decision_reasoning_parts)
+            
+            # ============================================================
+            # PHASE 2 — RETRIEVAL (if needed) + ANSWER
+            # ============================================================
+            decomposer_usage = None
+            
+            if retrieve and search_query:
+                rag_metadata["rag_used"] = True
+                rag_metadata["rag_query"] = search_query
+                rag_metadata["rag_decision"] = "search_triggered"
+                
+                # Execute retrieval via ConversationTools
+                search_result = ConversationTools.execute_tool(
+                    tool_name="search_conversation_history",
+                    arguments={"query": search_query, "top_k": 5},
+                    vector_index=self.vector_index,
+                    node=node
+                )
+                
+                # Capture QueryDecomposer token usage (if available)
+                try:
+                    vi = self.vector_index
+                    if vi.query_decomposer and hasattr(vi.query_decomposer, 'get_last_usage'):
+                        decomposer_usage = vi.query_decomposer.get_last_usage()
+                except Exception:
+                    pass
+                
+                result_count = search_result.count("[USER]") + search_result.count("[ASSISTANT]")
+                rag_metadata["rag_results_count"] = result_count
+                print(f"📦 Retrieved {result_count} archived messages")
+                
+                # Inject retrieved context into node's buffer temporarily for generate_response()
+                # We prepend a system-style context block that generate_response() will include
+                node._rag_retrieved_context = (
+                    f"RETRIEVED ARCHIVED CONTEXT (from earlier in this conversation):\n"
+                    f"{search_result}\n\n"
+                    f"Use this archived context together with the recent messages to answer the user's question."
+                )
+                
+                # Phase 2: Call generate_response() — reuses the baseline topic-routing prompt
+                print(f"🎯 Phase 2: Generating answer with baseline prompt + retrieved context...")
+                try:
+                    response = self.generate_response(node, user_message)
+                    answer_usage = self.get_last_usage()
+                finally:
+                    # Always clean up temporary context — prevents stale context leaking
+                    # into future baseline calls if generate_response() throws
+                    node._rag_retrieved_context = None
+                
+                # Log CoT thinking to BOTH loggers
+                try:
+                    logger_overwrite = get_debug_logger(append_mode=False)
+                    logger_append = get_debug_logger(append_mode=True)
+                    for logger in [logger_overwrite, logger_append]:
+                        logger.log_cot_thinking(
+                            query=user_message,
+                            reasoning=decision_reasoning,
+                            decision="USE RETRIEVAL",
+                            search_query=search_query
+                        )
+                except Exception:
+                    pass
+            
+            else:
+                # No retrieval needed — call generate_response() directly (identical to baseline)
+                rag_metadata["rag_decision"] = "no_retrieval_needed"
+                
+                response = self.generate_response(node, user_message)
+                answer_usage = self.get_last_usage()
+                
+                # Log CoT thinking to BOTH loggers
+                try:
+                    logger_overwrite = get_debug_logger(append_mode=False)
+                    logger_append = get_debug_logger(append_mode=True)
+                    for logger in [logger_overwrite, logger_append]:
+                        logger.log_cot_thinking(
+                            query=user_message,
+                            reasoning=decision_reasoning,
+                            decision="NOT USE RETRIEVAL",
+                            search_query=None
+                        )
+                except Exception:
+                    pass
+            
+            # Aggregate ALL token usage: decision + decomposer + answer
+            self.last_usage = self._sum_usage(decision_usage, decomposer_usage, answer_usage)
+            
+            return response, rag_metadata
+            
+        except Exception as e:
+            print(f"⚠️  RAG error: {e}")
+            import traceback
+            traceback.print_exc()
+            # Always clean up temporary context to prevent stale leaks
+            node._rag_retrieved_context = None
+            rag_metadata["rag_decision"] = f"error: {str(e)}"
+            response = self.generate_response(node, user_message)
+            self.last_usage = self.get_last_usage()  # At least capture fallback usage
+            return response, rag_metadata
+
     def _generate_fallback_response(self, user_message: str) -> str:
         """Generate a comprehensive fallback response with markdown formatting"""
         
@@ -896,6 +1160,34 @@ class SimpleChat:
         active.auto_generate_title_if_needed(self.llm, message)
         
         return response
+
+    def send_message_with_rag(self, message: str) -> tuple:
+        """
+        Send message and get response using RAG pipeline (non-streaming).
+        LLM decides whether to retrieve archived context via JSON decision.
+        
+        Returns:
+            Tuple of (response_text: str, rag_metadata: dict)
+            rag_metadata keys: rag_used, rag_query, rag_results_count, rag_decision, usage
+        """
+        active = self.chat_manager.get_active_node()
+        
+        # Add user message
+        active.buffer.add_message('user', message)
+        
+        # RAG call — LLM decides retrieval internally
+        response, rag_metadata = self.llm.generate_response_with_rag(active, message)
+        
+        # ✅ Capture usage IMMEDIATELY — before title generation can overwrite it
+        rag_metadata["usage"] = self.llm.get_last_usage()
+        
+        # Add assistant response
+        active.buffer.add_message('assistant', response)
+        
+        # Generate title if needed (may fire an LLM call that overwrites last_usage)
+        active.auto_generate_title_if_needed(self.llm, message)
+        
+        return response, rag_metadata
 
     def send_message_stream(self, message: str, disable_rag: bool = False):
         """

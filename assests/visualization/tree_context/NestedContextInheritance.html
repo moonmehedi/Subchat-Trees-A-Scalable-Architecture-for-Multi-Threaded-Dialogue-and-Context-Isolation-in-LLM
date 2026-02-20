@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subchat Trees — Nested Context Inheritance &amp; Retrieval-Augmented Memory</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            min-height: 100vh;
+            padding: 32px 16px;
+        }
+
+        .figure-container {
+            max-width: 1060px;
+            margin: 0 auto;
+            background: #fff;
+            border: 2px solid #e2e8f0;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+        }
+
+        .figure-header {
+            padding: 22px 32px 16px;
+            border-bottom: 1px solid #e2e8f0;
+            background: linear-gradient(135deg, #fafbff, #f0f4ff);
+        }
+        .figure-header h1 { font-size: 17px; font-weight: 700; color: #0f172a; }
+        .figure-header .subtitle { font-size: 12px; color: #64748b; margin-top: 3px; }
+
+        .figure-body { padding: 20px 24px 10px; }
+        .tree-canvas { width: 100%; overflow-x: auto; }
+        svg text { font-family: 'Inter', sans-serif; }
+
+        /* Legend */
+        .legend {
+            padding: 14px 32px 18px;
+            border-top: 1px solid #e2e8f0;
+            background: #fafbfc;
+        }
+        .legend h3 { font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 10px; }
+        .legend-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 7px 20px;
+        }
+        .legend-item { display: flex; align-items: center; gap: 8px; font-size: 11px; color: #475569; }
+        .legend-swatch { width: 24px; height: 12px; border-radius: 3px; flex-shrink: 0; }
+        .legend-line { width: 24px; height: 0; flex-shrink: 0; }
+
+        /* Equations */
+        .equations-bar {
+            padding: 14px 32px;
+            border-top: 1px solid #e2e8f0;
+            background: #f1f5f9;
+        }
+        .equations-bar h3 { font-size: 11px; font-weight: 700; color: #334155; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.4px; }
+        .eq-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 5px 28px;
+        }
+        .eq-item { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #334155; display: flex; gap: 6px; }
+        .eq-item .eq-label { font-family: 'Inter', sans-serif; font-size: 10px; font-weight: 600; color: #64748b; min-width: 95px; }
+        .eq-item .eq-expr { color: #1e293b; font-weight: 500; }
+
+        /* Caption */
+        .figure-caption { padding: 12px 32px 18px; border-top: 1px solid #e2e8f0; }
+        .figure-caption p { font-size: 11px; color: #64748b; line-height: 1.7; }
+        .figure-caption strong { color: #334155; }
+    </style>
+</head>
+<body>
+
+<div class="figure-container">
+
+    <div class="figure-header">
+        <h1>Figure: Nested Context Inheritance in Subchat Trees with Buffer Summarization &amp; Retrieval Memory</h1>
+        <div class="subtitle">Hierarchical tree showing recursive summary inheritance, buffer eviction to vector store, and semantic retrieval of evicted context.</div>
+    </div>
+
+    <div class="figure-body">
+        <div class="tree-canvas">
+            <svg viewBox="0 0 1000 820" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">
+
+                <defs>
+                    <marker id="aD" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#374151"/></marker>
+                    <marker id="aP" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#7c3aed"/></marker>
+                    <marker id="aG" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#059669"/></marker>
+                    <marker id="aA" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#d97706"/></marker>
+                    <marker id="aT" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#0d9488"/></marker>
+                    <filter id="glow" x="-15%" y="-15%" width="130%" height="130%">
+                        <feGaussianBlur stdDeviation="2.5" result="b"/><feFlood flood-color="#f59e0b" flood-opacity="0.2"/>
+                        <feComposite in2="b" operator="in"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+                    </filter>
+                </defs>
+
+                <!-- ── DEPTH LABELS ── -->
+                <g opacity="0.5" font-size="10" font-weight="700">
+                    <text x="18" y="52" fill="#6d28d9">Depth 0</text>
+                    <text x="18" y="63" font-size="8" font-weight="400" fill="#8b5cf6">Root</text>
+                    <text x="18" y="195" fill="#0369a1">Depth 1</text>
+                    <text x="18" y="206" font-size="8" font-weight="400" fill="#0ea5e9">Parent</text>
+                    <text x="18" y="395" fill="#059669">Depth 2</text>
+                    <text x="18" y="406" font-size="8" font-weight="400" fill="#34d399">Child</text>
+                    <text x="18" y="570" fill="#d97706">Depth 3</text>
+                    <text x="18" y="581" font-size="8" font-weight="400" fill="#fbbf24">Grandchild</text>
+                </g>
+
+                <!-- ── DEPTH BANDS ── -->
+                <rect x="60" y="25" width="930" height="130" rx="6" fill="#f5f3ff" opacity="0.35"/>
+                <rect x="60" y="165" width="930" height="200" rx="6" fill="#eff6ff" opacity="0.3"/>
+                <rect x="60" y="375" width="930" height="170" rx="6" fill="#ecfdf5" opacity="0.3"/>
+                <rect x="60" y="555" width="930" height="130" rx="6" fill="#fffbeb" opacity="0.3"/>
+
+                <!-- ════════════ DEPTH 0: ROOT ════════════ -->
+                <rect x="370" y="32" width="230" height="48" rx="10" fill="#6d28d9" stroke="#5b21b6" stroke-width="2" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.08))"/>
+                <text x="485" y="53" font-size="13" font-weight="700" fill="white" text-anchor="middle">🌳 Root: Main Topic</text>
+                <text x="485" y="70" font-size="9" fill="rgba(255,255,255,0.8)" text-anchor="middle">Primary conversation thread</text>
+
+                <!-- Root buffer -->
+                <rect x="395" y="90" width="180" height="52" rx="5" fill="#faf5ff" stroke="#c4b5fd" stroke-width="1.2" stroke-dasharray="4 2"/>
+                <text x="485" y="105" font-size="8.5" font-weight="600" fill="#6d28d9" text-anchor="middle">Buffer [n = 15]</text>
+                <text x="485" y="117" font-size="7.5" fill="#64748b" text-anchor="middle">msg₁, msg₂, … , msg₁₅</text>
+                <text x="485" y="132" font-size="7" fill="#a78bfa" text-anchor="middle" font-style="italic">Σ_root = Ø (no summary yet)</text>
+
+                <!-- ── ROOT → PARENTS ── -->
+                <path d="M 430 142 C 430 165, 260 165, 260 178" stroke="#374151" stroke-width="2" fill="none" marker-end="url(#aD)"/>
+                <path d="M 540 142 C 540 165, 710 165, 710 178" stroke="#374151" stroke-width="2" fill="none" marker-end="url(#aD)"/>
+                <text x="340" y="162" font-size="8" font-weight="600" fill="#475569" text-anchor="middle">follow-up</text>
+                <text x="630" y="162" font-size="8" font-weight="600" fill="#475569" text-anchor="middle">follow-up</text>
+
+                <!-- ════════════ DEPTH 1: PARENTS ════════════ -->
+
+                <!-- Parent A -->
+                <rect x="130" y="178" width="240" height="44" rx="9" fill="#0369a1" stroke="#075985" stroke-width="2" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.08))"/>
+                <text x="250" y="197" font-size="12" font-weight="700" fill="white" text-anchor="middle">Parent A: Subtopic α</text>
+                <text x="250" y="213" font-size="8.5" fill="rgba(255,255,255,0.8)" text-anchor="middle">follow-up from Root</text>
+
+                <!-- Parent A buffer (not full) -->
+                <rect x="148" y="232" width="204" height="62" rx="5" fill="#f0f9ff" stroke="#7dd3fc" stroke-width="1.2" stroke-dasharray="4 2"/>
+                <text x="250" y="247" font-size="8" font-weight="600" fill="#0369a1" text-anchor="middle">Buffer [n = 15] — 8/15</text>
+                <text x="250" y="260" font-size="7.5" fill="#64748b" text-anchor="middle">msg₁ … msg₈</text>
+                <text x="250" y="273" font-size="7" fill="#0ea5e9" text-anchor="middle" font-style="italic">Σ_A = Ø (threshold not reached)</text>
+                <rect x="180" y="280" width="140" height="12" rx="3" fill="#ede9fe" stroke="#c4b5fd" stroke-width="0.8"/>
+                <text x="250" y="289" font-size="6.5" font-weight="600" fill="#6d28d9" text-anchor="middle" font-family="'JetBrains Mono',monospace">inherited: Σ_root (if any)</text>
+
+                <!-- ISOLATION marker -->
+                <line x1="470" y1="185" x2="470" y2="355" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.45"/>
+                <rect x="448" y="255" width="44" height="15" rx="3" fill="#fee2e2" stroke="#fca5a5" stroke-width="0.8"/>
+                <text x="470" y="264" font-size="6" font-weight="700" fill="#dc2626" text-anchor="middle">ISOLATED</text>
+
+                <!-- Parent B -->
+                <rect x="590" y="178" width="240" height="44" rx="9" fill="#0369a1" stroke="#075985" stroke-width="2" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.08))"/>
+                <text x="710" y="197" font-size="12" font-weight="700" fill="white" text-anchor="middle">Parent B: Subtopic β</text>
+                <text x="710" y="213" font-size="8.5" fill="rgba(255,255,255,0.8)" text-anchor="middle">follow-up from Root</text>
+
+                <!-- Parent B buffer (FULL) -->
+                <rect x="600" y="232" width="220" height="62" rx="5" fill="#fffbeb" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4 2" filter="url(#glow)"/>
+                <text x="710" y="247" font-size="8" font-weight="600" fill="#b45309" text-anchor="middle">⚠ Buffer [n = 15] — 15/15 FULL</text>
+                <text x="710" y="260" font-size="7.5" fill="#92400e" text-anchor="middle">msg₁ … msg₁₅ ← evicting oldest</text>
+                <text x="710" y="273" font-size="7" fill="#d97706" text-anchor="middle" font-weight="600">Rolling summarization triggered!</text>
+                <rect x="655" y="280" width="110" height="12" rx="6" fill="#7c3aed" stroke="#6d28d9" stroke-width="0.8"/>
+                <text x="710" y="289" font-size="6.5" font-weight="700" fill="white" text-anchor="middle">Σ_B generated ✓</text>
+
+                <!-- Summary store -->
+                <path d="M 710 294 L 710 310" stroke="#7c3aed" stroke-width="1.5" stroke-dasharray="5 3" fill="none" marker-end="url(#aP)"/>
+                <rect x="640" y="314" width="140" height="32" rx="5" fill="#f5f3ff" stroke="#c4b5fd" stroke-width="1.2"/>
+                <text x="710" y="327" font-size="8" font-weight="700" fill="#6d28d9" text-anchor="middle">Summary Store (Σ_B)</text>
+                <text x="710" y="339" font-size="7" fill="#8b5cf6" text-anchor="middle" font-style="italic">"Key topics, facts, decisions…"</text>
+
+                <!-- ── PARENT B → CHILDREN ── -->
+                <path d="M 660 346 C 660 370, 290 370, 290 388" stroke="#059669" stroke-width="2" fill="none" marker-end="url(#aG)"/>
+                <path d="M 760 346 C 760 370, 760 374, 760 388" stroke="#059669" stroke-width="2" fill="none" marker-end="url(#aG)"/>
+                <text x="430" y="370" font-size="8" font-weight="600" fill="#059669" text-anchor="middle">inherit Σ_B + selected_text</text>
+
+                <!-- ════════════ DEPTH 2: CHILDREN ════════════ -->
+
+                <!-- Child B1 -->
+                <rect x="130" y="388" width="290" height="44" rx="9" fill="#059669" stroke="#047857" stroke-width="2" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.08))"/>
+                <text x="275" y="407" font-size="12" font-weight="700" fill="white" text-anchor="middle">Child B1: Sub-subtopic β₁</text>
+                <text x="275" y="423" font-size="8.5" fill="rgba(255,255,255,0.8)" text-anchor="middle">follow-up from Parent B</text>
+
+                <!-- Child B1 buffer -->
+                <rect x="145" y="440" width="260" height="70" rx="5" fill="#ecfdf5" stroke="#6ee7b7" stroke-width="1.2" stroke-dasharray="4 2"/>
+                <text x="275" y="455" font-size="8" font-weight="600" fill="#059669" text-anchor="middle">Buffer [n = 15]</text>
+                <text x="275" y="468" font-size="7.5" fill="#64748b" text-anchor="middle">msg₁, msg₂, … (own messages)</text>
+                <rect x="162" y="477" width="226" height="12" rx="3" fill="#ede9fe" stroke="#c4b5fd" stroke-width="0.8"/>
+                <text x="275" y="486" font-size="6.5" font-weight="600" fill="#6d28d9" text-anchor="middle" font-family="'JetBrains Mono',monospace">inherited: Σ_B (parent's summary)</text>
+                <rect x="162" y="493" width="226" height="12" rx="3" fill="#dbeafe" stroke="#93c5fd" stroke-width="0.8"/>
+                <text x="275" y="502" font-size="6.5" font-weight="600" fill="#1d4ed8" text-anchor="middle" font-family="'JetBrains Mono',monospace">+ follow-up(selected_text from B)</text>
+
+                <!-- ISOLATION between B1 and B2 -->
+                <line x1="530" y1="395" x2="530" y2="530" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.4"/>
+                <rect x="508" y="460" width="44" height="15" rx="3" fill="#fee2e2" stroke="#fca5a5" stroke-width="0.8"/>
+                <text x="530" y="469" font-size="6" font-weight="700" fill="#dc2626" text-anchor="middle">ISOLATED</text>
+
+                <!-- Child B2 -->
+                <rect x="600" y="388" width="290" height="44" rx="9" fill="#059669" stroke="#047857" stroke-width="2" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.08))"/>
+                <text x="745" y="407" font-size="12" font-weight="700" fill="white" text-anchor="middle">Child B2: Sub-subtopic β₂</text>
+                <text x="745" y="423" font-size="8.5" fill="rgba(255,255,255,0.8)" text-anchor="middle">follow-up from Parent B</text>
+
+                <!-- Child B2 buffer (FULL) -->
+                <rect x="610" y="440" width="270" height="70" rx="5" fill="#fffbeb" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4 2" filter="url(#glow)"/>
+                <text x="745" y="455" font-size="8" font-weight="600" fill="#b45309" text-anchor="middle">⚠ Buffer [n = 15] — 15/15 FULL</text>
+                <text x="745" y="468" font-size="7.5" fill="#92400e" text-anchor="middle">msg₁ … msg₁₅ ← summarizing</text>
+                <rect x="630" y="477" width="230" height="12" rx="3" fill="#ede9fe" stroke="#c4b5fd" stroke-width="0.8"/>
+                <text x="745" y="486" font-size="6.5" font-weight="600" fill="#6d28d9" text-anchor="middle" font-family="'JetBrains Mono',monospace">inherited: Σ_B (from parent)</text>
+                <rect x="650" y="493" width="190" height="12" rx="6" fill="#7c3aed" stroke="#6d28d9" stroke-width="0.8"/>
+                <text x="745" y="502" font-size="6.5" font-weight="700" fill="white" text-anchor="middle">Σ_B2 = rollup(Σ_B + own) ✓</text>
+
+                <!-- ── CHILD B2 → GRANDCHILD ── -->
+                <path d="M 745 510 C 745 535, 560 540, 560 558" stroke="#d97706" stroke-width="2" fill="none" marker-end="url(#aA)"/>
+                <!-- Nested inheritance note -->
+                <rect x="610" y="528" width="200" height="22" rx="4" fill="#fef3c7" stroke="#fbbf24" stroke-width="1"/>
+                <text x="710" y="537" font-size="7.5" font-weight="700" fill="#92400e" text-anchor="middle">Nested: Σ_B2 contains Σ_B (grandparent)</text>
+                <text x="710" y="546" font-size="6.5" fill="#b45309" text-anchor="middle" font-style="italic">recursive summary chain</text>
+
+                <!-- ════════════ DEPTH 3: GRANDCHILD ════════════ -->
+                <rect x="370" y="558" width="340" height="48" rx="10" fill="#d97706" stroke="#b45309" stroke-width="2" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.08))"/>
+                <text x="540" y="578" font-size="12" font-weight="700" fill="white" text-anchor="middle">🔗 Grandchild: Deep Subtopic β₂₁</text>
+                <text x="540" y="596" font-size="8.5" fill="rgba(255,255,255,0.8)" text-anchor="middle">follow-up from Child B2</text>
+
+                <!-- Grandchild buffer with full chain -->
+                <rect x="340" y="616" width="400" height="72" rx="5" fill="#fef3c7" stroke="#fbbf24" stroke-width="1.2" stroke-dasharray="4 2"/>
+                <text x="540" y="630" font-size="8" font-weight="600" fill="#d97706" text-anchor="middle">Buffer [n = 15] — Effective Context</text>
+                <text x="540" y="643" font-size="7.5" fill="#64748b" text-anchor="middle">own: msg₁, msg₂, … (grandchild's conversation)</text>
+                <rect x="360" y="651" width="360" height="12" rx="3" fill="#ede9fe" stroke="#c4b5fd" stroke-width="0.8"/>
+                <text x="540" y="660" font-size="6.5" font-weight="600" fill="#5b21b6" text-anchor="middle" font-family="'JetBrains Mono',monospace">Σ_B2 = rollup( Σ_B + B2's own )  where  Σ_B = rollup( Σ_root + B's own )</text>
+                <rect x="390" y="667" width="300" height="14" rx="3" fill="#fef9c3" stroke="#fde047" stroke-width="1"/>
+                <text x="540" y="677" font-size="7.5" font-weight="700" fill="#854d0e" text-anchor="middle" font-family="'JetBrains Mono',monospace">C_eff = Σ_B2(Σ_B(Σ_root)) ⊕ B(gc) ⊕ F(gc) ⊕ R(gc)</text>
+
+                <!-- ════════════════════════════════════════════════
+                     VECTOR STORE — clean compact box bottom-right
+                     ════════════════════════════════════════════════ -->
+                <rect x="740" y="710" width="240" height="98" rx="10" fill="#f0fdfa" stroke="#0d9488" stroke-width="2.5" filter="drop-shadow(0 2px 6px rgba(13,148,136,0.15))"/>
+                <!-- DB icon -->
+                <ellipse cx="770" cy="732" rx="10" ry="5" fill="none" stroke="#0d9488" stroke-width="1.5"/>
+                <path d="M 760 732 L 760 745 C 760 749 770 752 770 752 C 770 752 780 749 780 745 L 780 732" fill="none" stroke="#0d9488" stroke-width="1.5"/>
+                <text x="860" y="735" font-size="11" font-weight="800" fill="#0f766e" text-anchor="middle">🗄️ Vector Store</text>
+                <text x="860" y="749" font-size="8" fill="#0d9488" text-anchor="middle">(ChromaDB)</text>
+                <line x1="752" y1="757" x2="968" y2="757" stroke="#99f6e4" stroke-width="0.8"/>
+                <text x="860" y="770" font-size="7.5" fill="#115e59" text-anchor="middle" font-weight="600">Stores all evicted messages</text>
+                <text x="860" y="783" font-size="7" fill="#14b8a6" text-anchor="middle">(embedded via sentence-transformers)</text>
+                <text x="860" y="797" font-size="7" fill="#0d9488" text-anchor="middle" font-style="italic">Searchable by semantic similarity</text>
+
+                <!-- ── EVICTION ARROW: full buffers → VDB ── -->
+                <!-- From Parent B (full buffer) -->
+                <path d="M 820 290 C 840 320, 850 400, 850 500 C 850 580, 860 650, 860 708" stroke="#14b8a6" stroke-width="1.8" fill="none" stroke-dasharray="5 3" stroke-linecap="round" marker-end="url(#aT)" opacity="0.6"/>
+                <!-- From Child B2 (full buffer) -->
+                <path d="M 875 510 C 878 550, 870 620, 868 708" stroke="#14b8a6" stroke-width="1.5" fill="none" stroke-dasharray="5 3" stroke-linecap="round" marker-end="url(#aT)" opacity="0.5"/>
+                <!-- Label -->
+                <g transform="translate(860, 610)">
+                    <rect x="0" y="0" width="82" height="24" rx="4" fill="#f0fdfa" stroke="#5eead4" stroke-width="1"/>
+                    <text x="41" y="10" font-size="6.5" font-weight="700" fill="#0f766e" text-anchor="middle">evict + embed</text>
+                    <text x="41" y="20" font-size="6" fill="#14b8a6" text-anchor="middle">→ ChromaDB</text>
+                </g>
+
+                <!-- ── RETRIEVAL ARROW: VDB → back to grandchild ── -->
+                <path d="M 746 740 C 700 730, 680 710, 680 695 C 680 688, 678 684, 675 680" stroke="#0d9488" stroke-width="2.2" fill="none" stroke-dasharray="6 3" stroke-linecap="round" marker-end="url(#aT)"/>
+                <g transform="translate(650, 700)">
+                    <rect x="0" y="0" width="90" height="34" rx="5" fill="#ecfdf5" stroke="#34d399" stroke-width="1.2"/>
+                    <text x="45" y="12" font-size="7" font-weight="700" fill="#065f46" text-anchor="middle">🔍 retrieve R(v)</text>
+                    <text x="45" y="23" font-size="6" fill="#059669" text-anchor="middle">if query implies</text>
+                    <text x="45" y="32" font-size="6" fill="#059669" text-anchor="middle">prior context</text>
+                </g>
+
+                <!-- ════════════════════════════════════════════════
+                     BOTTOM PANEL: Context Lifecycle (horizontal)
+                     ════════════════════════════════════════════════ -->
+                <g transform="translate(78, 700)">
+                    <rect x="0" y="0" width="530" height="110" rx="8" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5"/>
+                    <text x="265" y="18" font-size="10" font-weight="800" fill="#334155" text-anchor="middle">Context Lifecycle at Each Node</text>
+                    <line x1="10" y1="26" x2="520" y2="26" stroke="#e2e8f0" stroke-width="1"/>
+
+                    <!-- Step 1 -->
+                    <rect x="10" y="34" width="95" height="66" rx="4" fill="#ecfdf5" stroke="#6ee7b7" stroke-width="1"/>
+                    <text x="58" y="48" font-size="7.5" font-weight="700" fill="#059669" text-anchor="middle">① Messages</text>
+                    <text x="58" y="60" font-size="6.5" fill="#64748b" text-anchor="middle">arrive in buffer</text>
+                    <text x="58" y="72" font-size="6.5" fill="#64748b" text-anchor="middle">[m₁, m₂ … mₖ]</text>
+                    <text x="58" y="92" font-size="6" fill="#a1a1aa" text-anchor="middle" font-style="italic">+ inherited Σ</text>
+
+                    <text x="111" y="66" font-size="12" fill="#94a3b8">→</text>
+
+                    <!-- Step 2 -->
+                    <rect x="118" y="34" width="95" height="66" rx="4" fill="#fffbeb" stroke="#fbbf24" stroke-width="1"/>
+                    <text x="166" y="48" font-size="7.5" font-weight="700" fill="#b45309" text-anchor="middle">② Buffer full</text>
+                    <text x="166" y="60" font-size="6.5" fill="#92400e" text-anchor="middle">oldest evicted →</text>
+                    <text x="166" y="72" font-size="6.5" fill="#92400e" text-anchor="middle">embedded to VDB</text>
+                    <text x="166" y="92" font-size="6" fill="#a1a1aa" text-anchor="middle" font-style="italic">count ≥ τ triggers Σ</text>
+
+                    <text x="219" y="66" font-size="12" fill="#94a3b8">→</text>
+
+                    <!-- Step 3 -->
+                    <rect x="226" y="34" width="95" height="66" rx="4" fill="#f5f3ff" stroke="#c4b5fd" stroke-width="1"/>
+                    <text x="274" y="48" font-size="7.5" font-weight="700" fill="#7c3aed" text-anchor="middle">③ Summarize</text>
+                    <text x="274" y="60" font-size="6.5" fill="#64748b" text-anchor="middle">Σ_new = LLM(</text>
+                    <text x="274" y="72" font-size="6.5" fill="#64748b" text-anchor="middle">Σ_old + batch)</text>
+                    <text x="274" y="92" font-size="6" fill="#a1a1aa" text-anchor="middle" font-style="italic">child inherits Σ</text>
+
+                    <text x="327" y="66" font-size="12" fill="#94a3b8">→</text>
+
+                    <!-- Step 4 -->
+                    <rect x="334" y="34" width="95" height="66" rx="4" fill="#f0fdfa" stroke="#5eead4" stroke-width="1"/>
+                    <text x="382" y="48" font-size="7.5" font-weight="700" fill="#0f766e" text-anchor="middle">④ Retrieval</text>
+                    <text x="382" y="60" font-size="6.5" fill="#115e59" text-anchor="middle">query implies prior</text>
+                    <text x="382" y="72" font-size="6.5" fill="#115e59" text-anchor="middle">context → search</text>
+                    <text x="382" y="84" font-size="6.5" fill="#115e59" text-anchor="middle">VDB (RAG)</text>
+                    <text x="382" y="96" font-size="6" fill="#a1a1aa" text-anchor="middle" font-style="italic">semantic match</text>
+
+                    <text x="435" y="66" font-size="12" fill="#94a3b8">→</text>
+
+                    <!-- Step 5 -->
+                    <rect x="442" y="34" width="80" height="66" rx="4" fill="#dbeafe" stroke="#93c5fd" stroke-width="1"/>
+                    <text x="482" y="48" font-size="7.5" font-weight="700" fill="#1d4ed8" text-anchor="middle">⑤ Augment</text>
+                    <text x="482" y="60" font-size="6.5" fill="#3b82f6" text-anchor="middle">R(v) injected</text>
+                    <text x="482" y="72" font-size="6.5" fill="#3b82f6" text-anchor="middle">into LLM</text>
+                    <text x="482" y="84" font-size="6.5" fill="#3b82f6" text-anchor="middle">prompt</text>
+                    <text x="482" y="96" font-size="6" fill="#a1a1aa" text-anchor="middle" font-style="italic">context restored</text>
+                </g>
+
+            </svg>
+        </div>
+    </div>
+
+    <!-- ── FORMAL EQUATIONS ── -->
+    <div class="equations-bar">
+        <h3>Formal Context Composition</h3>
+        <div class="eq-grid">
+            <div class="eq-item">
+                <span class="eq-label">Node Context:</span>
+                <span class="eq-expr">C(v) = Σ_parent(v) ⊕ B(v) ⊕ F(v) ⊕ R(v)</span>
+            </div>
+            <div class="eq-item">
+                <span class="eq-label">Recursive Summary:</span>
+                <span class="eq-expr">Σ(v) = LLM(Σ_parent(v), batch(v))</span>
+            </div>
+            <div class="eq-item">
+                <span class="eq-label">Grandchild:</span>
+                <span class="eq-expr">C(gc) = Σ_child(Σ_parent(Σ_root)) ⊕ B ⊕ F ⊕ R</span>
+            </div>
+            <div class="eq-item">
+                <span class="eq-label">Isolation:</span>
+                <span class="eq-expr">∀ siblings sᵢ, sⱼ : C(sᵢ) ∩ C(sⱼ) = Ø</span>
+            </div>
+            <div class="eq-item">
+                <span class="eq-label">Eviction:</span>
+                <span class="eq-expr">evict(m) → embed(m) → VDB.store(m, node_id, t)</span>
+            </div>
+            <div class="eq-item">
+                <span class="eq-label">Retrieval (RAG):</span>
+                <span class="eq-expr">R(v) = VDB.search(decompose(q), t_cutoff)</span>
+            </div>
+            <div class="eq-item">
+                <span class="eq-label">Summary Trigger:</span>
+                <span class="eq-expr">trigger ⟺ count ≥ τ ∧ (count − τ) mod δ = 0</span>
+            </div>
+            <div class="eq-item">
+                <span class="eq-label">Where:</span>
+                <span class="eq-expr">B=buffer, F=follow-up, R=retrieved, τ=15, δ=5</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── LEGEND ── -->
+    <div class="legend">
+        <h3>Legend</h3>
+        <div class="legend-grid">
+            <div class="legend-item">
+                <div class="legend-swatch" style="background:#6d28d9;"></div>
+                <span><strong>Root</strong> — Primary conversation (Depth 0)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-swatch" style="background:#0369a1;"></div>
+                <span><strong>Parent</strong> — First-level subchat (Depth 1)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-swatch" style="background:#059669;"></div>
+                <span><strong>Child</strong> — Second-level subchat (Depth 2)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-swatch" style="background:#d97706;"></div>
+                <span><strong>Grandchild</strong> — Third-level subchat (Depth 3)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-line" style="border-top:2.5px solid #374151;"></div>
+                <span><strong>Solid</strong> — Context inheritance (parent → child)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-line" style="border-top:2px dashed #7c3aed;"></div>
+                <span><strong>Dashed purple</strong> — Summary generation</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-line" style="border-top:2px dashed #dc2626;"></div>
+                <span><strong>Dashed red</strong> — Isolation boundary</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-line" style="border-top:2px dashed #0d9488;"></div>
+                <span><strong>Dashed teal</strong> — Eviction / Retrieval (VDB)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-swatch" style="background:linear-gradient(90deg,#fffbeb,#fef3c7);border:1.5px solid #f59e0b;"></div>
+                <span><strong>Amber glow</strong> — Buffer at capacity</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-swatch" style="background:#0d9488;"></div>
+                <span><strong>Teal</strong> — Vector Store (ChromaDB)</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── CAPTION ── -->
+    <div class="figure-caption">
+        <p>
+            <strong>Figure.</strong> Nested context inheritance with retrieval-augmented memory. The tree roots at a main topic (Depth 0).
+            Follow-up subchats branch via <strong>selected_text</strong>. Each node has a <strong>fixed-size buffer</strong> (<em>n</em>=15).
+            When the buffer fills (count ≥ <em>τ</em>=15), <strong>rolling summarization</strong> compresses older messages into Σ, and evicted
+            messages are <strong>embedded and archived to ChromaDB</strong>. Child nodes <strong>inherit</strong> the parent's Σ — a grandchild at Depth 3
+            receives Σ<sub>child</sub> encapsulating Σ<sub>parent</sub>(Σ<sub>root</sub>). <strong>Sibling nodes are fully isolated</strong>
+            (Parent A ⊥ Parent B). When a user query implies reference to prior context (e.g., <em>"What did I say about…"</em>),
+            <strong>retrieval-augmented generation (RAG)</strong> performs semantic search on the vector store to recover evicted information R(v),
+            which is injected into the prompt. Effective context: <strong>C(v) = Σ<sub>parent</sub> ⊕ B(v) ⊕ F(v) ⊕ R(v)</strong>.
+        </p>
+    </div>
+
+</div>
+
+</body>
+</html>

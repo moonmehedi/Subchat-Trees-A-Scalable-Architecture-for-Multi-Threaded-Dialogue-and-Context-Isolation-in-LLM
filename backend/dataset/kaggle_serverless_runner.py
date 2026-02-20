@@ -199,7 +199,6 @@ class ServerlessTestRunner:
         target_node: str,
         probe_message: str,
         llm_response: str,
-        reference_conversations: list,
         reference_text: str,
         scores: dict,
         mode: str,
@@ -209,7 +208,7 @@ class ServerlessTestRunner:
         Write detailed recall probe information to recall_probes_detail.log.
 
         Logs: topic, target node, probe question, full LLM summary,
-        all true conversations on that node, BLEU/ROUGE scores.
+        the real reference (user questions + AI responses), and BLEU/ROUGE scores.
         """
         if self.buffer_log_dir is None:
             return
@@ -233,19 +232,24 @@ class ServerlessTestRunner:
             for line in llm_response.split("\n"):
                 f.write(f"   {line}\n")
 
-            # 3. True reference conversations (what actually happened on this node)
-            f.write(f"\n📚 TRUE CONVERSATIONS ON THIS TOPIC ({len(reference_conversations)} entries):\n")
+            # 3. Reference text (real user questions + AI responses used for scoring)
+            f.write(f"\n📚 REFERENCE (User Questions + Real AI Responses):\n")
             f.write(f"{'-'*60}\n")
-            for entry in reference_conversations:
-                role = entry.get("role", "unknown")
-                msg = entry.get("message", "")
-                step = entry.get("step", "?")
-                if role == "user":
-                    f.write(f"   [Step {step}] 👤 User: {msg}\n")
-                elif role == "expected":
-                    f.write(f"   [Step {step}] 📋 Expected: {msg}\n")
-                else:
-                    f.write(f"   [Step {step}] {role}: {msg}\n")
+            if reference_text:
+                # Split by User:/Assistant: markers for readable display
+                for segment in reference_text.split("User: "):
+                    segment = segment.strip()
+                    if not segment:
+                        continue
+                    if "Assistant: " in segment:
+                        user_part, assistant_part = segment.split("Assistant: ", 1)
+                        f.write(f"   👤 User: {user_part.strip()}\n")
+                        f.write(f"   🤖 AI: {assistant_part.strip()[:300]}\n")
+                        f.write(f"   ---\n")
+                    else:
+                        f.write(f"   👤 User: {segment}\n")
+            else:
+                f.write(f"   ⚠️ No reference data collected for this topic\n")
             f.write(f"{'-'*60}\n")
 
             # 4. Scores
@@ -346,14 +350,19 @@ class ServerlessTestRunner:
             traceback.print_exc()
             return None
     
-    def send_message(self, node_id: str, message: str) -> Optional[Dict]:
+    def send_message(self, node_id: str, message: str, enable_rag: bool = False) -> Optional[Dict]:
         """Send message and get response using SimpleChat core class
         
-        Uses SimpleChat.send_message() which:
+        Uses SimpleChat.send_message() or send_message_with_rag() which:
         1. Adds user message to buffer
-        2. Calls llm.generate_response() with proper context (including summary)
+        2. Calls llm.generate_response() (or generate_response_with_rag()) with proper context
         3. Adds assistant response to buffer
         4. Auto-generates title if needed
+        
+        Args:
+            node_id: Target conversation node ID
+            message: User message text
+            enable_rag: If True, use RAG pipeline (LLM decides retrieval)
         """
         try:
             # Get node from ChatGraphManager
@@ -368,12 +377,17 @@ class ServerlessTestRunner:
             self.chat.chat_manager.switch_node(node_id)
             
             # Log before sending
-            self.log_buffer(f"📥 Sending message to node={node_id}")
+            self.log_buffer(f"📥 Sending message to node={node_id} (rag={enable_rag})")
             self.log_buffer(f"   Message: {message}", full=True)
             
-            # Use SimpleChat.send_message() - same as endpoints.py
-            # This handles: add user msg → generate response → add assistant msg
-            response_text = self.chat.send_message(message)
+            # Choose RAG or baseline path
+            rag_metadata = None
+            if enable_rag:
+                # RAG path — LLM decides whether to retrieve
+                response_text, rag_metadata = self.chat.send_message_with_rag(message)
+            else:
+                # Baseline path — no RAG
+                response_text = self.chat.send_message(message)
             
             latency = time.time() - start_time
             
@@ -383,19 +397,43 @@ class ServerlessTestRunner:
             self.log_cot_thinking(f"🤖 Generated response for node={node_id}")
             self.log_cot_thinking(f"   Response: {response_text}", full=True)
             
+            # Log RAG decision if applicable
+            if rag_metadata:
+                self.log_cot_thinking(f"   RAG decision: {rag_metadata.get('rag_decision', 'unknown')}")
+                if rag_metadata.get('rag_used'):
+                    self.log_retrieval(f"🔍 Retrieval triggered for node={node_id}")
+                    self.log_retrieval(f"   Query: {rag_metadata.get('rag_query', 'N/A')}")
+                    self.log_retrieval(f"   Results: {rag_metadata.get('rag_results_count', 0)} messages")
+            
             # Check if buffer triggered summarization
             if hasattr(node.buffer, 'messages_processed_count'):
                 self.log_vector_store(f"📦 Messages processed: {node.buffer.messages_processed_count}")
                 self.log_vector_store(f"   Node: {node_id}, Buffer max: {node.buffer.max_turns}", full=True)
             
-            # Get usage from LLM client
-            usage = self.chat.llm.get_last_usage()
+            # Get usage — prefer rag_metadata (captured before title generation)
+            # over get_last_usage() which could be overwritten by title gen
+            if rag_metadata and "usage" in rag_metadata:
+                usage = rag_metadata["usage"]
+            else:
+                usage = self.chat.llm.get_last_usage()
             
-            return {
+            result = {
                 "response": response_text,
                 "latency": latency,
                 "usage": usage
             }
+            
+            # Merge RAG metadata into result
+            if rag_metadata:
+                result["rag_used"] = rag_metadata.get("rag_used", False)
+                result["rag_query"] = rag_metadata.get("rag_query")
+                result["rag_results_count"] = rag_metadata.get("rag_results_count", 0)
+                result["rag_decision"] = rag_metadata.get("rag_decision", "unknown")
+            else:
+                result["rag_used"] = False
+                result["rag_decision"] = "disabled"
+            
+            return result
         except Exception as e:
             self.log(f"❌ Failed to send message: {e}", "ERROR")
             import traceback
@@ -518,6 +556,7 @@ class ServerlessTestRunner:
         self.log(f"  📋 Available topics for detection: {available_topics}", "INFO", "baseline")
         
         recall_probe_results = []  # Collect inline recall probe results
+        topic_responses = {}  # {topic: [(user_msg, ai_response), ...]} — collect real AI responses per topic
         
         for step_data in scenario["conversations"]:
             step = step_data["step"]
@@ -538,7 +577,7 @@ class ServerlessTestRunner:
                         "topic": probe_topic, "mode": "baseline",
                         "rouge1_f": 0.0, "rougeL_f": 0.0, "bleu": 0.0,
                         "summary_length": 0,
-                        "reference_length": len(step_data.get("reference_text", "").split()),
+                        "reference_length": 0,
                         "summary": "", "probe_tokens": 0, "probe_latency": 0.0,
                         "is_main_only": step_data.get("is_main_only_topic", False),
                         "target_node": "main",
@@ -546,7 +585,8 @@ class ServerlessTestRunner:
                     continue
                 
                 ai_summary = response["response"]
-                ref_text = step_data.get("reference_text", "")
+                # Build reference from real user questions + AI responses collected during the test
+                ref_text = self._build_recall_reference(probe_topic, topic_responses)
                 scores = self._compute_recall_scores(ai_summary, ref_text)
                 
                 self.log(f"  🤖 Summary: {ai_summary[:200]}...", "INFO", "baseline")
@@ -558,7 +598,6 @@ class ServerlessTestRunner:
                     target_node="main",
                     probe_message=message,
                     llm_response=ai_summary,
-                    reference_conversations=step_data.get("reference_conversations", []),
                     reference_text=ref_text,
                     scores=scores,
                     mode="baseline",
@@ -571,7 +610,7 @@ class ServerlessTestRunner:
                     "rougeL_f": scores["rougeL_f"],
                     "bleu": scores["bleu"],
                     "summary_length": len(ai_summary.split()),
-                    "reference_length": len(ref_text.split()),
+                    "reference_length": len(ref_text.split()) if ref_text else 0,
                     "summary": ai_summary[:500],
                     "probe_tokens": response.get("usage", {}).get("total_tokens", 0),
                     "probe_latency": response.get("latency", 0.0),
@@ -599,6 +638,10 @@ class ServerlessTestRunner:
             if not ai_message:
                 self.log("  ❌ Empty AI response", "ERROR", "baseline")
                 continue
+            
+            # Collect user question + AI response per topic for recall probe reference
+            if context not in ["intro", "step_1"]:
+                topic_responses.setdefault(expected_topic, []).append((message, ai_message))
             
             self.log(f"  🤖 AI Response:", "INFO", "baseline")
             self.log(f"     {ai_message}", "INFO", "baseline")
@@ -698,6 +741,7 @@ class ServerlessTestRunner:
         self.log(f"  📋 Available topics for detection: {available_topics}", "INFO", "system")
         
         recall_probe_results = []  # Collect inline recall probe results
+        topic_responses = {}  # {topic: [(user_msg, ai_response), ...]} — collect real AI responses per topic
         
         for step_data in scenario["conversations"]:
             step = step_data["step"]
@@ -717,14 +761,14 @@ class ServerlessTestRunner:
                 self.log(f"\n🔬 [Recall Probe] Topic: {probe_topic} → Node: {actual_target}", "INFO", "system")
                 self.log(f"  💬 Probe: {message}", "INFO", "system")
                 
-                response = self.send_message(target_node, message)
+                response = self.send_message(target_node, message, enable_rag=True)
                 if not response or not response.get("response"):
                     self.log(f"  ❌ No response for recall probe '{probe_topic}'", "WARN", "system")
                     recall_probe_results.append({
                         "topic": probe_topic, "mode": "system",
                         "rouge1_f": 0.0, "rougeL_f": 0.0, "bleu": 0.0,
                         "summary_length": 0,
-                        "reference_length": len(step_data.get("reference_text", "").split()),
+                        "reference_length": 0,
                         "summary": "", "probe_tokens": 0, "probe_latency": 0.0,
                         "is_main_only": is_main_only,
                         "target_node": actual_target,
@@ -732,7 +776,8 @@ class ServerlessTestRunner:
                     continue
                 
                 ai_summary = response["response"]
-                ref_text = step_data.get("reference_text", "")
+                # Build reference from real user questions + AI responses collected during the test
+                ref_text = self._build_recall_reference(probe_topic, topic_responses)
                 scores = self._compute_recall_scores(ai_summary, ref_text)
                 
                 self.log(f"  🤖 Summary: {ai_summary[:200]}...", "INFO", "system")
@@ -744,7 +789,6 @@ class ServerlessTestRunner:
                     target_node=actual_target,
                     probe_message=message,
                     llm_response=ai_summary,
-                    reference_conversations=step_data.get("reference_conversations", []),
                     reference_text=ref_text,
                     scores=scores,
                     mode="system",
@@ -757,7 +801,7 @@ class ServerlessTestRunner:
                     "rougeL_f": scores["rougeL_f"],
                     "bleu": scores["bleu"],
                     "summary_length": len(ai_summary.split()),
-                    "reference_length": len(ref_text.split()),
+                    "reference_length": len(ref_text.split()) if ref_text else 0,
                     "summary": ai_summary[:500],
                     "probe_tokens": response.get("usage", {}).get("total_tokens", 0),
                     "probe_latency": response.get("latency", 0.0),
@@ -796,7 +840,7 @@ class ServerlessTestRunner:
             self.log(f"\n[Step {step}] Context: {context} (Topic: {expected_topic}) | Node: {node_type}", "INFO", "system")
             self.log(f"  💬 User: {message}", "INFO", "system")
             
-            response = self.send_message(target_node, message)
+            response = self.send_message(target_node, message, enable_rag=True)
             
             if not response:
                 self.log("  ❌ No response received", "ERROR", "system")
@@ -808,8 +852,16 @@ class ServerlessTestRunner:
                 self.log("  ❌ Empty AI response", "ERROR", "system")
                 continue
             
+            # Collect user question + AI response per topic for recall probe reference
+            if context not in ["intro", "step_1"]:
+                topic_responses.setdefault(expected_topic, []).append((message, ai_message))
+            
             self.log(f"  🤖 AI Response:", "INFO", "system")
             self.log(f"     {ai_message}", "INFO", "system")
+            
+            # Log RAG decision
+            if response.get("rag_used"):
+                self.log(f"  🔍 RAG triggered: query='{response.get('rag_query', 'N/A')}', results={response.get('rag_results_count', 0)}", "INFO", "system")
             
             # Skip topic-prefix detection for intro/step_1 (acknowledgment, no topic prefix expected)
             if context in ["intro", "step_1"]:
@@ -852,7 +904,10 @@ class ServerlessTestRunner:
                 "output_tokens": response.get("usage", {}).get("completion_tokens", 0),
                 "total_tokens": response.get("usage", {}).get("total_tokens", 0),
                 "latency": response.get("latency", 0),
-                "rag_used": False,
+                "rag_used": response.get("rag_used", False),
+                "rag_query": response.get("rag_query"),
+                "rag_results_count": response.get("rag_results_count", 0),
+                "rag_decision": response.get("rag_decision", "disabled"),
                 "scenario_name": scenario_name
             })
             
@@ -860,6 +915,10 @@ class ServerlessTestRunner:
         
         # Store inline recall probe results for aggregation
         self._last_system_recall_probes = recall_probe_results
+        
+        # Calculate retrieval rate
+        rag_triggered = sum(1 for r in results if r.get("rag_used", False))
+        retrieval_rate = (rag_triggered / len(results) * 100) if results else 0
         
         self.log("\n" + "="*80, "INFO", "system")
         self.log("📊 SYSTEM TEST SUMMARY", "INFO", "system")
@@ -875,6 +934,7 @@ class ServerlessTestRunner:
         self.log(f"   ❌ Incorrect: {incorrect}", "INFO", "system")
         if results:
             self.log(f"   Accuracy: {(correct / len(results) * 100):.1f}%", "INFO", "system")
+        self.log(f"   🔍 Retrieval Rate: {retrieval_rate:.1f}% ({rag_triggered}/{len(results)} steps triggered RAG)", "INFO", "system")
         self.log("="*80, "INFO", "system")
         
         return results
@@ -885,13 +945,36 @@ class ServerlessTestRunner:
     # Detection & scoring happens inline in run_baseline_test() and run_system_test().
     # =========================================================================
 
+    def _build_recall_reference(self, probe_topic: str, topic_responses: Dict[str, list]) -> str:
+        """
+        Build the reference text for recall scoring from real user questions + AI responses
+        collected during the test run.
+        
+        Args:
+            probe_topic: The topic being probed
+            topic_responses: {topic: [(user_msg, ai_response), ...]} collected during test
+            
+        Returns:
+            Combined reference string of user questions and real AI responses
+        """
+        if probe_topic not in topic_responses or not topic_responses[probe_topic]:
+            self.log(f"  ⚠️ No collected responses for topic '{probe_topic}'", "WARN")
+            return ""
+        
+        parts = []
+        for user_msg, ai_resp in topic_responses[probe_topic]:
+            parts.append(f"User: {user_msg}")
+            parts.append(f"Assistant: {ai_resp}")
+        
+        return " ".join(parts)
+
     def _compute_recall_scores(self, summary: str, reference: str) -> Dict[str, float]:
         """
         Compute ROUGE-1, ROUGE-L, and BLEU scores between LLM summary and reference.
         
         Args:
             summary: The LLM-generated summary of a topic
-            reference: The concatenated raw user messages for that topic
+            reference: The combined user questions + real AI responses for that topic
             
         Returns:
             Dict with rouge1_f, rougeL_f, bleu scores (0-1 scale)
@@ -1101,6 +1184,33 @@ class ServerlessTestRunner:
                 return 0 if system == 0 else float('inf')
             return ((system - baseline) / baseline) * 100
         
+        # Calculate retrieval rate metrics
+        def calc_retrieval_rate(results):
+            """Calculate RAG decision breakdown across all turns"""
+            total = len(results)
+            rag_triggered = sum(1 for r in results if r.get("rag_decision") == "search_triggered")
+            buffer_sufficient = sum(1 for r in results if r.get("rag_decision") == "no_retrieval_needed")
+            disabled = sum(1 for r in results if r.get("rag_decision") == "disabled")
+            errors = sum(1 for r in results if str(r.get("rag_decision", "")).startswith("error:"))
+            no_vector = sum(1 for r in results if r.get("rag_decision") == "no_vector_index")
+            rag_eligible = rag_triggered + buffer_sufficient  # turns where Phase 1 actually ran
+            retrieval_rate = (rag_triggered / rag_eligible * 100) if rag_eligible > 0 else 0
+            buffer_rate = (buffer_sufficient / rag_eligible * 100) if rag_eligible > 0 else 0
+            return {
+                "total_turns": total,
+                "rag_eligible": rag_eligible,
+                "rag_triggered": rag_triggered,
+                "buffer_sufficient": buffer_sufficient,
+                "rag_disabled": disabled,
+                "errors": errors,
+                "no_vector_index": no_vector,
+                "retrieval_rate": retrieval_rate,
+                "buffer_rate": buffer_rate,
+            }
+        
+        baseline_retrieval = calc_retrieval_rate(baseline_results)
+        system_retrieval = calc_retrieval_rate(system_results)
+        
         return {
             "table_1": {
                 "baseline": baseline_isolation,
@@ -1117,6 +1227,10 @@ class ServerlessTestRunner:
                     k: calc_improvement(baseline_performance.get(k, 0), system_performance.get(k, 0))
                     for k in baseline_performance.keys()
                 }
+            },
+            "retrieval": {
+                "baseline": baseline_retrieval,
+                "system": system_retrieval
             }
         }
 
@@ -1349,6 +1463,33 @@ class ServerlessTestRunner:
             self.log(f"✅ Generated TABLE_2_RECALL_SCORES.md", "INFO")
         else:
             self.log(f"ℹ️ Skipping TABLE_2 (no recall probe data available)", "INFO")
+        
+        # TABLE 4: RAG DECISION BREAKDOWN
+        retrieval = metrics.get("retrieval")
+        if retrieval:
+            with open(buffer_dir / "TABLE_4_RAG_DECISIONS.md", 'w') as f:
+                f.write(f"# TABLE 4: RAG DECISION BREAKDOWN (Buffer Size: {self.current_buffer_size})\n\n")
+                f.write("Shows how the LLM's Phase 1 JSON decision split across all turns.\n")
+                f.write("**RAG Triggered** = LLM decided archived context was needed.\n")
+                f.write("**Buffer Sufficient** = LLM decided recent buffer had enough info.\n\n")
+                
+                bl = retrieval.get("baseline", {})
+                sy = retrieval.get("system", {})
+                
+                f.write("| Metric | Baseline | System |\n")
+                f.write("|--------|----------|--------|\n")
+                f.write(f"| **Total Turns** | {bl.get('total_turns', 0)} | {sy.get('total_turns', 0)} |\n")
+                f.write(f"| **RAG-Eligible Turns** | {bl.get('rag_eligible', 0)} | {sy.get('rag_eligible', 0)} |\n")
+                f.write(f"| **RAG Triggered** | {bl.get('rag_triggered', 0)} | {sy.get('rag_triggered', 0)} |\n")
+                f.write(f"| **Buffer Sufficient** | {bl.get('buffer_sufficient', 0)} | {sy.get('buffer_sufficient', 0)} |\n")
+                f.write(f"| **Retrieval Rate** | {bl.get('retrieval_rate', 0):.1f}% | {sy.get('retrieval_rate', 0):.1f}% |\n")
+                f.write(f"| **Buffer Rate** | {bl.get('buffer_rate', 0):.1f}% | {sy.get('buffer_rate', 0):.1f}% |\n")
+                if bl.get('errors', 0) > 0 or sy.get('errors', 0) > 0:
+                    f.write(f"| **Errors** | {bl.get('errors', 0)} | {sy.get('errors', 0)} |\n")
+                if bl.get('rag_disabled', 0) > 0 or sy.get('rag_disabled', 0) > 0:
+                    f.write(f"| **RAG Disabled** | {bl.get('rag_disabled', 0)} | {sy.get('rag_disabled', 0)} |\n")
+            
+            self.log(f"✅ Generated TABLE_4_RAG_DECISIONS.md", "INFO")
 
     def git_commit_and_push(self, files_to_add: List[str], commit_message: str) -> tuple:
         """Git push disabled - output is saved directly on Kaggle."""

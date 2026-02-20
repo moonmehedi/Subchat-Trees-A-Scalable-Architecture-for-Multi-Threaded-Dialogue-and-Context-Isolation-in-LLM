@@ -88,10 +88,12 @@ class VLLMClient:
         generated_text = outputs[0].outputs[0].text
         
         # Store usage stats (approximate) - MUST be integers for Pydantic validation
+        prompt_tokens = int(len(prompt.split()) * 1.3)
+        completion_tokens = int(len(generated_text.split()) * 1.3)
         self.last_usage = {
-            "prompt_tokens": int(len(prompt.split()) * 1.3),  # Rough estimate
-            "completion_tokens": int(len(generated_text.split()) * 1.3),  # Rough estimate
-            "total_tokens": int((len(prompt) + len(generated_text)) * 1.3 / 4)  # Rough estimate
+            "prompt_tokens": prompt_tokens,
+            "completion_tokens": completion_tokens,
+            "total_tokens": prompt_tokens + completion_tokens
         }
         
         return generated_text

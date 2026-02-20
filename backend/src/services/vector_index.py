@@ -24,162 +24,134 @@ from src.cores.config import settings
 
 class QueryDecomposer:
     """
-    Decomposes vague queries into multiple specific sub-queries.
-    
-    PROBLEM: Semantic search fails with vague queries like "user identity information"
-    SOLUTION: Generate 5-7 targeted sub-queries that capture specific patterns
-    
+    Decomposes a query into multiple specific sub-queries for better semantic retrieval.
+
+    PROBLEM: A single vague query often fails to match relevant archived messages.
+    SOLUTION: Prompt the LLM to generate 5-7 diverse sub-queries that capture
+              different phrasings, synonyms, and aspects of the original query.
+              No intent classification — the LLM understands the query directly.
+
     Example:
-        Query: "who am i?" or "user identity information"
-        Sub-queries: ["my name is", "I am a", "I study", "I work as", "my favorite"]
+        Query: "what did I tell you about myself?"
+        Sub-queries: ["my name is", "I am a", "I work as", "I study", "I live in",
+                      "my background", "personal introduction"]
     """
-    
-    def __init__(self):
-        """Initialize with Groq LLM for query generation"""
-        api_key = os.getenv("GROQ_API_KEY")
-        if not api_key:
-            raise ValueError("GROQ_API_KEY environment variable not set")
-        self.client = Groq(api_key=api_key)
-        self.model = settings.model_base
-    
-    def classify_intent(self, query: str) -> str:
-        """
-        Classify query intent to guide sub-query generation.
-        
-        Intents:
-        - identity: Questions about user (name, occupation, preferences)
-        - preference: Questions about user likes/dislikes
-        - discussion: Questions about past conversations
-        - factual: Questions about facts/information shared
-        - general: General questions
-        """
-        query_lower = query.lower()
-        
-        # Identity keywords
-        if any(kw in query_lower for kw in ["who am i", "my name", "about me", "user identity"]):
-            return "identity"
-        
-        # Preference keywords
-        if any(kw in query_lower for kw in ["favorite", "prefer", "like", "love", "hate", "dislike"]):
-            return "preference"
-        
-        # Discussion keywords
-        if any(kw in query_lower for kw in ["discussed", "talked about", "mentioned", "said earlier"]):
-            return "discussion"
-        
-        # Factual keywords
-        if any(kw in query_lower for kw in ["what is", "define", "explain", "how does"]):
-            return "factual"
-        
-        return "general"
-    
-    def generate_sub_queries(self, query: str, intent: str) -> List[str]:
-        """
-        Generate 5-7 targeted sub-queries based on intent.
-        
-        Uses LLM to generate diverse, specific queries that capture
-        different aspects of the user's vague query.
-        """
-        # Base template - all prompts share this structure
-        base_template = """Given query: "{query}"
-Intent: {intent_description}
 
-Generate 5-7 SHORT, SPECIFIC search queries. {focus_hint}
+    def __init__(self, vllm_client=None):
+        """Initialize with vLLM (preferred) or Groq LLM for sub-query generation"""
+        self.vllm_client = vllm_client
+        self.last_usage = None
+        self.client = None  # Groq client (fallback)
 
-Return ONLY a JSON array of strings: ["query1", "query2", ...]
+        if self.vllm_client:
+            self.model = "vllm-local"
+            print("✅ QueryDecomposer using vLLM backend")
+        else:
+            # Fallback to Groq
+            api_key = os.getenv("GROQ_API_KEY")
+            if not api_key:
+                raise ValueError("GROQ_API_KEY environment variable not set")
+            self.client = Groq(api_key=api_key)
+            self.model = settings.model_base_groq if hasattr(settings, 'model_base_groq') else settings.model_base
+            print("✅ QueryDecomposer using Groq backend")
 
-Example: {example}"""
+    def get_last_usage(self):
+        """Return token usage from the last generate_sub_queries() call."""
+        return self.last_usage
 
-        # Intent-specific configurations
-        intent_configs = {
-            "identity": {
-                "description": "user identity/introduction",
-                "focus": "Focus on: 'my name is', 'I am a', 'I work as', 'I study'",
-                "example": '["my name is", "I am a student", "I work as", "I study", "about myself"]'
-            },
-            "preference": {
-                "description": "user preferences/likes",
-                "focus": "Focus on: 'my favorite', 'I like', 'I love', 'I prefer', 'I hate'",
-                "example": '["my favorite", "I like", "I love", "I prefer", "I enjoy"]'
-            },
-            "discussion": {
-                "description": "past conversation topics",
-                "focus": "Focus on: key topics, entities, concepts",
-                "example": '["python programming", "snake facts", "decorators", "async"]'
-            },
-            "factual": {
-                "description": "factual information",
-                "focus": "Break down into: concepts, entities, related topics",
-                "example": '["capital france", "paris location", "french capital", "france geography"]'
-            },
-            "general": {
-                "description": "general information",
-                "focus": "Extract: key entities, topics, concepts",
-                "example": '["user data", "personal info", "account details"]'
-            }
-        }
-        
-        # Get config or use general as fallback
-        config = intent_configs.get(intent, intent_configs["general"])
-        
-        # Build prompt from template
-        prompt = base_template.format(
-            query=query,
-            intent_description=config["description"],
-            focus_hint=config["focus"],
-            example=config["example"]
+    def generate_sub_queries(self, query: str) -> List[str]:
+        """
+        Generate 5-7 diverse sub-queries directly from the user query.
+
+        The LLM is given the query as-is and asked to produce varied search strings
+        that cover synonyms, related concepts, and different phrasings. No intent
+        classification step — the LLM handles understanding on its own.
+        """
+        prompt = (
+            f'Given this search query: "{query}"\n\n'
+            "Generate 5-7 SHORT, SPECIFIC search strings that capture different aspects, "
+            "synonyms, and related concepts of the query. Think about how the relevant "
+            "information might actually be phrased in a conversation.\n\n"
+            'Return ONLY a JSON array of strings: ["q1", "q2", ...]\n\n'
+            "Examples:\n"
+            '  Query: "what is my job?"\n'
+            '  Output: ["I work as", "my job is", "I am employed", "my profession", "I am a developer", "my career", "I work at"]\n\n'
+            '  Query: "where do I live?"\n'
+            '  Output: ["I live in", "I am from", "my hometown is", "I am based in", "I reside in", "my city is", "I moved to"]\n\n'
+            '  Query: "what are my hobbies?"\n'
+            '  Output: ["I enjoy", "I like to", "in my free time", "my hobby is", "I love", "I spend time", "I am passionate about"]\n\n'
+            f'Now generate for: "{query}"'
         )
-        
+
         try:
-            response = self.client.chat.completions.create(
-                model=self.model,
-                messages=[
-                    {"role": "system", "content": "Generate focused search query arrays. Output ONLY JSON string arrays: [\"q1\", \"q2\"]. No objects, no extra text."},
-                    {"role": "user", "content": prompt}
-                ],
-                temperature=0.3,
-                max_tokens=50
-            )
-            
-            result = response.choices[0].message.content.strip()
-            
+            messages = [
+                {
+                    "role": "system",
+                    "content": (
+                        "You are a Query Expansion Specialist embedded inside a Retrieval-Augmented Generation (RAG) pipeline. "
+                        "Your sole purpose is to help the retrieval system find the most relevant archived conversation messages. "
+                        "When a user sends a query, you receive it and must generate multiple diverse search strings that cover "
+                        "different phrasings, synonyms, and related concepts — because the archived messages may not contain "
+                        "the exact words from the user's query, but may express the same idea differently. "
+                        "Your output directly determines what context the main LLM receives, so generating high-quality, "
+                        "varied search strings is critical. "
+                        "Output ONLY a JSON string array. No objects, no explanation, no extra text."
+                    )
+                },
+                {"role": "user", "content": prompt}
+            ]
+
+            if self.vllm_client:
+                result = self.vllm_client.generate(
+                    messages=messages,
+                    temperature=0.3,
+                    max_tokens=150
+                ).strip()
+                self.last_usage = self.vllm_client.get_last_usage()
+            else:
+                response = self.client.chat.completions.create(
+                    model=self.model,
+                    messages=messages,
+                    temperature=0.3,
+                    max_tokens=150
+                )
+                result = response.choices[0].message.content.strip()
+                if hasattr(response, 'usage') and response.usage:
+                    self.last_usage = {
+                        "prompt_tokens": response.usage.prompt_tokens or 0,
+                        "completion_tokens": response.usage.completion_tokens or 0,
+                        "total_tokens": response.usage.total_tokens or 0
+                    }
+
             # Parse JSON array
             sub_queries = json.loads(result)
-            
-            # Validate it's a list
+
             if not isinstance(sub_queries, list):
                 raise ValueError("Expected JSON array")
-            
-            # Extract strings from various formats
-            # Handle both ["query1", "query2"] and [{"query": "query1"}, {"query": "query2"}]
+
+            # Normalise: accept plain strings or dicts with a 'query' key
             cleaned_queries = []
             for sq in sub_queries:
                 if isinstance(sq, str):
                     cleaned_queries.append(sq)
                 elif isinstance(sq, dict):
-                    # Extract 'query' field from dict
-                    if 'query' in sq:
-                        cleaned_queries.append(sq['query'])
-                    else:
-                        # Try to get first value from dict
-                        values = list(sq.values())
-                        if values and isinstance(values[0], str):
-                            cleaned_queries.append(values[0])
-            
-            # Include original query as well
+                    val = sq.get('query') or (list(sq.values())[0] if sq else None)
+                    if isinstance(val, str):
+                        cleaned_queries.append(val)
+
+            # Always include the original query first
             all_queries = [query] + cleaned_queries
-            
-            print(f"🔍 Query Decomposition (Intent: {intent}):")
+
+            print(f"🔍 Query Decomposition:")
             print(f"   Original: {query}")
             print(f"   Generated {len(cleaned_queries)} sub-queries:")
             for i, sq in enumerate(cleaned_queries, 1):
                 print(f"      {i}. {sq}")
-            
-            return all_queries[:8]  # Max 8 queries (original + 7 sub-queries)
-            
+
+            return all_queries[:8]  # original + up to 7 sub-queries
+
         except Exception as e:
             print(f"⚠️  Failed to generate sub-queries: {e}")
-            # Fallback: return just the original query
             return [query]
 
 
@@ -357,8 +329,18 @@ class GlobalVectorIndex:
         self.persist_dir = persist_dir
         
         # Initialize enhanced retrieval components
+        # Pass vLLM client to QueryDecomposer so it can run locally without Groq
+        _vllm_client = None
+        if settings.llm_backend == "vllm":
+            try:
+                from .vllm_client import vllm_client as _vc
+                if _vc.is_available():
+                    _vllm_client = _vc
+            except ImportError:
+                pass
+        
         try:
-            self.query_decomposer = QueryDecomposer()
+            self.query_decomposer = QueryDecomposer(vllm_client=_vllm_client)
             self.context_retriever = ContextWindowRetriever(self.collection)
             # Note: Cross-encoder re-ranking disabled - embedding similarity (all-mpnet-base-v2) works better for conversational context
             print(f"✅ Initialized multi-query decomposition + context windows")
@@ -559,8 +541,7 @@ class GlobalVectorIndex:
             
             # PHASE 1: Multi-Query Decomposition
             if self.query_decomposer:
-                intent = self.query_decomposer.classify_intent(query)
-                sub_queries = self.query_decomposer.generate_sub_queries(query, intent)
+                sub_queries = self.query_decomposer.generate_sub_queries(query)
                 # GUARANTEE: Original query is always first (even if decomposer fails)
                 if not sub_queries or sub_queries[0] != query:
                     sub_queries = [query] + (sub_queries or [])
@@ -735,7 +716,7 @@ class GlobalVectorIndex:
             for logger in [logger_overwrite, logger_append]:
                 logger.log_retrieval(
                     query=query,
-                    intent=intent if self.query_decomposer else "unknown",
+                    intent="direct",
                     sub_queries=sub_queries,
                     sub_query_results=sub_query_results,
                     retrieved_results=final_results,

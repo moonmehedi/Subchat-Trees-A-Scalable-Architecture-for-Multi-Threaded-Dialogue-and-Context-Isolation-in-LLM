@@ -25,6 +25,7 @@ class DebugLogger:
         self.retrieval_log = self.log_dir / f"RETRIEVAL{suffix}.log"
         self.buffer_log = self.log_dir / f"BUFFER{suffix}.log"
         self.cot_thinking_log = self.log_dir / f"COT_THINKING{suffix}.log"
+        self.rag_pipeline_log = self.log_dir / f"RAG_PIPELINE{suffix}.log"
     
     def log_vector_store(self, messages_by_node: Dict[str, List[Dict[str, Any]]], total_count: int):
         """
@@ -235,6 +236,120 @@ class DebugLogger:
             if search_query:
                 f.write(f"\n🔍 SEARCH QUERY EXTRACTED:\n")
                 f.write(f"{search_query}\n")
+
+    def log_rag_pipeline(
+        self,
+        query: str,
+        decision_messages: List[Dict[str, Any]],
+        raw_llm_output: str,
+        retrieve: bool,
+        search_query: Optional[str],
+        sub_queries: Optional[List[str]] = None,
+        sub_query_results: Optional[Dict[str, List[Dict[str, Any]]]] = None,
+        final_results: Optional[List[Dict[str, Any]]] = None,
+    ):
+        """
+        Single unified log for the ENTIRE RAG pipeline:
+          Phase 1 decision (input messages, raw LLM JSON, parsed result)
+          + Phase 2 retrieval (sub-queries, per-query results, re-ranked finals)
+        All text shown in full — no truncation.
+        """
+        mode = 'a' if self.append_mode else 'w'
+        with open(self.rag_pipeline_log, mode, encoding='utf-8') as f:
+            if self.append_mode:
+                f.write("\n" + "="*80 + "\n")
+                f.write("NEW ENTRY\n")
+                f.write("="*80 + "\n")
+
+            f.write("="*80 + "\n")
+            f.write(f"RAG PIPELINE RUN\n")
+            f.write(f"Timestamp: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+            f.write("="*80 + "\n\n")
+
+            # ── USER QUERY ──────────────────────────────────────────────────
+            f.write("❓ USER QUERY:\n")
+            f.write(f"{query}\n\n")
+
+            # ── PHASE 1: DECISION ────────────────────────────────────────────
+            f.write("="*80 + "\n")
+            f.write("PHASE 1 — RETRIEVAL DECISION\n")
+            f.write("="*80 + "\n\n")
+
+            f.write(f"📨 INPUT MESSAGES FED TO DECISION LLM ({len(decision_messages)} messages):\n")
+            f.write("-"*60 + "\n")
+            for i, msg in enumerate(decision_messages):
+                role = msg.get('role', '?').upper()
+                content = msg.get('content', '')
+                f.write(f"[{i}] {role}:\n{content}\n")
+                f.write("-"*60 + "\n")
+
+            f.write(f"\n📤 RAW LLM OUTPUT:\n")
+            f.write(f"{raw_llm_output}\n\n")
+
+            f.write(f"✅ PARSED DECISION:\n")
+            f.write(f"  retrieve = {retrieve}\n")
+            f.write(f"  search_query = {search_query!r}\n\n")
+
+            # ── PHASE 2: RETRIEVAL ───────────────────────────────────────────
+            f.write("="*80 + "\n")
+            if retrieve:
+                f.write("PHASE 2 — RETRIEVAL EXECUTED\n")
+            else:
+                f.write("PHASE 2 — NO RETRIEVAL (buffer context sufficient)\n")
+            f.write("="*80 + "\n\n")
+
+            if not retrieve or sub_queries is None:
+                f.write("ℹ️  No retrieval performed — LLM used buffer context directly.\n")
+            else:
+                # Sub-queries
+                f.write(f"🔍 SEARCH QUERY: {search_query}\n")
+                f.write(f"📋 SUB-QUERIES ({len(sub_queries)} generated):\n")
+                f.write("-"*60 + "\n")
+                for i, sq in enumerate(sub_queries or [], 1):
+                    f.write(f"  {i}. {sq}\n")
+                f.write("\n")
+
+                # Per sub-query results
+                if sub_query_results:
+                    f.write("📊 PER SUB-QUERY RESULTS:\n")
+                    f.write("="*60 + "\n")
+                    for sq, results in (sub_query_results or {}).items():
+                        f.write(f"\nSUB-QUERY: {sq}\n")
+                        f.write("-"*60 + "\n")
+                        if not results:
+                            f.write("  (no results)\n")
+                        else:
+                            for j, r in enumerate(results, 1):
+                                score = r.get('score', 0)
+                                role = r.get('metadata', {}).get('role', '?').upper()
+                                node_id = r.get('metadata', {}).get('node_id', '?')
+                                text = r.get('text', '')
+                                f.write(f"  {j}. [score={score:.4f}] [{role}] node={node_id}\n")
+                                f.write(f"     FULL TEXT:\n     {text}\n")
+                                f.write("     " + "-"*56 + "\n")
+
+                # Final re-ranked results
+                f.write(f"\n{'='*80}\n")
+                f.write(f"✅ FINAL RE-RANKED RESULTS ({len(final_results or [])} messages returned to LLM):\n")
+                f.write("="*80 + "\n\n")
+                if not final_results:
+                    f.write("⚠️  NO RESULTS RETRIEVED\n")
+                else:
+                    for i, r in enumerate(final_results or [], 1):
+                        score = r.get('score', 0)
+                        role = r.get('metadata', {}).get('role', '?').upper()
+                        node_id = r.get('metadata', {}).get('node_id', '?')
+                        turn = r.get('metadata', {}).get('turn_number', '?')
+                        text = r.get('text', '')
+                        is_anchor = r.get('is_anchor', False)
+                        tag = " [ANCHOR]" if is_anchor else " [context]"
+                        f.write(f"{i}. [score={score:.4f}] [{role}]{tag}  node={node_id}  turn={turn}\n")
+                        f.write(f"   FULL TEXT:\n   {text}\n")
+                        f.write("   " + "-"*76 + "\n\n")
+
+            f.write("="*80 + "\n")
+            f.write("END OF RAG PIPELINE ENTRY\n")
+            f.write("="*80 + "\n")
 
 
 # Global singleton instances

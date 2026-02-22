@@ -892,19 +892,22 @@ Never mention tools or searching.
                     # into future baseline calls if generate_response() throws
                     node._rag_retrieved_context = None
                 
-                # Log CoT thinking to BOTH loggers
-                try:
-                    logger_overwrite = get_debug_logger(append_mode=False)
-                    logger_append = get_debug_logger(append_mode=True)
-                    for logger in [logger_overwrite, logger_append]:
-                        logger.log_cot_thinking(
-                            query=user_message,
-                            reasoning=decision_reasoning,
-                            decision="USE RETRIEVAL",
-                            search_query=search_query
-                        )
-                except Exception:
-                    pass
+                # Unified RAG_PIPELINE log — decision + full retrieval results in one file
+                retrieval_debug = getattr(self.vector_index, 'last_retrieval_debug', None) or {}
+                logger_overwrite = get_debug_logger(append_mode=False)
+                logger_append = get_debug_logger(append_mode=True)
+                print(f"📝 RAG pipeline log → {logger_overwrite.rag_pipeline_log}")
+                for logger in [logger_overwrite, logger_append]:
+                    logger.log_rag_pipeline(
+                        query=user_message,
+                        decision_messages=decision_messages,
+                        raw_llm_output=decision_text,
+                        retrieve=True,
+                        search_query=search_query,
+                        sub_queries=retrieval_debug.get('sub_queries'),
+                        sub_query_results=retrieval_debug.get('sub_query_results'),
+                        final_results=retrieval_debug.get('final_results'),
+                    )
             
             else:
                 # No retrieval needed — call generate_response() directly (identical to baseline)
@@ -913,19 +916,18 @@ Never mention tools or searching.
                 response = self.generate_response(node, user_message)
                 answer_usage = self.get_last_usage()
                 
-                # Log CoT thinking to BOTH loggers
-                try:
-                    logger_overwrite = get_debug_logger(append_mode=False)
-                    logger_append = get_debug_logger(append_mode=True)
-                    for logger in [logger_overwrite, logger_append]:
-                        logger.log_cot_thinking(
-                            query=user_message,
-                            reasoning=decision_reasoning,
-                            decision="NOT USE RETRIEVAL",
-                            search_query=None
-                        )
-                except Exception:
-                    pass
+                # Unified RAG_PIPELINE log — decision only, no retrieval
+                logger_overwrite = get_debug_logger(append_mode=False)
+                logger_append = get_debug_logger(append_mode=True)
+                print(f"📝 RAG pipeline log → {logger_overwrite.rag_pipeline_log}")
+                for logger in [logger_overwrite, logger_append]:
+                    logger.log_rag_pipeline(
+                        query=user_message,
+                        decision_messages=decision_messages,
+                        raw_llm_output=decision_text,
+                        retrieve=False,
+                        search_query=None,
+                    )
             
             # Aggregate ALL token usage: decision + decomposer + answer
             self.last_usage = self._sum_usage(decision_usage, decomposer_usage, answer_usage)

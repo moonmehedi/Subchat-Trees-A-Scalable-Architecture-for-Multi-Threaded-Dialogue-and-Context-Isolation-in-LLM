@@ -327,6 +327,7 @@ class GlobalVectorIndex:
         print(f"✅ Created fresh vector collection with all-mpnet-base-v2 embeddings (0 messages)")
         
         self.persist_dir = persist_dir
+        self.last_retrieval_debug = None  # Populated by retrieve_with_multi_query; read by simple_llm for unified RAG_PIPELINE log
         
         # Initialize enhanced retrieval components
         # Pass vLLM client to QueryDecomposer so it can run locally without Groq
@@ -704,21 +705,14 @@ class GlobalVectorIndex:
                 # No context expansion — just return the top anchors
                 final_results = top_anchors
             
-            # Log retrieval to BOTH loggers
-            logger_overwrite = get_debug_logger(append_mode=False)
-            logger_append = get_debug_logger(append_mode=True)
+            # Store retrieval details — will be read by simple_llm.py to write unified RAG_PIPELINE.log
+            self.last_retrieval_debug = {
+                'sub_queries': sub_queries,
+                'sub_query_results': sub_query_results,
+                'final_results': final_results,
+            }
             
-            for logger in [logger_overwrite, logger_append]:
-                logger.log_retrieval(
-                    query=query,
-                    intent="direct",
-                    sub_queries=sub_queries,
-                    sub_query_results=sub_query_results,
-                    retrieved_results=final_results,
-                    node_id=node_id
-                )
-            
-            print(f"✅ Retrieved {len(final_results)} results in coherent blocks (logged to file)")
+            print(f"✅ Retrieved {len(final_results)} results in coherent blocks")
             
             return final_results
             

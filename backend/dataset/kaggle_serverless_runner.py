@@ -109,22 +109,24 @@ class ServerlessTestRunner:
             f.write(f"Started: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
             f.write(f"{'='*80}\n\n")
 
-        # Initialize component log files (summary + full pairs)
+        # Initialize RUNNER component log files (summary + full pairs)
+        # These use RUNNER_ prefix to avoid colliding with DebugLogger files
+        # (DebugLogger writes structured RAG pipeline logs to COT_THINKING.log, RETRIEVAL.log, etc.)
         components = ["BUFFER", "VECTOR_STORE", "RETRIEVAL", "COT_THINKING", "JUDGE"]
         for component in components:
             # Summary log
-            summary_file = self.buffer_log_dir / f"{component}.log"
+            summary_file = self.buffer_log_dir / f"RUNNER_{component}.log"
             with open(summary_file, 'w') as f:
                 f.write(f"{'='*80}\n")
-                f.write(f"{component} LOG - SUMMARY (Buffer Size: {buffer_size})\n")
+                f.write(f"RUNNER {component} LOG - SUMMARY (Buffer Size: {buffer_size})\n")
                 f.write(f"Started: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
                 f.write(f"{'='*80}\n\n")
             
             # Full/detailed log
-            full_file = self.buffer_log_dir / f"{component}_full.log"
+            full_file = self.buffer_log_dir / f"RUNNER_{component}_full.log"
             with open(full_file, 'w') as f:
                 f.write(f"{'='*80}\n")
-                f.write(f"{component} LOG - DETAILED (Buffer Size: {buffer_size})\n")
+                f.write(f"RUNNER {component} LOG - DETAILED (Buffer Size: {buffer_size})\n")
                 f.write(f"Started: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
                 f.write(f"{'='*80}\n\n")
         
@@ -148,13 +150,14 @@ class ServerlessTestRunner:
 
     def log_component(self, component: str, message: str, full: bool = False):
         """
-        Log to component-specific log files in buffer directory.
+        Log to RUNNER component-specific log files in buffer directory.
+        Uses RUNNER_ prefix to avoid colliding with DebugLogger files.
         
         Args:
-            component: One of 'BUFFER', 'VECTOR_STORE', 'RETRIEVAL', 'COT_THINKING'
+            component: One of 'BUFFER', 'VECTOR_STORE', 'RETRIEVAL', 'COT_THINKING', 'JUDGE'
             message: The message to log
-            full: If True, log to {component}_full.log only (detailed info).
-                  If False, log to both {component}.log (summary) and {component}_full.log (detailed).
+            full: If True, log to RUNNER_{component}_full.log only (detailed info).
+                  If False, log to both RUNNER_{component}.log (summary) and RUNNER_{component}_full.log (detailed).
         """
         if self.buffer_log_dir is None:
             return  # Buffer logs not set up yet
@@ -162,14 +165,14 @@ class ServerlessTestRunner:
         timestamp = datetime.now().strftime("%H:%M:%S")
         log_msg = f"[{timestamp}] {message}"
         
-        # Always log to full/detailed log
-        full_log_file = self.buffer_log_dir / f"{component}_full.log"
+        # Always log to full/detailed log (RUNNER_ prefix)
+        full_log_file = self.buffer_log_dir / f"RUNNER_{component}_full.log"
         with open(full_log_file, 'a') as f:
             f.write(log_msg + "\n")
         
-        # If not full-only, also log to summary log
+        # If not full-only, also log to summary log (RUNNER_ prefix)
         if not full:
-            summary_log_file = self.buffer_log_dir / f"{component}.log"
+            summary_log_file = self.buffer_log_dir / f"RUNNER_{component}.log"
             with open(summary_log_file, 'a') as f:
                 f.write(log_msg + "\n")
 
@@ -273,12 +276,17 @@ class ServerlessTestRunner:
         self.chat.chat_manager.active_node_id = None
         self.chat.forest.active_tree_id = None
         
-        # Clear ChromaDB if it exists
+        # Clear VectorIndex properly (in-memory collection + on-disk ChromaDB)
         try:
-            chroma_db_path = Path(__file__).parent.parent / "chroma_db"
-            if chroma_db_path.exists():
-                shutil.rmtree(chroma_db_path)
-                self.log("🗑️  Cleared ChromaDB", "INFO")
+            if self.chat.llm.vector_index:
+                self.chat.llm.vector_index.clear()
+                self.log("🗑️  Cleared VectorIndex (collection reset)", "INFO")
+            else:
+                # Fallback: delete on-disk ChromaDB if no vector_index object
+                chroma_db_path = Path(__file__).parent.parent / "chroma_db"
+                if chroma_db_path.exists():
+                    shutil.rmtree(chroma_db_path)
+                    self.log("🗑️  Cleared ChromaDB (disk)", "INFO")
         except Exception as e:
             self.log(f"⚠️  ChromaDB clear warning: {e}", "WARN")
     

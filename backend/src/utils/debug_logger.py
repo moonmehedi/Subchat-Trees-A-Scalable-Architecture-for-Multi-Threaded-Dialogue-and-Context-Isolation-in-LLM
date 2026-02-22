@@ -23,7 +23,6 @@ class DebugLogger:
         suffix = "_full" if append_mode else ""
         self.vector_store_log = self.log_dir / f"VECTOR_STORE{suffix}.log"
         self.retrieval_log = self.log_dir / f"RETRIEVAL{suffix}.log"
-        self.buffer_log = self.log_dir / f"BUFFER{suffix}.log"
         self.cot_thinking_log = self.log_dir / f"COT_THINKING{suffix}.log"
     
     def log_vector_store(self, messages_by_node: Dict[str, List[Dict[str, Any]]], total_count: int):
@@ -150,53 +149,6 @@ class DebugLogger:
                     f.write(f"   FULL TEXT:\n")
                     f.write(f"   {text}\n")
                     f.write(f"   {'-'*76}\n\n")
-    
-    def log_buffer(self, node_id: str, buffer_messages: List[Dict[str, Any]], max_turns: int, summary: str = "", conversation_title: str = "Untitled"):
-        """
-        Log all messages currently in the buffer plus rolling summary.
-        """
-        mode = 'a' if self.append_mode else 'w'
-        with open(self.buffer_log, mode, encoding='utf-8') as f:
-            if self.append_mode:
-                f.write("\n" + "="*80 + "\n")
-                f.write("NEW ENTRY\n")
-                f.write("="*80 + "\n")
-            
-            f.write("="*80 + "\n")
-            f.write(f"BUFFER MESSAGES\n")
-            f.write(f"Timestamp: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
-            f.write("="*80 + "\n\n")
-            
-            f.write(f"📍 NODE: {node_id}\n")
-            f.write(f"💬 TITLE: {conversation_title}\n")
-            f.write(f"📊 BUFFER SIZE: {len(buffer_messages)}/{max_turns}\n")
-            
-            # Add summary section if exists
-            if summary:
-                f.write(f"\n{'='*80}\n")
-                f.write(f"📝 ROLLING SUMMARY ({len(summary)} chars):\n")
-                f.write(f"{'='*80}\n")
-                f.write(f"{summary}\n")
-            
-            f.write(f"\n{'='*80}\n")
-            f.write(f"ALL BUFFER MESSAGES ({len(buffer_messages)} total):\n")
-            f.write(f"{'='*80}\n\n")
-            
-            if not buffer_messages:
-                f.write("📭 Buffer is EMPTY\n")
-            else:
-                for i, msg in enumerate(buffer_messages, 1):
-                    role = msg.get('role', 'unknown').upper()
-                    timestamp = msg.get('timestamp', 0)
-                    text = msg.get('text', '')
-                    
-                    f.write(f"{i}. [{role}] @ {timestamp:.2f}\n")
-                    f.write(f"   FULL TEXT: {text}\n")
-                    f.write(f"   {'-'*76}\n\n")
-            
-            f.write(f"\n{'='*80}\n")
-            f.write(f"✅ Total: {len(buffer_messages)} messages in buffer\n")
-            f.write(f"{'='*80}\n")
     
     def log_cot_thinking(
         self,

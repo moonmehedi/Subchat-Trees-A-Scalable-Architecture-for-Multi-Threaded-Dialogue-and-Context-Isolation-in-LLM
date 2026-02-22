@@ -401,11 +401,6 @@ class GlobalVectorIndex:
             print(f"\n{'='*80}")
             print(f"✅ Total: {total_count} messages indexed across {len(messages_by_node)} conversations")
             print(f"{'='*80}\n")
-            
-        except Exception as e:
-            print(f"⚠️  Failed to print indexed messages: {e}")
-            import traceback
-            traceback.print_exc()
     
     def index_message(self, node_id: str, message: str, metadata: Dict[str, Any]):
         """

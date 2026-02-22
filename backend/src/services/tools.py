@@ -41,7 +41,7 @@ class ConversationTools:
                 }
             }
         ]
-    
+      
     @staticmethod
     def execute_tool(tool_name: str, arguments: Dict[str, Any], vector_index, node) -> str:
         """

@@ -358,7 +358,7 @@ class ServerlessTestRunner:
             traceback.print_exc()
             return None
     
-    def send_message(self, node_id: str, message: str, enable_rag: bool = False) -> Optional[Dict]:
+    def send_message(self, node_id: str, message: str, enable_rag: bool = True) -> Optional[Dict]:
         """Send message and get response using SimpleChat core class
         
         Uses SimpleChat.send_message() or send_message_with_rag() which:
@@ -578,7 +578,7 @@ class ServerlessTestRunner:
                 self.log(f"\n🔬 [Recall Probe] Topic: {probe_topic} → main node", "INFO", "baseline")
                 self.log(f"  💬 Probe: {message}", "INFO", "baseline")
                 
-                response = self.send_message(main_node_id, message)
+                response = self.send_message(main_node_id, message, enable_rag=True)
                 if not response or not response.get("response"):
                     self.log(f"  ❌ No response for recall probe '{probe_topic}'", "WARN", "baseline")
                     recall_probe_results.append({
@@ -635,7 +635,7 @@ class ServerlessTestRunner:
             self.log(f"\n[Step {step}] Context: {context} (Topic: {expected_topic})", "INFO", "baseline")
             self.log(f"  💬 User: {message}", "INFO", "baseline")
             
-            response = self.send_message(main_node_id, message)
+            response = self.send_message(main_node_id, message, enable_rag=True)
             
             if not response:
                 self.log("  ❌ No response received", "ERROR", "baseline")

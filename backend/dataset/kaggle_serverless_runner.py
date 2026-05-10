@@ -694,7 +694,12 @@ class ServerlessTestRunner:
                 "output_tokens": response.get("usage", {}).get("completion_tokens", 0),
                 "total_tokens": response.get("usage", {}).get("total_tokens", 0),
                 "latency": response.get("latency", 0),
-                "rag_used": False,
+                # Preserve the real RAG decision metadata from the baseline run.
+                # Baseline means "single linear conversation", not "RAG disabled".
+                "rag_used": response.get("rag_used", False),
+                "rag_query": response.get("rag_query"),
+                "rag_results_count": response.get("rag_results_count", 0),
+                "rag_decision": response.get("rag_decision", "disabled"),
                 "scenario_name": scenario_name
             })
             

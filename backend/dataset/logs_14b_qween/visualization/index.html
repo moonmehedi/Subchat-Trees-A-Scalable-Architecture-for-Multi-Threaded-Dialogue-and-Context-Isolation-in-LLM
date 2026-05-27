@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kaggle Serverless - Buffer Size Comparison</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .kaggle-badge {
+            background: #20BEFF;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 5px;
+            display: inline-block;
+            margin: 10px auto;
+        }
+        .serverless-badge {
+            background: #10B981;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 5px;
+            display: inline-block;
+            margin: 10px;
+        }
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin-bottom: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Kaggle Serverless Buffer Size Comparison</h1>
+        <p class="subtitle">Subchat Trees: Direct Python Imports - No Server Needed</p>
+        <div style="text-align: center;">
+            <span class="kaggle-badge">Tested on Kaggle GPUs</span>
+            <span class="serverless-badge">Serverless Architecture</span>
+        </div>
+        
+        <h2>📊 Context Isolation Metrics</h2>
+        
+        <div class="chart-container">
+            <canvas id="accuracyChart"></canvas>
+        </div>
+        
+        <div class="chart-container">
+            <canvas id="precisionChart"></canvas>
+        </div>
+        
+        <div class="chart-container">
+            <canvas id="recallChart"></canvas>
+        </div>
+        
+        <div class="chart-container">
+            <canvas id="f1Chart"></canvas>
+        </div>
+        
+        <div class="chart-container">
+            <canvas id="pollutionChart"></canvas>
+        </div>
+        
+        <h2>🔬 Topic Recall Scores (ROUGE/BLEU)</h2>
+        
+        <div class="chart-container"><canvas id="rouge1Chart"></canvas></div>
+        <div class="chart-container"><canvas id="rougeLChart"></canvas></div>
+        <div class="chart-container"><canvas id="bleuChart"></canvas></div>
+    </div>
+    
+    <script>
+        const bufferSizes = [20];
+        const baselineAccuracy = [62.7831715210356];
+        const systemAccuracy = [67.63754045307444];
+        const baselinePrecision = [86.42676767676767];
+        const systemPrecision = [77.7331056389498];
+        const baselineRecall = [62.66233766233766];
+        const systemRecall = [67.53246753246754];
+        const baselineF1 = [66.149407951356];
+        const systemF1 = [68.3730744363861];
+        const baselinePollution = [37.2168284789644];
+        const systemPollution = [32.362459546925564];
+        
+        const chartOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { position: 'top' }
+            },
+            scales: {
+                y: { beginAtZero: true }
+            }
+        };
+        
+        new Chart(document.getElementById('accuracyChart'), {
+            type: 'line',
+            data: {
+                labels: bufferSizes,
+                datasets: [{
+                    label: 'Baseline Accuracy',
+                    data: baselineAccuracy,
+                    borderColor: 'rgb(255, 99, 132)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                }, {
+                    label: 'System Accuracy',
+                    data: systemAccuracy,
+                    borderColor: 'rgb(75, 192, 192)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                }]
+            },
+            options: {
+                ...chartOptions,
+                plugins: {
+                    ...chartOptions.plugins,
+                    title: { display: true, text: 'Accuracy vs Buffer Size (%)' }
+                }
+            }
+        });
+        
+        new Chart(document.getElementById('precisionChart'), {
+            type: 'line',
+            data: {
+                labels: bufferSizes,
+                datasets: [{
+                    label: 'Baseline Precision',
+                    data: baselinePrecision,
+                    borderColor: 'rgb(255, 99, 132)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                }, {
+                    label: 'System Precision',
+                    data: systemPrecision,
+                    borderColor: 'rgb(75, 192, 192)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                }]
+            },
+            options: {
+                ...chartOptions,
+                plugins: {
+                    ...chartOptions.plugins,
+                    title: { display: true, text: 'Precision vs Buffer Size (%)' }
+                }
+            }
+        });
+        
+        new Chart(document.getElementById('recallChart'), {
+            type: 'line',
+            data: {
+                labels: bufferSizes,
+                datasets: [{
+                    label: 'Baseline Recall',
+                    data: baselineRecall,
+                    borderColor: 'rgb(255, 99, 132)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                }, {
+                    label: 'System Recall',
+                    data: systemRecall,
+                    borderColor: 'rgb(75, 192, 192)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                }]
+            },
+            options: {
+                ...chartOptions,
+                plugins: {
+                    ...chartOptions.plugins,
+                    title: { display: true, text: 'Recall vs Buffer Size (%)' }
+                }
+            }
+        });
+        
+        new Chart(document.getElementById('f1Chart'), {
+            type: 'line',
+            data: {
+                labels: bufferSizes,
+                datasets: [{
+                    label: 'Baseline F1 Score',
+                    data: baselineF1,
+                    borderColor: 'rgb(255, 99, 132)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                }, {
+                    label: 'System F1 Score',
+                    data: systemF1,
+                    borderColor: 'rgb(75, 192, 192)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                }]
+            },
+            options: {
+                ...chartOptions,
+                plugins: {
+                    ...chartOptions.plugins,
+                    title: { display: true, text: 'F1 Score vs Buffer Size (%)' }
+                }
+            }
+        });
+        
+        new Chart(document.getElementById('pollutionChart'), {
+            type: 'line',
+            data: {
+                labels: bufferSizes,
+                datasets: [{
+                    label: 'Baseline Pollution Rate',
+                    data: baselinePollution,
+                    borderColor: 'rgb(255, 99, 132)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                }, {
+                    label: 'System Pollution Rate',
+                    data: systemPollution,
+                    borderColor: 'rgb(75, 192, 192)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                }]
+            },
+            options: {
+                ...chartOptions,
+                plugins: {
+                    ...chartOptions.plugins,
+                    title: { display: true, text: 'Pollution Rate vs Buffer Size (%) - Lower is Better' }
+                }
+            }
+        });
+        
+        // Recall Probe Charts (only if data available)
+        const baselineRouge1 = [0.24397600936569144];
+        const systemRouge1 = [0.3923718870088195];
+        const baselineRougeL = [0.11991347223900772];
+        const systemRougeL = [0.292080799786421];
+        const baselineBleu = [0.04550062793405317];
+        const systemBleu = [0.1006713480326343];
+        
+        if (baselineRouge1.some(v => v > 0) || systemRouge1.some(v => v > 0)) {
+            new Chart(document.getElementById('rouge1Chart'), {
+                type: 'line',
+                data: {
+                    labels: bufferSizes,
+                    datasets: [{
+                        label: 'Baseline ROUGE-1',
+                        data: baselineRouge1,
+                        borderColor: 'rgb(255, 99, 132)',
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    }, {
+                        label: 'System ROUGE-1',
+                        data: systemRouge1,
+                        borderColor: 'rgb(75, 192, 192)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    }]
+                },
+                options: {
+                    ...chartOptions,
+                    plugins: {
+                        ...chartOptions.plugins,
+                        title: { display: true, text: 'ROUGE-1 (F1) vs Buffer Size - Higher is Better' }
+                    }
+                }
+            });
+            
+            new Chart(document.getElementById('rougeLChart'), {
+                type: 'line',
+                data: {
+                    labels: bufferSizes,
+                    datasets: [{
+                        label: 'Baseline ROUGE-L',
+                        data: baselineRougeL,
+                        borderColor: 'rgb(255, 99, 132)',
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    }, {
+                        label: 'System ROUGE-L',
+                        data: systemRougeL,
+                        borderColor: 'rgb(75, 192, 192)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    }]
+                },
+                options: {
+                    ...chartOptions,
+                    plugins: {
+                        ...chartOptions.plugins,
+                        title: { display: true, text: 'ROUGE-L (F1) vs Buffer Size - Higher is Better' }
+                    }
+                }
+            });
+            
+            new Chart(document.getElementById('bleuChart'), {
+                type: 'line',
+                data: {
+                    labels: bufferSizes,
+                    datasets: [{
+                        label: 'Baseline BLEU-2',
+                        data: baselineBleu,
+                        borderColor: 'rgb(255, 99, 132)',
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    }, {
+                        label: 'System BLEU-2',
+                        data: systemBleu,
+                        borderColor: 'rgb(75, 192, 192)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    }]
+                },
+                options: {
+                    ...chartOptions,
+                    plugins: {
+                        ...chartOptions.plugins,
+                        title: { display: true, text: 'BLEU-2 Score vs Buffer Size - Higher is Better' }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>

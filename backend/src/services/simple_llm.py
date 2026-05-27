@@ -125,7 +125,7 @@ class SimpleLLMClient:
                 "must be based solely on semantic relevance, not on which topic was last used. You must never "
                 "invent new topic or sub-topic names and may only choose from those already introduced; if "
                 "multiple topics are plausible, select the best semantic match, and if none clearly match, "
-                "request clarification while still choosing the closest topic. Every response must begin with "
+                "Chose the closest topic. Every response must begin with "
                 "the selected topic or sub-topic name followed by a colon, in the format "
                 "<topic_or_subtopic_name>: <your answer>."
             )

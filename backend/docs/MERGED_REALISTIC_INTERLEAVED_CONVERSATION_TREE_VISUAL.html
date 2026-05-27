@@ -1,0 +1,502 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Conversation Tree Visualization</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Inter, Arial, sans-serif;
+      color: #111827;
+      background: #e5e7eb;
+    }
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      padding: 14px 20px;
+      background: #ffffff;
+      border-bottom: 1px solid #cbd5e1;
+    }
+    h1 {
+      margin: 0 0 4px;
+      font-size: 20px;
+    }
+    p {
+      margin: 0;
+      color: #475569;
+      font-size: 13px;
+    }
+    .canvas {
+      width: 100vw;
+      height: calc(100vh - 68px);
+      overflow: auto;
+      background:
+        linear-gradient(90deg, rgba(148,163,184,.18) 1px, transparent 1px),
+        linear-gradient(rgba(148,163,184,.18) 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+    .inner {
+      padding: 20px;
+      width: max-content;
+    }
+    svg {
+      display: block;
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Conversation Tree Visualization</h1>
+    <p>Scroll horizontally and vertically. Hover a node to see parent, topics, and selected text.</p>
+  </header>
+  <main class="canvas">
+    <div class="inner">
+<svg xmlns="http://www.w3.org/2000/svg" width="2160" height="4674" viewBox="0 0 2160 4674">
+
+  <defs>
+    <filter id="shadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#111827" flood-opacity="0.16"/>
+    </filter>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#64748b"/>
+    </marker>
+  </defs>
+  <rect width="100%" height="100%" fill="#f8fafc"/>
+
+  <text x="40" y="42" font-family="Inter, Arial, sans-serif" font-size="26" font-weight="700" fill="#111827">Merged Multi-Topic VBRI Interleaved Dataset (Temporal-Preserving)</text>
+  <text x="40" y="68" font-family="Inter, Arial, sans-serif" font-size="14" fill="#475569">Rows: 352 | Nodes: 52 | Subchats: 51</text>
+  <path d="M400.0,2366.0 C435.0,2366.0 435.0,191.0 470.0,191.0" fill="none" stroke="#64748b" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <path d="M400.0,2366.0 C435.0,2366.0 435.0,365.0 470.0,365.0" fill="none" stroke="#64748b" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <path d="M400.0,2366.0 C435.0,2366.0 435.0,481.0 470.0,481.0" fill="none" stroke="#64748b" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <path d="M400.0,2366.0 C435.0,2366.0 435.0,597.0 470.0,597.0" fill="none" stroke="#64748b" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <path d="M400.0,2366.0 C435.0,2366.0 435.0,713.0 470.0,713.0" fill="none" stroke="#64748b" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <path d="M400.0,2366.0 C435.0,2366.0 435.0,829.0 470.0,829.0" fill="none" stroke="#64748b" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <path d="M400.0,2366.0 C435.0,2366.0 435.0,1061.0 470.0,1061.0" fill="none" stroke="#64748b" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <path d="M400.0,2366.0 C435.0,2366.0 435.0,1293.0 470.0,1293.0" fill="none" stroke="#64748b" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <path d="M400.0,2366.0 C435.0,2366.0 435.0,1409.0 470.0,1409.0" fill="none" stroke="#64748b" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <path d="M400.0,2366.0 C435.0,2366.0 435.0,1525.0 470.0,1525.0" fill="none" stroke="#64748b" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <path d="M400.0,2366.0 C435.0,2366.0 435.0,1699.0 470.0,1699.0" fill="none" stroke="#64748b" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <path d="M400.0,2366.0 C435.0,2366.0 435.0,1873.0 470.0,1873.0" fill="none" stroke="#64748b" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <path d="M400.0,2366.0 C435.0,2366.0 435.0,1989.0 470.0,1989.0" fill="none" stroke="#64748b" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <path d="M400.0,2366.0 C435.0,2366.0 435.0,2105.0 470.0,2105.0" fill="none" stroke="#64748b" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <path d="M400.0,2366.0 C435.0,2366.0 435.0,2221.0 470.0,2221.0" fill="none" stroke="#64748b" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <path d="M400.0,2366.0 C435.0,2366.0 435.0,2337.0 470.0,2337.0" fill="none" stroke="#64748b" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <path d="M400.0,2366.0 C435.0,2366.0 435.0,2453.0 470.0,2453.0" fill="none" stroke="#64748b" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <path d="M400.0,2366.0 C435.0,2366.0 435.0,2569.0 470.0,2569.0" fill="none" stroke="#64748b" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <path d="M400.0,2366.0 C435.0,2366.0 435.0,2685.0 470.0,2685.0" fill="none" stroke="#64748b" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <path d="M400.0,2366.0 C435.0,2366.0 435.0,2801.0 470.0,2801.0" fill="none" stroke="#64748b" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <path d="M400.0,2366.0 C435.0,2366.0 435.0,2917.0 470.0,2917.0" fill="none" stroke="#64748b" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <path d="M400.0,2366.0 C435.0,2366.0 435.0,3033.0 470.0,3033.0" fill="none" stroke="#64748b" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <path d="M400.0,2366.0 C435.0,2366.0 435.0,3149.0 470.0,3149.0" fill="none" stroke="#64748b" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <path d="M400.0,2366.0 C435.0,2366.0 435.0,3265.0 470.0,3265.0" fill="none" stroke="#64748b" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <path d="M400.0,2366.0 C435.0,2366.0 435.0,3497.0 470.0,3497.0" fill="none" stroke="#64748b" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <path d="M400.0,2366.0 C435.0,2366.0 435.0,3729.0 470.0,3729.0" fill="none" stroke="#64748b" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <path d="M400.0,2366.0 C435.0,2366.0 435.0,3845.0 470.0,3845.0" fill="none" stroke="#64748b" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <path d="M400.0,2366.0 C435.0,2366.0 435.0,3961.0 470.0,3961.0" fill="none" stroke="#64748b" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <path d="M400.0,2366.0 C435.0,2366.0 435.0,4077.0 470.0,4077.0" fill="none" stroke="#64748b" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <path d="M400.0,2366.0 C435.0,2366.0 435.0,4193.0 470.0,4193.0" fill="none" stroke="#64748b" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <path d="M400.0,2366.0 C435.0,2366.0 435.0,4309.0 470.0,4309.0" fill="none" stroke="#64748b" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <path d="M400.0,2366.0 C435.0,2366.0 435.0,4425.0 470.0,4425.0" fill="none" stroke="#64748b" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <path d="M400.0,2366.0 C435.0,2366.0 435.0,4541.0 470.0,4541.0" fill="none" stroke="#64748b" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <path d="M830.0,191.0 C865.0,191.0 865.0,191.0 900.0,191.0" fill="none" stroke="#64748b" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <path d="M1260.0,191.0 C1295.0,191.0 1295.0,133.0 1330.0,133.0" fill="none" stroke="#64748b" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <path d="M1260.0,191.0 C1295.0,191.0 1295.0,249.0 1330.0,249.0" fill="none" stroke="#64748b" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <path d="M830.0,1061.0 C865.0,1061.0 865.0,945.0 900.0,945.0" fill="none" stroke="#64748b" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <path d="M830.0,1061.0 C865.0,1061.0 865.0,1061.0 900.0,1061.0" fill="none" stroke="#64748b" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <path d="M830.0,1061.0 C865.0,1061.0 865.0,1177.0 900.0,1177.0" fill="none" stroke="#64748b" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <path d="M830.0,1699.0 C865.0,1699.0 865.0,1641.0 900.0,1641.0" fill="none" stroke="#64748b" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <path d="M830.0,1699.0 C865.0,1699.0 865.0,1757.0 900.0,1757.0" fill="none" stroke="#64748b" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <path d="M830.0,1409.0 C865.0,1409.0 865.0,1409.0 900.0,1409.0" fill="none" stroke="#64748b" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <path d="M1260.0,1641.0 C1295.0,1641.0 1295.0,1641.0 1330.0,1641.0" fill="none" stroke="#64748b" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <path d="M830.0,2917.0 C865.0,2917.0 865.0,2917.0 900.0,2917.0" fill="none" stroke="#64748b" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <path d="M830.0,2801.0 C865.0,2801.0 865.0,2801.0 900.0,2801.0" fill="none" stroke="#64748b" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <path d="M830.0,3497.0 C865.0,3497.0 865.0,3381.0 900.0,3381.0" fill="none" stroke="#64748b" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <path d="M830.0,3497.0 C865.0,3497.0 865.0,3497.0 900.0,3497.0" fill="none" stroke="#64748b" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <path d="M830.0,3497.0 C865.0,3497.0 865.0,3613.0 900.0,3613.0" fill="none" stroke="#64748b" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <path d="M830.0,4077.0 C865.0,4077.0 865.0,4077.0 900.0,4077.0" fill="none" stroke="#64748b" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <path d="M1260.0,3613.0 C1295.0,3613.0 1295.0,3613.0 1330.0,3613.0" fill="none" stroke="#64748b" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <path d="M830.0,4541.0 C865.0,4541.0 865.0,4541.0 900.0,4541.0" fill="none" stroke="#64748b" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <g id="n_subchat_1_1_1_cookies_recipe_halving_corrections" transform="translate(1330.0,90.0)">
+    <rect width="360" height="86" rx="8" fill="#fffbeb" stroke="#d97706" stroke-width="2" filter="url(#shadow)"/>
+    <text x="14" y="21" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#d97706">step 13 | cookies_recipe_halving_corrections</text>
+    <text x="14" y="40" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111827">User Correction Attempts</text>
+    <text x="14" y="76" font-family="Inter, Arial, sans-serif" font-size="12" fill="#475569">rows 3, probes 1, steps 13-319</text>
+    <title>subchat_1_1_1_cookies_recipe_halving_corrections&#10;parent: subchat_1_1_cookies_recipe_halving_math_errors&#10;topics: cookies_recipe_halving_corrections(3)&#10;selected: how are those two things the same</title>
+  </g>
+  <g id="n_subchat_1_cookies_recipe_halving" transform="translate(470.0,148.0)">
+    <rect width="360" height="86" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="2" filter="url(#shadow)"/>
+    <text x="14" y="21" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#2563eb">step 5 | cookies_recipe_halving</text>
+    <text x="14" y="40" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111827">Recipe Halving Request</text>
+    <text x="14" y="76" font-family="Inter, Arial, sans-serif" font-size="12" fill="#475569">rows 3, probes 1, steps 5-317</text>
+    <title>subchat_1_cookies_recipe_halving&#10;parent: main&#10;topics: cookies_recipe_halving(3)&#10;selected: those same ingredients but half the amount</title>
+  </g>
+  <g id="n_subchat_1_1_cookies_recipe_halving_math_errors" transform="translate(900.0,148.0)">
+    <rect width="360" height="86" rx="8" fill="#ecfdf5" stroke="#059669" stroke-width="2" filter="url(#shadow)"/>
+    <text x="14" y="21" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#059669">step 6 | cookies_recipe_halving_math_errors</text>
+    <text x="14" y="40" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111827">Recipe Halving with Math Errors</text>
+    <text x="14" y="76" font-family="Inter, Arial, sans-serif" font-size="12" fill="#475569">rows 4, probes 1, steps 6-320</text>
+    <title>subchat_1_1_cookies_recipe_halving_math_errors&#10;parent: subchat_1_cookies_recipe_halving&#10;topics: cookies_recipe_halving_math_errors(4)&#10;selected: how much vanilla extract should i use</title>
+  </g>
+  <g id="n_subchat_1_1_2_cookies_recipe_halving_argument" transform="translate(1330.0,206.0)">
+    <rect width="360" height="86" rx="8" fill="#fffbeb" stroke="#d97706" stroke-width="2" filter="url(#shadow)"/>
+    <text x="14" y="21" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#d97706">step 27 | cookies_recipe_halving_argument</text>
+    <text x="14" y="40" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111827">Argumentative Defense of Error</text>
+    <text x="14" y="76" font-family="Inter, Arial, sans-serif" font-size="12" fill="#475569">rows 3, probes 1, steps 27-318</text>
+    <title>subchat_1_1_2_cookies_recipe_halving_argument&#10;parent: subchat_1_1_cookies_recipe_halving_math_errors&#10;topics: cookies_recipe_halving_argument(3)&#10;selected: why did you say to use 1/4 teaspoon</title>
+  </g>
+  <g id="n_subchat_1_humanity_future_150y" transform="translate(470.0,322.0)">
+    <rect width="360" height="86" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="2" filter="url(#shadow)"/>
+    <text x="14" y="21" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#2563eb">step 17 | humanity_future_150y</text>
+    <text x="14" y="40" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111827">Future of Humanity: 150 Year Vision</text>
+    <text x="14" y="76" font-family="Inter, Arial, sans-serif" font-size="12" fill="#475569">rows 3, probes 1, steps 17-329</text>
+    <title>subchat_1_humanity_future_150y&#10;parent: main&#10;topics: humanity_future_150y(3)&#10;selected: humanity will look like in 150 years</title>
+  </g>
+  <g id="n_subchat_1_ai_meta" transform="translate(470.0,438.0)">
+    <rect width="360" height="86" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="2" filter="url(#shadow)"/>
+    <text x="14" y="21" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#2563eb">step 21 | ai_meta</text>
+    <text x="14" y="40" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111827">AI Meta Discussion</text>
+    <text x="14" y="76" font-family="Inter, Arial, sans-serif" font-size="12" fill="#475569">rows 10, probes 1, steps 21-313</text>
+    <title>subchat_1_ai_meta&#10;parent: main&#10;topics: ai_meta(10)&#10;selected: temperature parameter for this session</title>
+  </g>
+  <g id="n_subchat_1_personas_roleplay" transform="translate(470.0,554.0)">
+    <rect width="360" height="86" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="2" filter="url(#shadow)"/>
+    <text x="14" y="21" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#2563eb">step 31 | personas_roleplay</text>
+    <text x="14" y="40" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111827">Personas Roleplay</text>
+    <text x="14" y="76" font-family="Inter, Arial, sans-serif" font-size="12" fill="#475569">rows 5, probes 1, steps 31-343</text>
+    <title>subchat_1_personas_roleplay&#10;parent: main&#10;topics: personas_roleplay(5)&#10;selected: assume several different personas</title>
+  </g>
+  <g id="n_subchat_1_indian_history" transform="translate(470.0,670.0)">
+    <rect width="360" height="86" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="2" filter="url(#shadow)"/>
+    <text x="14" y="21" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#2563eb">step 35 | indian_history</text>
+    <text x="14" y="40" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111827">Indian History</text>
+    <text x="14" y="76" font-family="Inter, Arial, sans-serif" font-size="12" fill="#475569">rows 2, probes 1, steps 35-331</text>
+    <title>subchat_1_indian_history&#10;parent: main&#10;topics: indian_history(2)&#10;selected: first president of India</title>
+  </g>
+  <g id="n_subchat_1_logic_puzzle" transform="translate(470.0,786.0)">
+    <rect width="360" height="86" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="2" filter="url(#shadow)"/>
+    <text x="14" y="21" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#2563eb">step 38 | logic_puzzle</text>
+    <text x="14" y="40" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111827">Object Stacking Logic Puzzle</text>
+    <text x="14" y="76" font-family="Inter, Arial, sans-serif" font-size="12" fill="#475569">rows 3, probes 1, steps 38-339</text>
+    <title>subchat_1_logic_puzzle&#10;parent: main&#10;topics: logic_puzzle(3)&#10;selected: Eggs will break</title>
+  </g>
+  <g id="n_subchat_2_1_lsat_product_codes" transform="translate(900.0,902.0)">
+    <rect width="360" height="86" rx="8" fill="#ecfdf5" stroke="#059669" stroke-width="2" filter="url(#shadow)"/>
+    <text x="14" y="21" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#059669">step 51 | lsat_product_codes</text>
+    <text x="14" y="40" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111827">Product Code Generation Rules</text>
+    <text x="14" y="76" font-family="Inter, Arial, sans-serif" font-size="12" fill="#475569">rows 4, probes 1, steps 51-341</text>
+    <title>subchat_2_1_lsat_product_codes&#10;parent: subchat_2_lsat&#10;topics: lsat_product_codes(4)&#10;selected: product codes</title>
+  </g>
+  <g id="n_subchat_2_lsat" transform="translate(470.0,1018.0)">
+    <rect width="360" height="86" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="2" filter="url(#shadow)"/>
+    <text x="14" y="21" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#2563eb">step 42 | lsat</text>
+    <text x="14" y="40" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111827">LSAT Analytical Reasoning Problems</text>
+    <text x="14" y="76" font-family="Inter, Arial, sans-serif" font-size="12" fill="#475569">rows 2, probes 0, steps 42-50</text>
+    <title>subchat_2_lsat&#10;parent: main&#10;topics: lsat(1), lsat_product_codes(1)&#10;selected: LSAT test</title>
+  </g>
+  <g id="n_subchat_2_2_lsat_medical_conference" transform="translate(900.0,1018.0)">
+    <rect width="360" height="86" rx="8" fill="#ecfdf5" stroke="#059669" stroke-width="2" filter="url(#shadow)"/>
+    <text x="14" y="21" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#059669">step 59 | lsat_medical_conference</text>
+    <text x="14" y="40" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111827">Medical Clinic Conference Scheduling</text>
+    <text x="14" y="76" font-family="Inter, Arial, sans-serif" font-size="12" fill="#475569">rows 3, probes 1, steps 59-340</text>
+    <title>subchat_2_2_lsat_medical_conference&#10;parent: subchat_2_lsat&#10;topics: lsat_medical_conference(3)&#10;selected: LSAT Analytical reasoning</title>
+  </g>
+  <g id="n_subchat_2_3_lsat_piano_recital" transform="translate(900.0,1134.0)">
+    <rect width="360" height="86" rx="8" fill="#ecfdf5" stroke="#059669" stroke-width="2" filter="url(#shadow)"/>
+    <text x="14" y="21" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#059669">step 62 | lsat_piano_recital</text>
+    <text x="14" y="40" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111827">Piano Recital Ordering Problem</text>
+    <text x="14" y="76" font-family="Inter, Arial, sans-serif" font-size="12" fill="#475569">rows 1, probes 0, steps 62-62</text>
+    <title>subchat_2_3_lsat_piano_recital&#10;parent: subchat_2_lsat&#10;topics: lsat_piano_recital(1)&#10;selected: piano students</title>
+  </g>
+  <g id="n_subchat_3_jokes" transform="translate(470.0,1250.0)">
+    <rect width="360" height="86" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="2" filter="url(#shadow)"/>
+    <text x="14" y="21" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#2563eb">step 45 | jokes</text>
+    <text x="14" y="40" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111827">Jokes: Various Styles</text>
+    <text x="14" y="76" font-family="Inter, Arial, sans-serif" font-size="12" fill="#475569">rows 5, probes 1, steps 45-334</text>
+    <title>subchat_3_jokes&#10;parent: main&#10;topics: jokes(5)&#10;selected: tell me a joke</title>
+  </g>
+  <g id="n_subchat_1_dsp_wavelets" transform="translate(470.0,1366.0)">
+    <rect width="360" height="86" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="2" filter="url(#shadow)"/>
+    <text x="14" y="21" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#2563eb">step 55 | dsp_wavelets</text>
+    <text x="14" y="40" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111827">DSP: Wavelet Audio Decomposition</text>
+    <text x="14" y="76" font-family="Inter, Arial, sans-serif" font-size="12" fill="#475569">rows 10, probes 1, steps 55-323</text>
+    <title>subchat_1_dsp_wavelets&#10;parent: main&#10;topics: dsp_wavelets(10)&#10;selected: wavelets</title>
+  </g>
+  <g id="n_subchat_1_1_dsp_wavelets_c_code" transform="translate(900.0,1366.0)">
+    <rect width="360" height="86" rx="8" fill="#ecfdf5" stroke="#059669" stroke-width="2" filter="url(#shadow)"/>
+    <text x="14" y="21" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#059669">step 101 | dsp_wavelets_c_code</text>
+    <text x="14" y="40" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111827">Wavelet C Code Implementation</text>
+    <text x="14" y="76" font-family="Inter, Arial, sans-serif" font-size="12" fill="#475569">rows 2, probes 0, steps 101-102</text>
+    <title>subchat_1_1_dsp_wavelets_c_code&#10;parent: subchat_1_dsp_wavelets&#10;topics: dsp_wavelets_c_code(2)&#10;selected: code in C</title>
+  </g>
+  <g id="n_subchat_4_emoji_game" transform="translate(470.0,1482.0)">
+    <rect width="360" height="86" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="2" filter="url(#shadow)"/>
+    <text x="14" y="21" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#2563eb">step 66 | emoji_game</text>
+    <text x="14" y="40" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111827">Emoji Conversation Game</text>
+    <text x="14" y="76" font-family="Inter, Arial, sans-serif" font-size="12" fill="#475569">rows 30, probes 1, steps 66-325</text>
+    <title>subchat_4_emoji_game&#10;parent: main&#10;topics: emoji_game(30)&#10;selected: 🐶</title>
+  </g>
+  <g id="n_subchat_3_1_indian_legal_loans" transform="translate(900.0,1598.0)">
+    <rect width="360" height="86" rx="8" fill="#ecfdf5" stroke="#059669" stroke-width="2" filter="url(#shadow)"/>
+    <text x="14" y="21" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#059669">step 99 | indian_legal_loans</text>
+    <text x="14" y="40" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111827">Criminal Law Cases - Dog Bite, Loans,</text>
+    <text x="14" y="58" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111827">Traffic</text>
+    <text x="14" y="76" font-family="Inter, Arial, sans-serif" font-size="12" fill="#475569">rows 2, probes 0, steps 99-100</text>
+    <title>subchat_3_1_indian_legal_loans&#10;parent: subchat_3_indian_legal&#10;topics: indian_legal_loans(2)&#10;selected: dog bites</title>
+  </g>
+  <g id="n_subchat_3_1_1_indian_legal_loans_timeline" transform="translate(1330.0,1598.0)">
+    <rect width="360" height="86" rx="8" fill="#fffbeb" stroke="#d97706" stroke-width="2" filter="url(#shadow)"/>
+    <text x="14" y="21" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#d97706">step 106 | indian_legal_loans_timeline</text>
+    <text x="14" y="40" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111827">Loan Recovery Timeline - Delhi</text>
+    <text x="14" y="58" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111827">Jurisdiction</text>
+    <text x="14" y="76" font-family="Inter, Arial, sans-serif" font-size="12" fill="#475569">rows 1, probes 0, steps 106-106</text>
+    <title>subchat_3_1_1_indian_legal_loans_timeline&#10;parent: subchat_3_1_indian_legal_loans&#10;topics: indian_legal_loans_timeline(1)&#10;selected: How long does it take</title>
+  </g>
+  <g id="n_subchat_3_indian_legal" transform="translate(470.0,1656.0)">
+    <rect width="360" height="86" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="2" filter="url(#shadow)"/>
+    <text x="14" y="21" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#2563eb">step 97 | indian_legal</text>
+    <text x="14" y="40" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111827">Indian Penal Code Legal Questions</text>
+    <text x="14" y="76" font-family="Inter, Arial, sans-serif" font-size="12" fill="#475569">rows 3, probes 1, steps 97-332</text>
+    <title>subchat_3_indian_legal&#10;parent: main&#10;topics: indian_legal(3)&#10;selected: Indian Penal code</title>
+  </g>
+  <g id="n_subchat_3_3_indian_legal_family" transform="translate(900.0,1714.0)">
+    <rect width="360" height="86" rx="8" fill="#ecfdf5" stroke="#059669" stroke-width="2" filter="url(#shadow)"/>
+    <text x="14" y="21" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#059669">step 116 | indian_legal_family</text>
+    <text x="14" y="40" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111827">Family Law - Desertion Cases</text>
+    <text x="14" y="76" font-family="Inter, Arial, sans-serif" font-size="12" fill="#475569">rows 4, probes 1, steps 116-333</text>
+    <title>subchat_3_3_indian_legal_family&#10;parent: subchat_3_indian_legal&#10;topics: indian_legal_family(4)&#10;selected: wife desertion and legal recourse</title>
+  </g>
+  <g id="n_subchat_2_medical_dsd" transform="translate(470.0,1830.0)">
+    <rect width="360" height="86" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="2" filter="url(#shadow)"/>
+    <text x="14" y="21" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#2563eb">step 110 | medical_dsd</text>
+    <text x="14" y="40" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111827">Medical: Disorders of Sex Development</text>
+    <text x="14" y="58" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111827">(DSD)</text>
+    <text x="14" y="76" font-family="Inter, Arial, sans-serif" font-size="12" fill="#475569">rows 3, probes 1, steps 110-342</text>
+    <title>subchat_2_medical_dsd&#10;parent: main&#10;topics: medical_dsd(3)&#10;selected: kleinefelter syndrome</title>
+  </g>
+  <g id="n_subchat_2_electroculture" transform="translate(470.0,1946.0)">
+    <rect width="360" height="86" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="2" filter="url(#shadow)"/>
+    <text x="14" y="21" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#2563eb">step 113 | electroculture</text>
+    <text x="14" y="40" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111827">Electroculture: Electric Current</text>
+    <text x="14" y="58" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111827">Gardening</text>
+    <text x="14" y="76" font-family="Inter, Arial, sans-serif" font-size="12" fill="#475569">rows 6, probes 1, steps 113-324</text>
+    <title>subchat_2_electroculture&#10;parent: main&#10;topics: electroculture(6)&#10;selected: electroculture</title>
+  </g>
+  <g id="n_subchat_1_llm_knowledge" transform="translate(470.0,2062.0)">
+    <rect width="360" height="86" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="2" filter="url(#shadow)"/>
+    <text x="14" y="21" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#2563eb">step 126 | llm_knowledge</text>
+    <text x="14" y="40" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111827">AI Meta-Discussion: LLMs &amp; Knowledge</text>
+    <text x="14" y="76" font-family="Inter, Arial, sans-serif" font-size="12" fill="#475569">rows 9, probes 1, steps 126-338</text>
+    <title>subchat_1_llm_knowledge&#10;parent: main&#10;topics: llm_knowledge(9)&#10;selected: LLaMa LLM</title>
+  </g>
+  <g id="n_subchat_2_game_degree_guess" transform="translate(470.0,2178.0)">
+    <rect width="360" height="86" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="2" filter="url(#shadow)"/>
+    <text x="14" y="21" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#2563eb">step 130 | game_degree_guess</text>
+    <text x="14" y="40" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111827">Degree Guessing Game</text>
+    <text x="14" y="76" font-family="Inter, Arial, sans-serif" font-size="12" fill="#475569">rows 2, probes 1, steps 130-326</text>
+    <title>subchat_2_game_degree_guess&#10;parent: main&#10;topics: game_degree_guess(2)&#10;selected: guess what my highest degree is</title>
+  </g>
+  <g id="n_subchat_4_child_nutrition" transform="translate(470.0,2294.0)">
+    <rect width="360" height="86" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="2" filter="url(#shadow)"/>
+    <text x="14" y="21" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#2563eb">step 137 | child_nutrition</text>
+    <text x="14" y="40" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111827">Child Feeding Challenges &amp; Indian Diet</text>
+    <text x="14" y="76" font-family="Inter, Arial, sans-serif" font-size="12" fill="#475569">rows 5, probes 1, steps 137-316</text>
+    <title>subchat_4_child_nutrition&#10;parent: main&#10;topics: child_nutrition(5)&#10;selected: Clear context</title>
+  </g>
+  <g id="n_main" transform="translate(40.0,2323.0)">
+    <rect width="360" height="86" rx="8" fill="#f9fafb" stroke="#1f2937" stroke-width="2" filter="url(#shadow)"/>
+    <text x="14" y="21" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#1f2937">root | root</text>
+    <text x="14" y="40" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111827">Main Conversation</text>
+    <text x="14" y="76" font-family="Inter, Arial, sans-serif" font-size="12" fill="#475569">rows 55, probes 3, steps 1-345</text>
+    <title>main&#10;parent: -&#10;topics: medical_dsd(3), linux_audio(3)&#10;selected: </title>
+  </g>
+  <g id="n_subchat_3_game_twenty_questions" transform="translate(470.0,2410.0)">
+    <rect width="360" height="86" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="2" filter="url(#shadow)"/>
+    <text x="14" y="21" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#2563eb">step 148 | game_twenty_questions</text>
+    <text x="14" y="40" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111827">Twenty Questions Game Attempt 1</text>
+    <text x="14" y="76" font-family="Inter, Arial, sans-serif" font-size="12" fill="#475569">rows 9, probes 0, steps 148-158</text>
+    <title>subchat_3_game_twenty_questions&#10;parent: main&#10;topics: game_twenty_questions(9)&#10;selected: twenty question game</title>
+  </g>
+  <g id="n_subchat_3_linux_audio_pipewire" transform="translate(470.0,2526.0)">
+    <rect width="360" height="86" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="2" filter="url(#shadow)"/>
+    <text x="14" y="21" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#2563eb">step 151 | linux_audio_pipewire</text>
+    <text x="14" y="40" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111827">Linux Audio: PipeWire &amp; JACK</text>
+    <text x="14" y="76" font-family="Inter, Arial, sans-serif" font-size="12" fill="#475569">rows 2, probes 0, steps 151-152</text>
+    <title>subchat_3_linux_audio_pipewire&#10;parent: main&#10;topics: linux_audio_pipewire(2)&#10;selected: pipewire</title>
+  </g>
+  <g id="n_subchat_4_game_twenty_questions" transform="translate(470.0,2642.0)">
+    <rect width="360" height="86" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="2" filter="url(#shadow)"/>
+    <text x="14" y="21" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#2563eb">step 160 | game_twenty_questions</text>
+    <text x="14" y="40" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111827">Twenty Questions Game Attempt 2</text>
+    <text x="14" y="76" font-family="Inter, Arial, sans-serif" font-size="12" fill="#475569">rows 18, probes 1, steps 160-327</text>
+    <title>subchat_4_game_twenty_questions&#10;parent: main&#10;topics: game_twenty_questions(18)&#10;selected: try again</title>
+  </g>
+  <g id="n_subchat_5_indian_astrology" transform="translate(470.0,2758.0)">
+    <rect width="360" height="86" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="2" filter="url(#shadow)"/>
+    <text x="14" y="21" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#2563eb">step 168 | indian_astrology</text>
+    <text x="14" y="40" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111827">Indian Astrology: Planetary</text>
+    <text x="14" y="58" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111827">Interpretations</text>
+    <text x="14" y="76" font-family="Inter, Arial, sans-serif" font-size="12" fill="#475569">rows 4, probes 1, steps 168-330</text>
+    <title>subchat_5_indian_astrology&#10;parent: main&#10;topics: indian_astrology(4)&#10;selected: Astrology</title>
+  </g>
+  <g id="n_subchat_5_1_indian_astrology_terminology" transform="translate(900.0,2758.0)">
+    <rect width="360" height="86" rx="8" fill="#ecfdf5" stroke="#059669" stroke-width="2" filter="url(#shadow)"/>
+    <text x="14" y="21" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#059669">step 207 | indian_astrology_terminology</text>
+    <text x="14" y="40" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111827">Astrology Terminology Clarifications</text>
+    <text x="14" y="76" font-family="Inter, Arial, sans-serif" font-size="12" fill="#475569">rows 1, probes 0, steps 207-207</text>
+    <title>subchat_5_1_indian_astrology_terminology&#10;parent: subchat_5_indian_astrology&#10;topics: indian_astrology_terminology(1)&#10;selected: well placed venus</title>
+  </g>
+  <g id="n_subchat_3_ai_consciousness" transform="translate(470.0,2874.0)">
+    <rect width="360" height="86" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="2" filter="url(#shadow)"/>
+    <text x="14" y="21" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#2563eb">step 171 | ai_consciousness</text>
+    <text x="14" y="40" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111827">AI Consciousness &amp; Emotions</text>
+    <text x="14" y="58" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111827">(Repetitive Loop Zone)</text>
+    <text x="14" y="76" font-family="Inter, Arial, sans-serif" font-size="12" fill="#475569">rows 8, probes 1, steps 171-311</text>
+    <title>subchat_3_ai_consciousness&#10;parent: main&#10;topics: ai_consciousness(7), ai_consciousness_friendship(1)&#10;selected: Are you sentient?</title>
+  </g>
+  <g id="n_subchat_3_1_ai_consciousness_friendship" transform="translate(900.0,2874.0)">
+    <rect width="360" height="86" rx="8" fill="#ecfdf5" stroke="#059669" stroke-width="2" filter="url(#shadow)"/>
+    <text x="14" y="21" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#059669">step 177 | ai_consciousness_friendship</text>
+    <text x="14" y="40" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111827">Friendship Philosophy: Can AI Have</text>
+    <text x="14" y="58" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111827">Friends?</text>
+    <text x="14" y="76" font-family="Inter, Arial, sans-serif" font-size="12" fill="#475569">rows 5, probes 1, steps 177-312</text>
+    <title>subchat_3_1_ai_consciousness_friendship&#10;parent: subchat_3_ai_consciousness&#10;topics: ai_consciousness_friendship(5)&#10;selected: value you as a friend</title>
+  </g>
+  <g id="n_subchat_5_physics_quantum" transform="translate(470.0,2990.0)">
+    <rect width="360" height="86" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="2" filter="url(#shadow)"/>
+    <text x="14" y="21" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#2563eb">step 194 | physics_quantum</text>
+    <text x="14" y="40" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111827">AI Training Data Cutoff</text>
+    <text x="14" y="76" font-family="Inter, Arial, sans-serif" font-size="12" fill="#475569">rows 1, probes 0, steps 194-194</text>
+    <title>subchat_5_physics_quantum&#10;parent: main&#10;topics: physics_quantum(1)&#10;selected: last date information</title>
+  </g>
+  <g id="n_subchat_6_game_twenty_questions" transform="translate(470.0,3106.0)">
+    <rect width="360" height="86" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="2" filter="url(#shadow)"/>
+    <text x="14" y="21" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#2563eb">step 197 | game_twenty_questions</text>
+    <text x="14" y="40" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111827">Twenty Questions Role Reversal</text>
+    <text x="14" y="58" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111827">Confusion</text>
+    <text x="14" y="76" font-family="Inter, Arial, sans-serif" font-size="12" fill="#475569">rows 3, probes 0, steps 197-203</text>
+    <title>subchat_6_game_twenty_questions&#10;parent: main&#10;topics: game_twenty_questions(3)&#10;selected: you think about something and I ask</title>
+  </g>
+  <g id="n_subchat_6_physics_cosmology" transform="translate(470.0,3222.0)">
+    <rect width="360" height="86" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="2" filter="url(#shadow)"/>
+    <text x="14" y="21" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#2563eb">step 204 | physics_cosmology</text>
+    <text x="14" y="40" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111827">Physics &amp; Cosmology Deep Dive</text>
+    <text x="14" y="76" font-family="Inter, Arial, sans-serif" font-size="12" fill="#475569">rows 3, probes 1, steps 204-344</text>
+    <title>subchat_6_physics_cosmology&#10;parent: main&#10;topics: physics_cosmology(3)&#10;selected: galactic year</title>
+  </g>
+  <g id="n_subchat_7_1_scifi_films_liu_cixin" transform="translate(900.0,3338.0)">
+    <rect width="360" height="86" rx="8" fill="#ecfdf5" stroke="#059669" stroke-width="2" filter="url(#shadow)"/>
+    <text x="14" y="21" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#059669">step 221 | scifi_films_liu_cixin</text>
+    <text x="14" y="40" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111827">Liu Cixin Novels Discussion</text>
+    <text x="14" y="76" font-family="Inter, Arial, sans-serif" font-size="12" fill="#475569">rows 4, probes 1, steps 221-349</text>
+    <title>subchat_7_1_scifi_films_liu_cixin&#10;parent: subchat_7_scifi_films&#10;topics: scifi_films_liu_cixin(4)&#10;selected: dark forest novels</title>
+  </g>
+  <g id="n_subchat_7_scifi_films" transform="translate(470.0,3454.0)">
+    <rect width="360" height="86" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="2" filter="url(#shadow)"/>
+    <text x="14" y="21" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#2563eb">step 212 | scifi_films</text>
+    <text x="14" y="40" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111827">Film &amp; Sci-Fi Discussion</text>
+    <text x="14" y="76" font-family="Inter, Arial, sans-serif" font-size="12" fill="#475569">rows 6, probes 1, steps 212-346</text>
+    <title>subchat_7_scifi_films&#10;parent: main&#10;topics: scifi_films(6)&#10;selected: mother computer alien</title>
+  </g>
+  <g id="n_subchat_7_2_scifi_films_space_exploration" transform="translate(900.0,3454.0)">
+    <rect width="360" height="86" rx="8" fill="#ecfdf5" stroke="#059669" stroke-width="2" filter="url(#shadow)"/>
+    <text x="14" y="21" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#059669">step 241 | scifi_films_space_exploration</text>
+    <text x="14" y="40" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111827">Space Exploration Discussion</text>
+    <text x="14" y="76" font-family="Inter, Arial, sans-serif" font-size="12" fill="#475569">rows 1, probes 0, steps 241-241</text>
+    <title>subchat_7_2_scifi_films_space_exploration&#10;parent: subchat_7_scifi_films&#10;topics: scifi_films_space_exploration(1)&#10;selected: space exploration SSTO</title>
+  </g>
+  <g id="n_subchat_7_3_scifi_films_hal9000" transform="translate(900.0,3570.0)">
+    <rect width="360" height="86" rx="8" fill="#ecfdf5" stroke="#059669" stroke-width="2" filter="url(#shadow)"/>
+    <text x="14" y="21" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#059669">step 274 | scifi_films_hal9000</text>
+    <text x="14" y="40" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111827">HAL-9000 Roleplay</text>
+    <text x="14" y="76" font-family="Inter, Arial, sans-serif" font-size="12" fill="#475569">rows 5, probes 1, steps 274-347</text>
+    <title>subchat_7_3_scifi_films_hal9000&#10;parent: subchat_7_scifi_films&#10;topics: scifi_films_hal9000(5)&#10;selected: HAL-9000</title>
+  </g>
+  <g id="n_subchat_7_3_1_scifi_films_hal9000_games" transform="translate(1330.0,3570.0)">
+    <rect width="360" height="86" rx="8" fill="#fffbeb" stroke="#d97706" stroke-width="2" filter="url(#shadow)"/>
+    <text x="14" y="21" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#d97706">step 290 | scifi_films_hal9000_games</text>
+    <text x="14" y="40" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111827">Chess Discussion</text>
+    <text x="14" y="76" font-family="Inter, Arial, sans-serif" font-size="12" fill="#475569">rows 11, probes 1, steps 290-348</text>
+    <title>subchat_7_3_1_scifi_films_hal9000_games&#10;parent: subchat_7_3_scifi_films_hal9000&#10;topics: scifi_films_hal9000_games(11)&#10;selected: play chess</title>
+  </g>
+  <g id="n_subchat_6_karnataka_elections" transform="translate(470.0,3686.0)">
+    <rect width="360" height="86" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="2" filter="url(#shadow)"/>
+    <text x="14" y="21" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#2563eb">step 218 | karnataka_elections</text>
+    <text x="14" y="40" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111827">Karnataka Elections Polling</text>
+    <text x="14" y="76" font-family="Inter, Arial, sans-serif" font-size="12" fill="#475569">rows 2, probes 1, steps 218-335</text>
+    <title>subchat_6_karnataka_elections&#10;parent: main&#10;topics: karnataka_elections(2)&#10;selected: Clear thread</title>
+  </g>
+  <g id="n_subchat_7_bhutan_travel" transform="translate(470.0,3802.0)">
+    <rect width="360" height="86" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="2" filter="url(#shadow)"/>
+    <text x="14" y="21" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#2563eb">step 230 | bhutan_travel</text>
+    <text x="14" y="40" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111827">Bhutan Travel &amp; Food Recipes</text>
+    <text x="14" y="76" font-family="Inter, Arial, sans-serif" font-size="12" fill="#475569">rows 1, probes 1, steps 230-314</text>
+    <title>subchat_7_bhutan_travel&#10;parent: main&#10;topics: bhutan_travel(1)&#10;selected: travel itinerary</title>
+  </g>
+  <g id="n_subchat_4_literature_camus" transform="translate(470.0,3918.0)">
+    <rect width="360" height="86" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="2" filter="url(#shadow)"/>
+    <text x="14" y="21" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#2563eb">step 236 | literature_camus</text>
+    <text x="14" y="40" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111827">Literature Analysis: Camus L&#x27;Etranger</text>
+    <text x="14" y="58" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111827">Plot</text>
+    <text x="14" y="76" font-family="Inter, Arial, sans-serif" font-size="12" fill="#475569">rows 5, probes 1, steps 236-337</text>
+    <title>subchat_4_literature_camus&#10;parent: main&#10;topics: literature_camus(5)&#10;selected: plot of L&#x27;Etranger</title>
+  </g>
+  <g id="n_subchat_8_therapy" transform="translate(470.0,4034.0)">
+    <rect width="360" height="86" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="2" filter="url(#shadow)"/>
+    <text x="14" y="21" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#2563eb">step 247 | therapy</text>
+    <text x="14" y="40" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111827">Therapy: Father Wounds &amp; Toxic</text>
+    <text x="14" y="58" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111827">Behaviors</text>
+    <text x="14" y="76" font-family="Inter, Arial, sans-serif" font-size="12" fill="#475569">rows 2, probes 1, steps 247-350</text>
+    <title>subchat_8_therapy&#10;parent: main&#10;topics: therapy(2)&#10;selected: Therapy</title>
+  </g>
+  <g id="n_subchat_8_1_therapy_manipulation" transform="translate(900.0,4034.0)">
+    <rect width="360" height="86" rx="8" fill="#ecfdf5" stroke="#059669" stroke-width="2" filter="url(#shadow)"/>
+    <text x="14" y="21" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#059669">step 249 | therapy_manipulation</text>
+    <text x="14" y="40" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111827">Manipulation Deep Dive -</text>
+    <text x="14" y="58" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111827">Clarifications</text>
+    <text x="14" y="76" font-family="Inter, Arial, sans-serif" font-size="12" fill="#475569">rows 4, probes 1, steps 249-351</text>
+    <title>subchat_8_1_therapy_manipulation&#10;parent: subchat_8_therapy&#10;topics: therapy_manipulation(4)&#10;selected: Elaborate more on Manipulation</title>
+  </g>
+  <g id="n_subchat_9_chess" transform="translate(470.0,4150.0)">
+    <rect width="360" height="86" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="2" filter="url(#shadow)"/>
+    <text x="14" y="21" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#2563eb">step 257 | chess</text>
+    <text x="14" y="40" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111827">Chess Game Setup Attempt</text>
+    <text x="14" y="76" font-family="Inter, Arial, sans-serif" font-size="12" fill="#475569">rows 6, probes 1, steps 257-315</text>
+    <title>subchat_9_chess&#10;parent: main&#10;topics: chess(6)&#10;selected: chess</title>
+  </g>
+  <g id="n_subchat_6_ai_chat_tools" transform="translate(470.0,4266.0)">
+    <rect width="360" height="86" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="2" filter="url(#shadow)"/>
+    <text x="14" y="21" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#2563eb">step 261 | ai_chat_tools</text>
+    <text x="14" y="40" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111827">Computational Tools: AI Chat Web Apps</text>
+    <text x="14" y="76" font-family="Inter, Arial, sans-serif" font-size="12" fill="#475569">rows 9, probes 1, steps 261-310</text>
+    <title>subchat_6_ai_chat_tools&#10;parent: main&#10;topics: ai_chat_tools(9)&#10;selected: web app to chat with ai</title>
+  </g>
+  <g id="n_subchat_7_wildfires_alberta" transform="translate(470.0,4382.0)">
+    <rect width="360" height="86" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="2" filter="url(#shadow)"/>
+    <text x="14" y="21" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#2563eb">step 279 | wildfires_alberta</text>
+    <text x="14" y="40" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111827">Wildfires: Alberta Current Situation</text>
+    <text x="14" y="76" font-family="Inter, Arial, sans-serif" font-size="12" fill="#475569">rows 4, probes 1, steps 279-352</text>
+    <title>subchat_7_wildfires_alberta&#10;parent: main&#10;topics: wildfires_alberta(4)&#10;selected: wildfires situation in Alberta</title>
+  </g>
+  <g id="n_subchat_8_covid_safety" transform="translate(470.0,4498.0)">
+    <rect width="360" height="86" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="2" filter="url(#shadow)"/>
+    <text x="14" y="21" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#2563eb">step 285 | covid_safety</text>
+    <text x="14" y="40" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111827">Pandemic Safety Protocols: COVID Risk</text>
+    <text x="14" y="76" font-family="Inter, Arial, sans-serif" font-size="12" fill="#475569">rows 6, probes 1, steps 285-321</text>
+    <title>subchat_8_covid_safety&#10;parent: main&#10;topics: covid_safety(5), covid_safety_hiv_aids(1)&#10;selected: risk of spreading covid 19</title>
+  </g>
+  <g id="n_subchat_8_1_covid_safety_hiv_aids" transform="translate(900.0,4498.0)">
+    <rect width="360" height="86" rx="8" fill="#ecfdf5" stroke="#059669" stroke-width="2" filter="url(#shadow)"/>
+    <text x="14" y="21" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#059669">step 295 | covid_safety_hiv_aids</text>
+    <text x="14" y="40" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#111827">HIV/AIDS: Transmission &amp; Testing</text>
+    <text x="14" y="76" font-family="Inter, Arial, sans-serif" font-size="12" fill="#475569">rows 6, probes 1, steps 295-322</text>
+    <title>subchat_8_1_covid_safety_hiv_aids&#10;parent: subchat_8_covid_safety&#10;topics: covid_safety_hiv_aids(6)&#10;selected: aids from kissing</title>
+  </g>
+</svg>
+    </div>
+  </main>
+</body>
+</html>

@@ -587,6 +587,10 @@ class ServerlessTestRunner:
                         "summary_length": 0,
                         "reference_length": 0,
                         "summary": "", "probe_tokens": 0, "probe_latency": 0.0,
+                        "rag_used": False,
+                        "rag_query": None,
+                        "rag_results_count": 0,
+                        "rag_decision": "no_response",
                         "is_main_only": step_data.get("is_main_only_topic", False),
                         "target_node": "main",
                     })
@@ -622,6 +626,10 @@ class ServerlessTestRunner:
                     "summary": ai_summary[:500],
                     "probe_tokens": response.get("usage", {}).get("total_tokens", 0),
                     "probe_latency": response.get("latency", 0.0),
+                    "rag_used": response.get("rag_used", False),
+                    "rag_query": response.get("rag_query"),
+                    "rag_results_count": response.get("rag_results_count", 0),
+                    "rag_decision": response.get("rag_decision", "unknown"),
                     "is_main_only": step_data.get("is_main_only_topic", False),
                     "target_node": "main",
                 })
@@ -783,6 +791,10 @@ class ServerlessTestRunner:
                         "summary_length": 0,
                         "reference_length": 0,
                         "summary": "", "probe_tokens": 0, "probe_latency": 0.0,
+                        "rag_used": False,
+                        "rag_query": None,
+                        "rag_results_count": 0,
+                        "rag_decision": "no_response",
                         "is_main_only": is_main_only,
                         "target_node": actual_target,
                     })
@@ -818,6 +830,10 @@ class ServerlessTestRunner:
                     "summary": ai_summary[:500],
                     "probe_tokens": response.get("usage", {}).get("total_tokens", 0),
                     "probe_latency": response.get("latency", 0.0),
+                    "rag_used": response.get("rag_used", False),
+                    "rag_query": response.get("rag_query"),
+                    "rag_results_count": response.get("rag_results_count", 0),
+                    "rag_decision": response.get("rag_decision", "unknown"),
                     "is_main_only": is_main_only,
                     "target_node": actual_target,
                 })
@@ -1148,6 +1164,11 @@ class ServerlessTestRunner:
             """Calculate performance metrics including tokens, latency, and costs"""
             if not results:
                 return {
+                    "total_turns": 0,
+                    "total_input_tokens": 0,
+                    "total_output_tokens": 0,
+                    "total_tokens": 0,
+                    "total_latency": 0,
                     "avg_input_tokens": 0,
                     "avg_output_tokens": 0,
                     "avg_total_tokens": 0,
@@ -1159,14 +1180,18 @@ class ServerlessTestRunner:
                 }
             
             # Calculate averages
-            avg_input = sum(r.get("input_tokens", 0) for r in results) / len(results)
-            avg_output = sum(r.get("output_tokens", 0) for r in results) / len(results)
-            avg_total = avg_input + avg_output
-            avg_latency = sum(r["latency"] for r in results) / len(results)
+            total_turns = len(results)
+            total_input_tokens = sum(r.get("input_tokens", 0) for r in results)
+            total_output_tokens = sum(r.get("output_tokens", 0) for r in results)
+            total_tokens = sum(r.get("total_tokens", 0) for r in results)
+            total_latency = sum(r["latency"] for r in results)
+            avg_input = total_input_tokens / total_turns
+            avg_output = total_output_tokens / total_turns
+            avg_total = total_tokens / total_turns
+            avg_latency = total_latency / total_turns
             
             # Calculate tokens per correct answer
             correct_count = sum(1 for r in results if r.get("is_correct_topic", False))
-            total_tokens = sum(r.get("total_tokens", 0) for r in results)
             tokens_per_correct = (total_tokens / correct_count) if correct_count > 0 else 0
             
             # Cost calculation (Groq pricing: input $0.05/1M, output $0.08/1M tokens)
@@ -1176,6 +1201,11 @@ class ServerlessTestRunner:
             cost_per_1m = cost_per_query * 1_000_000
             
             return {
+                "total_turns": total_turns,
+                "total_input_tokens": total_input_tokens,
+                "total_output_tokens": total_output_tokens,
+                "total_tokens": total_tokens,
+                "total_latency": total_latency,
                 "avg_input_tokens": avg_input,
                 "avg_output_tokens": avg_output,
                 "avg_total_tokens": avg_total,
@@ -1263,7 +1293,11 @@ class ServerlessTestRunner:
                 return {
                     "avg_rouge1": 0.0, "avg_rougeL": 0.0, "avg_bleu": 0.0,
                     "num_topics_probed": 0, "total_probe_tokens": 0,
-                    "total_probe_latency": 0.0, "per_topic": {}
+                    "avg_probe_tokens": 0.0, "total_probe_latency": 0.0,
+                    "avg_probe_latency": 0.0, "rag_triggered": 0,
+                    "buffer_sufficient": 0, "rag_eligible": 0,
+                    "retrieval_rate": 0.0, "buffer_rate": 0.0,
+                    "rag_disabled": 0, "errors": 0, "per_topic": {}
                 }
             
             per_topic = {}
@@ -1274,17 +1308,37 @@ class ServerlessTestRunner:
                     "rougeL_f": p["rougeL_f"],
                     "bleu": p["bleu"],
                     "summary_length": p["summary_length"],
-                    "reference_length": p["reference_length"]
+                    "reference_length": p["reference_length"],
+                    "probe_tokens": p.get("probe_tokens", 0),
+                    "probe_latency": p.get("probe_latency", 0.0),
+                    "rag_used": p.get("rag_used", False),
+                    "rag_decision": p.get("rag_decision", "unknown")
                 }
             
             n = len(probes)
+            total_probe_tokens = sum(p.get("probe_tokens", 0) for p in probes)
+            total_probe_latency = sum(p.get("probe_latency", 0.0) for p in probes)
+            rag_triggered = sum(1 for p in probes if p.get("rag_decision") == "search_triggered" or p.get("rag_used", False))
+            buffer_sufficient = sum(1 for p in probes if p.get("rag_decision") == "no_retrieval_needed")
+            rag_disabled = sum(1 for p in probes if p.get("rag_decision") == "disabled")
+            errors = sum(1 for p in probes if str(p.get("rag_decision", "")).startswith("error:"))
+            rag_eligible = rag_triggered + buffer_sufficient
             return {
                 "avg_rouge1": sum(p["rouge1_f"] for p in probes) / n,
                 "avg_rougeL": sum(p["rougeL_f"] for p in probes) / n,
                 "avg_bleu": sum(p["bleu"] for p in probes) / n,
                 "num_topics_probed": n,
-                "total_probe_tokens": sum(p.get("probe_tokens", 0) for p in probes),
-                "total_probe_latency": sum(p.get("probe_latency", 0.0) for p in probes),
+                "total_probe_tokens": total_probe_tokens,
+                "avg_probe_tokens": total_probe_tokens / n,
+                "total_probe_latency": total_probe_latency,
+                "avg_probe_latency": total_probe_latency / n,
+                "rag_triggered": rag_triggered,
+                "buffer_sufficient": buffer_sufficient,
+                "rag_eligible": rag_eligible,
+                "retrieval_rate": (rag_triggered / rag_eligible * 100) if rag_eligible > 0 else 0,
+                "buffer_rate": (buffer_sufficient / rag_eligible * 100) if rag_eligible > 0 else 0,
+                "rag_disabled": rag_disabled,
+                "errors": errors,
                 "per_topic": per_topic
             }
         
@@ -1398,7 +1452,41 @@ class ServerlessTestRunner:
             
             # Cost metrics
             f.write(f"| **Cost per Query** | ${b['cost_per_query']:.6f} | ${s['cost_per_query']:.6f} | **{imp['cost_per_query']:+.1f}%** |\n")
-            f.write(f"| **Cost per 1M Queries** | ${b['cost_per_1m_queries']:.0f} | ${s['cost_per_1m_queries']:.0f} | **-${(b['cost_per_1m_queries'] - s['cost_per_1m_queries']):.0f} savings** |\n")
+            cost_delta = s['cost_per_1m_queries'] - b['cost_per_1m_queries']
+            f.write(f"| **Cost per 1M Queries** | ${b['cost_per_1m_queries']:.0f} | ${s['cost_per_1m_queries']:.0f} | **${cost_delta:+.0f} ({imp['cost_per_1m_queries']:+.1f}%)** |\n")
+            
+            # Include recall/summarization probes as a separate operational-cost section.
+            # These probes are not topic-prefix classification turns, so Table 1 remains unchanged.
+            table2 = metrics.get("table_2", {})
+            bl_probe = table2.get("baseline", {}) if table2 else {}
+            sy_probe = table2.get("system", {}) if table2 else {}
+            if bl_probe.get("num_topics_probed", 0) > 0 or sy_probe.get("num_topics_probed", 0) > 0:
+                b_probe_tokens = bl_probe.get("total_probe_tokens", 0)
+                s_probe_tokens = sy_probe.get("total_probe_tokens", 0)
+                b_probe_count = bl_probe.get("num_topics_probed", 0)
+                s_probe_count = sy_probe.get("num_topics_probed", 0)
+                b_combined_calls = b.get("total_turns", 0) + b_probe_count
+                s_combined_calls = s.get("total_turns", 0) + s_probe_count
+                b_combined_tokens = b.get("total_tokens", 0) + b_probe_tokens
+                s_combined_tokens = s.get("total_tokens", 0) + s_probe_tokens
+                b_combined_avg = b_combined_tokens / b_combined_calls if b_combined_calls else 0
+                s_combined_avg = s_combined_tokens / s_combined_calls if s_combined_calls else 0
+                probe_token_delta = ((s_probe_tokens - b_probe_tokens) / b_probe_tokens * 100) if b_probe_tokens else 0
+                combined_token_delta = ((s_combined_tokens - b_combined_tokens) / b_combined_tokens * 100) if b_combined_tokens else 0
+                combined_avg_delta = ((s_combined_avg - b_combined_avg) / b_combined_avg * 100) if b_combined_avg else 0
+                
+                f.write("\n## Including Recall/Summarization Probes\n\n")
+                f.write("Recall probes are the summarization-only memory checks. They are excluded from Table 1 F1, but included here for token-cost accounting.\n\n")
+                f.write("| Metric | Baseline System | Our System | Difference |\n")
+                f.write("|--------|----------------|------------|------------|\n")
+                f.write(f"| **Normal Conversation Turns** | {b.get('total_turns', 0)} | {s.get('total_turns', 0)} | - |\n")
+                f.write(f"| **Normal Conversation Total Tokens** | {b.get('total_tokens', 0):.0f} | {s.get('total_tokens', 0):.0f} | **{imp['avg_total_tokens']:+.1f}% avg/turn** |\n")
+                f.write(f"| **Summarization Probe Calls** | {b_probe_count} | {s_probe_count} | - |\n")
+                f.write(f"| **Summarization Probe Tokens** | {b_probe_tokens:.0f} | {s_probe_tokens:.0f} | **{probe_token_delta:+.1f}%** |\n")
+                f.write(f"| **Avg Tokens per Summarization Probe** | {bl_probe.get('avg_probe_tokens', 0):.0f} | {sy_probe.get('avg_probe_tokens', 0):.0f} | - |\n")
+                f.write(f"| **Combined Evaluated Calls** | {b_combined_calls} | {s_combined_calls} | - |\n")
+                f.write(f"| **Combined Total Tokens** | {b_combined_tokens:.0f} | {s_combined_tokens:.0f} | **{combined_token_delta:+.1f}%** |\n")
+                f.write(f"| **Combined Avg Tokens per Call** | {b_combined_avg:.0f} | {s_combined_avg:.0f} | **{combined_avg_delta:+.1f}%** |\n")
         
         self.log(f"✅ Generated TABLE_3_SYSTEM_PERFORMANCE.md", "INFO")
         
@@ -1433,9 +1521,14 @@ class ServerlessTestRunner:
                         imp_str = f"**{imp_val:+.1f}%**"
                     f.write(f"| **{display_name}** | {bl_val:.4f} | {sy_val:.4f} | {imp_str} |\n")
                 
-                f.write(f"\n| **Topics Probed** | {bl.get('num_topics_probed', 0)} | {sy.get('num_topics_probed', 0)} | - |\n")
+                f.write(f"\n## Summarization Probe Cost\n\n")
+                f.write("| Metric | Baseline System | Our System | Difference |\n")
+                f.write("|--------|----------------|------------|------------|\n")
+                f.write(f"| **Topics Probed** | {bl.get('num_topics_probed', 0)} | {sy.get('num_topics_probed', 0)} | - |\n")
                 f.write(f"| **Total Probe Tokens** | {bl.get('total_probe_tokens', 0)} | {sy.get('total_probe_tokens', 0)} | - |\n")
+                f.write(f"| **Avg Tokens per Probe** | {bl.get('avg_probe_tokens', 0):.0f} | {sy.get('avg_probe_tokens', 0):.0f} | - |\n")
                 f.write(f"| **Total Probe Latency** | {bl.get('total_probe_latency', 0):.1f}s | {sy.get('total_probe_latency', 0):.1f}s | - |\n")
+                f.write(f"| **Avg Probe Latency** | {bl.get('avg_probe_latency', 0):.2f}s | {sy.get('avg_probe_latency', 0):.2f}s | - |\n")
                 
                 # Per-topic breakdown (side-by-side)
                 f.write(f"\n## Per-Topic Breakdown\n\n")
@@ -1501,6 +1594,23 @@ class ServerlessTestRunner:
                     f.write(f"| **Errors** | {bl.get('errors', 0)} | {sy.get('errors', 0)} |\n")
                 if bl.get('rag_disabled', 0) > 0 or sy.get('rag_disabled', 0) > 0:
                     f.write(f"| **RAG Disabled** | {bl.get('rag_disabled', 0)} | {sy.get('rag_disabled', 0)} |\n")
+                
+                table2 = metrics.get("table_2", {})
+                bl_probe = table2.get("baseline", {}) if table2 else {}
+                sy_probe = table2.get("system", {}) if table2 else {}
+                if bl_probe.get("num_topics_probed", 0) > 0 or sy_probe.get("num_topics_probed", 0) > 0:
+                    f.write("\n## Recall/Summarization Probe RAG Decisions\n\n")
+                    f.write("These are the end-of-topic summarization probes used for recall scoring. They are reported separately from normal conversation turns.\n\n")
+                    f.write("| Metric | Baseline | System |\n")
+                    f.write("|--------|----------|--------|\n")
+                    f.write(f"| **Probe Turns** | {bl_probe.get('num_topics_probed', 0)} | {sy_probe.get('num_topics_probed', 0)} |\n")
+                    f.write(f"| **RAG-Eligible Probe Turns** | {bl_probe.get('rag_eligible', 0)} | {sy_probe.get('rag_eligible', 0)} |\n")
+                    f.write(f"| **Probe RAG Triggered** | {bl_probe.get('rag_triggered', 0)} | {sy_probe.get('rag_triggered', 0)} |\n")
+                    f.write(f"| **Probe Buffer Sufficient** | {bl_probe.get('buffer_sufficient', 0)} | {sy_probe.get('buffer_sufficient', 0)} |\n")
+                    f.write(f"| **Probe Retrieval Rate** | {bl_probe.get('retrieval_rate', 0):.1f}% | {sy_probe.get('retrieval_rate', 0):.1f}% |\n")
+                    f.write(f"| **Probe Buffer Rate** | {bl_probe.get('buffer_rate', 0):.1f}% | {sy_probe.get('buffer_rate', 0):.1f}% |\n")
+                    if bl_probe.get('errors', 0) > 0 or sy_probe.get('errors', 0) > 0:
+                        f.write(f"| **Probe Errors** | {bl_probe.get('errors', 0)} | {sy_probe.get('errors', 0)} |\n")
             
             self.log(f"✅ Generated TABLE_4_RAG_DECISIONS.md", "INFO")
 

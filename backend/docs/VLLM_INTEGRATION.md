@@ -115,7 +115,7 @@ The same code works seamlessly - no changes needed.
 - **Quantization**: AWQ (4-bit)
 - **Tensor Parallelism**: 2 GPUs (T4 x2)
 - **GPU Memory**: 91% utilization
-- **Max Tokens**: 5120 context length
+- **Max Tokens**: 6144 context length
 - **Prefix Caching**: Enabled
 
 ### Load Parameters
@@ -129,7 +129,7 @@ llm = vllm.LLM(
     trust_remote_code=True,
     dtype="half",
     enforce_eager=True,
-    max_model_len=5120,
+    max_model_len=6144,
     disable_log_stats=True,
     enable_prefix_caching=True
 )

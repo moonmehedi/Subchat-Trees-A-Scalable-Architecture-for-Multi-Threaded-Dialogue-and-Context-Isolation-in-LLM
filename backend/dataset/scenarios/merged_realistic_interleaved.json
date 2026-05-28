@@ -1090,7 +1090,7 @@
     {
       "step": 65,
       "context": "emoji_game",
-      "message": "emoji_game : 🐶",
+      "message": "emoji_game : Lets play a Emoji game i show you an emoji and you tell me what it is 🐶",
       "expected": "Response must start with 'emoji_game:' - NEW TOPIC: Emoji conversation game - dog emoji",
       "node_type": "main",
       "action": "",

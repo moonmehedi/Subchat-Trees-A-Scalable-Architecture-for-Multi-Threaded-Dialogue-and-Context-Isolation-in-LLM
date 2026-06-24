@@ -1,0 +1,1022 @@
+\begin{thebibliography}{}
+
+\bibitem [\protect \citeauthoryear {%
+Bahdanau%
+, Cho%
+\BCBL {}\ \BBA {} Bengio%
+}{%
+Bahdanau%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2014}}%
+}]{%
+bahdanau2014attention}
+\APACinsertmetastar {%
+bahdanau2014attention}%
+\begin{APACrefauthors}%
+Bahdanau, D.%
+, Cho, K.%
+\BCBL {}\ \BBA {} Bengio, Y.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2014}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Neural Machine Translation by Jointly Learning to Align
+  and Translate} {Neural machine translation by jointly learning to align and
+  translate}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{arXiv preprint arXiv:1409.0473}{}{}{}.
+\newblock
+\begin{APACrefURL} \url{https://arxiv.org/abs/1409.0473} \end{APACrefURL}
+\newblock
+\begin{APACrefDOI} \doi{10.48550/arXiv.1409.0473} \end{APACrefDOI}
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Besta%
+\ \protect \BOthers {.}}{%
+Besta%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2023}}%
+}]{%
+besta2023got}
+\APACinsertmetastar {%
+besta2023got}%
+\begin{APACrefauthors}%
+Besta, M.%
+, Blach, N.%
+, Kubicek, A.%
+, Gerstenberger, R.%
+, Gianinazzi, L.%
+, Gajda, J.%
+\BDBL {}Hoefler, T.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2023}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Graph of Thoughts: Solving Elaborate Problems with Large
+  Language Models} {Graph of thoughts: Solving elaborate problems with large
+  language models}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{arXiv preprint arXiv:2308.09687}{}{}{}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Brown%
+\ \protect \BOthers {.}}{%
+Brown%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2020}}%
+}]{%
+brown2020gpt3}
+\APACinsertmetastar {%
+brown2020gpt3}%
+\begin{APACrefauthors}%
+Brown, T\BPBI B.%
+, Mann, B.%
+, Ryder, N.%
+, Subbiah, M.%
+, Kaplan, J\BPBI D.%
+, Dhariwal, P.%
+\BDBL {}Amodei, D.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2020}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Language Models are Few-Shot Learners} {Language models
+  are few-shot learners}.{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {Advances in Neural Information Processing Systems 33.}
+  {Advances in neural information processing systems 33.}
+\newblock
+\APACaddressPublisher{}{Curran Associates, Inc.}
+\newblock
+\begin{APACrefURL}
+  \url{https://papers.nips.cc/paper/2020/hash/1457c0d6bfcb4967418bfb8ac142f64a-Abstract.html}
+  \end{APACrefURL}
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+{Chroma}%
+}{%
+{Chroma}%
+}{%
+{\protect \APACyear {2024}}%
+}]{%
+chromadb}
+\APACinsertmetastar {%
+chromadb}%
+\begin{APACrefauthors}%
+{Chroma}.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2024}{}{}.
+\newblock
+\APACrefbtitle {Chroma: The {AI}-native open-source embedding database.}
+  {Chroma: The {AI}-native open-source embedding database.}
+\newblock
+\APAChowpublished {\url{https://www.trychroma.com/}}.
+\newblock
+\APACrefnote{Accessed: 2025}
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Elsner%
+\ \BBA {} Charniak%
+}{%
+Elsner%
+\ \BBA {} Charniak%
+}{%
+{\protect \APACyear {2008}}%
+}]{%
+elsner2008talking}
+\APACinsertmetastar {%
+elsner2008talking}%
+\begin{APACrefauthors}%
+Elsner, M.%
+\BCBT {}\ \BBA {} Charniak, E.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2008}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {You Talking to Me? A Corpus and Algorithm for
+  Conversation Disentanglement} {You talking to me? a corpus and algorithm for
+  conversation disentanglement}.{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {Proceedings of ACL-08: HLT} {Proceedings of acl-08:
+  Hlt}\ (\BPGS\ 834--842).
+\newblock
+\APACaddressPublisher{Columbus, Ohio}{Association for Computational
+  Linguistics}.
+\newblock
+\begin{APACrefURL} \url{https://aclanthology.org/P08-1095/} \end{APACrefURL}
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+H.~Jiang%
+\ \protect \BOthers {.}}{%
+H.~Jiang%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2024}}%
+}]{%
+jiang2024longllmlingua}
+\APACinsertmetastar {%
+jiang2024longllmlingua}%
+\begin{APACrefauthors}%
+Jiang, H.%
+, Wu, Q.%
+, Luo, X.%
+, Li, D.%
+, Lin, C\BHBI Y.%
+, Yang, Y.%
+\BCBL {}\ \BBA {} Qiu, L.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2024}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {{LongLLMLingua}: Accelerating and Enhancing {LLM}s in
+  Long Context Scenarios via Prompt Compression} {{LongLLMLingua}: Accelerating
+  and enhancing {LLM}s in long context scenarios via prompt
+  compression}.{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {Proceedings of the 62nd Annual Meeting of the
+  Association for Computational Linguistics (Volume 1: Long Papers)}
+  {Proceedings of the 62nd annual meeting of the association for computational
+  linguistics (volume 1: Long papers)}\ (\BPGS\ 1658--1677).
+\newblock
+\APACaddressPublisher{Bangkok, Thailand}{Association for Computational
+  Linguistics}.
+\newblock
+\begin{APACrefURL} \url{https://aclanthology.org/2024.acl-long.91/}
+  \end{APACrefURL}
+\newblock
+\begin{APACrefDOI} \doi{10.18653/v1/2024.acl-long.91} \end{APACrefDOI}
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+J\BHBI Y.~Jiang%
+, Chen%
+, Chen%
+\BCBL {}\ \BBA {} Wang%
+}{%
+J\BHBI Y.~Jiang%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2018}}%
+}]{%
+jiang2018disentangle}
+\APACinsertmetastar {%
+jiang2018disentangle}%
+\begin{APACrefauthors}%
+Jiang, J\BHBI Y.%
+, Chen, F.%
+, Chen, Y\BHBI Y.%
+\BCBL {}\ \BBA {} Wang, W.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2018}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Learning to Disentangle Interleaved Conversational
+  Threads with a Siamese Hierarchical Network and Similarity Ranking} {Learning
+  to disentangle interleaved conversational threads with a siamese hierarchical
+  network and similarity ranking}.{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {Proceedings of the 2018 Conference of the North American
+  Chapter of the Association for Computational Linguistics: Human Language
+  Technologies, Volume 1 (Long Papers)} {Proceedings of the 2018 conference of
+  the north american chapter of the association for computational linguistics:
+  Human language technologies, volume 1 (long papers)}\ (\BPGS\ 1812--1822).
+\newblock
+\APACaddressPublisher{New Orleans, Louisiana}{Association for Computational
+  Linguistics}.
+\newblock
+\begin{APACrefURL} \url{https://aclanthology.org/N18-1164/} \end{APACrefURL}
+\newblock
+\begin{APACrefDOI} \doi{10.18653/v1/N18-1164} \end{APACrefDOI}
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Kummerfeld%
+\ \protect \BOthers {.}}{%
+Kummerfeld%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2019}}%
+}]{%
+kummerfeld2019disentanglement}
+\APACinsertmetastar {%
+kummerfeld2019disentanglement}%
+\begin{APACrefauthors}%
+Kummerfeld, J\BPBI K.%
+, Gouravajhala, S\BPBI R.%
+, Peper, J\BPBI J.%
+, Athreya, V.%
+, Gunasekara, C.%
+, Ganhotra, J.%
+\BDBL {}Lasecki, W.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2019}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {A Large-Scale Corpus for Conversation Disentanglement}
+  {A large-scale corpus for conversation disentanglement}.{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {Proceedings of the 57th Annual Meeting of the
+  Association for Computational Linguistics} {Proceedings of the 57th annual
+  meeting of the association for computational linguistics}\ (\BPGS\
+  3846--3856).
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Laban%
+, Schnabel%
+, Bennett%
+\BCBL {}\ \BBA {} Hearst%
+}{%
+Laban%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2024}}%
+}]{%
+laban2024limt}
+\APACinsertmetastar {%
+laban2024limt}%
+\begin{APACrefauthors}%
+Laban, P.%
+, Schnabel, T.%
+, Bennett, P.%
+\BCBL {}\ \BBA {} Hearst, M\BPBI A.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2024}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {{LLMs} Get Lost in Multi-Turn Conversation} {{LLMs} get
+  lost in multi-turn conversation}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{arXiv preprint arXiv:2404.07961}{}{}{}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Lewis%
+\ \protect \BOthers {.}}{%
+Lewis%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2020}}%
+}]{%
+lewis2020rag}
+\APACinsertmetastar {%
+lewis2020rag}%
+\begin{APACrefauthors}%
+Lewis, P.%
+, Perez, E.%
+, Piktus, A.%
+, Petroni, F.%
+, Karpukhin, V.%
+, Goyal, N.%
+\BDBL {}Kiela, D.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2020}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Retrieval-Augmented Generation for Knowledge-Intensive
+  {NLP} Tasks} {Retrieval-augmented generation for knowledge-intensive {NLP}
+  tasks}.{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {Advances in Neural Information Processing Systems}
+  {Advances in neural information processing systems}\ (\BVOL~33, \BPGS\
+  9459--9474).
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Li%
+, Hammoud%
+, Itani%
+, Khizbullin%
+\BCBL {}\ \BBA {} Ghanem%
+}{%
+Li%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2023}}%
+}]{%
+li2023camel}
+\APACinsertmetastar {%
+li2023camel}%
+\begin{APACrefauthors}%
+Li, G.%
+, Hammoud, H\BPBI A\BPBI A\BPBI K.%
+, Itani, H.%
+, Khizbullin, D.%
+\BCBL {}\ \BBA {} Ghanem, B.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2023}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {{CAMEL}: Communicative Agents for ``Mind'' Exploration
+  of Large Language Model Society} {{CAMEL}: Communicative agents for ``mind''
+  exploration of large language model society}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{arXiv preprint arXiv:2303.17760}{}{}{}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Lin%
+}{%
+Lin%
+}{%
+{\protect \APACyear {2004}}%
+}]{%
+lin2004rouge}
+\APACinsertmetastar {%
+lin2004rouge}%
+\begin{APACrefauthors}%
+Lin, C\BHBI Y.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2004}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {{ROUGE}: A Package for Automatic Evaluation of
+  Summaries} {{ROUGE}: A package for automatic evaluation of summaries}.{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {Text Summarization Branches Out: Proceedings of the
+  ACL-04 Workshop} {Text summarization branches out: Proceedings of the acl-04
+  workshop}\ (\BPGS\ 74--81).
+\newblock
+\APACaddressPublisher{Barcelona, Spain}{Association for Computational
+  Linguistics}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Liu%
+\ \protect \BOthers {.}}{%
+Liu%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2023}}%
+}]{%
+liu2023lostinthemiddle}
+\APACinsertmetastar {%
+liu2023lostinthemiddle}%
+\begin{APACrefauthors}%
+Liu, N\BPBI F.%
+, Lin, K.%
+, Hewitt, J.%
+, Paranjape, A.%
+, Bevilacqua, M.%
+, Petroni, F.%
+\BCBL {}\ \BBA {} Liang, P.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2023}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Lost in the Middle: How Language Models Use Long
+  Contexts} {Lost in the middle: How language models use long contexts}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{arXiv preprint arXiv:2307.03172}{}{}{}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Maharana%
+\ \protect \BOthers {.}}{%
+Maharana%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2024}}%
+}]{%
+maharana2024locomo}
+\APACinsertmetastar {%
+maharana2024locomo}%
+\begin{APACrefauthors}%
+Maharana, A.%
+, Lee, D\BHBI H.%
+, Tulyakov, S.%
+, Bansal, M.%
+, Barbieri, F.%
+\BCBL {}\ \BBA {} Fang, Y.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2024}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Evaluating Very Long-Term Conversational Memory of {LLM}
+  Agents} {Evaluating very long-term conversational memory of {LLM}
+  agents}.{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {Proceedings of the 62nd Annual Meeting of the
+  Association for Computational Linguistics (Volume 1: Long Papers)}
+  {Proceedings of the 62nd annual meeting of the association for computational
+  linguistics (volume 1: Long papers)}\ (\BPGS\ 13851--13870).
+\newblock
+\APACaddressPublisher{Bangkok, Thailand}{Association for Computational
+  Linguistics}.
+\newblock
+\begin{APACrefURL} \url{https://aclanthology.org/2024.acl-long.747/}
+  \end{APACrefURL}
+\newblock
+\begin{APACrefDOI} \doi{10.18653/v1/2024.acl-long.747} \end{APACrefDOI}
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Nielsen%
+}{%
+Nielsen%
+}{%
+{\protect \APACyear {1994}}%
+}]{%
+nielsen1994usability}
+\APACinsertmetastar {%
+nielsen1994usability}%
+\begin{APACrefauthors}%
+Nielsen, J.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{1994}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Usability Engineering} {Usability engineering}.{\BBCQ}
+\newblock
+\APACaddressPublisher{San Francisco, CA}{Morgan Kaufmann}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Norman%
+}{%
+Norman%
+}{%
+{\protect \APACyear {2013}}%
+}]{%
+norman2013design}
+\APACinsertmetastar {%
+norman2013design}%
+\begin{APACrefauthors}%
+Norman, D.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYear{2013}.
+\newblock
+\APACrefbtitle {The Design of Everyday Things: Revised and Expanded Edition}
+  {The design of everyday things: Revised and expanded edition}.
+\newblock
+\APACaddressPublisher{New York, NY}{Basic Books}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Ouyang%
+\ \protect \BOthers {.}}{%
+Ouyang%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2022}}%
+}]{%
+ouyang2022instructgpt}
+\APACinsertmetastar {%
+ouyang2022instructgpt}%
+\begin{APACrefauthors}%
+Ouyang, L.%
+, Wu, J.%
+, Jiang, X.%
+, Almeida, D.%
+, Wainwright, C\BPBI L.%
+, Mishkin, P.%
+\BDBL {}Lowe, R.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2022}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Training Language Models to Follow Instructions with
+  Human Feedback} {Training language models to follow instructions with human
+  feedback}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{arXiv preprint arXiv:2203.02155}{}{}{}.
+\newblock
+\begin{APACrefURL} \url{https://arxiv.org/abs/2203.02155} \end{APACrefURL}
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Packer%
+\ \protect \BOthers {.}}{%
+Packer%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2023}}%
+}]{%
+packer2023memgpt}
+\APACinsertmetastar {%
+packer2023memgpt}%
+\begin{APACrefauthors}%
+Packer, C.%
+, Wooders, S.%
+, Lin, K.%
+, Fang, V.%
+, Patil, S\BPBI G.%
+, Stoica, I.%
+\BCBL {}\ \BBA {} Gonzalez, J\BPBI E.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2023}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {{MemGPT}: Towards {LLMs} as Operating Systems}
+  {{MemGPT}: Towards {LLMs} as operating systems}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{arXiv preprint arXiv:2310.08560}{}{}{}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Papineni%
+, Roukos%
+, Ward%
+\BCBL {}\ \BBA {} Zhu%
+}{%
+Papineni%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2002}}%
+}]{%
+papineni2002bleu}
+\APACinsertmetastar {%
+papineni2002bleu}%
+\begin{APACrefauthors}%
+Papineni, K.%
+, Roukos, S.%
+, Ward, T.%
+\BCBL {}\ \BBA {} Zhu, W\BHBI J.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2002}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {{BLEU}: a Method for Automatic Evaluation of Machine
+  Translation} {{BLEU}: a method for automatic evaluation of machine
+  translation}.{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {Proceedings of the 40th Annual Meeting of the
+  Association for Computational Linguistics} {Proceedings of the 40th annual
+  meeting of the association for computational linguistics}\ (\BPGS\ 311--318).
+\newblock
+\APACaddressPublisher{Philadelphia, Pennsylvania, USA}{Association for
+  Computational Linguistics}.
+\newblock
+\begin{APACrefDOI} \doi{10.3115/1073083.1073135} \end{APACrefDOI}
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Reimers%
+\ \BBA {} Gurevych%
+}{%
+Reimers%
+\ \BBA {} Gurevych%
+}{%
+{\protect \APACyear {2019}}%
+}]{%
+reimers2019sentencebert}
+\APACinsertmetastar {%
+reimers2019sentencebert}%
+\begin{APACrefauthors}%
+Reimers, N.%
+\BCBT {}\ \BBA {} Gurevych, I.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2019}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Sentence-{BERT}: Sentence Embeddings using Siamese
+  {BERT}-Networks} {Sentence-{BERT}: Sentence embeddings using siamese
+  {BERT}-networks}.{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {Proceedings of the 2019 Conference on Empirical Methods
+  in Natural Language Processing and the 9th International Joint Conference on
+  Natural Language Processing (EMNLP-IJCNLP)} {Proceedings of the 2019
+  conference on empirical methods in natural language processing and the 9th
+  international joint conference on natural language processing
+  (emnlp-ijcnlp)}\ (\BPGS\ 3982--3992).
+\newblock
+\APACaddressPublisher{}{Association for Computational Linguistics}.
+\newblock
+\begin{APACrefDOI} \doi{10.18653/v1/D19-1410} \end{APACrefDOI}
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Serban%
+, Sordoni%
+, Bengio%
+, Courville%
+\BCBL {}\ \BBA {} Pineau%
+}{%
+Serban%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2016}}%
+}]{%
+serban2016hred}
+\APACinsertmetastar {%
+serban2016hred}%
+\begin{APACrefauthors}%
+Serban, I\BPBI V.%
+, Sordoni, A.%
+, Bengio, Y.%
+, Courville, A.%
+\BCBL {}\ \BBA {} Pineau, J.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2016}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Building End-To-End Dialogue Systems Using Generative
+  Models: Advances to the {Ubuntu} Dialogue Corpus} {Building end-to-end
+  dialogue systems using generative models: Advances to the {Ubuntu} dialogue
+  corpus}.{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {Proceedings of the AAAI Conference on Artificial
+  Intelligence} {Proceedings of the aaai conference on artificial
+  intelligence}\ (\BVOL~30).
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Sutskever%
+, Vinyals%
+\BCBL {}\ \BBA {} Le%
+}{%
+Sutskever%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2014}}%
+}]{%
+sutskever2014seq2seq}
+\APACinsertmetastar {%
+sutskever2014seq2seq}%
+\begin{APACrefauthors}%
+Sutskever, I.%
+, Vinyals, O.%
+\BCBL {}\ \BBA {} Le, Q\BPBI V.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2014}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Sequence to Sequence Learning with Neural Networks}
+  {Sequence to sequence learning with neural networks}.{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {Advances in Neural Information Processing Systems 27.}
+  {Advances in neural information processing systems 27.}
+\newblock
+\APACaddressPublisher{}{Curran Associates, Inc.}
+\newblock
+\begin{APACrefURL}
+  \url{https://papers.nips.cc/paper/5346-sequence-to-sequence-learning-with-neural}
+  \end{APACrefURL}
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Vaswani%
+\ \protect \BOthers {.}}{%
+Vaswani%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2017}}%
+}]{%
+vaswani2017attention}
+\APACinsertmetastar {%
+vaswani2017attention}%
+\begin{APACrefauthors}%
+Vaswani, A.%
+, Shazeer, N.%
+, Parmar, N.%
+, Uszkoreit, J.%
+, Jones, L.%
+, Gomez, A\BPBI N.%
+\BDBL {}Polosukhin, I.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2017}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Attention Is All You Need} {Attention is all you
+  need}.{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {Advances in Neural Information Processing Systems 30.}
+  {Advances in neural information processing systems 30.}
+\newblock
+\APACaddressPublisher{}{Curran Associates, Inc.}
+\newblock
+\begin{APACrefURL}
+  \url{https://proceedings.neurips.cc/paper/7181-attention-is-all-you-need}
+  \end{APACrefURL}
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Wang%
+\ \protect \BOthers {.}}{%
+Wang%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2023}}%
+}]{%
+wang2023selfconsistency}
+\APACinsertmetastar {%
+wang2023selfconsistency}%
+\begin{APACrefauthors}%
+Wang, X.%
+, Wei, J.%
+, Schuurmans, D.%
+, Le, Q.%
+, Chi, E.%
+, Narang, S.%
+\BDBL {}Zhou, D.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2023}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Self-Consistency Improves Chain of Thought Reasoning in
+  Language Models} {Self-consistency improves chain of thought reasoning in
+  language models}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{arXiv preprint arXiv:2203.11171}{}{}{}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Wei%
+, Bosma%
+\BCBL {}\ \protect \BOthers {.}}{%
+Wei%
+, Bosma%
+\BCBL {}\ \protect \BOthers {.}}{%
+{\protect \APACyear {2022}}%
+}]{%
+wei2022flan}
+\APACinsertmetastar {%
+wei2022flan}%
+\begin{APACrefauthors}%
+Wei, J.%
+, Bosma, M.%
+, Zhao, V\BPBI Y.%
+, Guu, K.%
+, Yu, A\BPBI W.%
+, Lester, B.%
+\BDBL {}Le, Q\BPBI V.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2022}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Finetuned Language Models Are Zero-Shot Learners}
+  {Finetuned language models are zero-shot learners}.{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {International Conference on Learning Representations.}
+  {International conference on learning representations.}
+\newblock
+\begin{APACrefURL} \url{https://openreview.net/forum?id=gEZrGCozdqR}
+  \end{APACrefURL}
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Wei%
+, Wang%
+\BCBL {}\ \protect \BOthers {.}}{%
+Wei%
+, Wang%
+\BCBL {}\ \protect \BOthers {.}}{%
+{\protect \APACyear {2022}}%
+}]{%
+wei2022cot}
+\APACinsertmetastar {%
+wei2022cot}%
+\begin{APACrefauthors}%
+Wei, J.%
+, Wang, X.%
+, Schuurmans, D.%
+, Bosma, M.%
+, Chi, E.%
+, Le, Q.%
+\BCBL {}\ \BBA {} Zhou, D.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2022}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Chain-of-Thought Prompting Elicits Reasoning in Large
+  Language Models} {Chain-of-thought prompting elicits reasoning in large
+  language models}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{arXiv preprint arXiv:2201.11903}{}{}{}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Wu%
+\ \BBA {} Yu%
+}{%
+Wu%
+\ \BBA {} Yu%
+}{%
+{\protect \APACyear {2024}}%
+}]{%
+wu2024stateful}
+\APACinsertmetastar {%
+wu2024stateful}%
+\begin{APACrefauthors}%
+Wu, Q.%
+\BCBT {}\ \BBA {} Yu, Z.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2024}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Stateful Memory-Augmented Transformers for Efficient
+  Dialogue Modeling} {Stateful memory-augmented transformers for efficient
+  dialogue modeling}.{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {Findings of the Association for Computational
+  Linguistics: EACL 2024} {Findings of the association for computational
+  linguistics: Eacl 2024}\ (\BPGS\ 853--867).
+\newblock
+\APACaddressPublisher{St. Julian's, Malta}{Association for Computational
+  Linguistics}.
+\newblock
+\begin{APACrefURL} \url{https://aclanthology.org/2024.findings-eacl.57/}
+  \end{APACrefURL}
+\newblock
+\begin{APACrefDOI} \doi{10.18653/v1/2024.findings-eacl.57} \end{APACrefDOI}
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+J.~Xu%
+, Szlam%
+\BCBL {}\ \BBA {} Weston%
+}{%
+J.~Xu%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2022}}%
+}]{%
+xu2022goldfish}
+\APACinsertmetastar {%
+xu2022goldfish}%
+\begin{APACrefauthors}%
+Xu, J.%
+, Szlam, A.%
+\BCBL {}\ \BBA {} Weston, J.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2022}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Beyond Goldfish Memory: Long-Term Open-Domain
+  Conversation} {Beyond goldfish memory: Long-term open-domain
+  conversation}.{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {Proceedings of the 60th Annual Meeting of the
+  Association for Computational Linguistics (Volume 1: Long Papers)}
+  {Proceedings of the 60th annual meeting of the association for computational
+  linguistics (volume 1: Long papers)}\ (\BPGS\ 5180--5197).
+\newblock
+\APACaddressPublisher{Dublin, Ireland}{Association for Computational
+  Linguistics}.
+\newblock
+\begin{APACrefURL} \url{https://aclanthology.org/2022.acl-long.356/}
+  \end{APACrefURL}
+\newblock
+\begin{APACrefDOI} \doi{10.18653/v1/2022.acl-long.356} \end{APACrefDOI}
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+X.~Xu%
+\ \protect \BOthers {.}}{%
+X.~Xu%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2022}}%
+}]{%
+xu2022longpersona}
+\APACinsertmetastar {%
+xu2022longpersona}%
+\begin{APACrefauthors}%
+Xu, X.%
+, Gou, Z.%
+, Wu, W.%
+, Niu, Z\BHBI Y.%
+, Wu, H.%
+, Wang, H.%
+\BCBL {}\ \BBA {} Wang, S.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2022}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Long Time No See! Open-Domain Conversation with
+  Long-Term Persona Memory} {Long time no see! open-domain conversation with
+  long-term persona memory}.{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {Findings of the Association for Computational
+  Linguistics: ACL 2022} {Findings of the association for computational
+  linguistics: Acl 2022}\ (\BPGS\ 2639--2650).
+\newblock
+\APACaddressPublisher{Dublin, Ireland}{Association for Computational
+  Linguistics}.
+\newblock
+\begin{APACrefURL} \url{https://aclanthology.org/2022.findings-acl.207/}
+  \end{APACrefURL}
+\newblock
+\begin{APACrefDOI} \doi{10.18653/v1/2022.findings-acl.207} \end{APACrefDOI}
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Yao%
+\ \protect \BOthers {.}}{%
+Yao%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2023}}%
+}]{%
+yao2023tot}
+\APACinsertmetastar {%
+yao2023tot}%
+\begin{APACrefauthors}%
+Yao, S.%
+, Yu, D.%
+, Zhao, J.%
+, Shafran, I.%
+, Griffiths, T\BPBI L.%
+, Cao, Y.%
+\BCBL {}\ \BBA {} Narasimhan, K.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2023}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Tree of Thoughts: Deliberate Problem Solving with Large
+  Language Models} {Tree of thoughts: Deliberate problem solving with large
+  language models}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{arXiv preprint arXiv:2305.10601}{}{}{}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Zheng%
+\ \protect \BOthers {.}}{%
+Zheng%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2024}}%
+}]{%
+zheng2024lmsyschat}
+\APACinsertmetastar {%
+zheng2024lmsyschat}%
+\begin{APACrefauthors}%
+Zheng, L.%
+, Chiang, W\BHBI L.%
+, Sheng, Y.%
+, Li, T.%
+, Zhuang, S.%
+, Wu, Z.%
+\BDBL {}Zhang, H.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2024}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {{LMSYS-Chat-1M}: A Large-Scale Real-World {LLM}
+  Conversation Dataset} {{LMSYS-Chat-1M}: A large-scale real-world {LLM}
+  conversation dataset}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{arXiv preprint arXiv:2309.11998}{}{}{}.
+\PrintBackRefs{\CurrentBib}
+
+\end{thebibliography}

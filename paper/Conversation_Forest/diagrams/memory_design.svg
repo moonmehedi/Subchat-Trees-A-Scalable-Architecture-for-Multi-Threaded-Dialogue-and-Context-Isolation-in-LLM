@@ -1,0 +1,165 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 760" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif">
+  <defs>
+    <marker id="arr" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#334155"/>
+    </marker>
+    <marker id="arr-blue" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#2563eb"/>
+    </marker>
+    <marker id="arr-green" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#16a34a"/>
+    </marker>
+    <filter id="sh" x="-2%" y="-2%" width="104%" height="110%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.10"/>
+    </filter>
+    <linearGradient id="hdr" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#c7d2fe"/>
+      <stop offset="1" stop-color="#a5b4fc"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1400" height="760" fill="#ffffff"/>
+
+  <!-- Title pill -->
+  <g filter="url(#sh)">
+    <rect x="470" y="22" width="460" height="62" rx="18" fill="url(#hdr)"/>
+  </g>
+  <text x="700" y="64" text-anchor="middle" font-size="40" font-weight="800" fill="#0f172a" letter-spacing="-0.8">Memory Design</text>
+
+  <!-- ===========================
+       Top Row: Buffer + Summary
+       =========================== -->
+
+  <!-- Local Buffer -->
+  <g filter="url(#sh)">
+    <rect x="60" y="120" width="420" height="220" rx="16" fill="#0ea5b6" opacity="0.95"/>
+  </g>
+  <circle cx="105" cy="165" r="18" fill="#e0f2fe"/>
+  <rect x="98" y="157" width="14" height="18" rx="2.5" fill="#0ea5b6"/>
+  <line x1="101" y1="162" x2="109" y2="162" stroke="#e0f2fe" stroke-width="2"/>
+  <line x1="101" y1="167" x2="109" y2="167" stroke="#e0f2fe" stroke-width="2"/>
+  <line x1="101" y1="172" x2="109" y2="172" stroke="#e0f2fe" stroke-width="2"/>
+
+  <text x="140" y="170" font-size="20" font-weight="800" fill="#ffffff">Local Buffer</text>
+
+  <g>
+    <rect x="95" y="192" width="350" height="128" rx="12" fill="#0891a2" opacity="0.9"/>
+    <text x="120" y="220" font-size="13.5" font-weight="700" fill="#e0f2fe">Recent Messages (deque, maxlen=C)</text>
+    <rect x="120" y="236" width="195" height="68" rx="10" fill="#0b7285" opacity="0.65"/>
+    <text x="135" y="260" font-size="11.5" fill="#e0f2fe">msg0 (oldest in buffer)</text>
+    <text x="135" y="279" font-size="11.5" fill="#e0f2fe">msg1</text>
+    <text x="135" y="298" font-size="11.5" fill="#e0f2fe">?</text>
+    <text x="350" y="260" font-size="11.5" fill="#e0f2fe" text-anchor="end">msgN (newest)</text>
+
+    <text x="120" y="330" font-size="12" fill="#e0f2fe">- Fixed size (FIFO eviction when full)</text>
+    <text x="120" y="350" font-size="12" fill="#e0f2fe">- Fast access for LLM context assembly</text>
+  </g>
+
+  <!-- Context Summary -->
+  <g filter="url(#sh)">
+    <rect x="520" y="120" width="540" height="220" rx="16" fill="#7c3aed" opacity="0.95"/>
+  </g>
+  <circle cx="565" cy="165" r="18" fill="#f5f3ff"/>
+  <path d="M558 173 L572 159" stroke="#7c3aed" stroke-width="3" stroke-linecap="round"/>
+  <path d="M559 160 L568 151 L572 155 L563 164 Z" fill="#7c3aed"/>
+  <text x="600" y="170" font-size="20" font-weight="800" fill="#ffffff">Context Summary</text>
+
+  <rect x="555" y="192" width="470" height="128" rx="12" fill="#6d28d9" opacity="0.9"/>
+  <text x="580" y="220" font-size="13.5" font-weight="700" fill="#ede9fe">Compressed Context</text>
+  <rect x="580" y="236" width="420" height="42" rx="10" fill="#4c1d95" opacity="0.55"/>
+  <text x="595" y="262" font-size="11.5" fill="#ede9fe">"User is learning Python. Discussed OOP concepts, decorators, async/await, and error handling?"</text>
+  <text x="580" y="298" font-size="12" fill="#ede9fe">- Generated when buffer reaches C, 2C, 3C? messages</text>
+  <text x="580" y="318" font-size="12" fill="#ede9fe">- Injected into LLM context as a system message</text>
+  <text x="580" y="338" font-size="12" fill="#ede9fe">- Inherited by child subchats (parent ? child)</text>
+
+  <!-- Arrow: Buffer -> Summary -->
+  <line x1="480" y1="230" x2="505" y2="230" stroke="#60a5fa" stroke-width="6" stroke-dasharray="10,8" marker-end="url(#arr-blue)"/>
+
+  <!-- ===========================
+       Bottom: Vector Index (Long-term)
+       =========================== -->
+
+  <g filter="url(#sh)">
+    <rect x="60" y="390" width="1000" height="310" rx="18" fill="#16a34a" opacity="0.95"/>
+  </g>
+  <circle cx="105" cy="438" r="18" fill="#dcfce7"/>
+  <rect x="98" y="430" width="14" height="18" rx="3" fill="#16a34a"/>
+  <text x="140" y="444" font-size="20" font-weight="800" fill="#ffffff">Vector Index (ChromaDB)</text>
+  <rect x="885" y="412" width="150" height="28" rx="14" fill="#0f5132" opacity="0.35"/>
+  <text x="960" y="431" text-anchor="middle" font-size="12" font-weight="700" fill="#dcfce7">Long-term memory</text>
+
+  <!-- Sub-boxes -->
+  <rect x="95" y="470" width="290" height="200" rx="14" fill="#0f7a3a" opacity="0.65"/>
+  <text x="120" y="500" font-size="14" font-weight="800" fill="#dcfce7">Archived Messages</text>
+  <text x="120" y="528" font-size="12" fill="#dcfce7">msgA: "What is Python?"</text>
+  <text x="120" y="550" font-size="12" fill="#dcfce7">msgB: "Python is?"</text>
+  <text x="120" y="572" font-size="12" fill="#dcfce7">msgC: "Tell about Java"</text>
+  <text x="120" y="594" font-size="12" fill="#dcfce7">?</text>
+  <text x="120" y="626" font-size="12" fill="#dcfce7">- Metadata: node_id, role, timestamp, turn_number</text>
+
+  <rect x="405" y="470" width="300" height="200" rx="14" fill="#0f7a3a" opacity="0.65"/>
+  <text x="430" y="500" font-size="14" font-weight="800" fill="#dcfce7">Semantic Search</text>
+  <text x="430" y="528" font-size="12" fill="#dcfce7">- Embeddings stored (all-mpnet-base-v2)</text>
+  <text x="430" y="550" font-size="12" fill="#dcfce7">- Cosine similarity query</text>
+  <text x="430" y="572" font-size="12" fill="#dcfce7">- Multi-query decomposition (5?7 sub-queries)</text>
+  <text x="430" y="594" font-size="12" fill="#dcfce7">- Dedup + re-rank anchors</text>
+  <text x="430" y="616" font-size="12" fill="#dcfce7">- Expand ?2 turns into coherent blocks</text>
+
+  <rect x="725" y="470" width="310" height="200" rx="14" fill="#0f7a3a" opacity="0.65"/>
+  <text x="750" y="500" font-size="14" font-weight="800" fill="#dcfce7">Retrieval Logic</text>
+  <text x="750" y="528" font-size="12" fill="#dcfce7">- Optional scope: per node_id or global</text>
+  <text x="750" y="550" font-size="12" fill="#dcfce7">- Exclude messages still in buffer (cutoff)</text>
+  <text x="750" y="572" font-size="12" fill="#dcfce7">- Return top-k blocks for context injection</text>
+  <text x="750" y="594" font-size="12" fill="#dcfce7">- Used on-demand when user asks to recall past info</text>
+
+  <!-- Arrow: Buffer -> Vector index (immediate indexing) -->
+  <line x1="270" y1="340" x2="270" y2="390" stroke="#0f172a" stroke-width="3.5" marker-end="url(#arr)"/>
+  <rect x="160" y="356" width="220" height="26" rx="8" fill="#f8fafc" stroke="#94a3b8" stroke-width="1"/>
+  <text x="270" y="374" text-anchor="middle" font-size="11.5" font-weight="700" fill="#334155">Index immediately (message + metadata)</text>
+
+  <!-- ===========================
+       Right: LLM Context
+       =========================== -->
+
+  <g filter="url(#sh)">
+    <rect x="1095" y="160" width="265" height="420" rx="18" fill="#f97316" opacity="0.95"/>
+  </g>
+  <circle cx="1140" cy="208" r="18" fill="#fff7ed"/>
+  <rect x="1133" y="200" width="14" height="18" rx="4" fill="#f97316"/>
+  <text x="1170" y="214" font-size="20" font-weight="800" fill="#ffffff">LLM Context</text>
+
+  <!-- Stack -->
+  <g>
+    <rect x="1130" y="250" width="215" height="44" rx="12" fill="#9a3412" opacity="0.5"/>
+    <text x="1146" y="278" font-size="12.5" font-weight="800" fill="#fff7ed">1. Parent context (if subchat)</text>
+
+    <rect x="1130" y="304" width="215" height="44" rx="12" fill="#7c3aed" opacity="0.75"/>
+    <text x="1146" y="332" font-size="12.5" font-weight="800" fill="#f5f3ff">2. Summary (compressed)</text>
+
+    <rect x="1130" y="358" width="215" height="44" rx="12" fill="#0ea5b6" opacity="0.75"/>
+    <text x="1146" y="386" font-size="12.5" font-weight="800" fill="#e0f2fe">3. Buffer messages</text>
+
+    <rect x="1130" y="412" width="215" height="44" rx="12" fill="#16a34a" opacity="0.75"/>
+    <text x="1146" y="440" font-size="12.5" font-weight="800" fill="#dcfce7">4. Retrieved context (RAG)</text>
+
+    <rect x="1130" y="466" width="215" height="44" rx="12" fill="#c2410c" opacity="0.65"/>
+    <text x="1146" y="494" font-size="12.5" font-weight="800" fill="#fff7ed">5. Current query</text>
+  </g>
+
+  <text x="1228" y="542" text-anchor="middle" font-size="12" fill="#fff7ed" opacity="0.95">? Groq / vLLM / Ollama ? Response</text>
+
+  <!-- Arrow: Summary + Buffer + Retrieval feed into LLM Context -->
+  <path d="M 1060 230 C 1085 230, 1075 278, 1095 278" fill="none" stroke="#334155" stroke-width="3" marker-end="url(#arr)"/>
+  <path d="M 1060 330 C 1085 330, 1075 386, 1095 386" fill="none" stroke="#334155" stroke-width="3" marker-end="url(#arr)"/>
+  <path d="M 1060 550 C 1085 550, 1075 440, 1095 440" fill="none" stroke="#334155" stroke-width="3" marker-end="url(#arr)"/>
+
+  <!-- Labels near arrows -->
+  <text x="1038" y="222" text-anchor="end" font-size="11" fill="#475569">Follow-up hint + inheritance</text>
+  <text x="1038" y="322" text-anchor="end" font-size="11" fill="#475569">Summary + recent turns</text>
+  <text x="1038" y="542" text-anchor="end" font-size="11" fill="#475569">On-demand retrieval blocks</text>
+
+  <!-- Figure caption -->
+  <text x="700" y="740" text-anchor="middle" font-size="11" fill="#64748b" font-style="italic">
+    Fig. Memory system: per-node buffer + rolling summary + global vector archive feeding context assembly.
+  </text>
+</svg>

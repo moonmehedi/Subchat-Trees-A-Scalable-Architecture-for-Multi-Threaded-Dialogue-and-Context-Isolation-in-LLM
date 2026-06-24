@@ -1,0 +1,41 @@
+<rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/
+	       22-rdf-syntax-ns#"
+    xmlns:foaf="http://xmlns.com/foaf/0.1/"
+    xmlns:rdfs="http://www.w3.org/2000/01/
+		rdf-schema#"> 
+  <rdf:Description 
+      rdf:about=
+      "http://www.semantest.tk/
+       hanifa/hanifa.rdf#Hanifa">
+    <foaf:family_name>Islam</foaf:family_name>
+    <foaf:mbox rdf:resource=
+	       "mailto:nabilacse10@yahoo.com"/>
+    <foaf:knows rdf:nodeID="A0"/>
+    <foaf:name>Hanifa Islam</foaf:name>
+    <foaf:title>Student</foaf:title>
+    <foaf:phone>0087637859</foaf:phone>
+    <foaf:givenname>Hanifa</foaf:givenname>
+    <foaf:schoolHomepage rdf:resource=
+			 "http://www.mist.com"/>
+    <rdf:type rdf:resource=
+	      "http://xmlns.com/foaf/0.1/Person"/>
+    <foaf:member>CSE10</foaf:member>
+    <foaf:topic_interest 
+	rdf:resource=
+	"http://dbpedia.org/resource/Semantic_Web"/>
+    <foaf:homepage rdf:resource=
+		   "http://www.semantest.tk"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A0">
+    <foaf:member>CSE10</foaf:member>
+    <foaf:homepage rdf:resource=
+		   "http://www.dhrubotaara.tk"/>
+    <foaf:mbox rdf:resource=
+	       "mailto:tasnima65@gmail.com"/>
+    <foaf:relation>Friend</foaf:relation>
+    <rdf:type rdf:resource=
+	      "http://xmlns.com/foaf/0.1/Person"/>
+  </rdf:Description>
+</rdf:RDF>
+

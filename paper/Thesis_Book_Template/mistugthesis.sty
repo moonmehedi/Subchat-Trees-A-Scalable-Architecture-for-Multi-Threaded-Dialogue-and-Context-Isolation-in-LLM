@@ -1,0 +1,183 @@
+% You should not change anything in this file unless you really know
+% what you are doing.
+\RequirePackage{graphicx}
+\RequirePackage{algorithmic}
+\RequirePackage{algorithm}
+\RequirePackage{amsthm}
+\RequirePackage[a4paper,left=1.0in, right=0.9in, top=0.9in, bottom=0.9in]{geometry}
+\RequirePackage{times}
+\RequirePackage{cite}
+\RequirePackage{url}
+\RequirePackage{listings}
+\usepackage{ragged2e}
+
+
+\RequirePackage[final, colorlinks, linkcolor=black, citecolor=black, urlcolor=black]{hyperref}
+
+% section and subsection font size
+\RequirePackage{sectsty}
+\sectionfont{\large}		
+\subsectionfont{\normalsize}
+
+% sets spacing between paragraphs
+\parskip 7.2pt           
+
+% 1.5 spacing
+\RequirePackage{setspace}
+\onehalfspacing
+
+
+% sets leading space for paragraphs
+\parindent 0.0pt		  
+
+% Customized chapter headings
+\def\@makechapterhead#1{%
+  {\parindent \z@ \centering \normalfont
+    \ifnum \c@secnumdepth >\m@ne
+    \Large\bfseries \MakeUppercase{\@chapapp}\space \thechapter
+    \par\nobreak
+    \vskip -10\p@
+    \fi
+    \interlinepenalty\@M
+    \Large \bfseries \MakeUppercase{#1}\par\nobreak
+    \vskip 90\p@}}
+
+% Read and store student names in DB
+\RequirePackage{datatool}
+\DTLloaddb[noheader]{ThesisStudents}{parameters/students.txt}
+
+% Thesis parameters
+\def\thesistitle{\input{parameters/thesistitle.txt}\unskip}
+\def\supdel{\par}
+\def\supervisor{\input{parameters/supervisor.txt}\unskip}
+\def\thesisdate{\input{parameters/thesisdate.txt}\unskip}
+\def\studentlist{\input{parameters/student_list.txt}\unskip}
+\def\course{\input{parameters/course.txt}\unskip}
+\def\deptname{\input{parameters/dept_name.txt}\unskip}
+
+% Thesis title page 
+\def\thesistitlepage{
+  \thispagestyle{empty}
+  \begin{center}
+   \textbf{{\Large\thesistitle}}\\
+    \vspace*{\stretch{2}}
+    \textbf{{\Large\studentlist}}\\
+    \vspace*{\stretch{2}}
+     \textrm{{\Large\course}}\\
+      \vspace*{\stretch{2}}
+     \includegraphics[width=50mm]{figures/mistlogo}\\
+    \vspace*{\stretch{2}}
+     \textrm{{\Large\deptname}}\\
+    
+    \vspace*{\stretch{1}}
+    \thesisdate
+  \end{center}}
+
+
+% Thesis certification page
+\def\thesiscertificationpage{
+\newpage
+  \begin{center}
+   \hspace{2cm}
+   %vspace{\dimexpr50mm-\baselineskip}
+    \hfill
+    \newline
+     \bigskip\bigskip
+
+     \large{\MakeUppercase{Predicting Green Space of a Location through Historical Image Analysis and Predictive
+Modeling}}
+\\\bigskip
+B.Sc. ENGINEERING THESIS
+\\\bigskip
+By \\
+\bigskip
+STUDENT1 NAME (SN. STUDENT1 ID)\\
+STUDENT2 NAME (SN. STUDENT2 ID)\\
+STUDENT3 NAME (SN. STUDENT3 ID)
+\\\\
+\begin{flushleft}
+Approved as to style and content by the Examiners in May 2025:
+  \end{flushleft}
+  
+  
+    
+  \end{center}
+
+ 
+  
+
+  %This thesis paper titled \textbf{\lq\lq\thesistitle\rq\rq}. submitted by Alisha Kabir (ID:202014006), M N Alam Siddiqui (ID:202014021) and Maliha Zerin (ID:202014025), has been accepted as
+  %satisfactory in partial fulfillment of the requirements for the
+  %egree B.Sc.\ in Computer Science and Engineering in \thesisdate.
+
+  \vspace{\stretch{1}}  
+
+  \vspace*{10.0mm}
+
+\begin{minipage}[t]{0.4\textwidth}
+    \hrule\medskip
+    \text{Supervisor Full Name\hspace{30mm}\qquad\qquad\qquad\qquad\quad\quad Supervisor }
+    \text{Supervisor Designation}\linebreak
+    \text{Department of Computer Science and Engineering (CSE)}\linebreak
+    \text{MIST, Dhaka}
+\end{minipage} \\
+
+  \vspace*{10.0mm}
+
+\begin{minipage}[t]{0.37\textwidth}
+    \hrule\medskip
+    \text{Brigadier General  Mohammad Shahjahan Majib\hspace{8mm}\quad\quad Head of the Department}
+    %\text{Head}\linebreak
+    \text{Department of Computer Science and Engineering (CSE)}\linebreak
+    \text{MIST, Dhaka}
+\end{minipage} \\
+
+\vspace{\stretch{2}}
+\vspace{\stretch{1}}
+\\\bigskip
+\begin{center}
+    Department of Computer Science and Engineering, MIST, Dhaka
+\end{center}
+}
+
+
+
+
+\def\thesiscandidatesdeclaration{
+
+ 
+ \begin{center}
+ \MakeUppercase{\large MAIN THESIS TITLE}\\\\ \bigskip \bigskip \bigskip \bigskip
+    \Medium DECLARATION \\[18pt]
+  \end{center}
+  %\addcontentsline{toc}{chapter}{\textbf{\normalsize{\emph{DECLARATION}}}}
+  %\vspace*{\stretch{1}}
+     \bigskip
+     %\bigskip
+     \justifying
+We hereby declare that the study reported in this thesis entitled as above is our own original work and has not been submitted before anywhere for any degree or other purposes. Further, we certify that the intellectual content of this thesis is the product of our own work and that all the assistance received in preparing this thesis and sources have been acknowledged and cited in the reference Section.
+   
+  %\vspace{\stretch{0.5}}  
+ \begin{flushleft}
+  \DTLforeach{ThesisStudents}{\StudentName=Column1,\StudentID=Column2,\Date=Column3}{
+    \vspace*{10.0mm}
+    \begin{minipage}[t]{0.4\textwidth}
+      \hrule\medskip
+       \begin{flushleft} 
+      \StudentName\par
+      \StudentID\par
+      \Date
+       \end{flushleft}
+    \end{minipage}\par}
+  \end{flushleft}
+  \vspace*{\stretch{1}}
+
+  \begin{center}
+ Department of Computer Science and Engineering MIST, Dhaka
+  \end{center}
+  }
+  
+
+
+
+\endinput

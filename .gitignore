@@ -59,5 +59,3 @@ test_multi_node_chroma_db/
 backend/dataset/dataset_sources/
 backend/dataset/nested_dataset/
 
-# Paper (LaTeX source - not for public repo)
-paper/

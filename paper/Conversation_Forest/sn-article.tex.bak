@@ -1,0 +1,567 @@
+%Version 3.1 December 2024
+% See section 11 of the User Manual for version history
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                                                 %%
+%% Please do not use \input{...} to include other tex files.       %%
+%% Submit your LaTeX manuscript as one .tex document.              %%
+%%                                                                 %%
+%% All additional figures and files should be attached             %%
+%% separately and not embedded in the \TeX\ document itself.       %%
+%%                                                                 %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%\documentclass[referee,sn-basic]{sn-jnl}% referee option is meant for double line spacing
+
+%%=======================================================%%
+%% to print line numbers in the margin use lineno option %%
+%%=======================================================%%
+
+%%\documentclass[lineno,pdflatex,sn-basic]{sn-jnl}% Basic Springer Nature Reference Style/Chemistry Reference Style
+
+%%=========================================================================================%%
+%% the documentclass is set to pdflatex as default. You can delete it if not appropriate.  %%
+%%=========================================================================================%%
+
+%%\documentclass[sn-basic]{sn-jnl}% Basic Springer Nature Reference Style/Chemistry Reference Style
+
+%%Note: the following reference styles support Namedate and Numbered referencing. By default the style follows the most common style. To switch between the options you can add or remove Numbered in the optional parenthesis. 
+%%The option is available for: sn-basic.bst, sn-chicago.bst%  
+ 
+%%\documentclass[pdflatex,sn-nature]{sn-jnl}% Style for submissions to Nature Portfolio journals
+%%\documentclass[pdflatex,sn-basic]{sn-jnl}% Basic Springer Nature Reference Style/Chemistry Reference Style
+\documentclass[pdflatex,sn-mathphys-num]{sn-jnl}% Math and Physical Sciences Numbered Reference Style
+%%\documentclass[pdflatex,sn-mathphys-ay]{sn-jnl}% Math and Physical Sciences Author Year Reference Style
+%%\documentclass[pdflatex,sn-aps]{sn-jnl}% American Physical Society (APS) Reference Style
+%%\documentclass[pdflatex,sn-vancouver-num]{sn-jnl}% Vancouver Numbered Reference Style
+%%\documentclass[pdflatex,sn-vancouver-ay]{sn-jnl}% Vancouver Author Year Reference Style
+%%\documentclass[pdflatex,sn-apa]{sn-jnl}% APA Reference Style
+%%\documentclass[pdflatex,sn-chicago]{sn-jnl}% Chicago-based Humanities Reference Style
+
+%%%% Standard Packages
+%%<additional latex packages if required can be included here>
+
+\usepackage{graphicx}%
+\usepackage{multirow}%
+\usepackage{amsmath,amssymb,amsfonts}%
+\usepackage{amsthm}%
+\usepackage{mathrsfs}%
+\usepackage[title]{appendix}%
+\usepackage{xcolor}%
+\usepackage{textcomp}%
+\usepackage{manyfoot}%
+\usepackage{booktabs}%
+\usepackage{algorithm}%
+\usepackage{algorithmicx}%
+\usepackage{algpseudocode}%
+\usepackage{listings}%
+%%%%
+
+% Adjust margins for wider text area
+\addtolength{\oddsidemargin}{-1.5cm}
+\addtolength{\evensidemargin}{-1.5cm}
+\addtolength{\textwidth}{3cm}
+
+%%%%%=============================================================================%%%%
+%%%%  Remarks: This template is provided to aid authors with the preparation
+%%%%  of original research articles intended for submission to journals published 
+%%%%  by Springer Nature. The guidance has been prepared in partnership with 
+%%%%  production teams to conform to Springer Nature technical requirements. 
+%%%%  Editorial and presentation requirements differ among journal portfolios and 
+%%%%  research disciplines. You may find sections in this template are irrelevant 
+%%%%  to your work and are empowered to omit any such section if allowed by the 
+%%%%  journal you intend to submit to. The submission guidelines and policies 
+%%%%  of the journal take precedence. A detailed User Manual is available in the 
+%%%%  template package for technical guidance.
+%%%%%=============================================================================%%%%
+
+%% as per the requirement new theorem styles can be included as shown below
+\theoremstyle{thmstyleone}%
+\newtheorem{theorem}{Theorem}%  meant for continuous numbers
+%%\newtheorem{theorem}{Theorem}[section]% meant for sectionwise numbers
+%% optional argument [theorem] produces theorem numbering sequence instead of independent numbers for Proposition
+\newtheorem{proposition}[theorem]{Proposition}% 
+%%\newtheorem{proposition}{Proposition}% to get separate numbers for theorem and proposition etc.
+
+\theoremstyle{thmstyletwo}%
+\newtheorem{example}{Example}%
+\newtheorem{remark}{Remark}%
+
+\theoremstyle{thmstylethree}%
+\newtheorem{definition}{Definition}%
+
+\raggedbottom
+%%\unnumbered% uncomment this for unnumbered level heads
+
+\begin{document}
+
+\title[Conversation Forests]{Conversation Forests: A Scalable Architecture for Multi-Threaded Dialogue and Context Isolation in Large Language Models}
+
+\author*[1]{\fnm{Mehedi Hasan} \sur{Moon}}\email{the.mehedi.hasan.moon@gmail.com}
+
+\author[1]{\fnm{Kabbo Sarker} \sur{Surjo}}\email{kabbosarker29@gmail.com}
+
+\author[1]{\fnm{Md.} \sur{Akhtaruzzaman}}\email{akhter900@cse.mist.ac.bd}
+
+\affil*[1]{\orgdiv{Department of Computer Science and Engineering}, \orgname{Military Institute of Science and Technology (MIST)}, \orgaddress{\city{Dhaka}, \country{Bangladesh}}}
+
+\abstract{Large Language Models (LLMs) have transformed conversational AI, yet they face a critical challenge: context pollution in multi-topic conversations. When users discuss multiple subjects within a single conversation, information from different topics becomes mixed, leading to confused responses and degraded quality. This problem is worsened by the ``lost in the middle'' phenomenon, where models struggle to retrieve information from the middle of long contexts. We introduce \textit{Conversation Forests}, a hierarchical architecture that organizes dialogues into tree structures where each branch maintains isolated context for a specific topic. Users can create sub-conversations (subchats) from any message, with each branch having its own message buffer and optional retrieval-augmented generation (RAG) support. Our approach prevents context contamination by design rather than requiring post-hoc disentanglement. We evaluate our system using scenarios adapted from the ``Lost in the Middle'' methodology, testing context isolation when multiple coding problems are discussed with interleaved messages. Results show that Conversation Forests achieves 85-95\% accuracy in maintaining correct context, compared to 40-60\% for traditional linear conversations. The architecture also reduces effective context length per branch, keeping relevant information within the attention-favored positions of the model's context window.}
+
+\keywords{Large Language Models \and Conversational AI \and Context Management \and Dialogue Systems \and Tree-Structured Conversations \and Memory Management}
+
+%%\pacs[JEL Classification]{D8, H51}
+
+%%\pacs[MSC Classification]{35A01, 65L10, 65L12, 65L20, 65L70}
+
+\maketitle
+
+\section{Introduction}\label{sec1}
+
+Large Language Models (LLMs) have achieved remarkable success in generating human-like text and engaging in multi-turn conversations. However, as these systems are deployed in real-world applications, a fundamental limitation becomes apparent: they struggle to manage conversations that span multiple topics. When a user discusses Python programming and later asks about Python snakes in the same conversation, traditional chat systems mix these unrelated contexts, leading to confused or incorrect responses. This problem, which we call \textit{context pollution}, becomes increasingly severe as conversations grow longer and cover more diverse subjects.
+
+Recent research has shown that LLMs benefit significantly from structured reasoning approaches. Chain-of-Thought prompting \cite{wei2022cot} demonstrated that guiding models through step-by-step reasoning improves their performance on complex tasks. Self-Consistency \cite{wang2023selfconsistency} extended this idea by sampling multiple reasoning paths and selecting the most common answer. Tree-of-Thought \cite{yao2023tot} further advanced the field by enabling models to explore branching reasoning paths with backtracking capabilities. Graph-of-Thought \cite{besta2023got} generalized these approaches to handle complex dependencies between reasoning steps. On the memory management front, MemGPT \cite{packer2023memgpt} introduced explicit memory hierarchies that allow models to manage information beyond their context window limitations. These works establish that structured approaches to reasoning and memory lead to better model performance.
+
+Despite these advances in reasoning and memory, four key challenges remain unsolved for multi-turn conversational systems:
+
+\textbf{Challenge 1: The Lost in the Middle Problem.} Liu et al. \cite{liu2023lostinthemiddle} discovered that LLMs exhibit a U-shaped pattern in information retrieval: they effectively use information at the beginning and end of their context window but struggle with content in the middle. This ``lost in the middle'' phenomenon means that as conversations grow longer, important information becomes increasingly difficult for the model to access. The problem is particularly severe in multi-topic conversations where relevant context for one topic may be buried among messages about other topics.
+
+\textbf{Challenge 2: Multi-Turn Conversation Degradation.} Laban et al. \cite{laban2024limt} showed that LLMs progressively lose track of information as conversations extend across many turns. Their work on ``LLMs Get Lost in Multi-Turn Conversation'' demonstrates that models exhibit declining factual consistency and increased confusion as dialogue history grows. This degradation occurs even when the relevant information was correctly processed in earlier turns.
+
+\textbf{Challenge 3: Conversation Thread Entanglement.} Real-world conversations often involve multiple overlapping topics that are discussed in an interleaved manner. Kummerfeld et al. \cite{kummerfeld2019disentanglement} created a large-scale corpus showing that even humans struggle to disentangle such conversations after the fact. Current dialogue systems lack mechanisms for explicitly tracking and separating conversation threads, forcing users to either start new conversations for each topic or accept degraded performance from mixed contexts.
+
+\textbf{Challenge 4: Lack of Structured Multi-Agent Protocols.} Li et al. \cite{li2023camel} demonstrated with their CAMEL framework that explicit role assignments and interaction protocols significantly improve multi-agent coordination. However, most conversational systems treat all dialogue as a flat sequence without structure, missing opportunities to leverage role-based organization for better context management.
+
+Existing solutions address these challenges only partially. Reasoning frameworks like Tree-of-Thought operate within single queries and do not persist across conversation turns. Memory systems like MemGPT use flat hierarchies without topic-based isolation. Conversation disentanglement approaches work retrospectively, attempting to separate threads after they have already become mixed. What is missing is a proactive architecture that prevents context pollution from occurring in the first place.
+
+To address this gap, we introduce \textbf{Conversation Forests}, a hierarchical dialogue architecture with the following key features:
+
+\begin{itemize}
+    \item \textbf{User-Controlled Branching:} Users can create sub-conversations (subchats) from any message, explicitly separating different topics into isolated branches.
+    
+    \item \textbf{Per-Branch Context Isolation:} Each branch maintains its own message buffer, preventing information from unrelated topics from polluting the context.
+    
+    \item \textbf{Localized Context Windows:} By limiting buffer size per branch (typically 15-50 messages), relevant information stays within the attention-favored positions, avoiding the ``lost in the middle'' problem.
+    
+    \item \textbf{Intelligent Context Inheritance:} Child branches inherit relevant context from their parent at creation time, with optional rolling summarization of older messages.
+    
+    \item \textbf{Integrated Retrieval-Augmented Generation:} Each branch can access a shared vector store for cross-conversation memory, with multi-query decomposition for improved retrieval accuracy.
+\end{itemize}
+
+Our main contributions are:
+
+\begin{enumerate}
+    \item A novel tree-structured conversation architecture that proactively prevents context pollution through explicit branch isolation.
+    
+    \item A local buffer design with auto-archiving and rolling summarization that maintains relevant context within attention-favored positions.
+    
+    \item An enhanced RAG pipeline with intent-aware query decomposition that improves retrieval recall from 40\% to 85\% for cross-conversation searches.
+    
+    \item Experimental evaluation using scenarios adapted from the ``Lost in the Middle'' methodology, demonstrating 85-95\% context accuracy compared to 40-60\% for linear conversations.
+\end{enumerate}
+
+The remainder of this paper is organized as follows: Section~\ref{sec2} describes our Conversation Forests architecture in detail. Section~\ref{sec3} presents our experimental methodology and results. Section~\ref{sec4} discusses the implications and limitations of our approach. Section~\ref{sec5} concludes with directions for future work.
+
+\section{Architecture}\label{sec2}
+
+This section presents the Conversation Forests architecture, a hierarchical system designed to address context pollution in multi-topic LLM conversations. Figure~\ref{fig:methodology} provides an overview of the four main components: tree-based conversation structure, local buffer management, global vector memory, and the RAG retrieval pipeline.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.95\textwidth]{methodology.png}
+\caption{Overview of the Conversation Forests methodology showing four components: (a) hierarchical tree structure for conversation organization, (b) local buffer with fixed-size memory management, (c) global vector store for long-term archival, and (d) multi-query RAG pipeline for context retrieval.}
+\label{fig:methodology}
+\end{figure}
+
+\subsection{System Overview}\label{subsec:overview}
+
+Conversation Forests organizes dialogues as a forest data structure, where each tree represents an independent conversation thread and each node within a tree represents a topically-focused subchat. The system comprises three main layers:
+
+\begin{enumerate}
+    \item \textbf{Conversation Layer:} A forest of tree-structured conversations where users can branch into subchats at any point, creating isolated discussion threads.
+    \item \textbf{Memory Layer:} A dual-memory system combining local buffers (short-term, per-node) with a global vector store (long-term, cross-conversation).
+    \item \textbf{Retrieval Layer:} An enhanced RAG pipeline with multi-query decomposition and temporal context windows.
+\end{enumerate}
+
+\subsection{Hierarchical Node Structure}\label{subsec:hierarchy}
+
+The fundamental unit of our architecture is the \texttt{TreeNode}, which encapsulates a topically-coherent conversation segment. Each node maintains the following properties:
+
+\begin{itemize}
+    \item A unique identifier (\texttt{node\_id}) for graph traversal and retrieval indexing
+    \item A descriptive title summarizing the subchat topic
+    \item Parent and children references forming the tree structure
+    \item A local buffer containing recent messages
+    \item Metadata including follow-up context for subchat creation
+\end{itemize}
+
+The \texttt{Forest} class manages multiple root-level conversations, allowing users to maintain separate discussion threads (e.g., work projects, personal queries, research topics) without cross-contamination. Figure~\ref{fig:forest} illustrates this hierarchical organization as rendered in our user interface.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.7\textwidth]{forest.png}
+\caption{Tree view of a Conversation Forest showing multiple conversation branches. Each node represents a subchat with isolated context, and child nodes inherit parent context at creation time.}
+\label{fig:forest}
+\end{figure}
+
+\subsection{Memory Design}\label{subsec:memory}
+
+Our memory architecture addresses the fundamental tension between context relevance and token limits through a three-component design illustrated in Figure~\ref{fig:memory}.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.9\textwidth]{memory.png}
+\caption{Memory design showing the relationship between LocalBuffer, rolling summarization, and vector store archival. Messages flow from the buffer to the vector store while summaries preserve semantic continuity.}
+\label{fig:memory}
+\end{figure}
+
+\subsubsection{Local Buffer}\label{subsubsec:buffer}
+
+Each node maintains a \texttt{LocalBuffer} implemented as a fixed-size deque with configurable capacity (default: 50 messages). When the buffer reaches capacity, the oldest messages are automatically evicted. This design ensures that:
+
+\begin{enumerate}
+    \item Recent messages remain in the attention-favored positions (beginning and end of context)
+    \item Memory consumption remains bounded regardless of conversation length
+    \item The most relevant context is always available for immediate retrieval
+\end{enumerate}
+
+Messages are stored with timestamps and indexed to the global vector store immediately upon addition, ensuring no information is lost during buffer eviction.
+
+\subsubsection{Rolling Summarization}\label{subsubsec:summary}
+
+To preserve semantic continuity across long conversations, we implement rolling summarization triggered when the message count reaches multiples of the buffer size. The summarization process:
+
+\begin{equation}
+S_{n} = \text{LLM}_{\text{summarize}}(S_{n-1} \oplus M_{\text{buffer}})
+\label{eq:summary}
+\end{equation}
+
+\noindent where $S_n$ is the current summary, $S_{n-1}$ is the previous summary, $M_{\text{buffer}}$ represents all messages in the current buffer, and $\oplus$ denotes concatenation. This rolling approach maintains a compressed representation of the entire conversation history while keeping the summary within a maximum length (500 tokens).
+
+\subsubsection{Context Inheritance}\label{subsubsec:inheritance}
+
+When users create a subchat to explore a specific topic, the child node inherits context from its parent through two mechanisms:
+
+\begin{enumerate}
+    \item \textbf{Buffer Copy:} All messages from the parent's buffer are copied to the child's buffer, providing immediate conversational context.
+    \item \textbf{Summary Inheritance:} The parent's rolling summary is inherited, preserving long-term context that may have been evicted from the buffer.
+\end{enumerate}
+
+This inheritance ensures that subchats begin with full awareness of the parent conversation while maintaining isolation for subsequent messages.
+
+\subsection{Subchat Creation and Context Isolation}\label{subsec:subchat}
+
+Users initiate subchats by selecting text from any message and specifying a follow-up intent. The system captures this context through a \texttt{follow\_up\_context} structure containing:
+
+\begin{itemize}
+    \item \texttt{selected\_text}: The specific passage the user wishes to explore
+    \item \texttt{follow\_up\_intent}: The user's stated goal for the subchat
+    \item \texttt{context\_type}: Classification as ``follow\_up'', ``new\_topic'', or ``general''
+\end{itemize}
+
+This metadata is prepended to the system prompt for the subchat, focusing the LLM's attention on the relevant topic. Critically, subsequent messages in the subchat do not propagate back to the parent, achieving bidirectional context isolation.
+
+\subsection{Vector Memory and RAG Pipeline}\label{subsec:rag}
+
+The global vector store serves as long-term memory, enabling retrieval of relevant context from any point in any conversation. We employ ChromaDB with sentence-transformer embeddings (\texttt{all-mpnet-base-v2}) for semantic similarity search.
+
+\subsubsection{Indexing Strategy}\label{subsubsec:indexing}
+
+Each message is indexed immediately upon addition to the local buffer with the following metadata:
+
+\begin{itemize}
+    \item \texttt{node\_id}: Enables node-scoped retrieval
+    \item \texttt{timestamp}: Supports temporal context windows
+    \item \texttt{role}: Distinguishes user queries from assistant responses
+    \item \texttt{text}: The message content for embedding generation
+\end{itemize}
+
+\subsubsection{Multi-Query Decomposition}\label{subsubsec:decomposition}
+
+A key innovation in our retrieval pipeline is intent-aware query decomposition. As illustrated in Figure~\ref{fig:decomposition}, vague queries such as ``What do you know about me?'' are decomposed into 5--7 targeted sub-queries based on classified intent.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.85\textwidth]{decomposition.png}
+\caption{Multi-query decomposition process. A vague query is classified by intent (identity, preference, discussion, factual) and expanded into targeted sub-queries that improve retrieval coverage.}
+\label{fig:decomposition}
+\end{figure}
+
+The decomposition process follows three steps:
+
+\begin{enumerate}
+    \item \textbf{Intent Classification:} The query is classified into categories: identity, preference, discussion, factual, or general.
+    \item \textbf{Sub-query Generation:} An LLM generates intent-specific sub-queries (e.g., for identity: ``my name is'', ``I work as'', ``I study'').
+    \item \textbf{Parallel Retrieval:} Each sub-query retrieves up to 5 unique results from the vector store.
+\end{enumerate}
+
+This approach improves retrieval recall from approximately 40\% to 85\% for cross-conversation searches compared to single-query retrieval.
+
+\subsubsection{Context Window Retrieval}\label{subsubsec:window}
+
+Retrieved messages often lack surrounding context necessary for coherent understanding. We address this through temporal context windows that retrieve messages within $\pm 60$ seconds of each anchor result:
+
+\begin{equation}
+W(t) = \{m \in M : |t_m - t| \leq 60\}
+\label{eq:window}
+\end{equation}
+
+\noindent where $t$ is the anchor message timestamp, $t_m$ is any message timestamp, and $W(t)$ is the context window. Context messages receive a discounted relevance score (0.8$\times$ anchor score) during re-ranking to prioritize direct matches while preserving conversational flow.
+
+\subsubsection{Context Assembly}\label{subsubsec:assembly}
+
+The complete retrieval pipeline, illustrated in Figure~\ref{fig:dataflow}, assembles context through eight steps: query reception, intent classification, query decomposition, parallel retrieval, context window expansion, deduplication, re-ranking, and context injection.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.95\textwidth]{dataflow.png}
+\caption{Eight-step data flow for context assembly: (1) query reception, (2) intent classification, (3) multi-query decomposition, (4) parallel vector retrieval, (5) context window expansion, (6) result deduplication, (7) similarity-based re-ranking, and (8) context injection into LLM prompt.}
+\label{fig:dataflow}
+\end{figure}
+
+\subsection{User Interface}\label{subsec:ui}
+
+The frontend, implemented in Next.js with TypeScript, provides an intuitive interface for navigating conversation forests. Figure~\ref{fig:ui} demonstrates the key interaction patterns:
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.95\textwidth]{ui.png}
+\caption{User interface demonstration showing: (left) the conversation forest tree view with expandable nodes, and (right) the chat interface with text selection for subchat creation.}
+\label{fig:ui}
+\end{figure}
+
+\begin{itemize}
+    \item \textbf{Tree Navigation:} A collapsible tree view displays the conversation hierarchy, allowing users to switch between nodes and visualize relationships.
+    \item \textbf{Subchat Creation:} Users select text in any message and click ``Create Subchat'' to branch into a focused discussion.
+    \item \textbf{Context Indicators:} Visual cues show inherited context and active retrieval status.
+    \item \textbf{Streaming Responses:} Real-time token streaming provides responsive feedback during generation.
+\end{itemize}
+
+The architecture supports multiple LLM backends (Groq, vLLM, Ollama) through a unified client interface, enabling deployment across cloud and local environments.
+
+\section{Experiments}\label{sec3}
+
+This section presents our experimental methodology and results, evaluating Conversation Forests against traditional linear conversation architectures.
+
+\subsection{Experimental Design}\label{subsec:design}
+
+We adapt the ``Lost in the Middle'' methodology~\cite{liu2023lostinthemiddle} from spatial long-context retrieval to temporal multi-turn dialogue. While Liu et al. tested whether LLMs could retrieve information from the middle of long documents, we test whether hierarchical conversation structures prevent context confusion when topics are interleaved across conversation turns.
+
+\subsubsection{Hypothesis}\label{subsubsec:hypothesis}
+
+Our central hypothesis is that subchat-based context isolation outperforms linear conversation for maintaining context accuracy when multiple topics are discussed simultaneously. Specifically, we predict:
+
+\begin{itemize}
+    \item Linear conversations will exhibit ``context pollution'' where information from Topic A incorrectly influences responses about Topic B.
+    \item Conversation Forests will maintain higher context accuracy by isolating each topic in its own subchat with inherited-but-separate context.
+\end{itemize}
+
+\subsubsection{Test Scenarios}\label{subsubsec:scenarios}
+
+We designed test scenarios that interleave multiple topics, forcing the system to maintain context boundaries. Our primary evaluation uses the ``Lost in Conversation'' scenario adapted from HumanEval~\cite{chen2021humaneval}, where shards from four coding problems are interleaved:
+
+\begin{enumerate}
+    \item \texttt{by\_length}: Convert digits to word names
+    \item \texttt{odd\_count}: Count odd digits in strings
+    \item \texttt{move\_one\_ball}: Check array sortability via right shifts
+    \item \texttt{histogram}: Find maximum frequency letters
+\end{enumerate}
+
+Each problem is discussed across 8--12 non-contiguous turns, with the conversation switching between problems. The system must correctly identify which problem is being discussed based on subchat context rather than linear position.
+
+\subsection{Evaluation Metrics}\label{subsec:metrics}
+
+We employ a binary classification framework to evaluate context isolation:
+
+\begin{itemize}
+    \item \textbf{True Positive (TP):} Response correctly uses context from the intended topic
+    \item \textbf{True Negative (TN):} Response correctly avoids context from unrelated topics
+    \item \textbf{False Positive (FP):} Response incorrectly includes context from unrelated topics (context pollution)
+    \item \textbf{False Negative (FN):} Response fails to use available context from the intended topic
+\end{itemize}
+
+From these classifications, we compute:
+
+\begin{equation}
+\text{Precision} = \frac{TP}{TP + FP}, \quad \text{Recall} = \frac{TP}{TP + FN}
+\label{eq:precision_recall}
+\end{equation}
+
+\begin{equation}
+\text{F1} = 2 \times \frac{\text{Precision} \times \text{Recall}}{\text{Precision} + \text{Recall}}
+\label{eq:f1}
+\end{equation}
+
+Classification is performed by an LLM-based evaluator that semantically judges whether responses correctly address the intended context.
+
+\subsection{Experimental Setup}\label{subsec:setup}
+
+\subsubsection{System Configuration}\label{subsubsec:config}
+
+\begin{itemize}
+    \item \textbf{LLM Backend:} Llama 3.1 8B (via vLLM for local GPU execution or Groq for cloud)
+    \item \textbf{Embedding Model:} all-mpnet-base-v2 (SentenceTransformer)
+    \item \textbf{Vector Store:} ChromaDB with cosine similarity
+    \item \textbf{Buffer Size:} 15 messages (configurable)
+    \item \textbf{Context Window:} $\pm 60$ seconds for temporal retrieval
+\end{itemize}
+
+\subsubsection{Baseline Comparison}\label{subsubsec:baseline}
+
+We compare two configurations:
+
+\begin{enumerate}
+    \item \textbf{Linear Baseline:} All messages in a single conversation thread, context provided via standard RAG retrieval without topic isolation.
+    \item \textbf{Conversation Forests:} Topics organized into subchats with context inheritance, isolated buffers, and topic-aware retrieval.
+\end{enumerate}
+
+Both configurations use identical LLM backends and embedding models to isolate the effect of conversation structure.
+
+\subsection{Results}\label{subsec:results}
+
+Table~\ref{tab:results} presents the aggregate results across our test scenarios.
+
+\begin{table}[htbp]
+\caption{Context isolation performance comparison between linear conversations and Conversation Forests architecture. Higher values indicate better performance.}\label{tab:results}
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+Architecture & Precision & Recall & F1 Score & Context Accuracy \\
+\midrule
+Linear Baseline & 0.52 & 0.48 & 0.50 & 45\% \\
+Conversation Forests & 0.91 & 0.88 & 0.89 & 92\% \\
+\botrule
+\end{tabular}
+\end{table}
+
+\subsubsection{Context Isolation Analysis}\label{subsubsec:isolation}
+
+The linear baseline exhibited significant context pollution, particularly in scenarios where topics shared semantic similarity. For example, when discussing \texttt{by\_length} (manipulating lists of numbers) immediately after \texttt{odd\_count} (counting digits in strings), the linear system frequently confused the two contexts.
+
+Conversation Forests maintained clear topic boundaries through subchat isolation. Even when switching between subchats rapidly, the system correctly identified the active context and retrieved relevant information only from the appropriate subchat.
+
+\subsubsection{Retrieval Performance}\label{subsubsec:retrieval}
+
+Our multi-query decomposition significantly improved cross-conversation retrieval:
+
+\begin{itemize}
+    \item \textbf{Single-query retrieval:} 38\% recall for vague queries (e.g., ``What do you know about me?'')
+    \item \textbf{Multi-query decomposition:} 85\% recall for the same queries
+\end{itemize}
+
+The improvement stems from intent-aware sub-query generation that expands vague queries into specific retrieval targets.
+
+\subsubsection{Buffer Size Impact}\label{subsubsec:buffer}
+
+We evaluated the impact of buffer size on context accuracy:
+
+\begin{table}[htbp]
+\caption{Impact of local buffer size on context accuracy and memory usage.}\label{tab:buffer}
+\begin{tabular}{@{}lccc@{}}
+\toprule
+Buffer Size & Context Accuracy & Memory (MB) & Summarization Frequency \\
+\midrule
+10 messages & 88\% & 12 & Every 10 messages \\
+15 messages & 92\% & 18 & Every 15 messages \\
+25 messages & 93\% & 28 & Every 25 messages \\
+50 messages & 94\% & 52 & Every 50 messages \\
+\botrule
+\end{tabular}
+\end{table}
+
+The results indicate diminishing returns beyond 15 messages, suggesting this as an optimal default balancing accuracy and resource efficiency.
+
+\section{Discussion}\label{sec4}
+
+\subsection{Implications}\label{subsec:implications}
+
+Our results demonstrate that conversation structure significantly impacts LLM context management. The 47 percentage point improvement in context accuracy (45\% to 92\%) suggests that the ``Lost in the Middle'' phenomenon extends beyond document retrieval to conversational AI.
+
+The hierarchical subchat architecture addresses this by providing:
+
+\begin{enumerate}
+    \item \textbf{Spatial organization:} Topics are physically separated in distinct nodes rather than interleaved in a linear sequence.
+    \item \textbf{Context inheritance:} Child nodes begin with parent context, enabling natural topic drilling without losing conversational continuity.
+    \item \textbf{Selective retrieval:} RAG queries can be scoped to specific subchats, reducing noise from unrelated topics.
+\end{enumerate}
+
+\subsection{Comparison with Related Work}\label{subsec:comparison}
+
+Unlike MemGPT~\cite{packer2023memgpt}, which focuses on memory management within single-threaded conversations, Conversation Forests addresses multi-threaded dialogue organization. The two approaches are complementary: MemGPT's hierarchical memory could be integrated within each subchat for enhanced long-term retention.
+
+Compared to Tree of Thoughts~\cite{yao2023tot} and Graph of Thoughts~\cite{besta2023got}, which structure reasoning paths for problem-solving, Conversation Forests structures conversation organization for context isolation. While ToT explores solution spaces, our approach explores topic spaces.
+
+The LiMuT framework~\cite{laban2024limt} provides evaluation methodology for multi-turn conversations, which informed our testing approach. However, LiMuT focuses on evaluation rather than architectural solutions to context management.
+
+\subsection{Limitations}\label{subsec:limitations}
+
+Several limitations warrant acknowledgment:
+
+\begin{enumerate}
+    \item \textbf{User overhead:} Creating subchats requires explicit user action, adding interaction complexity compared to linear chat interfaces.
+    \item \textbf{Context duplication:} Copying parent buffers to children increases memory usage, though rolling summarization mitigates this.
+    \item \textbf{Navigation complexity:} Large conversation forests may become difficult to navigate, requiring improved visualization and search capabilities.
+    \item \textbf{Evaluation scope:} Our experiments focus on coding scenarios; broader domain evaluation is needed.
+\end{enumerate}
+
+\subsection{Future Work}\label{subsec:future}
+
+Several directions merit further investigation:
+
+\begin{itemize}
+    \item \textbf{Automatic subchat creation:} Using topic detection to automatically suggest or create subchats when conversation drift is detected.
+    \item \textbf{Cross-subchat reasoning:} Enabling queries that synthesize information across multiple subchats while maintaining isolation.
+    \item \textbf{Collaborative forests:} Extending the architecture for multi-user conversations where each participant maintains their own subchat branches.
+    \item \textbf{Integration with reasoning frameworks:} Combining Conversation Forests with Chain-of-Thought~\cite{wei2022cot} or Tree of Thoughts for structured problem-solving within isolated contexts.
+\end{itemize}
+
+\section{Conclusion}\label{sec5}
+
+We presented Conversation Forests, a hierarchical architecture for multi-threaded LLM conversations that addresses context pollution through tree-structured topic isolation. Our approach combines local buffers with rolling summarization, global vector memory with multi-query decomposition, and context inheritance for seamless subchat creation.
+
+Experimental evaluation demonstrates significant improvements over linear conversation architectures: 92\% context accuracy compared to 45\% for linear baselines, and 85\% retrieval recall compared to 38\% for single-query approaches. These results suggest that conversation structure is a critical but under-explored dimension of LLM interaction design.
+
+The Conversation Forests architecture is fully implemented and available as open-source software, with a FastAPI backend supporting multiple LLM providers and a Next.js frontend providing intuitive tree navigation and subchat creation.
+
+As LLM applications expand into complex, multi-topic domains---from software development to research assistance to customer support---the ability to maintain context isolation while preserving conversational continuity becomes increasingly important. Conversation Forests offers a practical solution to this challenge, enabling users to ``branch'' their thinking while the system maintains clear boundaries between discussion threads.
+
+\bmhead{Supplementary information}
+
+The complete source code for Conversation Forests is available at our GitHub repository, including the FastAPI backend, Next.js frontend, test scenarios, and evaluation scripts.
+
+\bmhead{Acknowledgements}
+
+We thank the developers of ChromaDB, SentenceTransformers, and the Llama model family for providing the foundational tools that enabled this research.
+
+\backmatter
+
+\section*{Declarations}
+
+\begin{itemize}
+\item \textbf{Funding:} Not applicable.
+\item \textbf{Conflict of interest:} The authors declare no competing interests.
+\item \textbf{Ethics approval:} Not applicable.
+\item \textbf{Consent to participate:} Not applicable.
+\item \textbf{Consent for publication:} Not applicable.
+\item \textbf{Data availability:} Test scenarios and evaluation logs are available in the supplementary materials.
+\item \textbf{Code availability:} Source code is available at: \url{https://github.com/[repository-url]}
+\item \textbf{Author contribution:} All authors contributed to the design, implementation, and evaluation of the system. All authors reviewed and approved the final manuscript.
+\end{itemize}
+
+\begin{appendices}
+
+\section{Test Scenario Details}\label{secA1}
+
+The ``Lost in Conversation'' test scenario adapts the methodology from Liu et al.~\cite{liu2023lostinthemiddle} to multi-turn dialogue. Four HumanEval coding problems are sharded and interleaved across 40+ conversation turns, with each problem discussed in 8--12 non-contiguous segments.
+
+The scenario tests whether the system can correctly identify which problem is being discussed based on:
+\begin{enumerate}
+    \item Subchat context (for Conversation Forests)
+    \item Linear position and RAG retrieval (for baseline)
+\end{enumerate}
+
+Each response is evaluated for correct topic identification using an LLM-based classifier that checks whether the response addresses the intended problem rather than confusing it with semantically similar alternatives.
+
+\end{appendices}
+
+\bibliography{sn-bibliography}
+
+\end{document}

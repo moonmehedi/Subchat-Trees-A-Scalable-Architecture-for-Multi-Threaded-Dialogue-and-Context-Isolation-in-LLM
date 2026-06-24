@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="220" height="120" viewBox="0 0 220 120">
+  <rect x="0" y="0" width="220" height="120" fill="#ffffff"/>
+  <rect x="10" y="10" width="200" height="100" rx="14" ry="14" fill="#2f6bff"/>
+  <text x="110" y="62" text-anchor="middle"
+        style="font:700 18px Arial,sans-serif; fill:#fff;">
+    AI Response
+  </text>
+  <text x="110" y="85" text-anchor="middle"
+        style="font:12px Arial,sans-serif; fill:#eaf0ff;">
+    Query · Answer · Context
+  </text>
+</svg>

@@ -1,0 +1,5 @@
+Supervisor Name
+\supdel
+Supervisor Designation(E.g Assistant Professor)
+\supdel	
+Department of Computer Science \& Engineering Military Institute of Science and Technology

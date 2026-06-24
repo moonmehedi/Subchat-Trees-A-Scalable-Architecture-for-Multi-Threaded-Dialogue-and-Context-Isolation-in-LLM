@@ -1,0 +1,185 @@
+% You should not change anything in this file unless you really know
+% what you are doing.
+\RequirePackage{graphicx}
+\RequirePackage{algorithm}
+\RequirePackage{amsthm}
+\RequirePackage[a4paper,left=1.0in, right=0.9in, top=0.9in, bottom=0.9in]{geometry}
+\RequirePackage{times}
+\RequirePackage{cite}
+\RequirePackage{url}
+\RequirePackage{listings}
+\usepackage{ragged2e}
+
+
+\RequirePackage[final, colorlinks, linkcolor=black, citecolor=black, urlcolor=black]{hyperref}
+
+% section and subsection font size
+\RequirePackage{sectsty}
+\sectionfont{\large}		
+\subsectionfont{\normalsize}
+
+% sets spacing between paragraphs
+\parskip 7.2pt           
+
+% 1.5 spacing
+\RequirePackage{setspace}
+\onehalfspacing
+
+
+% sets leading space for paragraphs
+\parindent 0.0pt		  
+
+% Customized chapter headings
+\def\@makechapterhead#1{%
+  {\parindent \z@ \centering \normalfont
+    \ifnum \c@secnumdepth >\m@ne
+    \Large\bfseries \MakeUppercase{\@chapapp}\space \thechapter
+    \par\nobreak
+    \vskip -10\p@
+    \fi
+    \interlinepenalty\@M
+    \Large \bfseries \MakeUppercase{#1}\par\nobreak
+    \vskip 90\p@}}
+
+% Read and store student names in DB
+\RequirePackage{datatool}
+\DTLloaddb[noheader]{ThesisStudents}{parameters/students.txt}
+
+% Thesis parameters
+\def\thesistitle{\input{parameters/thesistitle.txt}\unskip}
+\def\supdel{\par}
+\def\supervisor{\input{parameters/supervisor.txt}\unskip}
+\def\thesisdate{\input{parameters/thesisdate.txt}\unskip}
+\def\studentlist{\input{parameters/student_list.txt}\unskip}
+\def\course{\input{parameters/course.txt}\unskip}
+\def\deptname{\input{parameters/dept_name.txt}\unskip}
+
+% Thesis title page 
+\def\thesistitlepage{
+  \newgeometry{left=25mm,right=25mm,top=12mm,bottom=15mm}
+  \thispagestyle{empty}
+  \begingroup
+  \titlepagefont
+  \begin{center}
+    {\parbox{0.94\textwidth}{\centering\fontsize{18pt}{20pt}\selectfont\thesistitle}\par}
+    \vspace*{25mm}
+    {\parbox{0.92\textwidth}{\centering\fontsize{16pt}{18pt}\selectfont\studentlist}\par}
+    \vspace*{24mm}
+    {\parbox{0.90\textwidth}{\centering\fontsize{16pt}{18pt}\selectfont
+    A Thesis Submitted in Partial Fulfillment of the Requirements for\\
+    the Degree of Bachelor of Science in Computer Science and\\
+    Engineering}\par}
+    \vspace*{24mm}
+    \includegraphics[width=34mm]{figures/mistlogo}\par
+    \vspace*{13mm}
+    {\parbox{0.94\textwidth}{\centering\fontsize{16pt}{18pt}\selectfont\deptname\\DHAKA, BANGLADESH}\par}
+    \vspace*{7mm}
+    {\fontsize{16pt}{18pt}\selectfont\thesisdate\par}
+  \end{center}
+  \endgroup
+  \clearpage
+  \restoregeometry
+}
+
+
+
+
+
+% Thesis certification page
+\def\thesiscertificationpage{
+\newpage
+  \begin{center}
+   \hspace{2cm}
+   %vspace{\dimexpr50mm-\baselineskip}
+    \hfill
+    \newline
+     \bigskip\bigskip
+
+     \large{\thesistitle}
+\\\bigskip
+B.Sc. ENGINEERING THESIS
+\\\bigskip
+By \\
+\bigskip
+\studentlist
+\par
+\begin{flushleft}
+Approved as to style and content by the Examiners in June 2026:
+  \end{flushleft}
+  \end{center}
+
+  \vspace{\stretch{1}}
+  \vspace*{10.0mm}
+
+\noindent
+\begin{minipage}[t]{0.76\textwidth}
+    \raggedright
+    \hrule\medskip
+    \textbf{Dr. Md. Aktaruzzaman}\\
+    Associate Professor and Head\\
+    Department of RME, DIU
+\end{minipage}\hfill
+\begin{minipage}[t]{0.20\textwidth}
+    \raggedleft Supervisor
+\end{minipage} \\
+
+  \vspace*{10.0mm}
+
+\noindent
+\begin{minipage}[t]{0.76\textwidth}
+    \raggedright
+    \hrule\medskip
+    {\small\textbf{Brigadier General Mohammad Shahjahan Majib, ndu, psc}}\\
+    Department of Computer Science and Engineering (CSE)\\
+    MIST, Dhaka
+\end{minipage}\hfill
+\begin{minipage}[t]{0.20\textwidth}
+    \raggedleft Head of the Department
+\end{minipage} \\
+
+\vspace{\stretch{2}}
+\vspace{\stretch{1}}
+\bigskip
+\begin{center}
+    Department of Computer Science and Engineering, MIST, Dhaka
+\end{center}
+}
+
+\def\thesiscandidatesdeclaration{
+
+ 
+ \begin{center}
+ \large \thesistitle\par \bigskip \bigskip \bigskip \bigskip
+    \large DECLARATION \\[18pt]
+  \end{center}
+  %\addcontentsline{toc}{chapter}{\textbf{\normalsize{\emph{DECLARATION}}}}
+  %\vspace*{\stretch{1}}
+     \bigskip
+     %\bigskip
+     \justifying
+We hereby declare that the study reported in this thesis entitled as above is our own original work and has not been submitted before anywhere for any degree or other purposes. Further, we certify that the intellectual content of this thesis is the product of our own work and that all the assistance received in preparing this thesis and sources have been acknowledged and cited in the reference Section.
+   
+  %\vspace{\stretch{0.5}}  
+ \begin{flushleft}
+  \DTLforeach{ThesisStudents}{\StudentName=Column1,\StudentID=Column2,\Date=Column3}{
+    \vspace*{10.0mm}
+    \begin{minipage}[t]{0.4\textwidth}
+      \hrule\medskip
+       \begin{flushleft} 
+      \StudentName\par
+      \StudentID\par
+      \Date
+       \end{flushleft}
+    \end{minipage}\par}
+  \end{flushleft}
+  \vspace*{\stretch{1}}
+
+  \begin{center}
+ Department of Computer Science and Engineering MIST, Dhaka
+  \end{center}
+  }
+  
+
+
+
+\endinput

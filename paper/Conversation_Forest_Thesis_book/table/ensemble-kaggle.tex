@@ -1,0 +1,21 @@
+\begin{table*}[h]
+\centering
+\caption{Value of Evaluation Metrics for Ensemble Learning Technique with Kaggle Dataset}
+\captionsetup[table]{skip=10pt}
+
+
+% \def\arraystretch{0.75}
+% \resizebox{\textwidth}{!}
+{
+\begin{tabular}{llllll}
+\hline
+Combination & Acc.   & Prec.  & Recall & F1 & Test Time   \\ \hline
+VGG16 and ResNet50        & 80.4\%  & 63\% & 60\%  & 59\% & 3 min 10 sec\\
+MobileNet and VGG16         & 100\% & 99\% & 99\%  & 98\% & 3 min 48 sec\\
+ResNet50 and MobileNet     & 97.2\% & 92\% & 93\% & 90\% & 2 min 4 sec\\
+Vgg16, ResNet50 and MobileNet    & 96.8\% & 90\% & 88\% & 85\% & 3 min 57 sec\\
+ \hline
+\end{tabular}
+}
+\label{table:ensemble-kaggle}
+\end{table*}

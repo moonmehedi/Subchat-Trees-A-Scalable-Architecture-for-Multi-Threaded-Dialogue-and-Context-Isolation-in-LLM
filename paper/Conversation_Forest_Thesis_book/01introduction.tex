@@ -1,0 +1,108 @@
+\chapter{INTRODUCTION}\label{sec1}
+\vspace{-3em}
+
+\section{Research Background}
+% Large language models now serve as the backbone of chat systems used for programming assistance, education, planning, research, and open-domain dialogue. Despite these gains, failures remain common in long, multi-topic conversations: earlier constraints are forgotten, separate tasks become mixed, and outdated turns keep influencing later responses. These pathologies persist because most chat interfaces still organize every exchange as a single chronological transcript, even when the underlying interaction contains multiple partially overlapping threads. As sessions grow, this flat structure increases context pollution and makes it harder for the model to recover the right information at the right time~\cite{liu2023lostinthemiddle,laban2024limt}.
+
+
+
+
+
+% HUMANIZE
+
+Large language models now serve as the backbone of chat systems used for programming assistance, education, planning, research and open-domain dialogue. Despite this advancement, failures remain common in long, multi-topic conversations. Earlier constraints are forgotten, separate task become mixed and outdated turns keep influencing later responses. This problem persists because most chat interface still organize every turn into a single chronological transcript, even when the underlying interaction contains multiple partially overlapping threads. As session grows, this chronological structure increase context pollution and makes it harder for the model to recover right information at the right time ~\cite{liu2023lostinthemiddle,laban2024limt}.
+
+
+
+
+
+
+
+
+% At the same time, several research directions suggest that explicit structure can improve language-model behaviour. Chain-of-Thought, Self-Consistency, Tree-of-Thought, and Graph-of-Thought show that structured intermediate reasoning improves problem solving on complex tasks~\cite{wei2022cot,wang2023selfconsistency,yao2023tot,besta2023got}. Conversation disentanglement studies show that mixed message streams naturally contain distinct threads, but recovering those threads after the fact is difficult and error-prone~\cite{elsner2008talking,jiang2018disentangle,kummerfeld2019disentanglement}. Hierarchical dialogue models, memory systems, retrieval augmentation, and role-based interaction frameworks likewise add structure at different levels of the stack~\cite{serban2016hred,packer2023memgpt,wu2024stateful,lewis2020rag,li2023camel}.
+
+
+Recent studies suggest that explicit structure can improve language-model performance. Studies including  Chain-of-Thought, Self-Consistency, Tree-of-
+Thought and Graph-of-Thought show that structured intermediate reasoning can improve LLM problem- solving ability on complex tasks. Conversation disentangle studies show that mixed message streams naturally contain distinct threads, but separating this thread after the fact is difficult and error-prone~\cite{elsner2008talking,jiang2018disentangle,kummerfeld2019disentanglement}. Other studies such as Hierarchical dialogue models, memory systems, retrieval augmentation and role-based interaction frameworks also introduce structure into how conversations are represented, stored, retrieved and managed ~\cite{serban2016hred,packer2023memgpt,wu2024stateful,lewis2020rag,li2023camel}.
+
+
+
+
+
+
+
+
+
+
+
+% More recent work treats multi-turn interaction as a distinct capability regime rather than a simple repetition of single-turn prompting. Long-context studies show that relevant evidence becomes harder to use when it is buried in the middle of an input sequence~\cite{liu2023lostinthemiddle}. Dialogue-focused benchmarks and memory studies report similar degradation across long-running interactions, including failures in factual consistency, event recall, and persona tracking~\cite{laban2024limt,maharana2024locomo,xu2022goldfish,xu2022longpersona}. Prompt compression can reduce token cost and improve information density, but it still operates over a fundamentally linear interaction record~\cite{jiang2024longllmlingua}.
+
+
+
+
+
+
+More recent work shows that multi-turn interaction is not simply repeated single term prompting. It is treated as a separate challenge that requires models to track users context, state and intent over time. This can be observed for multi-agents systems as well. Long-context studies show that relevent evidence becomes harder to use when it is buried in the middle of a input sequence~\cite{liu2023lostinthemiddle}. Dialogue-focused studies also observed similar degradation pattern over long-running interaction such as, failures in factual consistency, event recall and context tracking~\cite{laban2024limt,maharana2024locomo,xu2022goldfish,xu2022longpersona}. Context compression can reduce token cost and imporve information density, but again this can compress multiple distinct threads into a single one~\cite{jiang2024longllmlingua}.
+
+
+
+
+
+
+
+
+
+
+Consider a user who starts with Python debugging, shifts to python snakes for a biology question, opens a side discussion about Linux audio, and later returns to the original code. In a linear transcript, the latest query is interpreted against an interleaved history where keywords, pronouns, and instructions now refer to multiple competing contexts. The result can be semantic drift, role confusion, privacy leakage between topics and unnecessary token growth from carrying a broad history that no longer belongs to the current task.
+
+
+
+
+% The central issue, is not only how to store more context, but how to organize context so that unrelated conversational threads stop competing with one another. \textit{Subchat Trees} addresses this problem at the interaction layer. Rather than asking the model to untangle a mixed transcript internally, the interface preserves topic structure explicitly through branch creation, local buffers, rolling summaries, and branch-scoped retrieval. The goal is to keep active context focused while still allowing long-term information to remain accessible.
+
+
+
+The central issue, is not only how to store more context, but how to organize them so that unrelated conversational threads stop competing with one another. \textit{SubchatTrees} address this problem at the interaction layer. Rather than asking the model to untangle a mixed transcript, the interface preserves topic structure explicitly through branch creation, local buffer, rolling summaries and branch-scoped retrieval. The goal is to keep active context focused, while still allowing long-term information to remain accessible.
+
+\section{Problem Statement}
+Most LLM chat interfaces store all messages in one chronological conversation. When users move between topics, return to previous tasks or create nested follow-ups, unrelated messages remain in the same context. The model must then decide which earlier messages are relevant while also following the current instruction. This creates context pollution, topic confusion and unnecessary processing of unrelated conversation history. This thesis addresses this interface and context-management problem through explicit hierarchical conversation branching.
+
+These limitations become more visible as conversations grow in length and complexity. LLMs often struggle when reasoning and memory are not explicitly structured or managed. Long, unsegmented contexts are difficult for models to use reliably, even when the required information remains somewhere within the context window. Real-world conversations also contain multiple overlapping threads, and separating them after they have already been mixed is difficult and error-prone. Similar difficulties appear in multi-agent conversations, where the absence of clear roles and interaction protocols can lead to weak coordination and unclear conversational state. Together, these problems show the need for a conversation structure that can preserve topic boundaries, manage memory and support focused interaction throughout a long-running dialogue.
+
+\section{Overview of Subchat Trees}\label{subsec:approach}
+\textbf{SubchatTrees} organizes a session as a tree of related dialogue nodes rather than a single linear transcript. The design goal is to keep each active branch semantically focused while still allowing information to grow and persist through summarization and retrieval. The architecture centers on four design elements:
+
+
+
+
+\begin{itemize}
+    \item Each conversation node maintains isolated context through local circular buffers ($C$ messages) and vector-indexed long-term memory.
+    \item Users create focused ``subchats'' by selecting specific text fragments from parent conversations.
+    \item Follow-up prompts inject selected context as system messages, guiding the LLM's attention.
+    \item Parallel reasoning threads coexist without interference, and rolling summarization preserves semantic continuity beyond the buffer horizon.
+\end{itemize}
+
+\section{Thesis Objectives}\label{subsec:objectives}
+\begin{enumerate}
+    % \item To reduce context pollution in long, multi-topic conversations by separating unrelated threads into branch-local dialogue contexts.
+    \item To minimize context pollution in long, multi-topic conversations by separating unrelated threads thorugh chat interface.
+
+
+
+    \item To enable isolated and focused sub-conversations (subchats) where users can pursue side discussions without contaminating parent or sibling contexts.
+    \item To implement scalable memory management through a tree-structured conversation architecture that combines local buffers, rolling summaries and retrieval-based long-term memory.
+    
+    % \item To reduce latency while maintaining conversation quality by providing the model with more relevant, branch-specific context at inference time.
+    
+    \item To reduce latency and token cost while maintaining conversation quality.
+
+\end{enumerate}
+
+\section{Methodological Overview}
+The research was conducted by developing two conversation systems and evaluating them under the same conditions. The baseline stores every topic in one linear conversation node. Subchat Trees organizes the same conversation into parent and child nodes with isolated local buffers, rolling summaries and shared vector memory. A Variable-Block Randomized Interleaving benchmark was used to replay long multi-topic conversations across Qwen2.5 7B, 14B and 32B models with buffer sizes of 5, 10, 20 and 40. The systems were then compared using context-isolation, topic-recall, system-performance and recall-probe RAG metrics.
+
+\section{Scope of The Thesis}
+This thesis focuses on text-based long multi-topic conversation architectural and user interface design where users explicitly create and navigate subchats. It evaluates one model family across three model sizes and four fixed buffer sizes. The study focuses on context isolation, topic retention, retrieval behavior, token use and latency. Automatic branch creation, multimodal conversation and cross-model generalization are outside the current experimental scope.
+
+\section{Organization of The Thesis}
+The remainder of this thesis is organized as follows. Chapter 2 presents the theoretical background, related work and research gap. Chapter 3 describes the proposed architecture, memory design, retrieval pipeline, user interface and implementation. Chapter 4 presents the evaluation framework, metrics, experimental setup and results. Chapter 5 discusses engineering considerations, constraints, challenges and remedies. Finally, Chapter 6 presents the discussion, thesis outcomes, limitations, conclusion, future work and impact.

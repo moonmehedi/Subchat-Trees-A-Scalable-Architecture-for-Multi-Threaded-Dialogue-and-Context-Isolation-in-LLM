@@ -1,0 +1,115 @@
+\chapter{THEORETICAL BACKGROUND AND LITERATURE REVIEW}\label{sec2}
+\vspace{-3em}
+
+% Modern work on multi-turn LLM systems builds on a longer line of sequence modeling research. Early encoder-decoder models showed that end-to-end neural systems could map one sequence to another within a unified framework~\cite{sutskever2014seq2seq}. Attention mechanisms then reduced the bottleneck of fixed-length sequence representations~\cite{bahdanau2014attention}, and the Transformer made attention the dominant architecture for large-scale language modeling and generation~\cite{vaswani2017attention}. With scale, autoregressive models began to exhibit broad in-context task adaptation, most visibly in GPT-3's few-shot results~\cite{brown2020gpt3}. Instruction tuning and alignment work then pushed these systems closer to practical task-following assistants by improving zero-shot generalization and adherence to user intent~\cite{wei2022flan,ouyang2022instructgpt}. Against that background, current research on long-context and multi-topic dialogue focuses less on basic language generation and more on how context should be organized, retrieved, and controlled during interaction.
+
+
+
+
+
+Modern work on multi-turn LLM systems builds on a longer line of sequence modeling  and neural dialogue research. Early encoder-decoder models showed that neural network could learn to map an input sequence to an output sequence~\cite{sutskever2014seq2seq}. The transformer based attention mechanism  reduced the bottleneck of fixed-length sequence representations~\cite{bahdanau2014attention}, becoming the foundation of modern large-language models~\cite{vaswani2017attention}. Later, autoregressive models began to exhibit broad in-context task adaptation, like GPT-3's few-shot results ~\cite{brown2020gpt3}. Futher, Instruction tuning and alignment work made this model practical task-following assistants by improving zero-shot generalization and their ability to follow user intent~\cite{wei2022flan,ouyang2022instructgpt}. Against that background, current studies are more focused on how context should be organized, retrived and controlled during interaction.
+
+
+
+\section{Background: End-to-End Dialogue Modelling}\label{subsec:dialogue_background}
+
+Before the current wave of instruction-following LLM systems, dialogue modelling was often approached through end-to-end generative architectures trained on conversational corpora. Early studies like, Hierarchical recurrent encoder-decoder models (HRED) introduced a two-level structure in which token sequences formed utterances and utterances formed conversations~\cite{serban2016hred}. This work  established an early argument that dialogues can be benefitted from explicit hierarchical organization rather than flat sequence processing alone.
+
+Though the hierarchy remains internal to the model rather than exposed in the interaction design. But it proves that structure can improved model's performance.
+
+\section{Structured Reasoning and Branching Search}\label{subsec:reasoning}
+
+Chain-of-Thought prompting shows that exposing intermediate reasoning steps can significantly improve models performance on complex reasoning tasks that require multi step inference~\cite{wei2022cot}. Self-Consistency extends this idea by sampling multiple reasoning paths and aggregating them rather than trusting a single chain~\cite{wang2023selfconsistency}. Tree-of-Thought and Graph-of-Thought push the same idea further by representing reasoning as a branching or graph-structured search process rather than a single linear derivation~\cite{yao2023tot,besta2023got}.
+
+
+
+
+
+
+% Taken together, these methods support a broader conclusion: structured representations can improve robustness, interpretability, and search efficiency. Their scope, however, is usually limited to single tasks or single prompts. They do not specify how multi-topic conversational history should be segmented over time. Subchat Trees adopts the same high-level intuition about branching and decomposition, but applies it to persistent interaction structure rather than only to reasoning traces.
+
+
+
+Taken together these studies suggest a broader conclusion. Structured representation and proper context engineering can improve models robustness, interpretability and search efficiency. Though their scope is limited to single tasks or single prompts, but subchat trees adopts the same high-level intuition about branching and decomposition. Though it is  applied to persistent interaction structure rather than only to reasoning traces.
+
+
+
+
+
+
+
+
+\section{Context, Memory, and Retrieval}\label{subsec:memory_related}
+
+The limitations of long multi-turn conversational history are now well establish. Phenomenon such as ``Lost in the middle'' shows that language models exhibit strong position bias. Often struggle to utilize evidence placed in the middle of a conversation or prompt~\cite{liu2023lostinthemiddle}. LiMuT extends this concern from static prompts to multi-turn dialogue. The study proves factual consistency degrades as conversations grow and the model must preserve earlier details across many exchanges just to be relevant~\cite{laban2024limt}. These findings help explain why simply increasing context length does not reliably solve long-running dialogue problems.
+
+
+
+
+
+
+
+
+
+
+Long-term dialogue benchmarks reach similar conclusions from the generation side. work such as "Beyond Goldfish Memory" studies multi-session open-domain conversation and finds that models trained on short exchanges struggle when dialogue depends on information learned across sessions~\cite{xu2022goldfish}. "Long Time No See!" shows that long-term persona memory remains difficult to maintain without explicit memory management~\cite{xu2022longpersona}. LoCoMo provides a large benchmark for very long-term conversational memory and reports that even long-context and RAG-enabled systems remain far from human performance on dialogue-grounded recall and event tracking~\cite{maharana2024locomo}. Stateful memory-augmented transformers likewise target efficient retention of dialogue history without replaying the entire conversation at each turn~\cite{wu2024stateful}.
+
+
+
+
+
+
+
+
+% Memory and retrieval methods provide a complementary line of work. Retrieval-Augmented Generation (RAG) supplements parametric memory with document retrieval~\cite{lewis2020rag}. MemGPT frames long-context management as a hierarchical memory problem with movement between short-term context and archival storage~\cite{packer2023memgpt}. LongLLMLingua targets efficiency by compressing prompts while preserving important information~\cite{jiang2024longllmlingua}. These methods improve memory use, retrieval, or prompt efficiency, but they generally still operate over a single interaction thread. Subchat Trees is complementary to them because it addresses not only what information should be stored or retrieved, but also how the conversation itself should be partitioned.
+
+
+
+
+
+
+Memory and retrieval studies provide a relatable but different direction. Retrieval-Augmented Generation (RAG) improve language model performance by adding relevant external document to the prompt, instead of relying only on models internal parametric memory~\cite{lewis2020rag}. MemGPT treats long-context management as a hierarchical memory problem, where information can move between short term and long-term archival memory~\cite{packer2023memgpt}. LongLLMLingua improves efficiency by compressing context while preserving relevent information~\cite{jiang2024longllmlingua}. Though these approaches can improve retrieval, memory management and prompt efficiency. However, the assumption of conversation organized as a single interaction threaded persist. SubchatTrees on the other hand, not only focuses on how conversation should be stored or retrieved, but also how conversation itself should be divided into seperate branches.
+
+
+
+
+
+
+\section{Conversation Structure and Disentanglement}\label{subsec:disentangle}
+
+% Conversation disentanglement research studies how multiple threads become interleaved inside a shared message stream. Elsner and Charniak introduced an early corpus and algorithmic formulation for recovering detached conversations from mixed chat logs~\cite{elsner2008talking}. Jiang et al.~\cite{jiang2018disentangle} later showed that representation-learning approaches improve thread recovery by modeling message similarity within local windows. Kummerfeld et al.~\cite{kummerfeld2019disentanglement} substantially expanded the scale and quality of annotated data, helping establish disentanglement as a robust research area.
+
+
+Conversation disentanglement research studies how multiple threads become interleaved inside a single shared message stream. Elsner and Charniak introduced an early corpus and algorithm formulation for recovering detached conversations from mixed chat logs~\cite{elsner2008talking}.Jiang et al.~\cite{jiang2018disentangle} later showed that representation-learning approaches imporve thread recovery by modeling message similarly within local context windows.Kummerfeld et al.~\cite{kummerfeld2019disentanglement} substantially expanded the scale and quality of annotated data, Establishing disentanglement as a robust research area.
+
+
+
+
+
+% These studies are closely related to the problem addressed in this work, but they differ in where the intervention occurs. Conversation disentanglement is mainly reactive: the system attempts to infer structure after messages from different threads have already been mixed. However, prior work also shows that recovering clean thread boundaries after interleaving has occurred remains difficult and imperfect. This limitation supports the view that conversation structure should be preserved before topic mixing occurs, rather than recovered only afterward. In contrast, Subchat Trees treats branching as an explicit user action during interaction, allowing the system to maintain separate thread contexts from the beginning and reduce context contamination across topics.
+
+
+
+These works are closely related to the problem addressed in this study, but they differ in where the intervention occurs. Conversation disentanglement is mainly reactive, the system tries to recover structure after the message from different thread have already been mixed. However, prior work also shows that recovering clean thread after Interleaving has occurred remains difficult and imperfect. This limitation suggest that conversation structure should be preserved before topic mixing occurs. Thus, SubchatTrees treats branching as an explicit user action during interaction, allowing the system to maintain separate thread from the beginning so that they don't mix up in the first place. 
+
+
+
+\section{Multi-Turn Interaction and Role-Based Structure}\label{subsec:multi_turn}
+
+Recent work increasingly treats multi-turn interaction as a problem in its own right rather than a side effect of stronger single-turn prompting. LiMuT, LoCoMo, Beyond Goldfish Memory, and Long Time No See! all point to the same pattern: coherence, recall, and state tracking degrade over extended dialogue unless the system actively manages long-term dependencies~\cite{laban2024limt,maharana2024locomo,xu2022goldfish,xu2022longpersona}. The implication is that multi-turn reliability depends not only on raw model capability, but also on how conversational state is organized and revisited across turns.
+
+CAMEL adds a relatable perspective from multi-agent systems~\cite{li2023camel}. By assigning roles and communication protocols, it shows that explicit interaction structure can improve coordination and task performance. Subchat Trees applies a similar principle to a single-user setting: instead of multiple agents, separate branches provide explicit structure for topic-specific continuations, follow-ups and parallel exploration.
+
+
+
+\section{Research Gap}\label{subsec:gap}
+
+% The literature consistently shows that language models benefit from structure in reasoning, memory, and interaction, that long unsegmented contexts are difficult to use reliably, and that mixed conversational threads are hard to disentangle after contamination has already occurred. Yet current systems still largely rely on a flat chronological transcript as the default interface, and prior work stops short of proposing a user-facing hierarchical conversation architecture that allows sub-conversations to branch from any message, isolates context per branch, supports parallel exploration of alternatives, and scopes memory and retrieval to compact topic-specific units. To manage conversation flow more effectively and provide better context to the LLM, a user-centric interaction design is needed rather than relying only on larger context windows or post-hoc recovery. That missing interaction layer constitutes the core research gap addressed by Subchat Trees.
+
+
+
+The literature consistently shows that Language Models benefits from structured in reasoning, memory and interaction. Long unsegmented context are difficult to use reliably and mixed conversational threads are hard to disentangle after contamination has already occurred. Yet current systems are largely depended on a linear chronological transcript as the default interface. Also, There is no such work found proposing a user-facing hierarchical conversation architecture that allows conversations branching, context isolation and parallel exploration of topics over same context. To manage conversation flow more effectively and provide better context to the LLM, a user-centric interaction design is needed rather than relying only on larger context windows or post-hoc recovery. That missing interaction layer constitutes the core research gap addressed by this study.
+
+%%==================================%%
+%% SECTION 3: METHODOLOGY          %%
+%%==================================%%

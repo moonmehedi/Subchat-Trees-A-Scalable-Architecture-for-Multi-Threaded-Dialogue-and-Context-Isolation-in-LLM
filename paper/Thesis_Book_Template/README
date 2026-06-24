@@ -1,0 +1,14 @@
+# In Linux execute
+pdflatex mistugthesis.tex
+bibtex mistugthesis
+pdflatex mistugthesis.tex
+pdflatex mistugthesis.tex
+pdflatex mistugthesis.tex
+
+
+# In Windows
+build the .tex file
+build the .bib file
+build the .tex file
+build the .tex file
+build the .tex file

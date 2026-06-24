@@ -1,0 +1,98 @@
+\contentsline {section}{\normalsize {ACKNOWLEDGEMENTS}}{i}{DTLrowi.1.3}%
+\contentsline {section}{\normalsize {ABSTRACT}}{ii}{DTLrowi.1.3}%
+\contentsline {section}{\normalsize {\bengalifont সারসংক্ষেপ}}{iii}{DTLrowi.1.3}%
+\contentsline {section}{\normalsize {LIST OF NOTATIONS}}{v}{DTLrowi.1.3}%
+\contentsline {section}{LIST OF TABLES}{vi}{table.0.1}%
+\contentsline {section}{LIST OF FIGURES}{viii}{chapter*.1}%
+\contentsline {section}{TABLE OF CONTENTS}{x}{chapter*.2}%
+\contentsline {chapter}{\numberline {1}INTRODUCTION}{1}{chapter.1}%
+\contentsline {section}{\numberline {1.1}Research Background}{1}{section.1.1}%
+\contentsline {section}{\numberline {1.2}Problem Statement}{2}{section.1.2}%
+\contentsline {section}{\numberline {1.3}Overview of Subchat Trees}{2}{section.1.3}%
+\contentsline {section}{\numberline {1.4}Thesis Objectives}{3}{section.1.4}%
+\contentsline {section}{\numberline {1.5}Methodological Overview}{3}{section.1.5}%
+\contentsline {section}{\numberline {1.6}Scope of The Thesis}{3}{section.1.6}%
+\contentsline {section}{\numberline {1.7}Organization of The Thesis}{4}{section.1.7}%
+\contentsline {chapter}{\numberline {2}THEORETICAL BACKGROUND AND LITERATURE REVIEW}{5}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Background: End-to-End Dialogue Modelling}{5}{section.2.1}%
+\contentsline {section}{\numberline {2.2}Structured Reasoning and Branching Search}{5}{section.2.2}%
+\contentsline {section}{\numberline {2.3}Context, Memory, and Retrieval}{6}{section.2.3}%
+\contentsline {section}{\numberline {2.4}Conversation Structure and Disentanglement}{7}{section.2.4}%
+\contentsline {section}{\numberline {2.5}Multi-Turn Interaction and Role-Based Structure}{7}{section.2.5}%
+\contentsline {section}{\numberline {2.6}Research Gap}{7}{section.2.6}%
+\contentsline {chapter}{\numberline {3}METHODOLOGY}{9}{chapter.3}%
+\contentsline {section}{\numberline {3.1}System Architecture}{9}{section.3.1}%
+\contentsline {subsection}{\numberline {3.1.1}Hierarchical Conversation Tree Structure}{11}{subsection.3.1.1}%
+\contentsline {subsection}{\numberline {3.1.2}Memory Management Strategy}{13}{subsection.3.1.2}%
+\contentsline {subsection}{\numberline {3.1.3}Context Inheritance}{15}{subsection.3.1.3}%
+\contentsline {subsection}{\numberline {3.1.4}Follow-up Mechanism}{16}{subsection.3.1.4}%
+\contentsline {section}{\numberline {3.2}Vector Memory and RAG Pipeline}{16}{section.3.2}%
+\contentsline {subsection}{\numberline {3.2.1}Multi-Query Decomposition and Retrieval}{16}{subsection.3.2.1}%
+\contentsline {subsubsection}{\numberline {3.2.1.1}Sub-Query Generation.}{17}{subsubsection.3.2.1.1}%
+\contentsline {subsubsection}{\numberline {3.2.1.2}Embedding and Vector Search.}{17}{subsubsection.3.2.1.2}%
+\contentsline {subsubsection}{\numberline {3.2.1.3}Deduplication.}{17}{subsubsection.3.2.1.3}%
+\contentsline {subsection}{\numberline {3.2.2}Context Window Retrieval}{19}{subsection.3.2.2}%
+\contentsline {subsection}{\numberline {3.2.3}Context Assembly}{20}{subsection.3.2.3}%
+\contentsline {subsubsection}{\numberline {3.2.3.1}Standard Assembly (all nodes).}{22}{subsubsection.3.2.3.1}%
+\contentsline {subsubsection}{\numberline {3.2.3.2}Follow-up Assembly (subchat nodes).}{22}{subsubsection.3.2.3.2}%
+\contentsline {section}{\numberline {3.3}User Interface}{23}{section.3.3}%
+\contentsline {subsection}{\numberline {3.3.1}Design Rationale.}{23}{subsection.3.3.1}%
+\contentsline {subsection}{\numberline {3.3.2}The Problem with Linear Chat.}{23}{subsection.3.3.2}%
+\contentsline {subsection}{\numberline {3.3.3}Subchat Trees as a Solution.}{23}{subsection.3.3.3}%
+\contentsline {section}{\numberline {3.4}Baseline System}{25}{section.3.4}%
+\contentsline {section}{\numberline {3.5}System Development}{25}{section.3.5}%
+\contentsline {chapter}{\numberline {4}RESULT ANALYSIS}{26}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Dataset Design}{26}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Evaluation Matrices}{28}{section.4.2}%
+\contentsline {section}{\numberline {4.3}Topic-Scoring Pipeline}{31}{section.4.3}%
+\contentsline {section}{\numberline {4.4}How to Read the Result Tables}{32}{section.4.4}%
+\contentsline {section}{\numberline {4.5}7B Model: Context Structure Helps, but Instruction Following Remains Fragile}{33}{section.4.5}%
+\contentsline {section}{\numberline {4.6}14B Model: The Cleanest Practical Tradeoff}{35}{section.4.6}%
+\contentsline {section}{\numberline {4.7}32B Model: Strongest Absolute Performance and Better Long-Context Tolerance}{37}{section.4.7}%
+\contentsline {section}{\numberline {4.8}Cross-Model Visual Synthesis}{39}{section.4.8}%
+\contentsline {section}{\numberline {4.9}Result Summary}{41}{section.4.9}%
+\contentsline {chapter}{\numberline {5}ENGINEERING CONSIDERATIONS, CHALLENGES AND REMEDIES}{43}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Design Constraints}{43}{section.5.1}%
+\contentsline {subsection}{\numberline {5.1.1}Context and Model Constraints}{43}{subsection.5.1.1}%
+\contentsline {subsection}{\numberline {5.1.2}Memory and Retrieval Constraints}{43}{subsection.5.1.2}%
+\contentsline {subsection}{\numberline {5.1.3}User-Controlled Branching Constraints}{43}{subsection.5.1.3}%
+\contentsline {section}{\numberline {5.2}Ethical Considerations}{43}{section.5.2}%
+\contentsline {section}{\numberline {5.3}Sustainability in Environmental and Societal Context}{43}{section.5.3}%
+\contentsline {section}{\numberline {5.4}Complex Engineering Problem}{44}{section.5.4}%
+\contentsline {section}{\numberline {5.5}Engineering Activities}{44}{section.5.5}%
+\contentsline {section}{\numberline {5.6}Development Challenges and Remedies}{44}{section.5.6}%
+\contentsline {section}{\numberline {5.7}Deployment Considerations}{45}{section.5.7}%
+\contentsline {chapter}{\numberline {6}DISCUSSION AND CONCLUSION}{46}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Thesis Outcome}{46}{section.6.1}%
+\contentsline {section}{\numberline {6.2}Thesis Implication and Contribution}{46}{section.6.2}%
+\contentsline {section}{\numberline {6.3}What the Results Show}{46}{section.6.3}%
+\contentsline {section}{\numberline {6.4}Why Larger Buffers Are Not Always Better}{46}{section.6.4}%
+\contentsline {section}{\numberline {6.5}Token Efficiency Revisited}{46}{section.6.5}%
+\contentsline {section}{\numberline {6.6}RAG as a Backstop Rather Than a Default}{46}{section.6.6}%
+\contentsline {section}{\numberline {6.7}Limitations}{47}{section.6.7}%
+\contentsline {section}{\numberline {6.8}Deployment Considerations}{47}{section.6.8}%
+\contentsline {section}{\numberline {6.9}Conclusion}{47}{section.6.9}%
+\contentsline {section}{\numberline {6.10}Future Work}{47}{section.6.10}%
+\contentsline {section}{\numberline {6.11}Impact}{47}{section.6.11}%
+\contentsline {chapter}{\numberline {A}ENGINEERING CONSIDERATIONS, CHALLENGES AND REMEDIES}{48}{appendix.A}%
+\contentsline {section}{\numberline {A.1}System Requirements and Specifications}{48}{section.A.1}%
+\contentsline {subsection}{\numberline {A.1.1}Relevant Specifications and Engineering Conventions}{49}{subsection.A.1.1}%
+\contentsline {section}{\numberline {A.2}Design Constraints}{49}{section.A.2}%
+\contentsline {subsection}{\numberline {A.2.1}Ethical Considerations}{49}{subsection.A.2.1}%
+\contentsline {subsection}{\numberline {A.2.2}Environmental Considerations}{49}{subsection.A.2.2}%
+\contentsline {subsection}{\numberline {A.2.3}Social Constraints}{49}{subsection.A.2.3}%
+\contentsline {subsection}{\numberline {A.2.4}Sustainability in Environmental and Societal Context}{49}{subsection.A.2.4}%
+\contentsline {section}{\numberline {A.3}Project Management}{49}{section.A.3}%
+\contentsline {subsection}{\numberline {A.3.1}Timeline and Work Breakdown}{49}{subsection.A.3.1}%
+\contentsline {subsection}{\numberline {A.3.2}Resource and Budget Management}{50}{subsection.A.3.2}%
+\contentsline {subsection}{\numberline {A.3.3}Risk Management}{50}{subsection.A.3.3}%
+\contentsline {subsection}{\numberline {A.3.4}Team Roles and Collaboration}{51}{subsection.A.3.4}%
+\contentsline {section}{\numberline {A.4}Addressed Knowledge Profile Attributes}{51}{section.A.4}%
+\contentsline {section}{\numberline {A.5}Addressed Complex Engineering Problems}{51}{section.A.5}%
+\contentsline {section}{\numberline {A.6}Addressed Complex Engineering Activities}{52}{section.A.6}%
+\contentsline {chapter}{\numberline {B}THESIS SELF-ASSESSMENT REPORT}{53}{appendix.B}%
+\contentsline {section}{\numberline {B.1}Research Information}{53}{section.B.1}%
+\contentsline {section}{\numberline {B.2}Synopsis of the Research}{53}{section.B.2}%
+\contentsline {section}{\numberline {B.3}Mapping of Attained Course Outcomes}{53}{section.B.3}%
+\contentsline {section}{\numberline {B.4}Assessment Questions and Answers}{55}{section.B.4}%
+\contentsline {section}{\numberline {B.5}Signature Panel}{56}{section.B.5}%

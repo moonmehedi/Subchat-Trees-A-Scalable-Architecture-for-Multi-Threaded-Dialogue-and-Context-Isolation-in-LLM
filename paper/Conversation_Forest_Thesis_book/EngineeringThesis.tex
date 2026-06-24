@@ -1,0 +1,70 @@
+\chapter{ENGINEERING CONSIDERATIONS, CHALLENGES AND REMEDIES}\label{ch:engineering}
+\vspace{-3em}
+
+This chapter summarizes the principal engineering constraints, responsibilities and remedies associated with Subchat Trees.
+
+\section{Design Constraints}
+
+\subsection{Context and Model Constraints}
+Fixed context limits require balancing buffer size, summaries and retrieved context. Larger buffers preserve more recent messages but can increase prompt length and pollution; suitable settings therefore depend on model capability.
+
+\subsection{Memory and Retrieval Constraints}
+Each node maintains a local buffer and rolling summary, while shared vector memory supports long-term recall. Deduplication, re-ranking and turn-based expansion reduce repeated or fragmented retrieval.
+
+\subsection{User-Controlled Branching Constraints}
+Users must create and select appropriate branches. The interface retains conventional chat interaction while exposing optional tree navigation and branch creation.
+
+\section{Ethical Considerations}
+The benchmark uses anonymized LMSYS-Chat-1M conversations. Deployments must disclose inherited parent context, support sensitive-data removal and avoid presenting the system as professional advice in high-stakes domains.
+
+\section{Sustainability in Environmental and Societal Context}
+Subchat Trees reduces tokens per correct answer, but embeddings, retrieval and summarization add computation. Retrieval should remain conditional, while explicit branches can improve navigation and separation of sensitive or unrelated topics.
+
+\section{Complex Engineering Problem}
+The project required the integration of multiple interdependent components and the analysis of model behavior under long, interleaved conversation. Table~\ref{table_OBE1} summarizes the complex engineering attributes addressed by this thesis.
+
+\begin{table}[H]
+\centering
+\caption{Complex Engineering Problem (CEP)}
+\begin{tabular}{p{.27\linewidth} p{.67\linewidth}}
+\hline
+Name of Complex Engineering Attribute & Justification \\ \hline
+\textbf{P1: Depth of knowledge required} & Requires LLM inference, context engineering, hierarchical structures, RAG, vector databases and evaluation. \\
+\textbf{P3: Depth of analysis required} & Compares three model sizes and four buffers across 59 topic labels and 43 recall probes. \\
+\textbf{P4: Familiarity of issues} & Applies known long-context, topic-mixing and retrieval problems to nested user-controlled branches. \\
+\textbf{P7: Interdependence} & Routing, inheritance, buffers, summaries, vector memory, retrieval and inference directly affect one another. \\
+\hline
+\end{tabular}
+\label{table_OBE1}
+\end{table}
+
+\section{Engineering Activities}
+Table~\ref{table_OBE2} summarizes the major engineering activities completed during the thesis.
+
+\begin{table}[H]
+\centering
+\caption{Complex Engineering Activities (CEA)}
+\begin{tabular}{p{.27\linewidth} p{.67\linewidth}}
+\hline
+Name of Complex Engineering Activity & Justification \\ \hline
+\textbf{A1: Range of Resources} & Uses web frameworks, vector memory, inference backends, Kaggle GPUs, GitHub and Qwen2.5 models. \\
+\textbf{A3: Innovation} & Organizes conversation as nested subchats with inherited parent context and isolated child updates. \\
+\textbf{A4: Consequences for Society and Environment} & Improves reliability and privacy while requiring responsible management of token, retrieval and storage costs. \\
+\hline
+\end{tabular}
+\label{table_OBE2}
+\end{table}
+
+\section{Development Challenges and Remedies}
+\textbf{Long Prompt and vLLM Limits.} Multiple buffers were tested and model errors recorded because larger prompts can exceed practical limits.
+
+\textbf{Context Pollution.} Explicit routing, local buffers and summaries separate unrelated topics.
+
+\textbf{Long-Term Recall.} Rolling summaries and vector memory preserve evicted details.
+
+\textbf{Retrieval Calibration.} Probe RAG decisions expose model-dependent retrieval errors.
+
+\textbf{Reproducibility.} Deterministic VBRI replay, fixed settings and recorded configurations support repeatable evaluation.
+
+\section{Deployment Considerations}\label{subsec:deployment_thesis}
+Deployment requires vector-index sharding, branch archival, caching and inheritance safeguards. The model-agnostic architecture supports local, cloud and hybrid inference.

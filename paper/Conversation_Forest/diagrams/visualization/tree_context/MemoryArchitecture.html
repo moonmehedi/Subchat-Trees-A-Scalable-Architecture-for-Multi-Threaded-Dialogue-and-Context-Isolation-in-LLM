@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory Architecture</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes flowDown {
+            0% { stroke-dashoffset: 20; }
+            100% { stroke-dashoffset: 0; }
+        }
+        @keyframes flowUp {
+            0% { stroke-dashoffset: -20; }
+            100% { stroke-dashoffset: 0; }
+        }
+        .flow-arrow {
+            stroke-dasharray: 8, 4;
+        }
+        .flow-down { animation: flowDown 1.5s linear infinite; }
+        .flow-up { animation: flowUp 1.5s linear infinite; }
+        
+        body { overflow: hidden; }
+    </style>
+</head>
+<body>
+    <div class="w-screen h-screen bg-gradient-to-br from-slate-50 via-indigo-50 to-purple-50 p-6 overflow-hidden">
+        <div class="h-full flex flex-col">
+            
+            <!-- Header -->
+            <div class="text-center mb-4">
+                <h1 class="text-3xl font-bold text-gray-800 mb-1">Memory Architecture & Hierarchy</h1>
+                <p class="text-sm text-gray-600">How Context Flows Through the System</p>
+            </div>
+
+            <!-- Main Container -->
+            <div class="flex-1 flex items-center justify-center">
+                <div class="relative w-full max-w-5xl">
+
+                    <!-- Conversation Node Container -->
+                    <div class="bg-white rounded-3xl shadow-2xl border-4 border-indigo-300 p-8">
+                        
+                        <!-- Title -->
+                        <div class="text-center mb-6">
+                            <div class="bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-xl px-6 py-3 inline-block shadow-lg">
+                                <h2 class="text-xl font-bold">🌳 Conversation Node Memory</h2>
+                            </div>
+                        </div>
+
+                        <!-- Two Column Layout -->
+                        <div class="grid grid-cols-2 gap-8 mb-6">
+                            
+                            <!-- Left: Local Buffer -->
+                            <div class="relative">
+                                <div class="bg-gradient-to-br from-cyan-500 to-cyan-600 text-white rounded-2xl shadow-xl border-3 border-cyan-700 p-6">
+                                    <div class="flex items-center mb-3">
+                                        <div class="bg-white text-cyan-600 rounded-full w-10 h-10 flex items-center justify-center font-bold text-lg mr-3">📋</div>
+                                        <div class="text-lg font-bold">Local Buffer</div>
+                                    </div>
+                                    <div class="bg-cyan-700/50 rounded-xl p-4 text-sm space-y-2">
+                                        <div class="font-semibold text-cyan-100">Recent Messages (n=50):</div>
+                                        <div class="bg-cyan-800 rounded-lg p-3 space-y-1 text-xs">
+                                            <div class="text-cyan-200">msg₄₈ (oldest in buffer)</div>
+                                            <div class="text-cyan-200">msg₄₉</div>
+                                            <div class="text-cyan-200">msg₅₀ (newest)</div>
+                                        </div>
+                                        <div class="text-xs text-cyan-100 italic mt-2">
+                                            • Fixed size (deque)
+                                            <br/>• When full → evict oldest
+                                            <br/>• Fast access for LLM
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Arrow Down from Buffer -->
+                                <div class="absolute -bottom-16 left-1/2 transform -translate-x-1/2">
+                                    <div class="text-center">
+                                        <svg width="60" height="60" viewBox="0 0 60 60">
+                                            <path d="M30 5 L30 50" stroke="#06b6d4" stroke-width="4" class="flow-arrow flow-down"/>
+                                            <path d="M30 55 L25 45 M30 55 L35 45" stroke="#06b6d4" stroke-width="4" stroke-linecap="round"/>
+                                        </svg>
+                                        <div class="text-xs font-bold text-cyan-600 -mt-2">Archive</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Right: Rolling Summary -->
+                            <div class="relative">
+                                <div class="bg-gradient-to-br from-purple-500 to-purple-600 text-white rounded-2xl shadow-xl border-3 border-purple-700 p-6">
+                                    <div class="flex items-center mb-3">
+                                        <div class="bg-white text-purple-600 rounded-full w-10 h-10 flex items-center justify-center font-bold text-lg mr-3">📝</div>
+                                        <div class="text-lg font-bold">Context Summary</div>
+                                    </div>
+                                    <div class="bg-purple-700/50 rounded-xl p-4 text-sm space-y-2">
+                                        <div class="font-semibold text-purple-100">Compressed Context:</div>
+                                        <div class="bg-purple-800 rounded-lg p-3 text-xs text-purple-200 italic">
+                                            "User is learning Python programming. Discussed OOP concepts, decorators, async/await, and error handling..."
+                                        </div>
+                                        <div class="text-xs text-purple-100 italic mt-2">
+                                            • Summary of old messages
+                                            <br/>• Used in LLM context
+                                            <br/>• Future work: Recursive
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Note: Not connected to archive -->
+                                <div class="absolute -bottom-16 left-1/2 transform -translate-x-1/2 text-xs text-purple-600 font-semibold text-center w-full">
+                                    (Summarizes archived content)
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Vector Index (Bottom) -->
+                        <div class="relative">
+                            <div class="bg-gradient-to-br from-emerald-500 to-emerald-600 text-white rounded-2xl shadow-xl border-4 border-emerald-700 p-6 mt-12">
+                                <div class="flex items-center mb-3">
+                                    <div class="bg-white text-emerald-600 rounded-full w-10 h-10 flex items-center justify-center font-bold text-lg mr-3">🗄️</div>
+                                    <div class="text-lg font-bold">Vector Index (ChromaDB)</div>
+                                    <div class="ml-auto text-xs bg-emerald-700 px-3 py-1 rounded-full">Long-term Memory</div>
+                                </div>
+                                <div class="grid grid-cols-3 gap-4">
+                                    <div class="bg-emerald-700/50 rounded-xl p-4">
+                                        <div class="font-semibold text-emerald-100 text-sm mb-2">📦 Archived Messages:</div>
+                                        <div class="bg-emerald-800 rounded-lg p-2 space-y-1 text-xs text-emerald-200">
+                                            <div>msg₁: "What is Python?"</div>
+                                            <div>msg₂: "Python is..."</div>
+                                            <div>msg₃: "Tell about Java"</div>
+                                            <div>...</div>
+                                            <div>msg₄₇: "Earlier message"</div>
+                                        </div>
+                                    </div>
+                                    <div class="bg-emerald-700/50 rounded-xl p-4">
+                                        <div class="font-semibold text-emerald-100 text-sm mb-2">🔍 Semantic Search:</div>
+                                        <div class="text-xs text-emerald-50 space-y-1">
+                                            <div>• Embeddings stored</div>
+                                            <div>• Cosine similarity</div>
+                                            <div>• Multi-query retrieval</div>
+                                            <div>• Context window ±60s</div>
+                                        </div>
+                                    </div>
+                                    <div class="bg-emerald-700/50 rounded-xl p-4">
+                                        <div class="font-semibold text-emerald-100 text-sm mb-2">🎯 Retrieval Logic:</div>
+                                        <div class="text-xs text-emerald-50 space-y-1">
+                                            <div>• Filter by node_id</div>
+                                            <div>• Exclude buffer msgs</div>
+                                            <div>• Rank by relevance</div>
+                                            <div>• Return top-k results</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Arrow Up for Retrieval -->
+                            <div class="absolute -top-16 right-1/4 transform translate-x-1/2">
+                                <div class="text-center">
+                                    <div class="text-xs font-bold text-emerald-600 mb-1">Retrieve</div>
+                                    <svg width="60" height="60" viewBox="0 0 60 60">
+                                        <path d="M30 55 L30 10" stroke="#10b981" stroke-width="4" class="flow-arrow flow-up"/>
+                                        <path d="M30 5 L25 15 M30 5 L35 15" stroke="#10b981" stroke-width="4" stroke-linecap="round"/>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- LLM Context Assembly (Right side) -->
+                    <div class="absolute -right-72 top-1/2 transform -translate-y-1/2 w-64">
+                        <div class="bg-gradient-to-br from-orange-500 to-orange-600 text-white rounded-2xl shadow-2xl border-4 border-orange-700 p-5">
+                            <div class="flex items-center mb-3">
+                                <div class="bg-white text-orange-600 rounded-full w-10 h-10 flex items-center justify-center font-bold text-lg mr-3">🤖</div>
+                                <div class="text-base font-bold">LLM Context</div>
+                            </div>
+                            <div class="bg-orange-700/50 rounded-xl p-4 space-y-2 text-xs">
+                                <div class="bg-orange-800 rounded px-2 py-1 text-orange-100">1. Parent context (if subchat)</div>
+                                <div class="bg-purple-700 rounded px-2 py-1 text-purple-100">2. Summary (compressed)</div>
+                                <div class="bg-cyan-700 rounded px-2 py-1 text-cyan-100">3. Buffer messages</div>
+                                <div class="bg-emerald-700 rounded px-2 py-1 text-emerald-100">4. Retrieved context</div>
+                                <div class="bg-orange-800 rounded px-2 py-1 text-orange-100">5. Current query</div>
+                            </div>
+                            <div class="text-xs text-orange-100 mt-3 italic text-center">
+                                → Groq/Ollama → Response
+                            </div>
+                        </div>
+
+                        <!-- Arrow from Vector Index to LLM -->
+                        <div class="absolute -left-24 top-1/2 transform -translate-y-1/2">
+                            <svg width="100" height="40" viewBox="0 0 100 40">
+                                <path d="M5 20 L90 20" stroke="#10b981" stroke-width="3" class="flow-arrow flow-down"/>
+                                <path d="M95 20 L85 15 M95 20 L85 25" stroke="#10b981" stroke-width="3" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="text-center text-xs text-gray-600 mt-4">
+                <p class="font-semibold">Memory flows: Buffer → Archive → Vector Index → Retrieval → LLM Context</p>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>

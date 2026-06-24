@@ -1,0 +1,73 @@
+\chapter{DISCUSSION AND CONCLUSION}\label{sec5}
+\vspace{-3em}
+
+\section{Thesis Outcome}
+This thesis delivers a working hierarchical conversation architecture. Across every tested model and buffer, Subchat Trees improves context-isolation F1, recall retention and tokens per correct answer.
+
+\section{Thesis Implication and Contribution}
+The contribution is a user-controlled Subchat Trees architecture with three-tier memory, branch-aware retrieval, the VBRI benchmark and cross-model evaluation. It improves performance without model fine-tuning.
+
+\section{What the Results Show}\label{subsec:discussion_results}
+
+Explicit branch routing lowers topic pollution and improves F1 and recall similarity. The 7B model remains limited by instruction following, 14B provides the best practical balance, and 32B achieves the strongest absolute performance at $C=20$.
+
+\section{Why Larger Buffers Are Not Always Better}\label{subsec:larger_buffers}
+
+At $C=40$, delayed summarization and excess raw turns degrade 7B and 14B performance; even 32B performs best at $C=20$. Longer context increases capacity but does not identify the active conversational branch.
+
+\section{Token Efficiency Revisited}\label{subsec:token_efficiency_revisited}
+
+Subchat Trees can use slightly more raw tokens because relevant context produces fuller answers, while a confused baseline often responds briefly. Tokens per correct answer is therefore the more meaningful measure, and the system is consistently better under it.
+
+\section{RAG as a Backstop Rather Than a Default}\label{subsec:rag_backstop_discussion}
+
+Recall probes show that retrieval works best as a backstop when branch-local context is insufficient. The 7B model is less reliable at judging sufficiency, showing that retrieval control is model-sensitive.
+
+\section{Limitations}\label{subsec:limitations}
+
+\textbf{Strict Prefix Scoring.} Exact-label scoring can understate semantic quality.
+
+\textbf{Model Family.} Results are limited to Qwen2.5 AWQ models.
+
+\textbf{Buffer Search.} Only $C \in \{5,10,20,40\}$ is evaluated; adaptive sizing may perform better.
+
+\textbf{RAG Decision Reliability.} Weaker models can misjudge context sufficiency.
+
+\textbf{User-Specified Branching.} Real users may organize branches differently from the benchmark.
+
+\section{Deployment Considerations}\label{subsec:deployment}
+
+Deployment requires scalable vector indexing, archival, caching and inheritance safeguards. The architecture supports local, cloud and hybrid inference.
+
+\section{Conclusion}\label{sec6}
+Subchat Trees improves context-isolation F1 in every tested configuration. At 32B and $C=20$, F1 rises from 69.6\% to 85.2\% and pollution falls from 32.7\% to 16.5\%; 14B provides a strong practical tradeoff with 83.4\% F1 at $C=10$. Recall and efficiency results further show that long conversations benefit from user-controlled structure, not only longer context windows.
+
+% \subsection{Future Directions}\label{subsec:future}
+
+% \textbf{Adaptive Memory Management.} Learn optimal buffer sizes and eviction policies per topic through reinforcement learning.
+
+% \textbf{Automatic Subchat Suggestion.} Use topic-shift classifiers to detect context drift and suggest subchat creation proactively.
+
+% \textbf{Cross-Node Synthesis.} Controlled mechanisms to merge insights from multiple branches while preserving per-branch isolation guarantees.
+
+% \textbf{Multi-Modal Extension.} Apply hierarchical structuring to conversations involving images, code, and documents.
+
+% \textbf{Human Studies.} Conduct user studies comparing Subchat Trees to linear chat on real-world tasks (research, coding, creative writing) to measure cognitive load and task completion.
+
+% \textbf{Alternative Backends.} Evaluate with GPT-4, Claude, and additional open-source models to assess generalizability across LLM families.
+
+% \textbf{Graph Extensions.} Allow directed acyclic graph (DAG) structures where nodes have multiple parents for complex information synthesis.
+
+\section{Future Work}
+Future work includes adaptive buffers, automatic branch suggestions, controlled cross-node synthesis, multimodal interaction, additional models, human studies and multi-parent graph structures.
+
+\section{Impact}\label{subsec:impact}
+Subchat Trees addresses critical challenges in conversational AI:
+\begin{itemize}
+    \item \textbf{Privacy:} Isolated contexts prevent sensitive information leakage across topics.
+    \item \textbf{Accuracy:} Reduced pollution improves reliability in high-stakes domains (medicine, law, finance).
+    \item \textbf{Cost:} Token efficiency reduces barriers for resource-constrained users and organizations.
+    \item \textbf{Accessibility:} Explicit conversation structure aids users in navigating complex, multi-topic discussions.
+\end{itemize}
+
+The implementation, scenarios and evaluation framework support further research in structured conversational AI.

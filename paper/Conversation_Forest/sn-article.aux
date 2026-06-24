@@ -1,0 +1,600 @@
+\relax 
+\bibstyle{sn-mathphys-num}
+\providecommand\hyper@newdestlabel[2]{}
+\providecommand\HyField@AuxAddToFields[1]{}
+\providecommand\HyField@AuxAddToCoFields[2]{}
+\providecommand \oddpage@label [2]{}
+\Newlabel{1}{1}
+\citation{liu2023lostinthemiddle,laban2024limt}
+\citation{wei2022cot,wang2023selfconsistency,yao2023tot,besta2023got}
+\citation{elsner2008talking,jiang2018disentangle,kummerfeld2019disentanglement}
+\citation{serban2016hred,packer2023memgpt,wu2024stateful,lewis2020rag,li2023camel}
+\citation{liu2023lostinthemiddle}
+\citation{laban2024limt,maharana2024locomo,xu2022goldfish,xu2022longpersona}
+\citation{jiang2024longllmlingua}
+\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{2}{section.1}\protected@file@percent }
+\newlabel{sec1}{{1}{2}{Introduction}{section.1}{}}
+\citation{zheng2024lmsyschat}
+\citation{sutskever2014seq2seq}
+\citation{bahdanau2014attention}
+\citation{vaswani2017attention}
+\citation{brown2020gpt3}
+\citation{wei2022flan,ouyang2022instructgpt}
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.1}Overview of Subchat Trees}{3}{subsection.1.1}\protected@file@percent }
+\newlabel{subsec:approach}{{1.1}{3}{Overview of Subchat Trees}{subsection.1.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.2}Objectives}{3}{subsection.1.2}\protected@file@percent }
+\newlabel{subsec:objectives}{{1.2}{3}{Objectives}{subsection.1.2}{}}
+\citation{serban2016hred}
+\citation{wei2022cot}
+\citation{wang2023selfconsistency}
+\citation{yao2023tot,besta2023got}
+\citation{liu2023lostinthemiddle}
+\citation{laban2024limt}
+\@writefile{toc}{\contentsline {section}{\numberline {2}Related Work}{4}{section.2}\protected@file@percent }
+\newlabel{sec2}{{2}{4}{Related Work}{section.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Background: End-to-End Dialogue Modelling}{4}{subsection.2.1}\protected@file@percent }
+\newlabel{subsec:dialogue_background}{{2.1}{4}{Background: End-to-End Dialogue Modelling}{subsection.2.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Structured Reasoning and Branching Search}{4}{subsection.2.2}\protected@file@percent }
+\newlabel{subsec:reasoning}{{2.2}{4}{Structured Reasoning and Branching Search}{subsection.2.2}{}}
+\citation{xu2022goldfish}
+\citation{xu2022longpersona}
+\citation{maharana2024locomo}
+\citation{wu2024stateful}
+\citation{lewis2020rag}
+\citation{packer2023memgpt}
+\citation{jiang2024longllmlingua}
+\citation{elsner2008talking}
+\citation{jiang2018disentangle}
+\citation{kummerfeld2019disentanglement}
+\citation{laban2024limt,maharana2024locomo,xu2022goldfish,xu2022longpersona}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Context, Memory, and Retrieval}{5}{subsection.2.3}\protected@file@percent }
+\newlabel{subsec:memory_related}{{2.3}{5}{Context, Memory, and Retrieval}{subsection.2.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.4}Conversation Structure and Disentanglement}{5}{subsection.2.4}\protected@file@percent }
+\newlabel{subsec:disentangle}{{2.4}{5}{Conversation Structure and Disentanglement}{subsection.2.4}{}}
+\citation{li2023camel}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.5}Multi-Turn Interaction and Role-Based Structure}{6}{subsection.2.5}\protected@file@percent }
+\newlabel{subsec:multi_turn}{{2.5}{6}{Multi-Turn Interaction and Role-Based Structure}{subsection.2.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.6}Research Gap}{6}{subsection.2.6}\protected@file@percent }
+\newlabel{subsec:gap}{{2.6}{6}{Research Gap}{subsection.2.6}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Methodology}{6}{section.3}\protected@file@percent }
+\newlabel{sec3}{{3}{6}{Methodology}{section.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}System Architecture}{6}{subsection.3.1}\protected@file@percent }
+\newlabel{subsec:arch}{{3.1}{6}{System Architecture}{subsection.3.1}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Overview of the Subchat Trees methodology showing four components: (a) hierarchical tree structure for conversation organization, (b) local buffer with fixed-size memory management, (c) global vector store for long-term archival, and (d) multi-query RAG pipeline for context retrieval.}}{7}{figure.1}\protected@file@percent }
+\newlabel{fig:methodology}{{1}{7}{Overview of the Subchat Trees methodology showing four components: (a) hierarchical tree structure for conversation organization, (b) local buffer with fixed-size memory management, (c) global vector store for long-term archival, and (d) multi-query RAG pipeline for context retrieval}{figure.1}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.1.1}Hierarchical Conversation Tree Structure}{7}{subsubsection.3.1.1}\protected@file@percent }
+\newlabel{subsubsec:tree}{{3.1.1}{7}{Hierarchical Conversation Tree Structure}{subsubsection.3.1.1}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Tree view of a Subchat Forest showing multiple conversation branches. Each node represents a subchat with isolated context; child nodes inherit parent context at creation time.}}{8}{figure.2}\protected@file@percent }
+\newlabel{fig:forest}{{2}{8}{Tree view of a Subchat Forest showing multiple conversation branches. Each node represents a subchat with isolated context; child nodes inherit parent context at creation time}{figure.2}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.1.2}Memory Management Strategy}{8}{subsubsection.3.1.2}\protected@file@percent }
+\newlabel{subsubsec:memory}{{3.1.2}{8}{Memory Management Strategy}{subsubsection.3.1.2}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Three-tier memory design showing the relationship between the LocalBuffer (circular deque), rolling summarization, and vector store archival. Messages are indexed immediately to the vector store and summarized periodically to preserve semantic continuity.}}{9}{figure.3}\protected@file@percent }
+\newlabel{fig:memory}{{3}{9}{Three-tier memory design showing the relationship between the LocalBuffer (circular deque), rolling summarization, and vector store archival. Messages are indexed immediately to the vector store and summarized periodically to preserve semantic continuity}{figure.3}{}}
+\newlabel{eq:buffer}{{1}{9}{Memory Management Strategy}{equation.3.1}{}}
+\newlabel{eq:summary}{{2}{9}{Memory Management Strategy}{equation.3.2}{}}
+\newlabel{eq:vectorstore}{{3}{9}{Memory Management Strategy}{equation.3.3}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.1.3}Context Inheritance}{10}{subsubsection.3.1.3}\protected@file@percent }
+\newlabel{subsubsec:inheritance}{{3.1.3}{10}{Context Inheritance}{subsubsection.3.1.3}{}}
+\newlabel{eq:inheritance}{{4}{10}{Context Inheritance}{equation.3.4}{}}
+\newlabel{eq:followup}{{5}{10}{Context Inheritance}{equation.3.5}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.1.4}Follow-up Mechanism}{10}{subsubsection.3.1.4}\protected@file@percent }
+\newlabel{subsubsec:followup_alg}{{3.1.4}{10}{Follow-up Mechanism}{subsubsection.3.1.4}{}}
+\@writefile{loa}{\contentsline {algorithm}{\numberline {1}{\ignorespaces Follow-up Subchat Creation}}{10}{algorithm.1}\protected@file@percent }
+\newlabel{alg:subchat}{{1}{10}{Follow-up Mechanism}{algorithm.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Vector Memory and RAG Pipeline}{10}{subsection.3.2}\protected@file@percent }
+\newlabel{subsec:rag}{{3.2}{10}{Vector Memory and RAG Pipeline}{subsection.3.2}{}}
+\citation{reimers2019sentencebert}
+\citation{chromadb}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.1}Multi-Query Decomposition and Retrieval}{11}{subsubsection.3.2.1}\protected@file@percent }
+\newlabel{subsubsec:decomposition}{{3.2.1}{11}{Multi-Query Decomposition and Retrieval}{subsubsection.3.2.1}{}}
+\@writefile{toc}{\contentsline {paragraph}{Sub-Query Generation.}{11}{section*.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Embedding and Vector Search.}{11}{section*.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Deduplication.}{11}{section*.4}\protected@file@percent }
+\newlabel{eq:candidate_pool}{{6}{11}{Deduplication}{equation.3.6}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces End-to-end retrieval pipeline. \textbf  {Phase~1}: LLM-based sub-query generation decomposes the user query into up to $n \leq 8$ sub-queries. \textbf  {Phase~2}: each sub-query is embedded via \texttt  {all-mpnet-base-v2} ($d{=}768$) and dispatched to ChromaDB for cosine search ($N{=}20$ candidates each), then deduplicated to $u{=}5$ unique results per sub-query. \textbf  {Phase~3}: all anchor candidates are re-ranked by cosine similarity to the original query~$q_0$; top-$k$ are selected. \textbf  {Phase~4}: each winning anchor expands $\pm \delta $ turns ($\delta {=}2$) into a coherent conversational block (Eq.~\ref {eq:window}). The resulting~$k$ blocks are injected into the LLM prompt.}}{12}{figure.4}\protected@file@percent }
+\newlabel{fig:retrieval_pipeline}{{4}{12}{End-to-end retrieval pipeline. \textbf {Phase~1}: LLM-based sub-query generation decomposes the user query into up to $n \leq 8$ sub-queries. \textbf {Phase~2}: each sub-query is embedded via \texttt {all-mpnet-base-v2} ($d{=}768$) and dispatched to ChromaDB for cosine search ($N{=}20$ candidates each), then deduplicated to $u{=}5$ unique results per sub-query. \textbf {Phase~3}: all anchor candidates are re-ranked by cosine similarity to the original query~$q_0$; top-$k$ are selected. \textbf {Phase~4}: each winning anchor expands $\pm \delta $ turns ($\delta {=}2$) into a coherent conversational block (Eq.~\ref {eq:window}). The resulting~$k$ blocks are injected into the LLM prompt}{figure.4}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.2}Context Window Retrieval}{13}{subsubsection.3.2.2}\protected@file@percent }
+\newlabel{subsubsec:window}{{3.2.2}{13}{Context Window Retrieval}{subsubsection.3.2.2}{}}
+\newlabel{eq:window}{{7}{13}{Context Window Retrieval}{equation.3.7}{}}
+\newlabel{eq:window_filtered}{{8}{13}{Context Window Retrieval}{equation.3.8}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.3}Context Assembly}{13}{subsubsection.3.2.3}\protected@file@percent }
+\newlabel{subsubsec:assembly}{{3.2.3}{13}{Context Assembly}{subsubsection.3.2.3}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Context assembly pipeline. The user query is buffered (\textcircled {1}--\textcircled {2}) and passed through the RAG retrieval pipeline (\textcircled {3}; detailed in Figure~\ref {fig:retrieval_pipeline}), which returns coherent context blocks~$R$. At step~\textcircled {4} the pipeline branches: root-level nodes follow the \emph  {standard} path (solid arrows, Eq.~\ref {eq:context_standard}), while follow-up subchat nodes additionally inject the selected-text prompt~$F$ and the inherited parent summary $S_{\mathrm  {sum}}^{\,\mathrm  {parent}}$ (dashed arrows, Eq.~\ref {eq:context_followup}). Both paths converge at step~\textcircled {5} for LLM generation, after which the response is stored back in the buffer and vector store (\textcircled {6}).}}{14}{figure.5}\protected@file@percent }
+\newlabel{fig:dataflow}{{5}{14}{Context assembly pipeline. The user query is buffered (\textcircled {1}--\textcircled {2}) and passed through the RAG retrieval pipeline (\textcircled {3}; detailed in Figure~\ref {fig:retrieval_pipeline}), which returns coherent context blocks~$R$. At step~\textcircled {4} the pipeline branches: root-level nodes follow the \emph {standard} path (solid arrows, Eq.~\ref {eq:context_standard}), while follow-up subchat nodes additionally inject the selected-text prompt~$F$ and the inherited parent summary $S_{\mathrm {sum}}^{\,\mathrm {parent}}$ (dashed arrows, Eq.~\ref {eq:context_followup}). Both paths converge at step~\textcircled {5} for LLM generation, after which the response is stored back in the buffer and vector store (\textcircled {6})}{figure.5}{}}
+\citation{nielsen1994usability}
+\@writefile{toc}{\contentsline {paragraph}{Standard Assembly (all nodes).}{15}{section*.5}\protected@file@percent }
+\newlabel{eq:context_standard}{{9}{15}{Standard Assembly (all nodes)}{equation.3.9}{}}
+\@writefile{toc}{\contentsline {paragraph}{Follow-up Assembly (subchat nodes).}{15}{section*.6}\protected@file@percent }
+\newlabel{eq:context_followup}{{10}{15}{Follow-up Assembly (subchat nodes)}{equation.3.10}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}User Interface}{15}{subsection.3.3}\protected@file@percent }
+\newlabel{subsec:ui}{{3.3}{15}{User Interface}{subsection.3.3}{}}
+\@writefile{toc}{\contentsline {paragraph}{Design Rationale.}{15}{section*.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{The Problem with Linear Chat.}{15}{section*.8}\protected@file@percent }
+\citation{norman2013design}
+\@writefile{toc}{\contentsline {paragraph}{Subchat Trees as a Solution.}{16}{section*.9}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces User interface: (left) the conversation forest tree view with expandable nodes, and (right) the chat panel with text selection for one-click subchat creation.}}{16}{figure.6}\protected@file@percent }
+\newlabel{fig:ui}{{6}{16}{User interface: (left) the conversation forest tree view with expandable nodes, and (right) the chat panel with text selection for one-click subchat creation}{figure.6}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Baseline System}{16}{subsection.3.4}\protected@file@percent }
+\newlabel{subsec:baseline}{{3.4}{16}{Baseline System}{subsection.3.4}{}}
+\citation{zheng2024lmsyschat}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.5}Evaluation Framework}{17}{subsection.3.5}\protected@file@percent }
+\newlabel{subsec:eval}{{3.5}{17}{Evaluation Framework}{subsection.3.5}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.5.1}Dataset Design}{17}{subsubsection.3.5.1}\protected@file@percent }
+\newlabel{subsubsec:dataset}{{3.5.1}{17}{Dataset Design}{subsubsection.3.5.1}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Conversation-level provenance for the final VBRI dataset. Turns denote replay turns contributed to \texttt  {merged\_realistic\_interleaved.json}, excluding appended recall probes.}}{19}{table.1}\protected@file@percent }
+\newlabel{tab:scenarios}{{1}{19}{Conversation-level provenance for the final VBRI dataset. Turns denote replay turns contributed to \texttt {merged\_realistic\_interleaved.json}, excluding appended recall probes}{table.1}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.5.2}Evaluation Matrices}{19}{subsubsection.3.5.2}\protected@file@percent }
+\newlabel{subsubsec:metrics}{{3.5.2}{19}{Evaluation Matrices}{subsubsection.3.5.2}{}}
+\citation{lin2004rouge,papineni2002bleu}
+\newlabel{eq:per_topic_metrics}{{11}{20}{Evaluation Matrices}{equation.3.11}{}}
+\newlabel{eq:weighted_isolation}{{12}{20}{Evaluation Matrices}{equation.3.12}{}}
+\newlabel{eq:accuracy_pollution}{{13}{20}{Evaluation Matrices}{equation.3.13}{}}
+\newlabel{eq:probe}{{14}{20}{Evaluation Matrices}{equation.3.14}{}}
+\newlabel{eq:recall_probe_agg}{{15}{20}{Evaluation Matrices}{equation.3.15}{}}
+\newlabel{eq:avg_tokens}{{16}{21}{Evaluation Matrices}{equation.3.16}{}}
+\newlabel{eq:compression}{{17}{21}{Evaluation Matrices}{equation.3.17}{}}
+\newlabel{eq:tpca}{{18}{21}{Evaluation Matrices}{equation.3.18}{}}
+\newlabel{eq:cost}{{19}{21}{Evaluation Matrices}{equation.3.19}{}}
+\newlabel{eq:rag_rates}{{20}{21}{Evaluation Matrices}{equation.3.20}{}}
+\citation{qwen2025qwen25}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.5.3}Topic-Scoring Pipeline}{22}{subsubsection.3.5.3}\protected@file@percent }
+\newlabel{subsubsec:classify}{{3.5.3}{22}{Topic-Scoring Pipeline}{subsubsection.3.5.3}{}}
+\@writefile{loa}{\contentsline {algorithm}{\numberline {2}{\ignorespaces Deterministic Topic-Prefix Scoring}}{22}{algorithm.2}\protected@file@percent }
+\newlabel{alg:classify}{{2}{22}{Topic-Scoring Pipeline}{algorithm.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.6}Implementation}{22}{subsection.3.6}\protected@file@percent }
+\newlabel{subsec:impl}{{3.6}{22}{Implementation}{subsection.3.6}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.6.1}Technology Stack}{22}{subsubsection.3.6.1}\protected@file@percent }
+\newlabel{subsubsec:stack}{{3.6.1}{22}{Technology Stack}{subsubsection.3.6.1}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces LLM temperature settings by task.}}{23}{table.2}\protected@file@percent }
+\newlabel{tab:temps}{{2}{23}{LLM temperature settings by task}{table.2}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.6.2}Serverless Kaggle Evaluation Harness}{23}{subsubsection.3.6.2}\protected@file@percent }
+\newlabel{subsubsec:kaggle}{{3.6.2}{23}{Serverless Kaggle Evaluation Harness}{subsubsection.3.6.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.7}Experimental Setup}{23}{subsection.3.7}\protected@file@percent }
+\newlabel{subsec:setup}{{3.7}{23}{Experimental Setup}{subsection.3.7}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Experimental Results}{24}{section.4}\protected@file@percent }
+\newlabel{sec4}{{4}{24}{Experimental Results}{section.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}How to Read the Result Tables}{24}{subsection.4.1}\protected@file@percent }
+\newlabel{subsec:reading_results}{{4.1}{24}{How to Read the Result Tables}{subsection.4.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}7B Model: Context Structure Helps, but Instruction Following Remains Fragile}{25}{subsection.4.2}\protected@file@percent }
+\newlabel{subsec:results_7b}{{4.2}{25}{7B Model: Context Structure Helps, but Instruction Following Remains Fragile}{subsection.4.2}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces 7B: merged context-isolation metrics across buffer sizes.}}{25}{table.3}\protected@file@percent }
+\newlabel{tab:7b_context_main}{{3}{25}{7B: merged context-isolation metrics across buffer sizes}{table.3}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces 7B: aggregate recall-probe scores and probe cost. Topic-specific rows are kept in the appendix; this table reports the major aggregate recall results.}}{25}{table.4}\protected@file@percent }
+\newlabel{tab:7b_recall_main}{{4}{25}{7B: aggregate recall-probe scores and probe cost. Topic-specific rows are kept in the appendix; this table reports the major aggregate recall results}{table.4}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces 7B: merged system-performance metrics, including recall/summarization probe token accounting.}}{26}{table.5}\protected@file@percent }
+\newlabel{tab:7b_perf_main}{{5}{26}{7B: merged system-performance metrics, including recall/summarization probe token accounting}{table.5}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces 7B: merged RAG decision breakdown for ordinary turns and recall/summarization probes.}}{26}{table.6}\protected@file@percent }
+\newlabel{tab:7b_rag_main}{{6}{26}{7B: merged RAG decision breakdown for ordinary turns and recall/summarization probes}{table.6}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}14B Model: The Cleanest Practical Tradeoff}{27}{subsection.4.3}\protected@file@percent }
+\newlabel{subsec:results_14b}{{4.3}{27}{14B Model: The Cleanest Practical Tradeoff}{subsection.4.3}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {7}{\ignorespaces 14B: merged context-isolation metrics across buffer sizes.}}{27}{table.7}\protected@file@percent }
+\newlabel{tab:14b_context_main}{{7}{27}{14B: merged context-isolation metrics across buffer sizes}{table.7}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {8}{\ignorespaces 14B: aggregate recall-probe scores and probe cost.}}{27}{table.8}\protected@file@percent }
+\newlabel{tab:14b_recall_main}{{8}{27}{14B: aggregate recall-probe scores and probe cost}{table.8}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {9}{\ignorespaces 14B: merged system-performance metrics, including recall/summarization probe token accounting.}}{28}{table.9}\protected@file@percent }
+\newlabel{tab:14b_perf_main}{{9}{28}{14B: merged system-performance metrics, including recall/summarization probe token accounting}{table.9}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {10}{\ignorespaces 14B: merged RAG decision breakdown for ordinary turns and recall/summarization probes.}}{28}{table.10}\protected@file@percent }
+\newlabel{tab:14b_rag_main}{{10}{28}{14B: merged RAG decision breakdown for ordinary turns and recall/summarization probes}{table.10}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}32B Model: Strongest Absolute Performance and Better Long-Context Tolerance}{29}{subsection.4.4}\protected@file@percent }
+\newlabel{subsec:results_32b}{{4.4}{29}{32B Model: Strongest Absolute Performance and Better Long-Context Tolerance}{subsection.4.4}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {11}{\ignorespaces 32B: merged context-isolation metrics across buffer sizes.}}{29}{table.11}\protected@file@percent }
+\newlabel{tab:32b_context_main}{{11}{29}{32B: merged context-isolation metrics across buffer sizes}{table.11}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {12}{\ignorespaces 32B: aggregate recall-probe scores and probe cost.}}{29}{table.12}\protected@file@percent }
+\newlabel{tab:32b_recall_main}{{12}{29}{32B: aggregate recall-probe scores and probe cost}{table.12}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {13}{\ignorespaces 32B: merged system-performance metrics, including recall/summarization probe token accounting.}}{30}{table.13}\protected@file@percent }
+\newlabel{tab:32b_perf_main}{{13}{30}{32B: merged system-performance metrics, including recall/summarization probe token accounting}{table.13}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {14}{\ignorespaces 32B: merged RAG decision breakdown for ordinary turns and recall/summarization probes.}}{30}{table.14}\protected@file@percent }
+\newlabel{tab:32b_rag_main}{{14}{30}{32B: merged RAG decision breakdown for ordinary turns and recall/summarization probes}{table.14}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.5}Cross-Model Visual Synthesis}{31}{subsection.4.5}\protected@file@percent }
+\newlabel{subsec:cross_model_visuals}{{4.5}{31}{Cross-Model Visual Synthesis}{subsection.4.5}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {15}{\ignorespaces Best Subchat Trees configuration for each model. F1 gain is reported as absolute percentage-point improvement over the corresponding linear baseline at the same buffer size.}}{31}{table.15}\protected@file@percent }
+\newlabel{tab:best_by_model}{{15}{31}{Best Subchat Trees configuration for each model. F1 gain is reported as absolute percentage-point improvement over the corresponding linear baseline at the same buffer size}{table.15}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Context-isolation F1 across model sizes and buffer sizes. Subchat Trees improves F1 over the linear baseline in every configuration.}}{31}{figure.7}\protected@file@percent }
+\newlabel{fig:f1_buffer_all}{{7}{31}{Context-isolation F1 across model sizes and buffer sizes. Subchat Trees improves F1 over the linear baseline in every configuration}{figure.7}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Pollution rate across buffer sizes. Lower values are better. Subchat Trees consistently reduces cross-topic contamination by routing turns into branch-local buffers instead of keeping all topics in one linear transcript.}}{32}{figure.8}\protected@file@percent }
+\newlabel{fig:pollution_buffer_all}{{8}{32}{Pollution rate across buffer sizes. Lower values are better. Subchat Trees consistently reduces cross-topic contamination by routing turns into branch-local buffers instead of keeping all topics in one linear transcript}{figure.8}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.6}Result Summary}{32}{subsection.4.6}\protected@file@percent }
+\newlabel{subsec:findings_summary}{{4.6}{32}{Result Summary}{subsection.4.6}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces Average ROUGE-1 F1 on 43 topic-recall probes. The tree system retains more semantically relevant topic content than the linear baseline across all tested model-buffer settings.}}{33}{figure.9}\protected@file@percent }
+\newlabel{fig:rouge1_buffer_all}{{9}{33}{Average ROUGE-1 F1 on 43 topic-recall probes. The tree system retains more semantically relevant topic content than the linear baseline across all tested model-buffer settings}{figure.9}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces RAG retrieval rate during the 43 recall probes. Probe retrieval is a cleaner memory-sufficiency signal than normal-turn retrieval because every probe asks the model to recover earlier topic content.}}{33}{figure.10}\protected@file@percent }
+\newlabel{fig:probe_rag_buffer_all}{{10}{33}{RAG retrieval rate during the 43 recall probes. Probe retrieval is a cleaner memory-sufficiency signal than normal-turn retrieval because every probe asks the model to recover earlier topic content}{figure.10}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces Tokens per correct answer across model sizes and buffer sizes. The y-axis uses a log scale because the 7B baseline becomes extremely inefficient at larger buffers.}}{34}{figure.11}\protected@file@percent }
+\newlabel{fig:tpca_buffer_all}{{11}{34}{Tokens per correct answer across model sizes and buffer sizes. The y-axis uses a log scale because the 7B baseline becomes extremely inefficient at larger buffers}{figure.11}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Discussion}{34}{section.5}\protected@file@percent }
+\newlabel{sec5}{{5}{34}{Discussion}{section.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}What the Results Show}{34}{subsection.5.1}\protected@file@percent }
+\newlabel{subsec:discussion_results}{{5.1}{34}{What the Results Show}{subsection.5.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Why Larger Buffers Are Not Always Better}{35}{subsection.5.2}\protected@file@percent }
+\newlabel{subsec:larger_buffers}{{5.2}{35}{Why Larger Buffers Are Not Always Better}{subsection.5.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Token Efficiency Revisited}{35}{subsection.5.3}\protected@file@percent }
+\newlabel{subsec:token_efficiency_revisited}{{5.3}{35}{Token Efficiency Revisited}{subsection.5.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.4}RAG as a Backstop Rather Than a Default}{35}{subsection.5.4}\protected@file@percent }
+\newlabel{subsec:rag_backstop_discussion}{{5.4}{35}{RAG as a Backstop Rather Than a Default}{subsection.5.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.5}Limitations}{36}{subsection.5.5}\protected@file@percent }
+\newlabel{subsec:limitations}{{5.5}{36}{Limitations}{subsection.5.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.6}Deployment Considerations}{36}{subsection.5.6}\protected@file@percent }
+\newlabel{subsec:deployment}{{5.6}{36}{Deployment Considerations}{subsection.5.6}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6}Conclusion and Future Work}{36}{section.6}\protected@file@percent }
+\newlabel{sec6}{{6}{36}{Conclusion and Future Work}{section.6}{}}
+\citation{zheng2024lmsyschat}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.1}Future Directions}{37}{subsection.6.1}\protected@file@percent }
+\newlabel{subsec:future}{{6.1}{37}{Future Directions}{subsection.6.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}Broader Impact}{37}{subsection.6.2}\protected@file@percent }
+\newlabel{subsec:impact}{{6.2}{37}{Broader Impact}{subsection.6.2}{}}
+\@writefile{toc}{\contentsline {subparagraph}{Supplementary Information}{37}{section*.10}\protected@file@percent }
+\@writefile{toc}{\contentsline {subparagraph}{Acknowledgements}{37}{section*.11}\protected@file@percent }
+\citation{zheng2024lmsyschat}
+\@writefile{toc}{\contentsline {section}{\numberline {A}Source Conversation Details}{38}{appendix.a.A}\protected@file@percent }
+\newlabel{secA1}{{A}{38}{Source Conversation Details}{appendix.a.A}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {B}Kaggle Notebook Execution Pipeline}{38}{appendix.a.B}\protected@file@percent }
+\newlabel{secA2}{{B}{38}{Kaggle Notebook Execution Pipeline}{appendix.a.B}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {C}Per-Topic Confusion Matrix Methodology}{39}{appendix.a.C}\protected@file@percent }
+\newlabel{secA3}{{C}{39}{Per-Topic Confusion Matrix Methodology}{appendix.a.C}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {D}Complete Merged Result Tables}{39}{appendix.a.D}\protected@file@percent }
+\newlabel{secA4}{{D}{39}{Complete Merged Result Tables}{appendix.a.D}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {D.1}7B Merged Tables}{39}{subsection.a.D.1}\protected@file@percent }
+\newlabel{app:7b_merged}{{D.1}{39}{7B Merged Tables}{subsection.a.D.1}{}}
+\gdef \LT@i {\LT@entry 
+    {1}{114.12054pt}\LT@entry 
+    {3}{29.70863pt}\LT@entry 
+    {1}{35.86969pt}\LT@entry 
+    {3}{29.70863pt}\LT@entry 
+    {1}{35.86969pt}\LT@entry 
+    {3}{29.70863pt}\LT@entry 
+    {1}{35.86969pt}\LT@entry 
+    {3}{29.70863pt}\LT@entry 
+    {1}{29.86969pt}}
+\@writefile{lot}{\contentsline {table}{\numberline {D1}{7B: merged context-isolation metrics.}}{40}{table.1}\protected@file@percent }
+\newlabel{tab:app_7b_context}{{D1}{40}{7B: merged context-isolation metrics}{table.1}{}}
+\gdef \LT@ii {\LT@entry 
+    {1}{114.12054pt}\LT@entry 
+    {3}{34.43092pt}\LT@entry 
+    {1}{35.86969pt}\LT@entry 
+    {3}{34.43092pt}\LT@entry 
+    {1}{35.86969pt}\LT@entry 
+    {3}{34.43092pt}\LT@entry 
+    {1}{35.86969pt}\LT@entry 
+    {3}{34.43092pt}\LT@entry 
+    {1}{29.86969pt}}
+\@writefile{lot}{\contentsline {table}{\numberline {D2}{7B: merged aggregate recall scores and probe cost.}}{41}{table.2}\protected@file@percent }
+\newlabel{tab:app_7b_recall_agg}{{D2}{41}{7B: merged aggregate recall scores and probe cost}{table.2}{}}
+\gdef \LT@iii {\LT@entry 
+    {3}{114.12054pt}\LT@entry 
+    {3}{31.02809pt}\LT@entry 
+    {1}{35.86969pt}\LT@entry 
+    {3}{31.02809pt}\LT@entry 
+    {1}{35.86969pt}\LT@entry 
+    {3}{31.02809pt}\LT@entry 
+    {1}{35.86969pt}\LT@entry 
+    {3}{31.02809pt}\LT@entry 
+    {1}{29.86969pt}}
+\@writefile{lot}{\contentsline {table}{\numberline {D3}{7B: per-topic ROUGE-1 F1 across buffers.}}{42}{table.3}\protected@file@percent }
+\newlabel{tab:app_7b_rouge1_topics}{{D3}{42}{7B: per-topic ROUGE-1 F1 across buffers}{table.3}{}}
+\gdef \LT@iv {\LT@entry 
+    {3}{114.12054pt}\LT@entry 
+    {3}{31.02809pt}\LT@entry 
+    {1}{35.86969pt}\LT@entry 
+    {3}{31.02809pt}\LT@entry 
+    {1}{35.86969pt}\LT@entry 
+    {3}{31.02809pt}\LT@entry 
+    {1}{35.86969pt}\LT@entry 
+    {3}{31.02809pt}\LT@entry 
+    {1}{29.86969pt}}
+\@writefile{lot}{\contentsline {table}{\numberline {D4}{7B: per-topic ROUGE-L F1 across buffers.}}{43}{table.4}\protected@file@percent }
+\newlabel{tab:app_7b_rougel_topics}{{D4}{43}{7B: per-topic ROUGE-L F1 across buffers}{table.4}{}}
+\gdef \LT@v {\LT@entry 
+    {3}{114.12054pt}\LT@entry 
+    {3}{31.02809pt}\LT@entry 
+    {1}{35.86969pt}\LT@entry 
+    {3}{31.02809pt}\LT@entry 
+    {1}{35.86969pt}\LT@entry 
+    {3}{31.02809pt}\LT@entry 
+    {1}{35.86969pt}\LT@entry 
+    {3}{31.02809pt}\LT@entry 
+    {1}{29.86969pt}}
+\@writefile{lot}{\contentsline {table}{\numberline {D5}{7B: per-topic BLEU-2 across buffers.}}{44}{table.5}\protected@file@percent }
+\newlabel{tab:app_7b_bleu_topics}{{D5}{44}{7B: per-topic BLEU-2 across buffers}{table.5}{}}
+\gdef \LT@vi {\LT@entry 
+    {3}{114.12054pt}\LT@entry 
+    {3}{41.2357pt}\LT@entry 
+    {3}{41.2357pt}\LT@entry 
+    {3}{41.2357pt}\LT@entry 
+    {3}{41.2357pt}\LT@entry 
+    {3}{41.2357pt}\LT@entry 
+    {3}{41.2357pt}\LT@entry 
+    {3}{41.2357pt}\LT@entry 
+    {3}{35.2357pt}}
+\@writefile{lot}{\contentsline {table}{\numberline {D6}{7B: merged normal conversation performance metrics.}}{45}{table.6}\protected@file@percent }
+\newlabel{tab:app_7b_perf_normal}{{D6}{45}{7B: merged normal conversation performance metrics}{table.6}{}}
+\gdef \LT@vii {\LT@entry 
+    {3}{114.12054pt}\LT@entry 
+    {3}{34.43092pt}\LT@entry 
+    {1}{35.86969pt}\LT@entry 
+    {3}{39.84767pt}\LT@entry 
+    {3}{39.84767pt}\LT@entry 
+    {3}{39.84767pt}\LT@entry 
+    {3}{39.84767pt}\LT@entry 
+    {3}{39.84767pt}\LT@entry 
+    {3}{33.84767pt}}
+\@writefile{lot}{\contentsline {table}{\numberline {D7}{7B: merged performance metrics including recall/summarization probes.}}{46}{table.7}\protected@file@percent }
+\newlabel{tab:app_7b_perf_probe}{{D7}{46}{7B: merged performance metrics including recall/summarization probes}{table.7}{}}
+\gdef \LT@viii {\LT@entry 
+    {1}{114.12054pt}\LT@entry 
+    {3}{29.70863pt}\LT@entry 
+    {1}{35.86969pt}\LT@entry 
+    {3}{29.70863pt}\LT@entry 
+    {1}{35.86969pt}\LT@entry 
+    {3}{29.70863pt}\LT@entry 
+    {1}{35.86969pt}\LT@entry 
+    {3}{29.70863pt}\LT@entry 
+    {1}{29.86969pt}}
+\@writefile{lot}{\contentsline {table}{\numberline {D8}{7B: merged normal-turn RAG decision breakdown.}}{47}{table.8}\protected@file@percent }
+\newlabel{tab:app_7b_rag_normal}{{D8}{47}{7B: merged normal-turn RAG decision breakdown}{table.8}{}}
+\gdef \LT@ix {\LT@entry 
+    {1}{114.12054pt}\LT@entry 
+    {3}{29.70863pt}\LT@entry 
+    {1}{35.86969pt}\LT@entry 
+    {3}{29.70863pt}\LT@entry 
+    {1}{35.86969pt}\LT@entry 
+    {3}{29.70863pt}\LT@entry 
+    {1}{35.86969pt}\LT@entry 
+    {3}{33.11147pt}\LT@entry 
+    {1}{29.86969pt}}
+\@writefile{lot}{\contentsline {table}{\numberline {D9}{7B: merged recall-probe RAG decision breakdown.}}{48}{table.9}\protected@file@percent }
+\newlabel{tab:app_7b_rag_probe}{{D9}{48}{7B: merged recall-probe RAG decision breakdown}{table.9}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {D.2}14B Merged Tables}{49}{subsection.a.D.2}\protected@file@percent }
+\newlabel{app:14b_merged}{{D.2}{49}{14B Merged Tables}{subsection.a.D.2}{}}
+\gdef \LT@x {\LT@entry 
+    {1}{114.12054pt}\LT@entry 
+    {3}{29.70863pt}\LT@entry 
+    {1}{35.86969pt}\LT@entry 
+    {3}{29.70863pt}\LT@entry 
+    {1}{35.86969pt}\LT@entry 
+    {3}{29.70863pt}\LT@entry 
+    {1}{35.86969pt}\LT@entry 
+    {3}{29.70863pt}\LT@entry 
+    {1}{29.86969pt}}
+\@writefile{lot}{\contentsline {table}{\numberline {D10}{14B: merged context-isolation metrics.}}{50}{table.10}\protected@file@percent }
+\newlabel{tab:app_14b_context}{{D10}{50}{14B: merged context-isolation metrics}{table.10}{}}
+\gdef \LT@xi {\LT@entry 
+    {1}{114.12054pt}\LT@entry 
+    {3}{37.17401pt}\LT@entry 
+    {1}{35.86969pt}\LT@entry 
+    {3}{37.17401pt}\LT@entry 
+    {1}{35.86969pt}\LT@entry 
+    {3}{37.17401pt}\LT@entry 
+    {3}{37.17401pt}\LT@entry 
+    {3}{34.43092pt}\LT@entry 
+    {1}{29.86969pt}}
+\@writefile{lot}{\contentsline {table}{\numberline {D11}{14B: merged aggregate recall scores and probe cost.}}{51}{table.11}\protected@file@percent }
+\newlabel{tab:app_14b_recall_agg}{{D11}{51}{14B: merged aggregate recall scores and probe cost}{table.11}{}}
+\gdef \LT@xii {\LT@entry 
+    {3}{114.12054pt}\LT@entry 
+    {3}{31.02809pt}\LT@entry 
+    {1}{35.86969pt}\LT@entry 
+    {3}{31.02809pt}\LT@entry 
+    {1}{35.86969pt}\LT@entry 
+    {3}{31.02809pt}\LT@entry 
+    {1}{35.86969pt}\LT@entry 
+    {3}{31.02809pt}\LT@entry 
+    {1}{29.86969pt}}
+\@writefile{lot}{\contentsline {table}{\numberline {D12}{14B: per-topic ROUGE-1 F1 across buffers.}}{52}{table.12}\protected@file@percent }
+\newlabel{tab:app_14b_rouge1_topics}{{D12}{52}{14B: per-topic ROUGE-1 F1 across buffers}{table.12}{}}
+\gdef \LT@xiii {\LT@entry 
+    {3}{114.12054pt}\LT@entry 
+    {3}{31.02809pt}\LT@entry 
+    {1}{35.86969pt}\LT@entry 
+    {3}{31.02809pt}\LT@entry 
+    {1}{35.86969pt}\LT@entry 
+    {3}{31.02809pt}\LT@entry 
+    {1}{35.86969pt}\LT@entry 
+    {3}{31.02809pt}\LT@entry 
+    {1}{29.86969pt}}
+\@writefile{lot}{\contentsline {table}{\numberline {D13}{14B: per-topic ROUGE-L F1 across buffers.}}{53}{table.13}\protected@file@percent }
+\newlabel{tab:app_14b_rougel_topics}{{D13}{53}{14B: per-topic ROUGE-L F1 across buffers}{table.13}{}}
+\gdef \LT@xiv {\LT@entry 
+    {3}{114.12054pt}\LT@entry 
+    {3}{31.02809pt}\LT@entry 
+    {1}{35.86969pt}\LT@entry 
+    {3}{31.02809pt}\LT@entry 
+    {1}{35.86969pt}\LT@entry 
+    {3}{31.02809pt}\LT@entry 
+    {1}{35.86969pt}\LT@entry 
+    {3}{31.02809pt}\LT@entry 
+    {1}{29.86969pt}}
+\@writefile{lot}{\contentsline {table}{\numberline {D14}{14B: per-topic BLEU-2 across buffers.}}{54}{table.14}\protected@file@percent }
+\newlabel{tab:app_14b_bleu_topics}{{D14}{54}{14B: per-topic BLEU-2 across buffers}{table.14}{}}
+\gdef \LT@xv {\LT@entry 
+    {3}{114.12054pt}\LT@entry 
+    {3}{41.2357pt}\LT@entry 
+    {3}{41.2357pt}\LT@entry 
+    {3}{41.2357pt}\LT@entry 
+    {3}{41.2357pt}\LT@entry 
+    {3}{41.2357pt}\LT@entry 
+    {3}{41.2357pt}\LT@entry 
+    {3}{41.2357pt}\LT@entry 
+    {3}{35.2357pt}}
+\@writefile{lot}{\contentsline {table}{\numberline {D15}{14B: merged normal conversation performance metrics.}}{55}{table.15}\protected@file@percent }
+\newlabel{tab:app_14b_perf_normal}{{D15}{55}{14B: merged normal conversation performance metrics}{table.15}{}}
+\gdef \LT@xvi {\LT@entry 
+    {3}{114.12054pt}\LT@entry 
+    {3}{34.43092pt}\LT@entry 
+    {1}{35.86969pt}\LT@entry 
+    {3}{39.84767pt}\LT@entry 
+    {3}{39.84767pt}\LT@entry 
+    {3}{39.84767pt}\LT@entry 
+    {3}{39.84767pt}\LT@entry 
+    {3}{39.84767pt}\LT@entry 
+    {3}{33.84767pt}}
+\@writefile{lot}{\contentsline {table}{\numberline {D16}{14B: merged performance metrics including recall/summarization probes.}}{56}{table.16}\protected@file@percent }
+\newlabel{tab:app_14b_perf_probe}{{D16}{56}{14B: merged performance metrics including recall/summarization probes}{table.16}{}}
+\gdef \LT@xvii {\LT@entry 
+    {1}{114.12054pt}\LT@entry 
+    {3}{29.70863pt}\LT@entry 
+    {1}{35.86969pt}\LT@entry 
+    {3}{29.70863pt}\LT@entry 
+    {1}{35.86969pt}\LT@entry 
+    {3}{29.70863pt}\LT@entry 
+    {1}{35.86969pt}\LT@entry 
+    {3}{29.70863pt}\LT@entry 
+    {1}{29.86969pt}}
+\@writefile{lot}{\contentsline {table}{\numberline {D17}{14B: merged normal-turn RAG decision breakdown.}}{57}{table.17}\protected@file@percent }
+\newlabel{tab:app_14b_rag_normal}{{D17}{57}{14B: merged normal-turn RAG decision breakdown}{table.17}{}}
+\gdef \LT@xviii {\LT@entry 
+    {1}{114.12054pt}\LT@entry 
+    {3}{29.70863pt}\LT@entry 
+    {1}{35.86969pt}\LT@entry 
+    {3}{29.70863pt}\LT@entry 
+    {1}{35.86969pt}\LT@entry 
+    {3}{29.70863pt}\LT@entry 
+    {1}{35.86969pt}\LT@entry 
+    {3}{29.70863pt}\LT@entry 
+    {1}{29.86969pt}}
+\@writefile{lot}{\contentsline {table}{\numberline {D18}{14B: merged recall-probe RAG decision breakdown.}}{58}{table.18}\protected@file@percent }
+\newlabel{tab:app_14b_rag_probe}{{D18}{58}{14B: merged recall-probe RAG decision breakdown}{table.18}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {D.3}32B Merged Tables}{59}{subsection.a.D.3}\protected@file@percent }
+\newlabel{app:32b_merged}{{D.3}{59}{32B Merged Tables}{subsection.a.D.3}{}}
+\gdef \LT@xix {\LT@entry 
+    {1}{114.12054pt}\LT@entry 
+    {3}{29.70863pt}\LT@entry 
+    {1}{35.86969pt}\LT@entry 
+    {3}{29.70863pt}\LT@entry 
+    {1}{35.86969pt}\LT@entry 
+    {3}{29.70863pt}\LT@entry 
+    {1}{35.86969pt}\LT@entry 
+    {3}{29.70863pt}\LT@entry 
+    {1}{29.86969pt}}
+\@writefile{lot}{\contentsline {table}{\numberline {D19}{32B: merged context-isolation metrics.}}{60}{table.19}\protected@file@percent }
+\newlabel{tab:app_32b_context}{{D19}{60}{32B: merged context-isolation metrics}{table.19}{}}
+\gdef \LT@xx {\LT@entry 
+    {1}{114.12054pt}\LT@entry 
+    {3}{37.17401pt}\LT@entry 
+    {3}{37.17401pt}\LT@entry 
+    {3}{37.17401pt}\LT@entry 
+    {3}{37.17401pt}\LT@entry 
+    {3}{37.17401pt}\LT@entry 
+    {3}{37.17401pt}\LT@entry 
+    {3}{37.17401pt}\LT@entry 
+    {3}{31.17401pt}}
+\@writefile{lot}{\contentsline {table}{\numberline {D20}{32B: merged aggregate recall scores and probe cost.}}{61}{table.20}\protected@file@percent }
+\newlabel{tab:app_32b_recall_agg}{{D20}{61}{32B: merged aggregate recall scores and probe cost}{table.20}{}}
+\gdef \LT@xxi {\LT@entry 
+    {3}{114.12054pt}\LT@entry 
+    {3}{31.02809pt}\LT@entry 
+    {1}{35.86969pt}\LT@entry 
+    {3}{31.02809pt}\LT@entry 
+    {1}{35.86969pt}\LT@entry 
+    {3}{31.02809pt}\LT@entry 
+    {1}{35.86969pt}\LT@entry 
+    {3}{31.02809pt}\LT@entry 
+    {1}{29.86969pt}}
+\@writefile{lot}{\contentsline {table}{\numberline {D21}{32B: per-topic ROUGE-1 F1 across buffers.}}{62}{table.21}\protected@file@percent }
+\newlabel{tab:app_32b_rouge1_topics}{{D21}{62}{32B: per-topic ROUGE-1 F1 across buffers}{table.21}{}}
+\gdef \LT@xxii {\LT@entry 
+    {3}{114.12054pt}\LT@entry 
+    {3}{31.02809pt}\LT@entry 
+    {1}{35.86969pt}\LT@entry 
+    {3}{31.02809pt}\LT@entry 
+    {1}{35.86969pt}\LT@entry 
+    {3}{31.02809pt}\LT@entry 
+    {1}{35.86969pt}\LT@entry 
+    {3}{31.02809pt}\LT@entry 
+    {1}{29.86969pt}}
+\@writefile{lot}{\contentsline {table}{\numberline {D22}{32B: per-topic ROUGE-L F1 across buffers.}}{63}{table.22}\protected@file@percent }
+\newlabel{tab:app_32b_rougel_topics}{{D22}{63}{32B: per-topic ROUGE-L F1 across buffers}{table.22}{}}
+\gdef \LT@xxiii {\LT@entry 
+    {3}{114.12054pt}\LT@entry 
+    {3}{31.02809pt}\LT@entry 
+    {1}{35.86969pt}\LT@entry 
+    {3}{31.02809pt}\LT@entry 
+    {1}{35.86969pt}\LT@entry 
+    {3}{31.02809pt}\LT@entry 
+    {1}{35.86969pt}\LT@entry 
+    {3}{31.02809pt}\LT@entry 
+    {1}{29.86969pt}}
+\@writefile{lot}{\contentsline {table}{\numberline {D23}{32B: per-topic BLEU-2 across buffers.}}{64}{table.23}\protected@file@percent }
+\newlabel{tab:app_32b_bleu_topics}{{D23}{64}{32B: per-topic BLEU-2 across buffers}{table.23}{}}
+\gdef \LT@xxiv {\LT@entry 
+    {3}{114.12054pt}\LT@entry 
+    {3}{41.2357pt}\LT@entry 
+    {3}{41.2357pt}\LT@entry 
+    {3}{41.2357pt}\LT@entry 
+    {3}{41.2357pt}\LT@entry 
+    {3}{41.2357pt}\LT@entry 
+    {3}{41.2357pt}\LT@entry 
+    {3}{41.2357pt}\LT@entry 
+    {3}{35.2357pt}}
+\@writefile{lot}{\contentsline {table}{\numberline {D24}{32B: merged normal conversation performance metrics.}}{65}{table.24}\protected@file@percent }
+\newlabel{tab:app_32b_perf_normal}{{D24}{65}{32B: merged normal conversation performance metrics}{table.24}{}}
+\gdef \LT@xxv {\LT@entry 
+    {3}{114.12054pt}\LT@entry 
+    {3}{34.43092pt}\LT@entry 
+    {1}{35.86969pt}\LT@entry 
+    {3}{39.84767pt}\LT@entry 
+    {3}{39.84767pt}\LT@entry 
+    {3}{39.84767pt}\LT@entry 
+    {3}{39.84767pt}\LT@entry 
+    {3}{39.84767pt}\LT@entry 
+    {3}{33.84767pt}}
+\@writefile{lot}{\contentsline {table}{\numberline {D25}{32B: merged performance metrics including recall/summarization probes.}}{66}{table.25}\protected@file@percent }
+\newlabel{tab:app_32b_perf_probe}{{D25}{66}{32B: merged performance metrics including recall/summarization probes}{table.25}{}}
+\gdef \LT@xxvi {\LT@entry 
+    {1}{114.12054pt}\LT@entry 
+    {3}{29.70863pt}\LT@entry 
+    {1}{35.86969pt}\LT@entry 
+    {3}{29.70863pt}\LT@entry 
+    {1}{35.86969pt}\LT@entry 
+    {3}{29.70863pt}\LT@entry 
+    {1}{35.86969pt}\LT@entry 
+    {3}{29.70863pt}\LT@entry 
+    {1}{29.86969pt}}
+\@writefile{lot}{\contentsline {table}{\numberline {D26}{32B: merged normal-turn RAG decision breakdown.}}{67}{table.26}\protected@file@percent }
+\newlabel{tab:app_32b_rag_normal}{{D26}{67}{32B: merged normal-turn RAG decision breakdown}{table.26}{}}
+\gdef \LT@xxvii {\LT@entry 
+    {1}{114.12054pt}\LT@entry 
+    {3}{29.70863pt}\LT@entry 
+    {1}{35.86969pt}\LT@entry 
+    {3}{29.70863pt}\LT@entry 
+    {1}{35.86969pt}\LT@entry 
+    {3}{29.70863pt}\LT@entry 
+    {1}{35.86969pt}\LT@entry 
+    {3}{29.70863pt}\LT@entry 
+    {1}{29.86969pt}}
+\@writefile{lot}{\contentsline {table}{\numberline {D27}{32B: merged recall-probe RAG decision breakdown.}}{68}{table.27}\protected@file@percent }
+\newlabel{tab:app_32b_rag_probe}{{D27}{68}{32B: merged recall-probe RAG decision breakdown}{table.27}{}}
+\bibdata{sn-bibliography}
+\bibcite{liu2023lostinthemiddle}{{1}{2023}{{Liu et~al.}}{{}}}
+\bibcite{laban2024limt}{{2}{2024}{{Laban et~al.}}{{}}}
+\bibcite{wei2022cot}{{3}{2022}{{Wei et~al.}}{{}}}
+\bibcite{wang2023selfconsistency}{{4}{2023}{{Wang et~al.}}{{}}}
+\bibcite{yao2023tot}{{5}{2023}{{Yao et~al.}}{{}}}
+\bibcite{besta2023got}{{6}{2023}{{Besta et~al.}}{{}}}
+\bibcite{elsner2008talking}{{7}{2008}{{Elsner and Charniak}}{{}}}
+\bibcite{jiang2018disentangle}{{8}{2018}{{Jiang et~al.}}{{}}}
+\bibcite{kummerfeld2019disentanglement}{{9}{2019}{{Kummerfeld et~al.}}{{}}}
+\bibcite{serban2016hred}{{10}{2016}{{Serban et~al.}}{{}}}
+\bibcite{packer2023memgpt}{{11}{2023}{{Packer et~al.}}{{}}}
+\bibcite{wu2024stateful}{{12}{2024}{{Wu and Yu}}{{}}}
+\bibcite{lewis2020rag}{{13}{2020}{{Lewis et~al.}}{{}}}
+\bibcite{li2023camel}{{14}{2023}{{Li et~al.}}{{}}}
+\bibcite{maharana2024locomo}{{15}{2024}{{Maharana et~al.}}{{}}}
+\bibcite{xu2022goldfish}{{16}{2022a}{{Xu et~al.}}{{}}}
+\bibcite{xu2022longpersona}{{17}{2022b}{{Xu et~al.}}{{}}}
+\bibcite{jiang2024longllmlingua}{{18}{2024}{{Jiang et~al.}}{{}}}
+\bibcite{zheng2024lmsyschat}{{19}{2024}{{Zheng et~al.}}{{}}}
+\bibcite{chen2021humaneval}{{20}{2021}{{Chen et~al.}}{{}}}
+\bibcite{sutskever2014seq2seq}{{21}{2014}{{Sutskever et~al.}}{{}}}
+\bibcite{bahdanau2014attention}{{22}{2014}{{Bahdanau et~al.}}{{}}}
+\bibcite{vaswani2017attention}{{23}{2017}{{Vaswani et~al.}}{{}}}
+\bibcite{brown2020gpt3}{{24}{2020}{{Brown et~al.}}{{}}}
+\bibcite{wei2022flan}{{25}{2022}{{Wei et~al.}}{{}}}
+\bibcite{ouyang2022instructgpt}{{26}{2022}{{Ouyang et~al.}}{{}}}
+\bibcite{reimers2019sentencebert}{{27}{2019}{{Reimers and Gurevych}}{{}}}
+\bibcite{chromadb}{{28}{2024}{{{Chroma}}}{{}}}
+\bibcite{nielsen1994usability}{{29}{1994}{{Nielsen}}{{}}}
+\bibcite{norman2013design}{{30}{2013}{{Norman}}{{}}}
+\bibcite{lin2004rouge}{{31}{2004}{{Lin}}{{}}}
+\bibcite{papineni2002bleu}{{32}{2002}{{Papineni et~al.}}{{}}}
+\bibcite{qwen2025qwen25}{{33}{2025}{{Team}}{{}}}
+\gdef \@abspage@last{72}

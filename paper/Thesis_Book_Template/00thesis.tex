@@ -1,0 +1,237 @@
+\documentclass[12pt]{report}
+%\documentclass{article}
+
+\usepackage{mistugthesis}
+\usepackage{comment}
+\usepackage{setspace}
+\usepackage{geometry}
+ 
+\usepackage[T1]{fontenc}
+\usepackage{algpseudocode}
+\usepackage{algorithm}
+\usepackage{graphicx,xcolor}
+\usepackage{listings}
+\usepackage{fancyhdr}
+%\usepackage{natbib}
+%\usepackage{natbib}
+\usepackage{caption}
+\usepackage{subcaption}
+\setcounter{tocdepth}{4} 
+\setcounter{secnumdepth}{4}
+\usepackage{booktabs}
+\usepackage{longtable}
+%\usepackage{tocloft}
+%\usepackage{harvard}
+%\usepackage[natbibapa]{apacite}
+\usepackage{apacite}
+
+%\usepackage{titlesec}
+%\renewcommand{\bibname}{REFERENCES}
+\renewcommand{\bibname}{\centering\MakeUppercase{REFERENCES}}
+
+
+%\bibliographystyle{agsm}
+%\titleformat*{\section}{\bfseries\Large\centering}
+\bibliographystyle{apacite}
+%\bibliographystyle{plainnat}
+%\bibliographystyle{IEEEtranN}
+
+
+
+ \geometry{
+ a4paper,
+ %total={170mm,257mm},
+ left=35mm,
+ right=25mm,
+ top=35mm,
+ bottom=35mm,
+ }
+ \usepackage[subfigure, titles]{tocloft}
+\newlength\mylength
+\settowidth\mylength{0.0001\cftfigpresnum\cftfigaftersnum}
+\renewcommand\cftfigpresnum{\figurename~}
+\renewcommand\cftfigaftersnum{:}
+\addtolength\cftfignumwidth{\mylength}
+
+\renewcommand\cfttabpresnum{\tablename~}
+\renewcommand\cfttabaftersnum{:}
+\settowidth\mylength{\cfttabpresnum\cfttabaftersnum}
+\addtolength\cfttabnumwidth{\mylength}
+
+
+\begin{document}
+
+\hypersetup{citecolor=black}
+\begin{singlespace}
+\begin{center}
+\begingroup
+%\vspace{\dimexpr35mm-\baselineskip}
+\fontsize{18pt}{18pt}\selectfont
+MAIN TITLE OF THESIS
+
+\end{center}
+
+
+
+\vspace{\dimexpr23.25mm-\baselineskip}
+\centering
+\fontsize{16pt}{16pt}\selectfont
+STUDENT1 NAME (SN. STUDENT1 ID)\linebreak 
+STUDENT2 NAME (SN. STUDENT2 ID)\linebreak
+E.G. MALIHA ZERIN  (SN. 202014025)\linebreak
+
+
+
+
+\vspace{\dimexpr25.08mm-\baselineskip}
+\centering 
+\fontsize{16pt}{16pt}\selectfont
+A Thesis Submitted in Partial Fulfilment of the Requirements for the
+Degree of Bachelor of Science in Computer Science and Engineering\linebreak
+\vspace{\dimexpr25mm-\baselineskip}
+
+
+
+\centering
+
+\input{figures/logo}
+\vspace{\dimexpr8mm-\baselineskip}
+
+\thispagestyle{empty}
+\centering
+\fontsize{16pt}{16pt}\selectfont
+DEPARTMENT OF COMPUTER SCIENCE AND ENGINEERING\linebreak
+MILITARY INSTITUTE OF SCIENCE AND TECHNOLOGY\linebreak
+DHAKA, BANGLADESH
+ 
+%\vspace{\dimexpr10.08mm-\baselineskip}
+\centering
+\fontsize{16pt}{16pt}\selectfont
+\newline\bigskip
+MAY, 2025
+ \par
+\endgroup
+
+
+
+\end{singlespace}
+
+
+
+
+\thesiscertificationpage
+\thispagestyle{empty}
+\newpage
+\thispagestyle{empty}
+\thesiscandidatesdeclaration
+%\thesiscandidatesdeclaration
+\thispagestyle{empty}
+\newpage
+\pagenumbering{roman}
+\setcounter{page}{1}
+\input{mistugthesisacknowledgement.tex}
+%\thispagestyle{empty}
+\newpage % Start a new page
+%\pagenumbering{roman}
+%\setcounter{page}{1}
+\input{Engabstract.tex}
+\newpage
+\input{Banglaabstract.tex}
+
+
+\clearpage
+%\input{mistugthesisabbreviation.tex}
+\newpage
+\input{Notations.tex}
+ 
+\newpage
+
+% Center align the heading for List of Figures
+\renewcommand{\cftloftitlefont}{\hfill\Large}
+\renewcommand{\cftafterloftitle}{\hfill}
+
+% Center align the heading for List of Tables
+\renewcommand{\cftlottitlefont}{\hfill\Large}
+\renewcommand{\cftafterlottitle}{\hfill}
+
+\renewcommand{\cfttoctitlefont}{\hfill\Large}
+\renewcommand{\cftaftertoctitle}{\hfill}
+%\clearpage
+% Remove dotted lines for entries in Table of Contents
+\renewcommand{\cftdot}{}
+% Remove dotted lines for entries in List of Figures
+\renewcommand{\cftfigdot}{}
+
+
+\renewcommand{\contentsname}{\large TABLE OF CONTENTS\hfill}
+\renewcommand{\listfigurename}{\hfill\large LIST OF FIGURES\hfill}
+\renewcommand{\listtablename}{\hfill\large LIST OF TABLES\hfill}
+
+%\listsandtoc 
+\newpage
+%\renewcommand\listfigurename{LIST OF FIGURES}
+\addcontent sline{toc}{section}{LIST OF TABLES}
+\listoftables
+
+\newpage
+%\renewcommand\listtablename{LIST OF TABLES}
+\addcontentsline{toc}{section}{LIST OF FIGURES}
+\listoffigures
+
+\newpage
+%\renewcommand{\contentsname}{ TABLE OF CONTENTS\hfill}
+\addcontentsline{toc}{section}{TABLE OF CONTENTS}
+\tableofcontents
+
+
+%**
+\clearpage
+%\input{mistugthesissymbols.tex}
+
+\clearpage
+\pagenumbering{arabic}
+\setcounter{page}{4}
+\captionsetup[figure]{labelsep=colon, name=Figure}
+%\captionsetup[table]{labelsep=colon, name=Table}
+
+% Chapter-1 Introduction
+\pagestyle{fancy}
+\renewcommand{\chaptermark}[1]{\markboth{#1}{#1}}
+\fancyhead[L]{}
+\fancyhead[R]{\chapternumber\ \thechapter\ \space\ \leftmark}
+\hypersetup{urlcolor=black}
+
+
+\hypersetup{linkcolor=black}
+		%\linespread{6}
+		\doublespacing
+
+\input{01introduction.tex}
+\input{02litrev.tex}
+\input{03methodology.tex}
+% \input{05development.tex}
+\input{06Evaluation}
+\input{EngineeringThesis.tex}
+\input{07discussion.tex}
+
+\hypersetup{urlcolor=black}
+
+\clearpage
+
+\appendix
+
+%\begingroup
+%\raggedright
+%\vspace{15mm}
+%\titleformat{\section}{\bfseries\Large\centering}
+\renewcommand{\bibname}{\centering REFERENCES}
+%\renewcommand{\refname}{\centering REFERENCES}
+%\bibliographystyle{apacite}
+\bibliography{reference}
+%\endgroup   %\begingroup
+%\raggedright
+
+
+
+
+\end{document}

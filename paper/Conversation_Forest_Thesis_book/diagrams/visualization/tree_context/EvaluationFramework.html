@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluation Framework Flow</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes flowDown {
+            0% { stroke-dashoffset: 20; }
+            100% { stroke-dashoffset: 0; }
+        }
+        .flow-arrow {
+            stroke-dasharray: 8, 4;
+            animation: flowDown 1.5s linear infinite;
+        }
+        body { overflow: hidden; }
+    </style>
+</head>
+<body>
+    <div class="w-screen h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-50 p-6 overflow-hidden">
+        <div class="h-full flex flex-col">
+            
+            <!-- Title -->
+            <div class="text-center mb-6">
+                <h1 class="text-4xl font-bold text-gray-800 mb-2">AI-Based Evaluation Framework</h1>
+                <p class="text-sm text-gray-600">LLM Judge System for Response Quality Assessment</p>
+            </div>
+
+            <!-- Main Content -->
+            <div class="flex-1 flex items-center justify-center">
+                <div class="relative w-full max-w-5xl mx-auto" style="height: 500px;">
+
+                    <!-- Step 1: AI Response -->
+                    <div class="absolute left-0 top-1/2 transform -translate-y-1/2 w-80">
+                        <div class="bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-xl shadow-2xl border-4 border-blue-700 p-6">
+                            <div class="text-center mb-3">
+                                <div class="text-5xl mb-3">🤖</div>
+                                <div class="text-2xl font-bold mb-2">AI Response</div>
+                                <div class="text-sm text-blue-100">System Output</div>
+                            </div>
+                            <div class="bg-blue-700/50 rounded-lg p-4 text-sm space-y-2">
+                                <div class="text-blue-50">
+                                    <span class="font-semibold">Query:</span> User question
+                                </div>
+                                <div class="text-blue-50">
+                                    <span class="font-semibold">Answer:</span> Generated response
+                                </div>
+                                <div class="text-blue-50">
+                                    <span class="font-semibold">Context:</span> Retrieved info
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Arrow Right -->
+                    <div class="absolute left-80 top-1/2 transform -translate-y-1/2" style="margin-left: 20px;">
+                        <svg width="140" height="80">
+                            <defs>
+                                <marker id="arrowhead1" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                                    <polygon points="0 0, 10 3, 0 6" fill="#8b5cf6" />
+                                </marker>
+                            </defs>
+                            <path d="M10 40 L130 40" stroke="#8b5cf6" stroke-width="6" class="flow-arrow" marker-end="url(#arrowhead1)"/>
+                            <text x="70" y="30" fill="#8b5cf6" font-size="14" font-weight="bold" text-anchor="middle">Evaluate</text>
+                        </svg>
+                    </div>
+
+                    <!-- Step 2: Expected Answer (Top) -->
+                    <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-64">
+                        <div class="bg-gradient-to-br from-emerald-500 to-emerald-600 text-white rounded-xl shadow-xl border-3 border-emerald-700 p-4">
+                            <div class="text-center mb-2">
+                                <div class="text-3xl mb-2">✅</div>
+                                <div class="text-lg font-bold">Expected Answer</div>
+                            </div>
+                            <div class="bg-emerald-700/50 rounded-lg p-3 text-xs">
+                                <div class="text-emerald-50 text-center">
+                                    Ground truth from test dataset
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: LLM Judge (Center) -->
+                    <div class="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-72">
+                        <div class="bg-gradient-to-br from-purple-500 to-purple-600 text-white rounded-xl shadow-2xl border-4 border-purple-700 p-6">
+                            <div class="text-center mb-3">
+                                <div class="text-5xl mb-3">⚖️</div>
+                                <div class="text-2xl font-bold mb-2">LLM Judge</div>
+                                <div class="text-sm text-purple-100">GPT-4o Evaluator</div>
+                            </div>
+                            <div class="bg-purple-700/50 rounded-lg p-4 text-sm space-y-2">
+                                <div class="text-purple-50 font-semibold mb-2 text-center">Compares:</div>
+                                <div class="text-purple-50 flex items-center gap-2">
+                                    <span>📝</span>
+                                    <span>AI Response vs Expected</span>
+                                </div>
+                                <div class="text-purple-50 flex items-center gap-2">
+                                    <span>🎯</span>
+                                    <span>Context relevance</span>
+                                </div>
+                                <div class="text-purple-50 flex items-center gap-2">
+                                    <span>🚫</span>
+                                    <span>No context pollution</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Arrow Down from Expected to Judge -->
+                    <div class="absolute top-32 left-1/2 transform -translate-x-1/2">
+                        <svg width="60" height="50">
+                            <path d="M30 5 L30 45" stroke="#10b981" stroke-width="4" class="flow-arrow"/>
+                            <path d="M30 48 L26 40 M30 48 L34 40" stroke="#10b981" stroke-width="4" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+
+                    <!-- Arrow Right from Judge -->
+                    <div class="absolute left-1/2 top-1/2 transform -translate-y-1/2" style="margin-left: 136px;">
+                        <svg width="140" height="80">
+                            <defs>
+                                <marker id="arrowhead2" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                                    <polygon points="0 0, 10 3, 0 6" fill="#f59e0b" />
+                                </marker>
+                            </defs>
+                            <path d="M10 40 L130 40" stroke="#f59e0b" stroke-width="6" class="flow-arrow" marker-end="url(#arrowhead2)"/>
+                            <text x="70" y="30" fill="#f59e0b" font-size="14" font-weight="bold" text-anchor="middle">Decides</text>
+                        </svg>
+                    </div>
+
+                    <!-- Step 4: Decision (Right) -->
+                    <div class="absolute right-0 top-1/2 transform -translate-y-1/2 w-80">
+                        <div class="bg-gradient-to-br from-amber-500 to-amber-600 text-white rounded-xl shadow-2xl border-4 border-amber-700 p-6">
+                            <div class="text-center mb-3">
+                                <div class="text-5xl mb-3">🎯</div>
+                                <div class="text-2xl font-bold mb-2">Judgment</div>
+                                <div class="text-sm text-amber-100">Binary Decision</div>
+                            </div>
+                            <div class="space-y-3">
+                                <div class="bg-green-600 rounded-lg p-4 text-center">
+                                    <div class="text-3xl mb-1">✓</div>
+                                    <div class="text-xl font-bold">CORRECT</div>
+                                    <div class="text-xs text-green-100 mt-1">Pass</div>
+                                </div>
+                                <div class="text-center text-amber-200 font-bold">OR</div>
+                                <div class="bg-red-600 rounded-lg p-4 text-center">
+                                    <div class="text-3xl mb-1">✗</div>
+                                    <div class="text-xl font-bold">WRONG</div>
+                                    <div class="text-xs text-red-100 mt-1">Fail</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="text-center text-sm text-gray-700 mt-4">
+                <p class="font-bold text-lg mb-1">Evaluation Flow: AI Response → LLM Judge (+ Expected) → Right/Wrong Decision</p>
+                <p class="text-xs text-gray-600">Automated quality assessment using GPT-4o as evaluator</p>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>

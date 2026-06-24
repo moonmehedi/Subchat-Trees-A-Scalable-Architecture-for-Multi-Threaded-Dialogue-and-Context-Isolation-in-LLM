@@ -1,0 +1,7 @@
+% Put in this file the names of the thesis group members.
+% One name per line, follow the name with the student number, 
+% separated by a comma(,)
+Student Name 1, Student No. Student1ID,
+Student Name 2, Student No. Student2ID,
+Student Name 3, Student No. Student3ID,
+

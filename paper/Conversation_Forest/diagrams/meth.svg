@@ -1,0 +1,292 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1300 860" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif">
+  <defs>
+    <marker id="arr" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#334155"/>
+    </marker>
+    <marker id="arr-ret" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#6366f1"/>
+    </marker>
+    <marker id="arr-gray" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#94a3b8"/>
+    </marker>
+    <filter id="sh" x="-2%" y="-2%" width="104%" height="108%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.07"/>
+    </filter>
+  </defs>
+
+  <rect width="1300" height="860" fill="#fff"/>
+
+  <!-- ══ Title ══ -->
+  <text x="650" y="40" text-anchor="middle" font-size="24" font-weight="700" fill="#0f172a" letter-spacing="-0.3">Subchat Trees: Architecture Overview</text>
+  <line x1="470" y1="50" x2="830" y2="50" stroke="#e2e8f0" stroke-width="1"/>
+
+  <!-- ══════════════════════════════════════════════════ -->
+  <!--  MODULE 1 (a): IBI — Top Left                     -->
+  <!-- ══════════════════════════════════════════════════ -->
+  <g filter="url(#sh)">
+    <rect x="40" y="72" width="555" height="310" rx="10" fill="#eff6ff" stroke="#3b82f6" stroke-width="2"/>
+  </g>
+  <!-- Badge + Title -->
+  <circle cx="70" cy="100" r="16" fill="#3b82f6"/>
+  <text x="70" y="105" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">a</text>
+  <text x="96" y="106" font-size="18" font-weight="700" fill="#1e3a5f">Interactive Branching Interface</text>
+  <text x="96" y="126" font-size="11" font-style="italic" fill="#64748b">User-driven branching from selected parent text</text>
+
+  <!-- Text Selection box -->
+  <rect x="55" y="142" width="255" height="114" rx="6" fill="#fff" stroke="#93c5fd" stroke-width="1"/>
+  <text x="70" y="161" font-size="12" font-weight="600" fill="#1e40af">Selection-Based Branching</text>
+  <line x1="65" y1="168" x2="300" y2="168" stroke="#dbeafe" stroke-width="1"/>
+  <text x="70" y="186" font-size="10.5" fill="#334155">• User highlights a text span in the parent node</text>
+  <text x="70" y="202" font-size="10.5" fill="#334155">• A focused child subchat is created from that span</text>
+  <text x="70" y="218" font-size="10.5" fill="#334155">• Follow-up prompt F is attached to guide the child</text>
+  <text x="70" y="234" font-size="10.5" fill="#334155">• Parent context is inherited once at creation</text>
+
+  <!-- Tree Sidebar box -->
+  <rect x="325" y="142" width="255" height="114" rx="6" fill="#fff" stroke="#93c5fd" stroke-width="1"/>
+  <text x="340" y="161" font-size="12" font-weight="600" fill="#1e40af">Tree Navigation View</text>
+  <line x1="335" y1="168" x2="570" y2="168" stroke="#dbeafe" stroke-width="1"/>
+  <text x="340" y="186" font-size="10.5" fill="#334155">• Root node represents the main conversation</text>
+  <text x="340" y="202" font-size="10.5" fill="#334155">• Child nodes represent focused follow-up threads</text>
+  <text x="340" y="218" font-size="10.5" fill="#334155">• Depth encodes lineage r → ... → n</text>
+  <text x="340" y="234" font-size="10.5" fill="#334155">• Sibling branches remain context-isolated</text>
+
+  <!-- SSE Streaming row -->
+  <rect x="55" y="268" width="525" height="36" rx="6" fill="#fff" stroke="#93c5fd" stroke-width="1"/>
+  <text x="70" y="289" font-size="11.5" font-weight="600" fill="#1e40af">Messenger-Style Interaction</text>
+  <text x="252" y="289" font-size="10.5" fill="#334155">— Familiar chat interface with in-place branching and focused follow-ups</text>
+
+  <!-- Trigger equation -->
+  <rect x="55" y="314" width="525" height="28" rx="5" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1" stroke-dasharray="4,2"/>
+  <text x="70" y="333" font-size="10.5" fill="#1e40af" font-style="italic">Branching preserves the parent thread while opening a new child context.</text>
+
+  <!-- Label (a) -->
+  <text x="55" y="362" font-size="10" fill="#94a3b8" font-style="italic">(a) User interface with text-selection-driven subchat creation</text>
+
+  <!-- ══════════════════════════════════════════════════ -->
+  <!--  MODULE 2 (b): HCF — Top Right                    -->
+  <!-- ══════════════════════════════════════════════════ -->
+  <g filter="url(#sh)">
+    <rect x="700" y="72" width="555" height="310" rx="10" fill="#f0fdf4" stroke="#22c55e" stroke-width="2"/>
+  </g>
+  <circle cx="730" cy="100" r="16" fill="#22c55e"/>
+  <text x="730" y="105" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">b</text>
+  <text x="756" y="106" font-size="18" font-weight="700" fill="#14532d">Hierarchical Conversation Forest</text>
+  <text x="756" y="126" font-size="11" font-style="italic" fill="#64748b">Forest = {T1, T2, ..., Tp} of rooted conversation trees</text>
+
+  <!-- Mini tree diagram -->
+  <rect x="715" y="142" width="225" height="150" rx="6" fill="#fff" stroke="#86efac" stroke-width="1"/>
+  <text x="730" y="161" font-size="12" font-weight="600" fill="#166534">Tree T = (N, E, r, B, V)</text>
+  <line x1="725" y1="168" x2="930" y2="168" stroke="#dcfce7" stroke-width="1"/>
+  <!-- Root -->
+  <rect x="792" y="180" width="56" height="20" rx="4" fill="#22c55e" stroke="#15803d" stroke-width="1"/>
+  <text x="820" y="194" text-anchor="middle" font-size="9.5" font-weight="600" fill="#fff">Root r</text>
+  <!-- Children lines -->
+  <line x1="806" y1="200" x2="770" y2="218" stroke="#15803d" stroke-width="1.5"/>
+  <line x1="834" y1="200" x2="870" y2="218" stroke="#15803d" stroke-width="1.5"/>
+  <!-- Child 1 -->
+  <rect x="742" y="218" width="56" height="18" rx="4" fill="#86efac" stroke="#15803d" stroke-width="1"/>
+  <text x="770" y="231" text-anchor="middle" font-size="9" fill="#14532d">Child₁</text>
+  <!-- Child 2 -->
+  <rect x="844" y="218" width="56" height="18" rx="4" fill="#86efac" stroke="#15803d" stroke-width="1"/>
+  <text x="872" y="231" text-anchor="middle" font-size="9" fill="#14532d">Child₂</text>
+  <!-- Grandchild -->
+  <line x1="770" y1="236" x2="770" y2="252" stroke="#15803d" stroke-width="1.5"/>
+  <rect x="742" y="252" width="56" height="18" rx="4" fill="#dcfce7" stroke="#15803d" stroke-width="1"/>
+  <text x="770" y="265" text-anchor="middle" font-size="8.5" fill="#14532d">Grand₁</text>
+  <text x="730" y="285" font-size="9" fill="#64748b">Path: r → Child₁ → Grand₁</text>
+
+  <!-- Core Classes -->
+  <rect x="955" y="142" width="285" height="150" rx="6" fill="#fff" stroke="#86efac" stroke-width="1"/>
+  <text x="970" y="161" font-size="12" font-weight="600" fill="#166534">Node Semantics</text>
+  <line x1="965" y1="168" x2="1230" y2="168" stroke="#dcfce7" stroke-width="1"/>
+  <text x="970" y="187" font-size="10.5" fill="#334155">• Each node stores title, parent, children, and path</text>
+  <text x="970" y="205" font-size="10.5" fill="#334155">• Each node owns a local buffer B_n</text>
+  <text x="970" y="223" font-size="10.5" fill="#334155">• Follow-up nodes store selected-text context</text>
+  <text x="970" y="241" font-size="10.5" fill="#334155">• Child nodes copy parent state once at creation</text>
+  <text x="970" y="259" font-size="10.5" fill="#334155">• Subsequent turns remain local to that branch</text>
+
+  <!-- Definition box -->
+  <rect x="715" y="304" width="525" height="40" rx="5" fill="#f0fdf4" stroke="#bbf7d0" stroke-width="1" stroke-dasharray="4,2"/>
+  <text x="730" y="321" font-size="11" fill="#166534" font-weight="600">Def. 1.</text>
+  <text x="776" y="321" font-size="11" fill="#166534" font-style="italic">Each node n ∈ N has local state, parent linkage, and branch-specific memory.</text>
+  <text x="730" y="337" font-size="10" fill="#166534" font-style="italic">Siblings do not share context; inheritance occurs only at child creation.</text>
+
+  <!-- Label (b) -->
+  <text x="715" y="365" font-size="10" fill="#94a3b8" font-style="italic">(b) Hierarchical tree structure for conversation organization</text>
+
+  <!-- ══════════════════════════════════════════════════ -->
+  <!--  MODULE 3 (c): TCIE — Bottom Right                -->
+  <!-- ══════════════════════════════════════════════════ -->
+  <g filter="url(#sh)">
+    <rect x="700" y="440" width="555" height="380" rx="10" fill="#fefce8" stroke="#eab308" stroke-width="2"/>
+  </g>
+  <circle cx="730" cy="468" r="16" fill="#eab308"/>
+  <text x="730" y="473" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">c</text>
+  <text x="756" y="473" font-size="18" font-weight="700" fill="#713f12">Three-Tier Node Memory</text>
+  <text x="756" y="493" font-size="11" font-style="italic" fill="#64748b">Per-node short-, medium-, and long-term context</text>
+
+  <!-- Tier 1 -->
+  <rect x="715" y="510" width="525" height="52" rx="6" fill="#fff" stroke="#fde047" stroke-width="1.5"/>
+  <rect x="723" y="517" width="50" height="18" rx="4" fill="#eab308"/>
+  <text x="748" y="530" text-anchor="middle" font-size="9.5" font-weight="700" fill="#fff">Tier 1</text>
+  <text x="782" y="530" font-size="12" font-weight="600" fill="#713f12">Short-Term: Circular Buffer B_n</text>
+  <text x="782" y="550" font-size="10.5" fill="#334155">FIFO deque · C messages (default 15) · Per-node isolated</text>
+
+  <!-- Tier 2 -->
+  <rect x="715" y="572" width="525" height="52" rx="6" fill="#fff" stroke="#fde047" stroke-width="1.5"/>
+  <rect x="723" y="579" width="50" height="18" rx="4" fill="#ca8a04"/>
+  <text x="748" y="592" text-anchor="middle" font-size="9.5" font-weight="700" fill="#fff">Tier 2</text>
+  <text x="782" y="592" font-size="12" font-weight="600" fill="#713f12">Medium-Term: Rolling Summary S_n</text>
+  <text x="782" y="612" font-size="10.5" fill="#334155">S_n = LLM(S_{n−1} ⊕ M_buffer) · Triggered at C, 2C, 3C, ...</text>
+
+  <!-- Tier 3 -->
+  <rect x="715" y="634" width="525" height="52" rx="6" fill="#fff" stroke="#fde047" stroke-width="1.5"/>
+  <rect x="723" y="641" width="50" height="18" rx="4" fill="#a16207"/>
+  <text x="748" y="654" text-anchor="middle" font-size="9.5" font-weight="700" fill="#fff">Tier 3</text>
+  <text x="782" y="654" font-size="12" font-weight="600" fill="#713f12">Long-Term: Vector Archive V</text>
+  <text x="782" y="674" font-size="10.5" fill="#334155">Immediate vector indexing with node_id, role, timestamp, and turn number</text>
+
+  <!-- Always vs On-demand note -->
+  <rect x="715" y="698" width="525" height="40" rx="6" fill="#fefce8" stroke="#facc15" stroke-width="1"/>
+  <text x="730" y="716" font-size="11" font-weight="600" fill="#713f12">Prompt assembly:</text>
+  <text x="830" y="716" font-size="10.5" fill="#334155">local buffer and rolling summary are always available</text>
+  <text x="730" y="732" font-size="10.5" fill="#92400e">Retrieved blocks R are appended only when retrieval is triggered for the current query.</text>
+
+  <!-- Inheritance -->
+  <rect x="715" y="748" width="525" height="55" rx="5" fill="#fff" stroke="#fde047" stroke-width="1" stroke-dasharray="4,2"/>
+  <text x="730" y="766" font-size="11" font-weight="600" fill="#713f12">Context Inheritance (Eq. 4):</text>
+  <text x="730" y="784" font-size="10.5" fill="#713f12" font-style="italic">At child creation: selected-text prompt + parent summary + parent buffer copy</text>
+  <text x="730" y="798" font-size="9.5" fill="#92400e">One-time inheritance · No sibling sharing · No backward propagation to the parent</text>
+
+  <!-- Label (c) -->
+  <text x="715" y="830" font-size="10" fill="#94a3b8" font-style="italic">(c) Local buffer with fixed-size memory and rolling summarization</text>
+
+  <!-- ══════════════════════════════════════════════════ -->
+  <!--  MODULE 4 (d): Memory Retrieval — Bottom Left      -->
+  <!-- ══════════════════════════════════════════════════ -->
+  <g filter="url(#sh)">
+    <rect x="40" y="440" width="555" height="380" rx="10" fill="#fdf2f8" stroke="#ec4899" stroke-width="2"/>
+  </g>
+  <circle cx="70" cy="468" r="16" fill="#ec4899"/>
+  <text x="70" y="473" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">d</text>
+  <text x="96" y="473" font-size="18" font-weight="700" fill="#831843">On-Demand Retrieval Pipeline</text>
+  <text x="96" y="493" font-size="11" font-style="italic" fill="#64748b">Long-term retrieval from the vector archive when local context is insufficient</text>
+
+  <!-- Agentic decision box -->
+  <rect x="55" y="510" width="525" height="44" rx="6" fill="#fce7f3" stroke="#ec4899" stroke-width="1.5"/>
+  <text x="70" y="528" font-size="11.5" font-weight="700" fill="#831843">Retrieval trigger:</text>
+  <text x="170" y="528" font-size="10.5" fill="#334155">The system decides whether archived context is needed for the current query</text>
+  <text x="70" y="545" font-size="10" fill="#9d174d">If not triggered, generation proceeds using node-local memory only.</text>
+
+  <!-- Phase 1 -->
+  <rect x="55" y="566" width="250" height="82" rx="6" fill="#fff" stroke="#f9a8d4" stroke-width="1.5"/>
+  <rect x="63" y="573" width="52" height="17" rx="3" fill="#ec4899"/>
+  <text x="89" y="585" text-anchor="middle" font-size="9" font-weight="700" fill="#fff">Phase 1</text>
+  <text x="124" y="585" font-size="12" font-weight="600" fill="#831843">Decompose</text>
+  <text x="68" y="605" font-size="10.5" fill="#334155">Generate q₀ plus up to n ≤ 8</text>
+  <text x="68" y="620" font-size="10.5" fill="#334155">focused reformulations of</text>
+  <text x="68" y="635" font-size="10.5" fill="#334155">the user query</text>
+
+  <!-- Phase 2 -->
+  <rect x="320" y="566" width="265" height="82" rx="6" fill="#fff" stroke="#f9a8d4" stroke-width="1.5"/>
+  <rect x="328" y="573" width="52" height="17" rx="3" fill="#db2777"/>
+  <text x="354" y="585" text-anchor="middle" font-size="9" font-weight="700" fill="#fff">Phase 2</text>
+  <text x="389" y="585" font-size="12" font-weight="600" fill="#831843">Search</text>
+  <text x="333" y="605" font-size="10.5" fill="#334155">Embed each sub-query with</text>
+  <text x="333" y="620" font-size="10.5" fill="#334155">all-mpnet-base-v2 and search</text>
+  <text x="333" y="635" font-size="10.5" fill="#334155">ChromaDB (N = 20 candidates/query)</text>
+
+  <!-- Arrow P1→P2 -->
+  <line x1="305" y1="607" x2="320" y2="607" stroke="#831843" stroke-width="1.8" marker-end="url(#arr)"/>
+
+  <!-- Phase 3 -->
+  <rect x="55" y="660" width="250" height="82" rx="6" fill="#fff" stroke="#f9a8d4" stroke-width="1.5"/>
+  <rect x="63" y="667" width="52" height="17" rx="3" fill="#be185d"/>
+  <text x="89" y="679" text-anchor="middle" font-size="9" font-weight="700" fill="#fff">Phase 3</text>
+  <text x="124" y="679" font-size="12" font-weight="600" fill="#831843">Re-rank</text>
+  <text x="68" y="699" font-size="10.5" fill="#334155">Deduplicate the candidate pool</text>
+  <text x="68" y="714" font-size="10.5" fill="#334155">Re-rank against the original</text>
+  <text x="68" y="729" font-size="10.5" fill="#334155">query and keep top-k anchors</text>
+
+  <!-- Phase 4 -->
+  <rect x="320" y="660" width="265" height="82" rx="6" fill="#fff" stroke="#f9a8d4" stroke-width="1.5"/>
+  <rect x="328" y="667" width="52" height="17" rx="3" fill="#9d174d"/>
+  <text x="354" y="679" text-anchor="middle" font-size="9" font-weight="700" fill="#fff">Phase 4</text>
+  <text x="389" y="679" font-size="12" font-weight="600" fill="#831843">Expand</text>
+  <text x="333" y="699" font-size="10.5" fill="#334155">Expand each anchor into a</text>
+  <text x="333" y="714" font-size="10.5" fill="#334155">turn-based window ±δ (δ = 2)</text>
+  <text x="333" y="729" font-size="10.5" fill="#334155">to form coherent context blocks R</text>
+
+  <!-- Arrow P2→P3 (L-shaped: down then left) -->
+  <line x1="452" y1="648" x2="452" y2="656" stroke="#831843" stroke-width="1.8"/>
+  <line x1="452" y1="656" x2="305" y2="656" stroke="#831843" stroke-width="1.8"/>
+  <line x1="305" y1="656" x2="305" y2="660" stroke="#831843" stroke-width="1.8" marker-end="url(#arr)"/>
+
+  <!-- Arrow P3→P4 -->
+  <line x1="305" y1="701" x2="320" y2="701" stroke="#831843" stroke-width="1.8" marker-end="url(#arr)"/>
+
+  <!-- Embedding info -->
+  <rect x="55" y="754" width="525" height="25" rx="5" fill="#fdf2f8" stroke="#f9a8d4" stroke-width="1" stroke-dasharray="4,2"/>
+  <text x="70" y="771" font-size="10.5" fill="#831843" font-weight="600">Embedding model:</text>
+  <text x="172" y="771" font-size="10.5" fill="#831843" font-style="italic">all-mpnet-base-v2, d = 768</text>
+
+  <!-- Retrieval outcome -->
+  <rect x="55" y="789" width="525" height="25" rx="5" fill="#fff" stroke="#f9a8d4" stroke-width="1"/>
+  <text x="70" y="806" font-size="10" fill="#9d174d">Output: a small set of coherent retrieved blocks R for prompt assembly</text>
+
+  <!-- Label (d) -->
+  <text x="55" y="833" font-size="10" fill="#94a3b8" font-style="italic">(d) Multi-query retrieval pipeline for on-demand long-term memory access</text>
+
+  <!-- ══════════════════════════════════════════════════ -->
+  <!--  FLOW ARROWS — Clockwise: a → b → c → d → a      -->
+  <!-- ══════════════════════════════════════════════════ -->
+
+  <!-- Arrow a→b: horizontal top -->
+  <line x1="595" y1="215" x2="700" y2="215" stroke="#334155" stroke-width="2.5" marker-end="url(#arr)"/>
+  <rect x="614" y="200" width="65" height="18" rx="4" fill="#f8fafc" stroke="#94a3b8" stroke-width="1"/>
+  <text x="646" y="213" text-anchor="middle" font-size="10.5" font-weight="600" fill="#334155">creates</text>
+
+  <!-- Arrow b→c: vertical right side -->
+  <line x1="977" y1="382" x2="977" y2="440" stroke="#334155" stroke-width="2.5" marker-end="url(#arr)"/>
+  <rect x="985" y="398" width="68" height="18" rx="4" fill="#f8fafc" stroke="#94a3b8" stroke-width="1"/>
+  <text x="1019" y="411" text-anchor="middle" font-size="10.5" font-weight="600" fill="#334155">isolates</text>
+
+  <!-- Arrow c→d: horizontal bottom (right to left) -->
+  <line x1="700" y1="680" x2="595" y2="680" stroke="#334155" stroke-width="2.5" marker-end="url(#arr)"/>
+  <rect x="618" y="665" width="60" height="18" rx="4" fill="#f8fafc" stroke="#94a3b8" stroke-width="1"/>
+  <text x="648" y="678" text-anchor="middle" font-size="10.5" font-weight="600" fill="#334155">queries</text>
+
+  <!-- Arrow d→a: vertical left side (up) with LLM label -->
+  <line x1="60" y1="440" x2="60" y2="382" stroke="#6366f1" stroke-width="2.5" stroke-dasharray="7,4" marker-end="url(#arr-ret)"/>
+
+  <!-- LLM Response label on left edge -->
+  <rect x="10" y="395" width="40" height="40" rx="6" fill="#eef2ff" stroke="#a5b4fc" stroke-width="1.5"/>
+  <text x="30" y="413" text-anchor="middle" font-size="9" font-weight="700" fill="#4f46e5">LLM</text>
+  <text x="30" y="427" text-anchor="middle" font-size="8" font-weight="600" fill="#6366f1">Response</text>
+
+  <!-- ══════════════════════════════════════════════════ -->
+  <!--  CENTRAL: LLM + Context Assembly                  -->
+  <!-- ══════════════════════════════════════════════════ -->
+
+  <!-- LLM box in center -->
+  <rect x="597" y="394" width="100" height="36" rx="8" fill="#1e293b" stroke="#334155" stroke-width="1.5"/>
+  <text x="647" y="417" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">LLM</text>
+
+  <!-- Prior knowledge label -->
+  <text x="647" y="388" text-anchor="middle" font-size="9" fill="#64748b" font-style="italic">responds with prior knowledge</text>
+
+  <!-- Context input arrow from c (Tier 1+2 always) -->
+  <line x1="700" y1="412" x2="697" y2="412" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arr-gray)"/>
+
+  <!-- Context input arrow from d (on-demand R) -->
+  <line x1="595" y1="412" x2="597" y2="412" stroke="#94a3b8" stroke-width="1.5"/>
+
+  <!-- Labels for inputs -->
+  <text x="710" y="407" font-size="8.5" fill="#64748b">B_n + S_sum</text>
+  <text x="710" y="419" font-size="8" fill="#94a3b8">(always)</text>
+
+  <!-- On-demand label for retrieval arrow -->
+  <text x="540" y="407" font-size="8.5" fill="#64748b" text-anchor="end">R (retrieved)</text>
+  <text x="540" y="419" font-size="8" fill="#94a3b8" text-anchor="end">(on-demand)</text>
+
+</svg>

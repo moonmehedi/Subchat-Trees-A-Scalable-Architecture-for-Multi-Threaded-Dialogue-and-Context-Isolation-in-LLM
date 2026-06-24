@@ -1,0 +1,116 @@
+\chapter{THESIS SELF-ASSESSMENT REPORT}
+\label{annex:self_assessment}
+\vspace{-3em}
+
+\section{Research Information}
+
+\textbf{Title of the Research:} Subchat Trees: A Scalable Hierarchical Architecture for Multi-Threaded Dialogue and Context Isolation in LLMs
+
+\textbf{Supervisor:} Dr. Md. Aktaruzzaman, Associate Professor and Head, Department of RME, DIU
+
+\textbf{Co-supervisor:} Not applicable
+
+\textbf{Research Team:} MD Mehedi Hasan Moon (first author), Kabbo Sarker Surjo and Ariful Islam Khan
+
+\section{Synopsis of the Research}
+Subchat Trees organizes mixed linear chat into user-controlled branches. Each node uses a local buffer, rolling summary and shared vector memory; children inherit parent context without contaminating parent or sibling branches. Across 309 turns, 59 topics, 43 recall probes, three models and four buffers, the architecture improves context-isolation F1 in every tested configuration without fine-tuning.
+
+\section{Mapping of Attained Course Outcomes}
+\begin{landscape}
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\begin{longtable}{@{}p{0.08\linewidth}p{0.05\linewidth}p{0.42\linewidth}p{0.05\linewidth}p{0.05\linewidth}p{0.18\linewidth}@{}}
+\caption{Mapping of attained CSE-400 course outcomes.}\label{tab:annexB_co_mapping}\\
+\toprule
+\textbf{Term} & \textbf{CO} & \textbf{Attained Outcome} & \textbf{PO} & \textbf{Level} & \textbf{Relevant Evidence} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Term} & \textbf{CO} & \textbf{Attained Outcome} & \textbf{PO} & \textbf{Level} & \textbf{Relevant Evidence} \\
+\midrule
+\endhead
+Spring & CO1 & Identified context pollution in linear multi-topic chat as a contemporary computing problem and proposed a research contribution. & PO12 & H & Sections 1.2, 2.6, 6.2 \\
+Spring & CO2 & Identified system outcomes, functional requirements, constraints and specifications for hierarchical conversation management. & PO2 & H & Section 1.4, Chapter 3, Annexure A \\
+Spring & CO3 & Decomposed the system, managed resources and risks, and documented a timeline and budget. & PO11 & H & Sections 3.1--3.5, Annexure A \\
+Spring & CO4 & Investigated model behavior through controlled experiments, quantitative metrics and log analysis. & PO4 & H & Sections 4.1--4.4 \\
+Spring & CO5 & Designed, implemented and evaluated the proposed architecture against a linear baseline. & PO3 & H & Chapters 3 and 4 \\
+Fall & CO1 & Applied modern analysis, development and validation tools to the system and subsystems. & PO5 & M & Sections 3.5 and 4.1 \\
+Fall & CO2 & Assessed social impacts and responsibilities related to privacy, accessibility, reliability and resource use. & PO6 & M & Section 5.3, Annexure A \\
+Fall & CO3 & Evaluated ethical and professional implications of inherited context and high-stakes use. & PO8 & H & Section 5.2, Annexure A \\
+Fall & CO4 & Considered environmental sustainability through compute use, retrieval decisions and token efficiency. & PO7 & L & Section 5.3, Annexure A \\
+Fall & CO5 & Worked as a coordinated team using shared implementation, experiments, validation and documentation. & PO9 & M & Annexure A, Declaration \\
+Fall & CO6 & Communicated the project through the thesis, diagrams, evaluation tables and presentation-oriented findings. & PO10 & H & Chapters 3--6, Annexure B \\
+\botrule
+\end{longtable}
+\normalsize
+\end{landscape}
+
+\section{Assessment Questions and Answers}
+
+\subsection*{i. Real-world problem, research gap and future contribution}
+The project addresses context pollution in linear multi-topic chat through user-controlled branches, branch-aware memory and a structured evaluation benchmark.
+
+\subsection*{ii. Requirements, constraints and functional specifications}
+Requirements cover inheritance, isolation, bounded buffers, summarization and retrieval under context, cost, usability and privacy constraints.
+
+\subsection*{iii. Planning, scheduling, resource allocation and risk management}
+The work followed six phases from problem study to documentation, using available resources and controls for model failure, leakage, dataset errors and sensitive inheritance.
+
+\subsection*{iv. Investigation and analysis methods}
+Deterministic replay, buffer ablation and cross-model experiments compare identical messages using isolation, recall, token, latency, RAG and log evidence.
+
+\subsection*{v. Design, implementation and evaluation}
+The architecture combines hierarchical nodes, local buffers, rolling summaries, shared vector memory and isolated child updates. Evaluation against a linear baseline shows higher F1 in every configuration.
+
+\subsection*{vi. Modern engineering and computing tools}
+The project uses FastAPI, Next.js, ChromaDB, SentenceTransformers, vLLM, model APIs, Kaggle GPUs and GitHub for modular implementation and reproducible testing.
+
+\subsection*{vii. Societal impacts and stakeholder responsibilities}
+Branches can improve accessibility and reduce leakage, while developers remain responsible for transparent inheritance, privacy controls and safeguards.
+
+\subsection*{viii. Ethical and professional issues}
+Key ethical issues are privacy, inherited sensitive context and high-stakes reliance. Production systems should expose inheritance, support deletion and state their limitations.
+
+\subsection*{ix. Environmental sustainability}
+Bounded buffers, conditional retrieval, reusable embeddings and suitable models can reduce unnecessary computation; the prototype does not measure full carbon impact.
+
+\subsection*{x. Individual roles and team collaboration}
+MD Mehedi Hasan Moon coordinated architecture, experiments, analysis and writing. Kabbo Sarker Surjo and Ariful Islam Khan contributed implementation, testing, validation and review.
+
+\subsection*{xi. Communication to technical and non-technical audiences}
+Technical communication uses the architecture, benchmark, metrics and implementation; non-technical communication explains how branches provide the right context for each task.
+
+\section{Signature Panel}
+\vspace{12mm}
+
+\noindent
+\begin{minipage}[t]{0.45\textwidth}
+\hrule\medskip
+Dr. Md. Aktaruzzaman\\
+Supervisor\\
+Date:
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.45\textwidth}
+\hrule\medskip
+MD Mehedi Hasan Moon\\
+Student No. 202214048\\
+Date:
+\end{minipage}
+
+\vspace{18mm}
+
+\noindent
+\begin{minipage}[t]{0.45\textwidth}
+\hrule\medskip
+Kabbo Sarker Surjo\\
+Student No. 202214030\\
+Date:
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.45\textwidth}
+\hrule\medskip
+Ariful Islam Khan\\
+Student No. 202214039\\
+Date:
+\end{minipage}

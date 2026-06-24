@@ -1,0 +1,48 @@
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {3.1}{\ignorespaces LLM temperature settings by task.}}{28}{table.caption.10}%
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {4.1}{\ignorespaces Conversation-level provenance for the final VBRI dataset. Turns denote replay turns contributed to \texttt {merged\_realistic\_interleaved.json}, excluding appended recall probes.}}{33}{table.caption.11}%
+\contentsline {table}{\numberline {4.2}{\ignorespaces 7B: merged context-isolation metrics across buffer sizes.}}{40}{table.caption.12}%
+\contentsline {table}{\numberline {4.3}{\ignorespaces 7B: aggregate recall-probe scores and probe cost. Topic-specific rows are kept in the appendix; this table reports the major aggregate recall results.}}{40}{table.caption.13}%
+\contentsline {table}{\numberline {4.4}{\ignorespaces 7B: merged system-performance metrics, including recall/summarization probe token accounting.}}{41}{table.caption.14}%
+\contentsline {table}{\numberline {4.5}{\ignorespaces 7B: merged recall/summarization-probe RAG decision breakdown.}}{41}{table.caption.15}%
+\contentsline {table}{\numberline {4.6}{\ignorespaces 14B: merged context-isolation metrics across buffer sizes.}}{42}{table.caption.16}%
+\contentsline {table}{\numberline {4.7}{\ignorespaces 14B: aggregate recall-probe scores and probe cost.}}{43}{table.caption.17}%
+\contentsline {table}{\numberline {4.8}{\ignorespaces 14B: merged system-performance metrics, including recall/summarization probe token accounting.}}{43}{table.caption.18}%
+\contentsline {table}{\numberline {4.9}{\ignorespaces 14B: merged recall/summarization-probe RAG decision breakdown.}}{44}{table.caption.19}%
+\contentsline {table}{\numberline {4.10}{\ignorespaces 32B: merged context-isolation metrics across buffer sizes.}}{45}{table.caption.20}%
+\contentsline {table}{\numberline {4.11}{\ignorespaces 32B: aggregate recall-probe scores and probe cost.}}{45}{table.caption.21}%
+\contentsline {table}{\numberline {4.12}{\ignorespaces 32B: merged system-performance metrics, including recall/summarization probe token accounting.}}{46}{table.caption.22}%
+\contentsline {table}{\numberline {4.13}{\ignorespaces 32B: merged recall/summarization-probe RAG decision breakdown.}}{46}{table.caption.23}%
+\contentsline {table}{\numberline {4.14}{\ignorespaces Best Subchat Trees configuration for each model.}}{47}{table.caption.24}%
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {5.1}{\ignorespaces Complex Engineering Problem (CEP)}}{54}{table.caption.30}%
+\contentsline {table}{\numberline {5.2}{\ignorespaces Complex Engineering Activities (CEA)}}{55}{table.caption.31}%
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {A.1}{\ignorespaces 7B: merged context-isolation metrics.}}{67}{table.A.1}%
+\contentsline {table}{\numberline {A.2}{\ignorespaces 7B: merged aggregate recall scores and probe cost.}}{68}{table.A.2}%
+\contentsline {table}{\numberline {A.3}{\ignorespaces 7B: per-topic ROUGE-1 F1 across buffers.}}{69}{table.A.3}%
+\contentsline {table}{\numberline {A.4}{\ignorespaces 7B: per-topic ROUGE-L F1 across buffers.}}{71}{table.A.4}%
+\contentsline {table}{\numberline {A.5}{\ignorespaces 7B: per-topic BLEU-2 across buffers.}}{73}{table.A.5}%
+\contentsline {table}{\numberline {A.6}{\ignorespaces 7B: merged normal conversation performance metrics.}}{75}{table.A.6}%
+\contentsline {table}{\numberline {A.7}{\ignorespaces 7B: merged performance metrics including recall/summarization probes.}}{76}{table.A.7}%
+\contentsline {table}{\numberline {A.8}{\ignorespaces 7B: merged recall-probe RAG decision breakdown.}}{77}{table.A.8}%
+\contentsline {table}{\numberline {A.9}{\ignorespaces 14B: merged context-isolation metrics.}}{79}{table.A.9}%
+\contentsline {table}{\numberline {A.10}{\ignorespaces 14B: merged aggregate recall scores and probe cost.}}{80}{table.A.10}%
+\contentsline {table}{\numberline {A.11}{\ignorespaces 14B: per-topic ROUGE-1 F1 across buffers.}}{81}{table.A.11}%
+\contentsline {table}{\numberline {A.12}{\ignorespaces 14B: per-topic ROUGE-L F1 across buffers.}}{83}{table.A.12}%
+\contentsline {table}{\numberline {A.13}{\ignorespaces 14B: per-topic BLEU-2 across buffers.}}{85}{table.A.13}%
+\contentsline {table}{\numberline {A.14}{\ignorespaces 14B: merged normal conversation performance metrics.}}{87}{table.A.14}%
+\contentsline {table}{\numberline {A.15}{\ignorespaces 14B: merged performance metrics including recall/summarization probes.}}{88}{table.A.15}%
+\contentsline {table}{\numberline {A.16}{\ignorespaces 14B: merged recall-probe RAG decision breakdown.}}{89}{table.A.16}%
+\contentsline {table}{\numberline {A.17}{\ignorespaces 32B: merged context-isolation metrics.}}{91}{table.A.17}%
+\contentsline {table}{\numberline {A.18}{\ignorespaces 32B: merged aggregate recall scores and probe cost.}}{92}{table.A.18}%
+\contentsline {table}{\numberline {A.19}{\ignorespaces 32B: per-topic ROUGE-1 F1 across buffers.}}{93}{table.A.19}%
+\contentsline {table}{\numberline {A.20}{\ignorespaces 32B: per-topic ROUGE-L F1 across buffers.}}{95}{table.A.20}%
+\contentsline {table}{\numberline {A.21}{\ignorespaces 32B: per-topic BLEU-2 across buffers.}}{97}{table.A.21}%
+\contentsline {table}{\numberline {A.22}{\ignorespaces 32B: merged normal conversation performance metrics.}}{99}{table.A.22}%
+\contentsline {table}{\numberline {A.23}{\ignorespaces 32B: merged performance metrics including recall/summarization probes.}}{100}{table.A.23}%
+\contentsline {table}{\numberline {A.24}{\ignorespaces 32B: merged recall-probe RAG decision breakdown.}}{101}{table.A.24}%

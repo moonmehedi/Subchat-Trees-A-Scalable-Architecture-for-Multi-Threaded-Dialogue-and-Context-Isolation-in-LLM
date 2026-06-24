@@ -1,0 +1,23 @@
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {2.1}{\ignorespaces Aerial Image vs Street-View Image}}{8}{figure.caption.8}%
+\contentsline {figure}{\numberline {2.2}{\ignorespaces Semantic Segmentation}}{9}{figure.caption.9}%
+\contentsline {figure}{\numberline {2.3}{\ignorespaces U-Net}}{11}{figure.caption.10}%
+\contentsline {figure}{\numberline {2.4}{\ignorespaces Segnet Architecture}}{12}{figure.caption.11}%
+\contentsline {figure}{\numberline {2.5}{\ignorespaces Deeplabv3 Architecture}}{13}{figure.caption.12}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Methodology Framework for Detection}}{24}{figure.caption.13}%
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Methodology Framework for Prediction}}{25}{figure.caption.14}%
+\contentsline {figure}{\numberline {3.3}{\ignorespaces Sample Images from Kaggle dataset}}{26}{figure.caption.15}%
+\contentsline {figure}{\numberline {3.4}{\ignorespaces Sample Images from Categories of Custom Dataset}}{27}{figure.caption.16}%
+\contentsline {figure}{\numberline {3.5}{\ignorespaces U-Net Model Architecture}}{30}{figure.caption.18}%
+\contentsline {figure}{\numberline {3.6}{\ignorespaces SegNet Model Architecture}}{31}{figure.caption.19}%
+\contentsline {figure}{\numberline {3.7}{\ignorespaces DeepLabV3plus Model Architecture}}{32}{figure.caption.20}%
+\contentsline {figure}{\numberline {3.8}{\ignorespaces Framework for Ensemble Learning}}{33}{figure.caption.21}%
+\contentsline {figure}{\numberline {3.9}{\ignorespaces Siamese Neural Network Model Architecture}}{38}{figure.caption.22}%
+\contentsline {figure}{\numberline {3.10}{\ignorespaces Proposed Framework for Predicting Change in GVI from Historical Images}}{39}{figure.caption.23}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Outputs from Different Models for Pre-existing Dataset}}{45}{figure.caption.26}%
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Outputs from Different Models for Custom Dataset}}{45}{figure.caption.27}%
+\addvspace {10\p@ }
+\addvspace {10\p@ }

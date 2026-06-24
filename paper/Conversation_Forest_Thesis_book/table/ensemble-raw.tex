@@ -1,0 +1,21 @@
+\begin{table*}[h]
+\centering
+\caption{Value of Evaluation Metrics for Ensemble Learning Technique with Prepared Dataset}
+\captionsetup[table]{skip=10pt}
+
+
+% \def\arraystretch{0.75}
+% \resizebox{\textwidth}{!}
+{
+\begin{tabular}{llllll}
+\hline
+Combination & Acc.   & Prec.  & Recall & F1 & Test Time   \\ \hline
+VGG16 and ResNet50        & 89.9\%  & 70\% & 78\%  & 75\% & 1 min 7 sec\\
+MobileNet and VGG16         & 100\% & 99\% & 97\%  & 98\% & 49 sec\\
+ResNet50 and MobileNet     & 98\% & 85\% & 83\% & 70\% & 1 min 9 sec\\
+Vgg16, ResNet50 and MobileNet    & 98\% & 90\% & 86\% & 89\% & 1 min\\
+ \hline
+\end{tabular}
+}
+\label{table:ensemble-raw}
+\end{table*}

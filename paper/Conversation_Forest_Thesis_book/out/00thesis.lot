@@ -1,0 +1,35 @@
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {3.1}{\ignorespaces LLM temperature settings by task.}}{25}{table.caption.4}%
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {4.1}{\ignorespaces Conversation-level provenance for the final VBRI dataset. Turns denote replay turns contributed to \texttt {merged\_realistic\_interleaved.json}, excluding appended recall probes.}}{29}{table.caption.5}%
+\contentsline {table}{\numberline {4.2}{\ignorespaces 7B: merged context-isolation metrics across buffer sizes.}}{33}{table.caption.6}%
+\contentsline {table}{\numberline {4.3}{\ignorespaces 7B: aggregate recall-probe scores and probe cost. Topic-specific rows are kept in the appendix; this table reports the major aggregate recall results.}}{33}{table.caption.7}%
+\contentsline {table}{\numberline {4.4}{\ignorespaces 7B: merged system-performance metrics, including recall/summarization probe token accounting.}}{34}{table.caption.8}%
+\contentsline {table}{\numberline {4.5}{\ignorespaces 7B: merged recall/summarization-probe RAG decision breakdown.}}{34}{table.caption.9}%
+\contentsline {table}{\numberline {4.6}{\ignorespaces 14B: merged context-isolation metrics across buffer sizes.}}{35}{table.caption.10}%
+\contentsline {table}{\numberline {4.7}{\ignorespaces 14B: aggregate recall-probe scores and probe cost.}}{35}{table.caption.11}%
+\contentsline {table}{\numberline {4.8}{\ignorespaces 14B: merged system-performance metrics, including recall/summarization probe token accounting.}}{36}{table.caption.12}%
+\contentsline {table}{\numberline {4.9}{\ignorespaces 14B: merged recall/summarization-probe RAG decision breakdown.}}{36}{table.caption.13}%
+\contentsline {table}{\numberline {4.10}{\ignorespaces 32B: merged context-isolation metrics across buffer sizes.}}{37}{table.caption.14}%
+\contentsline {table}{\numberline {4.11}{\ignorespaces 32B: aggregate recall-probe scores and probe cost.}}{37}{table.caption.15}%
+\contentsline {table}{\numberline {4.12}{\ignorespaces 32B: merged system-performance metrics, including recall/summarization probe token accounting.}}{38}{table.caption.16}%
+\contentsline {table}{\numberline {4.13}{\ignorespaces 32B: merged recall/summarization-probe RAG decision breakdown.}}{38}{table.caption.17}%
+\contentsline {table}{\numberline {4.14}{\ignorespaces Best Subchat Trees configuration for each model.}}{39}{table.caption.18}%
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {5.1}{\ignorespaces Complex Engineering Problem (CEP)}}{44}{table.caption.24}%
+\contentsline {table}{\numberline {5.2}{\ignorespaces Complex Engineering Activities (CEA)}}{44}{table.caption.25}%
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {A.1}{\ignorespaces Functional requirements of Subchat Trees.}}{48}{table.A.1}%
+\contentsline {table}{\numberline {A.2}{\ignorespaces Non-functional requirements and design responses.}}{48}{table.A.2}%
+\contentsline {table}{\numberline {A.3}{\ignorespaces Project timeline and work breakdown.}}{50}{table.A.3}%
+\contentsline {table}{\numberline {A.4}{\ignorespaces Resource and direct-cost budget for the research prototype.}}{50}{table.caption.26}%
+\contentsline {table}{\numberline {A.5}{\ignorespaces Major project risks and mitigation measures.}}{50}{table.A.5}%
+\contentsline {table}{\numberline {A.6}{\ignorespaces Team roles and collaborative responsibilities.}}{51}{table.caption.27}%
+\contentsline {table}{\numberline {A.7}{\ignorespaces Mapping of Knowledge and Attitude Profile attributes.}}{51}{table.A.7}%
+\contentsline {table}{\numberline {A.8}{\ignorespaces Mapping of Complex Engineering Problem attributes.}}{52}{table.A.8}%
+\contentsline {table}{\numberline {A.9}{\ignorespaces Mapping of Complex Engineering Activity attributes.}}{52}{table.A.9}%
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {B.1}{\ignorespaces Mapping of attained CSE-400 course outcomes.}}{54}{table.B.1}%

@@ -1,0 +1,85 @@
+\contentsline {section}{\normalsize {ACKNOWLEDGEMENTS}}{i}{DTLrowi.1.2}%
+\contentsline {section}{\normalsize {ABSTRACT}}{ii}{DTLrowi.1.2}%
+\contentsline {section}{\normalsize {\bengalifont সারসংক্ষেপ}}{iii}{DTLrowi.1.2}%
+\contentsline {section}{\normalsize {LIST OF NOTATIONS}}{v}{DTLrowi.1.2}%
+\contentsline {section}{LIST OF TABLES}{vi}{table.0.1}%
+\contentsline {section}{LIST OF FIGURES}{viii}{chapter*.1}%
+\contentsline {section}{TABLE OF CONTENTS}{x}{chapter*.2}%
+\contentsline {chapter}{\numberline {1}INTRODUCTION}{1}{chapter.1}%
+\contentsline {section}{\numberline {1.1}Research Background}{1}{section.1.1}%
+\contentsline {section}{\numberline {1.2}Problem Statement}{3}{section.1.2}%
+\contentsline {section}{\numberline {1.3}Overview of Subchat Trees}{3}{section.1.3}%
+\contentsline {section}{\numberline {1.4}Thesis Objectives}{4}{section.1.4}%
+\contentsline {section}{\numberline {1.5}Methodological Overview}{5}{section.1.5}%
+\contentsline {section}{\numberline {1.6}Scope of The Thesis}{5}{section.1.6}%
+\contentsline {section}{\numberline {1.7}Organization of The Thesis}{5}{section.1.7}%
+\contentsline {chapter}{\numberline {2}THEORETICAL BACKGROUND AND LITERATURE REVIEW}{7}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Background: End-to-End Dialogue Modelling}{7}{section.2.1}%
+\contentsline {section}{\numberline {2.2}Structured Reasoning and Branching Search}{8}{section.2.2}%
+\contentsline {section}{\numberline {2.3}Context, Memory, and Retrieval}{9}{section.2.3}%
+\contentsline {section}{\numberline {2.4}Conversation Structure and Disentanglement}{10}{section.2.4}%
+\contentsline {section}{\numberline {2.5}Multi-Turn Interaction and Role-Based Structure}{11}{section.2.5}%
+\contentsline {section}{\numberline {2.6}Research Gap}{11}{section.2.6}%
+\contentsline {chapter}{\numberline {3}METHODOLOGY}{13}{chapter.3}%
+\contentsline {section}{\numberline {3.1}System Architecture}{13}{section.3.1}%
+\contentsline {subsection}{\numberline {3.1.1}Hierarchical Conversation Tree Structure}{14}{subsection.3.1.1}%
+\contentsline {subsection}{\numberline {3.1.2}Memory Management Strategy}{16}{subsection.3.1.2}%
+\contentsline {subsection}{\numberline {3.1.3}Context Inheritance}{17}{subsection.3.1.3}%
+\contentsline {subsection}{\numberline {3.1.4}Follow-up Mechanism}{18}{subsection.3.1.4}%
+\contentsline {section}{\numberline {3.2}Vector Memory and RAG Pipeline}{19}{section.3.2}%
+\contentsline {subsection}{\numberline {3.2.1}Multi-Query Decomposition and Retrieval}{19}{subsection.3.2.1}%
+\contentsline {subsubsection}{\numberline {3.2.1.1}Sub-Query Generation.}{19}{subsubsection.3.2.1.1}%
+\contentsline {subsubsection}{\numberline {3.2.1.2}Embedding and Vector Search.}{20}{subsubsection.3.2.1.2}%
+\contentsline {subsubsection}{\numberline {3.2.1.3}Deduplication.}{20}{subsubsection.3.2.1.3}%
+\contentsline {subsection}{\numberline {3.2.2}Context Window Retrieval}{22}{subsection.3.2.2}%
+\contentsline {subsection}{\numberline {3.2.3}Context Assembly}{23}{subsection.3.2.3}%
+\contentsline {subsubsection}{\numberline {3.2.3.1}Standard Assembly (all nodes).}{25}{subsubsection.3.2.3.1}%
+\contentsline {subsubsection}{\numberline {3.2.3.2}Follow-up Assembly (subchat nodes).}{25}{subsubsection.3.2.3.2}%
+\contentsline {section}{\numberline {3.3}User Interface}{26}{section.3.3}%
+\contentsline {subsection}{\numberline {3.3.1}Design Rationale.}{26}{subsection.3.3.1}%
+\contentsline {subsection}{\numberline {3.3.2}The Problem with Linear Chat.}{26}{subsection.3.3.2}%
+\contentsline {subsection}{\numberline {3.3.3}Subchat Trees as a Solution.}{27}{subsection.3.3.3}%
+\contentsline {section}{\numberline {3.4}Baseline System}{28}{section.3.4}%
+\contentsline {section}{\numberline {3.5}System Development}{28}{section.3.5}%
+\contentsline {chapter}{\numberline {4}RESULT ANALYSIS}{29}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Dataset Design}{29}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Evaluation Matrices}{33}{section.4.2}%
+\contentsline {section}{\numberline {4.3}Topic-Scoring Pipeline}{37}{section.4.3}%
+\contentsline {section}{\numberline {4.4}How to Read the Result Tables}{38}{section.4.4}%
+\contentsline {section}{\numberline {4.5}7B Model: Context Structure Helps, but Instruction Following Remains Fragile}{39}{section.4.5}%
+\contentsline {section}{\numberline {4.6}14B Model: The Cleanest Practical Tradeoff}{42}{section.4.6}%
+\contentsline {section}{\numberline {4.7}32B Model: Strongest Absolute Performance and Better Long-Context Tolerance}{44}{section.4.7}%
+\contentsline {section}{\numberline {4.8}Cross-Model Visual Synthesis}{47}{section.4.8}%
+\contentsline {section}{\numberline {4.9}Result Summary}{49}{section.4.9}%
+\contentsline {chapter}{\numberline {5}ENGINEERING CONSIDERATIONS, CHALLENGES AND REMEDIES}{52}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Design Constraints}{52}{section.5.1}%
+\contentsline {subsection}{\numberline {5.1.1}Context and Model Constraints}{52}{subsection.5.1.1}%
+\contentsline {subsection}{\numberline {5.1.2}Memory and Retrieval Constraints}{52}{subsection.5.1.2}%
+\contentsline {subsection}{\numberline {5.1.3}User-Controlled Branching Constraints}{53}{subsection.5.1.3}%
+\contentsline {section}{\numberline {5.2}Ethical Considerations}{53}{section.5.2}%
+\contentsline {section}{\numberline {5.3}Sustainability in Environmental and Societal Context}{53}{section.5.3}%
+\contentsline {section}{\numberline {5.4}Complex Engineering Problem}{54}{section.5.4}%
+\contentsline {section}{\numberline {5.5}Engineering Activities}{55}{section.5.5}%
+\contentsline {section}{\numberline {5.6}Development Challenges and Remedies}{55}{section.5.6}%
+\contentsline {section}{\numberline {5.7}Deployment Considerations}{56}{section.5.7}%
+\contentsline {chapter}{\numberline {6}DISCUSSION AND CONCLUSION}{57}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Thesis Outcome}{57}{section.6.1}%
+\contentsline {section}{\numberline {6.2}Thesis Implication and Contribution}{57}{section.6.2}%
+\contentsline {section}{\numberline {6.3}What the Results Show}{57}{section.6.3}%
+\contentsline {section}{\numberline {6.4}Why Larger Buffers Are Not Always Better}{58}{section.6.4}%
+\contentsline {section}{\numberline {6.5}Token Efficiency Revisited}{59}{section.6.5}%
+\contentsline {section}{\numberline {6.6}RAG as a Backstop Rather Than a Default}{59}{section.6.6}%
+\contentsline {section}{\numberline {6.7}Limitations}{60}{section.6.7}%
+\contentsline {section}{\numberline {6.8}Deployment Considerations}{60}{section.6.8}%
+\contentsline {section}{\numberline {6.9}Conclusion}{61}{section.6.9}%
+\contentsline {section}{\numberline {6.10}Future Work}{62}{section.6.10}%
+\contentsline {section}{\numberline {6.11}Impact}{62}{section.6.11}%
+\contentsline {chapter}{\numberline {A}SUPPLEMENTARY MATERIAL}{63}{appendix.A}%
+\contentsline {section}{\numberline {A.1}Source Conversation Details}{63}{section.A.1}%
+\contentsline {section}{\numberline {A.2}Kaggle Notebook Execution Pipeline}{64}{section.A.2}%
+\contentsline {section}{\numberline {A.3}Per-Topic Confusion Matrix Methodology}{65}{section.A.3}%
+\contentsline {section}{\numberline {A.4}Complete Merged Result Tables}{66}{section.A.4}%
+\contentsline {subsection}{\numberline {A.4.1}7B Merged Tables}{66}{subsection.A.4.1}%
+\contentsline {subsection}{\numberline {A.4.2}14B Merged Tables}{78}{subsection.A.4.2}%
+\contentsline {subsection}{\numberline {A.4.3}32B Merged Tables}{90}{subsection.A.4.3}%
+\contentsline {chapter}{REFERENCES}{102}{appendix*.32}%

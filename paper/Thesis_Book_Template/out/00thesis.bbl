@@ -1,0 +1,1049 @@
+\begin{thebibliography}{}
+
+\bibitem [\protect \citeauthoryear {%
+Alqadhi%
+\ \protect \BOthers {.}}{%
+Alqadhi%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2021}}%
+}]{%
+changeinland8}
+\APACinsertmetastar {%
+changeinland8}%
+\begin{APACrefauthors}%
+Alqadhi, S.%
+, Mallick, J.%
+, Balha, A.%
+, Bindajam, A.%
+, Singh, C\BPBI K.%
+\BCBL {}\ \BBA {} Hoa, P\BPBI V.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2021}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Spatial and decadal prediction of land use/land cover using multi-layer perceptron-neural network (MLP-NN) algorithm for a semi-arid region of Asir, Saudi Arabia} {Spatial and decadal prediction of land use/land cover using multi-layer perceptron-neural network (mlp-nn) algorithm for a semi-arid region of asir, saudi arabia}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Earth Science Informatics}{14}{}{1547--1562}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Badrinarayanan%
+, Handa%
+\BCBL {}\ \BBA {} Cipolla%
+}{%
+Badrinarayanan%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2015}}%
+}]{%
+segnet2}
+\APACinsertmetastar {%
+segnet2}%
+\begin{APACrefauthors}%
+Badrinarayanan, V.%
+, Handa, A.%
+\BCBL {}\ \BBA {} Cipolla, R.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2015}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Segnet: A deep convolutional encoder-decoder architecture for robust semantic pixel-wise labelling} {Segnet: A deep convolutional encoder-decoder architecture for robust semantic pixel-wise labelling}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{arXiv preprint arXiv:1505.07293}{}{}{}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Badrinarayanan%
+, Kendall%
+\BCBL {}\ \BBA {} Cipolla%
+}{%
+Badrinarayanan%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2017}}%
+}]{%
+segnet1}
+\APACinsertmetastar {%
+segnet1}%
+\begin{APACrefauthors}%
+Badrinarayanan, V.%
+, Kendall, A.%
+\BCBL {}\ \BBA {} Cipolla, R.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2017}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Segnet: A deep convolutional encoder-decoder architecture for image segmentation} {Segnet: A deep convolutional encoder-decoder architecture for image segmentation}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{IEEE transactions on pattern analysis and machine intelligence}{39}{12}{2481--2495}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Berland%
+\ \BBA {} Lange%
+}{%
+Berland%
+\ \BBA {} Lange%
+}{%
+{\protect \APACyear {2017}}%
+}]{%
+berland2017google}
+\APACinsertmetastar {%
+berland2017google}%
+\begin{APACrefauthors}%
+Berland, A.%
+\BCBT {}\ \BBA {} Lange, D\BPBI A.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2017}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Google Street View shows promise for virtual street tree surveys} {Google street view shows promise for virtual street tree surveys}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Urban Forestry \& Urban Greening}{21}{}{11--15}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Cai%
+, Li%
+, Seiferling%
+\BCBL {}\ \BBA {} Ratti%
+}{%
+Cai%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2018}}%
+}]{%
+cai2018treepedia}
+\APACinsertmetastar {%
+cai2018treepedia}%
+\begin{APACrefauthors}%
+Cai, B\BPBI Y.%
+, Li, X.%
+, Seiferling, I.%
+\BCBL {}\ \BBA {} Ratti, C.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2018}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Treepedia 2.0: applying deep learning for large-scale quantification of urban tree cover} {Treepedia 2.0: applying deep learning for large-scale quantification of urban tree cover}.{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {2018 IEEE International Congress on Big Data (BigData Congress)} {2018 ieee international congress on big data (bigdata congress)}\ (\BPGS\ 49--56).
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Chai%
+, Newsam%
+\BCBL {}\ \BBA {} Huang%
+}{%
+Chai%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2020}}%
+}]{%
+chai2020aerial}
+\APACinsertmetastar {%
+chai2020aerial}%
+\begin{APACrefauthors}%
+Chai, D.%
+, Newsam, S.%
+\BCBL {}\ \BBA {} Huang, J.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2020}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Aerial image semantic segmentation using DCNN predicted distance maps} {Aerial image semantic segmentation using dcnn predicted distance maps}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{ISPRS Journal of Photogrammetry and Remote Sensing}{161}{}{309--322}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+J.~Chen%
+\ \protect \BOthers {.}}{%
+J.~Chen%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2022}}%
+}]{%
+chen2022enhanced}
+\APACinsertmetastar {%
+chen2022enhanced}%
+\begin{APACrefauthors}%
+Chen, J.%
+, Shao, S.%
+, Zhu, Y.%
+, Wang, Y.%
+, Rao, F.%
+, Dai, X.%
+\BCBL {}\ \BBA {} Lai, D.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2022}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Enhanced automatic identification of urban community green space based on semantic segmentation} {Enhanced automatic identification of urban community green space based on semantic segmentation}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Land}{11}{6}{905}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+L\BHBI C.~Chen%
+, Zhu%
+, Papandreou%
+, Schroff%
+\BCBL {}\ \BBA {} Adam%
+}{%
+L\BHBI C.~Chen%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2018}}%
+}]{%
+deeplab2}
+\APACinsertmetastar {%
+deeplab2}%
+\begin{APACrefauthors}%
+Chen, L\BHBI C.%
+, Zhu, Y.%
+, Papandreou, G.%
+, Schroff, F.%
+\BCBL {}\ \BBA {} Adam, H.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2018}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Encoder-decoder with atrous separable convolution for semantic image segmentation} {Encoder-decoder with atrous separable convolution for semantic image segmentation}.{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {Proceedings of the European conference on computer vision (ECCV)} {Proceedings of the european conference on computer vision (eccv)}\ (\BPGS\ 801--818).
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Degerickx%
+, Hermy%
+\BCBL {}\ \BBA {} Somers%
+}{%
+Degerickx%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2017}}%
+}]{%
+degerickx2017mapping}
+\APACinsertmetastar {%
+degerickx2017mapping}%
+\begin{APACrefauthors}%
+Degerickx, J.%
+, Hermy, M.%
+\BCBL {}\ \BBA {} Somers, B.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2017}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Mapping functional urban green types using hyperspectral remote sensing} {Mapping functional urban green types using hyperspectral remote sensing}.{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {2017 Joint Urban Remote Sensing Event (JURSE)} {2017 joint urban remote sensing event (jurse)}\ (\BPGS\ 1--4).
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Degerli%
+\ \BBA {} {\c{C}}etin%
+}{%
+Degerli%
+\ \BBA {} {\c{C}}etin%
+}{%
+{\protect \APACyear {2022}}%
+}]{%
+changeinland4}
+\APACinsertmetastar {%
+changeinland4}%
+\begin{APACrefauthors}%
+Degerli, B.%
+\BCBT {}\ \BBA {} {\c{C}}etin, M.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2022}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Using the remote sensing method to simulate the land change in the year 2030} {Using the remote sensing method to simulate the land change in the year 2030}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Turkish Journal of Agriculture-Food Science and Technology}{10}{12}{2453--2466}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Demir%
+\ \protect \BOthers {.}}{%
+Demir%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2018}}%
+}]{%
+demir2018deepglobe}
+\APACinsertmetastar {%
+demir2018deepglobe}%
+\begin{APACrefauthors}%
+Demir, I.%
+, Koperski, K.%
+, Lindenbaum, D.%
+, Pang, G.%
+, Huang, J.%
+, Basu, S.%
+\BDBL {}Raskar, R.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2018}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Deepglobe 2018: A challenge to parse the earth through satellite images} {Deepglobe 2018: A challenge to parse the earth through satellite images}.{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition Workshops} {Proceedings of the ieee conference on computer vision and pattern recognition workshops}\ (\BPGS\ 172--181).
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Dey%
+\ \BBA {} Salem%
+}{%
+Dey%
+\ \BBA {} Salem%
+}{%
+{\protect \APACyear {2017}}%
+}]{%
+gru}
+\APACinsertmetastar {%
+gru}%
+\begin{APACrefauthors}%
+Dey, R.%
+\BCBT {}\ \BBA {} Salem, F\BPBI M.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2017}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Gate-variants of gated recurrent unit (GRU) neural networks} {Gate-variants of gated recurrent unit (gru) neural networks}.{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {2017 IEEE 60th international midwest symposium on circuits and systems (MWSCAS)} {2017 ieee 60th international midwest symposium on circuits and systems (mwscas)}\ (\BPGS\ 1597--1600).
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Dinda%
+, Chatterjee%
+\BCBL {}\ \BBA {} Ghosh%
+}{%
+Dinda%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2021}}%
+}]{%
+changeinland1}
+\APACinsertmetastar {%
+changeinland1}%
+\begin{APACrefauthors}%
+Dinda, S.%
+, Chatterjee, N\BPBI D.%
+\BCBL {}\ \BBA {} Ghosh, S.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2021}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {An integrated simulation approach to the assessment of urban growth pattern and loss in urban green space in Kolkata, India: A GIS-based analysis} {An integrated simulation approach to the assessment of urban growth pattern and loss in urban green space in kolkata, india: A gis-based analysis}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Ecological Indicators}{121}{}{107178}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+\APACcitebtitle {Forest Aerial Images for Segmentation}}{%
+\APACcitebtitle {Forest Aerial Images for Segmentation}}{%
+{\protect \APACyear {2022}}%
+}]{%
+datasetlink}
+\APACinsertmetastar {%
+datasetlink}%
+\APACrefbtitle {Forest Aerial Images for Segmentation.} {Forest aerial images for segmentation.}
+\newblock
+\APACrefYearMonthDay{2022}{}{}.
+\newblock
+\APAChowpublished {{ <\url{https://www.kaggle.com/datasets/quadeer15sh/augmented-forest-segmentation>} (Feb. 19, 2024)}}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Ghosh%
+, Chatterjee%
+\BCBL {}\ \BBA {} Dinda%
+}{%
+Ghosh%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2021}}%
+}]{%
+changeinland2}
+\APACinsertmetastar {%
+changeinland2}%
+\begin{APACrefauthors}%
+Ghosh, S.%
+, Chatterjee, N\BPBI D.%
+\BCBL {}\ \BBA {} Dinda, S.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2021}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Urban ecological security assessment and forecasting using integrated DEMATEL-ANP and CA-Markov models: A case study on Kolkata Metropolitan Area, India} {Urban ecological security assessment and forecasting using integrated dematel-anp and ca-markov models: A case study on kolkata metropolitan area, india}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Sustainable Cities and Society}{68}{}{102773}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Hawkins%
+, Ahmed%
+, Roorda%
+\BCBL {}\ \BBA {} Habib%
+}{%
+Hawkins%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2022}}%
+}]{%
+changeinland5}
+\APACinsertmetastar {%
+changeinland5}%
+\begin{APACrefauthors}%
+Hawkins, J.%
+, Ahmed, U.%
+, Roorda, M.%
+\BCBL {}\ \BBA {} Habib, K\BPBI N.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2022}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Measuring the process of urban gentrification: A composite measure of the gentrification process in Toronto} {Measuring the process of urban gentrification: A composite measure of the gentrification process in toronto}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Cities}{126}{}{103708}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Hern{\'a}ndez%
+\ \BBA {} Amig{\'o}%
+}{%
+Hern{\'a}ndez%
+\ \BBA {} Amig{\'o}%
+}{%
+{\protect \APACyear {2021}}%
+}]{%
+RNN2}
+\APACinsertmetastar {%
+RNN2}%
+\begin{APACrefauthors}%
+Hern{\'a}ndez, A.%
+\BCBT {}\ \BBA {} Amig{\'o}, J\BPBI M.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2021}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Attention mechanisms and their applications to complex systems} {Attention mechanisms and their applications to complex systems}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Entropy}{23}{3}{283}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Hu%
+, Niu%
+, Carrasco%
+, Lennox%
+\BCBL {}\ \BBA {} Arvin%
+}{%
+Hu%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2020}}%
+}]{%
+hu2020voronoi}
+\APACinsertmetastar {%
+hu2020voronoi}%
+\begin{APACrefauthors}%
+Hu, J.%
+, Niu, H.%
+, Carrasco, J.%
+, Lennox, B.%
+\BCBL {}\ \BBA {} Arvin, F.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2020}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Voronoi-based multi-robot autonomous exploration in unknown environments via deep reinforcement learning} {Voronoi-based multi-robot autonomous exploration in unknown environments via deep reinforcement learning}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{IEEE Transactions on Vehicular Technology}{69}{12}{14413--14423}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Ilic%
+, Sawada%
+\BCBL {}\ \BBA {} Zarzelli%
+}{%
+Ilic%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2019}}%
+}]{%
+changeinland6}
+\APACinsertmetastar {%
+changeinland6}%
+\begin{APACrefauthors}%
+Ilic, L.%
+, Sawada, M.%
+\BCBL {}\ \BBA {} Zarzelli, A.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2019}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Deep mapping gentrification in a large Canadian city using deep learning and Google Street View} {Deep mapping gentrification in a large canadian city using deep learning and google street view}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{PloS one}{14}{3}{e0212814}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Kattenborn%
+\ \protect \BOthers {.}}{%
+Kattenborn%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2020}}%
+}]{%
+changeinland3}
+\APACinsertmetastar {%
+changeinland3}%
+\begin{APACrefauthors}%
+Kattenborn, T.%
+, Eichel, J.%
+, Wiser, S.%
+, Burrows, L.%
+, Fassnacht, F\BPBI E.%
+\BCBL {}\ \BBA {} Schmidtlein, S.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2020}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Convolutional Neural Networks accurately predict cover fractions of plant species and communities in Unmanned Aerial Vehicle imagery} {Convolutional neural networks accurately predict cover fractions of plant species and communities in unmanned aerial vehicle imagery}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Remote Sensing in Ecology and Conservation}{6}{4}{472--486}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Lee%
+\ \protect \BOthers {.}}{%
+Lee%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2021}}%
+}]{%
+siamese2}
+\APACinsertmetastar {%
+siamese2}%
+\begin{APACrefauthors}%
+Lee, H.%
+, Lee, K.%
+, Kim, J\BPBI H.%
+, Na, Y.%
+, Park, J.%
+, Choi, J\BPBI P.%
+\BCBL {}\ \BBA {} Hwang, J\BPBI Y.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2021}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Local similarity Siamese network for urban land change detection on remote sensing images} {Local similarity siamese network for urban land change detection on remote sensing images}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{IEEE Journal of Selected Topics in Applied Earth Observations and Remote Sensing}{14}{}{4139--4149}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Li%
+\ \BBA {} Ratti%
+}{%
+Li%
+\ \BBA {} Ratti%
+}{%
+{\protect \APACyear {2018}}%
+}]{%
+li2018mapping}
+\APACinsertmetastar {%
+li2018mapping}%
+\begin{APACrefauthors}%
+Li, X.%
+\BCBT {}\ \BBA {} Ratti, C.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2018}{}{}.
+\newblock
+\APACrefbtitle {Mapping the spatial distribution of shade provision of street trees in Boston using Google Street View panoramas. Urban For. Urban Green. 31, 109--119.} {Mapping the spatial distribution of shade provision of street trees in boston using google street view panoramas. urban for. urban green. 31, 109--119.}
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Li%
+\ \protect \BOthers {.}}{%
+Li%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2015}}%
+}]{%
+li2015assessing}
+\APACinsertmetastar {%
+li2015assessing}%
+\begin{APACrefauthors}%
+Li, X.%
+, Zhang, C.%
+, Li, W.%
+, Ricard, R.%
+, Meng, Q.%
+\BCBL {}\ \BBA {} Zhang, W.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2015}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Assessing street-level urban greenery using Google Street View and a modified green view index} {Assessing street-level urban greenery using google street view and a modified green view index}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Urban Forestry \& Urban Greening}{14}{3}{675--685}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Melekhov%
+, Kannala%
+\BCBL {}\ \BBA {} Rahtu%
+}{%
+Melekhov%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2016}}%
+}]{%
+siamese}
+\APACinsertmetastar {%
+siamese}%
+\begin{APACrefauthors}%
+Melekhov, I.%
+, Kannala, J.%
+\BCBL {}\ \BBA {} Rahtu, E.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2016}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Siamese network features for image matching} {Siamese network features for image matching}.{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {2016 23rd international conference on pattern recognition (ICPR)} {2016 23rd international conference on pattern recognition (icpr)}\ (\BPGS\ 378--383).
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Mitchell%
+}{%
+Mitchell%
+}{%
+{\protect \APACyear {1997}}%
+}]{%
+mitchell1997machine}
+\APACinsertmetastar {%
+mitchell1997machine}%
+\begin{APACrefauthors}%
+Mitchell, T\BPBI M.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{1997}{}{}.
+\newblock
+\APACrefbtitle {Machine learning.} {Machine learning.}
+\newblock
+\APACaddressPublisher{}{McGraw-hill}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+MohanRajan%
+\ \BBA {} Loganathan%
+}{%
+MohanRajan%
+\ \BBA {} Loganathan%
+}{%
+{\protect \APACyear {2021}}%
+}]{%
+changeinland10}
+\APACinsertmetastar {%
+changeinland10}%
+\begin{APACrefauthors}%
+MohanRajan, S\BPBI N.%
+\BCBT {}\ \BBA {} Loganathan, A.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2021}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Modelling spatial drivers for LU/LC change prediction using hybrid machine learning methods in Javadi Hills, Tamil Nadu, India} {Modelling spatial drivers for lu/lc change prediction using hybrid machine learning methods in javadi hills, tamil nadu, india}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Journal of the Indian Society of Remote Sensing}{49}{}{913--934}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Nawar%
+, Sorker%
+, Chowdhury%
+\BCBL {}\ \BBA {} Rahman%
+}{%
+Nawar%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2022}}%
+}]{%
+nawar2022present}
+\APACinsertmetastar {%
+nawar2022present}%
+\begin{APACrefauthors}%
+Nawar, N.%
+, Sorker, R.%
+, Chowdhury, F\BPBI J.%
+\BCBL {}\ \BBA {} Rahman, M\BPBI M.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2022}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Present status and historical changes of urban green space in Dhaka city, Bangladesh: A remote sensing driven approach} {Present status and historical changes of urban green space in dhaka city, bangladesh: A remote sensing driven approach}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Environmental Challenges}{6}{}{100425}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Niu%
+, Zhong%
+\BCBL {}\ \BBA {} Yu%
+}{%
+Niu%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2021}}%
+}]{%
+RNN1}
+\APACinsertmetastar {%
+RNN1}%
+\begin{APACrefauthors}%
+Niu, Z.%
+, Zhong, G.%
+\BCBL {}\ \BBA {} Yu, H.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2021}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {A review on the attention mechanism of deep learning} {A review on the attention mechanism of deep learning}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Neurocomputing}{452}{}{48--62}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Richards%
+\ \BBA {} Edwards%
+}{%
+Richards%
+\ \BBA {} Edwards%
+}{%
+{\protect \APACyear {2017}}%
+}]{%
+richards2017quantifying}
+\APACinsertmetastar {%
+richards2017quantifying}%
+\begin{APACrefauthors}%
+Richards, D\BPBI R.%
+\BCBT {}\ \BBA {} Edwards, P\BPBI J.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2017}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Quantifying street tree regulating ecosystem services using Google Street View} {Quantifying street tree regulating ecosystem services using google street view}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Ecological indicators}{77}{}{31--40}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Sag%
+}{%
+Sag%
+}{%
+{\protect \APACyear {2018}}%
+}]{%
+sag2018new}
+\APACinsertmetastar {%
+sag2018new}%
+\begin{APACrefauthors}%
+Sag, M.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2018}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {The new legal landscape for text mining and machine learning} {The new legal landscape for text mining and machine learning}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{J. Copyright Soc'y USA}{66}{}{291}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Seiferling%
+, Naik%
+, Ratti%
+\BCBL {}\ \BBA {} Proulx%
+}{%
+Seiferling%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2017}}%
+}]{%
+seiferling2017green}
+\APACinsertmetastar {%
+seiferling2017green}%
+\begin{APACrefauthors}%
+Seiferling, I.%
+, Naik, N.%
+, Ratti, C.%
+\BCBL {}\ \BBA {} Proulx, R.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2017}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Green streets- Quantifying and mapping urban trees with street-level imagery and computer vision} {Green streets- quantifying and mapping urban trees with street-level imagery and computer vision}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Landscape and Urban Planning}{165}{}{93--101}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Shen%
+\ \protect \BOthers {.}}{%
+Shen%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2017}}%
+}]{%
+siamese1}
+\APACinsertmetastar {%
+siamese1}%
+\begin{APACrefauthors}%
+Shen, C.%
+, Jin, Z.%
+, Zhao, Y.%
+, Fu, Z.%
+, Jiang, R.%
+, Chen, Y.%
+\BCBL {}\ \BBA {} Hua, X\BHBI S.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2017}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Deep siamese network with multi-level similarity perception for person re-identification} {Deep siamese network with multi-level similarity perception for person re-identification}.{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {Proceedings of the 25th ACM international conference on Multimedia} {Proceedings of the 25th acm international conference on multimedia}\ (\BPGS\ 1942--1950).
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Singh%
+\ \BBA {} Nongmeikapam%
+}{%
+Singh%
+\ \BBA {} Nongmeikapam%
+}{%
+{\protect \APACyear {2023}}%
+}]{%
+singh2023semantic}
+\APACinsertmetastar {%
+singh2023semantic}%
+\begin{APACrefauthors}%
+Singh, N\BPBI J.%
+\BCBT {}\ \BBA {} Nongmeikapam, K.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2023}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Semantic segmentation of satellite images using deep-UNet} {Semantic segmentation of satellite images using deep-unet}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Arabian Journal for Science and Engineering}{48}{2}{1193--1205}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Staudemeyer%
+\ \BBA {} Morris%
+}{%
+Staudemeyer%
+\ \BBA {} Morris%
+}{%
+{\protect \APACyear {2019}}%
+}]{%
+lstm}
+\APACinsertmetastar {%
+lstm}%
+\begin{APACrefauthors}%
+Staudemeyer, R\BPBI C.%
+\BCBT {}\ \BBA {} Morris, E\BPBI R.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2019}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Understanding LSTM--a tutorial into long short-term memory recurrent neural networks} {Understanding lstm--a tutorial into long short-term memory recurrent neural networks}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{arXiv preprint arXiv:1909.09586}{}{}{}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Tong%
+\ \protect \BOthers {.}}{%
+Tong%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2020}}%
+}]{%
+changeinland7}
+\APACinsertmetastar {%
+changeinland7}%
+\begin{APACrefauthors}%
+Tong, M.%
+, She, J.%
+, Tan, J.%
+, Li, M.%
+, Ge, R.%
+\BCBL {}\ \BBA {} Gao, Y.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2020}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Evaluating street greenery by multiple indicators using street-level imagery and satellite images: a case study in Nanjing, China} {Evaluating street greenery by multiple indicators using street-level imagery and satellite images: a case study in nanjing, china}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Forests}{11}{12}{1347}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Ullah%
+\ \protect \BOthers {.}}{%
+Ullah%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2019}}%
+}]{%
+changeinland9}
+\APACinsertmetastar {%
+changeinland9}%
+\begin{APACrefauthors}%
+Ullah, S.%
+, Tahir, A\BPBI A.%
+, Akbar, T\BPBI A.%
+, Hassan, Q\BPBI K.%
+, Dewan, A.%
+, Khan, A\BPBI J.%
+\BCBL {}\ \BBA {} Khan, M.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2019}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Remote sensing-based quantification of the relationships between land use land cover changes and surface temperature over the Lower Himalayan Region} {Remote sensing-based quantification of the relationships between land use land cover changes and surface temperature over the lower himalayan region}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Sustainability}{11}{19}{5492}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Vargas%
+, Mosavi%
+\BCBL {}\ \BBA {} Ruiz%
+}{%
+Vargas%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2017}}%
+}]{%
+vargas2017deep}
+\APACinsertmetastar {%
+vargas2017deep}%
+\begin{APACrefauthors}%
+Vargas, R.%
+, Mosavi, A.%
+\BCBL {}\ \BBA {} Ruiz, R.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2017}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Deep learning: a review} {Deep learning: a review}.{\BBCQ}
+\newblock
+
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Yang%
+, Zhao%
+, Mcbride%
+\BCBL {}\ \BBA {} Gong%
+}{%
+Yang%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2009}}%
+}]{%
+yang2009can}
+\APACinsertmetastar {%
+yang2009can}%
+\begin{APACrefauthors}%
+Yang, J.%
+, Zhao, L.%
+, Mcbride, J.%
+\BCBL {}\ \BBA {} Gong, P.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2009}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Can you see green? Assessing the visibility of urban forests in cities} {Can you see green? assessing the visibility of urban forests in cities}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Landscape and Urban Planning}{91}{2}{97--104}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Yoosefzadeh-Najafabadi%
+, Earl%
+, Tulpan%
+, Sulik%
+\BCBL {}\ \BBA {} Eskandari%
+}{%
+Yoosefzadeh-Najafabadi%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2021}}%
+}]{%
+yoosefzadeh2021application}
+\APACinsertmetastar {%
+yoosefzadeh2021application}%
+\begin{APACrefauthors}%
+Yoosefzadeh-Najafabadi, M.%
+, Earl, H\BPBI J.%
+, Tulpan, D.%
+, Sulik, J.%
+\BCBL {}\ \BBA {} Eskandari, M.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2021}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Application of machine learning algorithms in plant breeding: predicting yield from hyperspectral reflectance in soybean} {Application of machine learning algorithms in plant breeding: predicting yield from hyperspectral reflectance in soybean}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Frontiers in plant science}{11}{}{624273}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Yurtkulu%
+, Sahin%
+\BCBL {}\ \BBA {} Unal%
+}{%
+Yurtkulu%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2019}}%
+}]{%
+deeplab1}
+\APACinsertmetastar {%
+deeplab1}%
+\begin{APACrefauthors}%
+Yurtkulu, S\BPBI C.%
+, Sahin, Y\BPBI H.%
+\BCBL {}\ \BBA {} Unal, G.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2019}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Semantic segmentation with extended DeepLabv3 architecture} {Semantic segmentation with extended deeplabv3 architecture}.{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {2019 27th Signal Processing and Communications Applications Conference (SIU)} {2019 27th signal processing and communications applications conference (siu)}\ (\BPGS\ 1--4).
+\PrintBackRefs{\CurrentBib}
+
+\end{thebibliography}

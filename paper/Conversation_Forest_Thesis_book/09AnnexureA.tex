@@ -1,0 +1,213 @@
+\chapter{ENGINEERING CONSIDERATIONS, CHALLENGES AND REMEDIES}
+\label{annex:engineering_considerations}
+\vspace{-3em}
+
+This annexure summarizes the engineering-compliance evidence required for CSE-400.
+
+\section{System Requirements and Specifications}
+
+The system must inherit parent context, isolate later child messages, preserve evicted information and support different models and buffers.
+
+\begin{longtable}{p{0.12\textwidth}p{0.32\textwidth}p{0.46\textwidth}}
+\caption{Functional requirements of Subchat Trees.}\label{tab:annexA_functional_requirements}\\
+\toprule
+\textbf{ID} & \textbf{Requirement} & \textbf{Implemented Evidence} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{ID} & \textbf{Requirement} & \textbf{Implemented Evidence} \\
+\midrule
+\endhead
+FR1 & Hierarchical branch creation & Create nested subchats from selected parent text. \\
+FR2 & Parent-context inheritance & Inherit selected text, recent messages and parent summary. \\
+FR3 & Branch isolation & Keep child updates from parent and sibling contexts. \\
+FR4 & Bounded short-term memory & Maintain configurable FIFO circular buffers. \\
+FR5 & Long-term memory access & Preserve evicted content through summaries and vector memory. \\
+FR6 & Conditional retrieval & Retrieve archived blocks only when needed. \\
+FR7 & Reproducible evaluation & Replay identical VBRI sequences and record results. \\
+\botrule
+\end{longtable}
+
+\begin{longtable}{p{0.12\textwidth}p{0.32\textwidth}p{0.46\textwidth}}
+\caption{Non-functional requirements and design responses.}\label{tab:annexA_nonfunctional_requirements}\\
+\toprule
+\textbf{ID} & \textbf{Requirement} & \textbf{Design Response} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{ID} & \textbf{Requirement} & \textbf{Design Response} \\
+\midrule
+\endhead
+NFR1 & Reliability & Local buffers and deterministic replay expose failures. \\
+NFR2 & Scalability & Distributed node state and vector memory support longer sessions. \\
+NFR3 & Efficiency & Conditional retrieval and tokens-per-correct-answer measure useful work. \\
+NFR4 & Privacy awareness & Isolation reduces leakage; inherited context remains explicit. \\
+NFR5 & Usability & Familiar chat interaction with optional tree navigation. \\
+NFR6 & Portability & Supports local, cloud and hybrid inference. \\
+\botrule
+\end{longtable}
+
+\subsection{Relevant Specifications and Engineering Conventions}
+The prototype uses UTF-8, structured JSON, version control, FastAPI, Next.js, Server-Sent Events and recorded clean-state experiments. It is not certified for safety-critical deployment.
+
+\section{Design Constraints}
+
+\subsection{Ethical Considerations}
+The evaluation uses anonymized public data. Deployments must disclose inherited context, support deletion and avoid replacing professional judgment.
+
+\subsection{Environmental Considerations}
+Inference, embeddings and retrieval consume energy. Bounded buffers, reusable embeddings and conditional retrieval reduce avoidable computation.
+
+\subsection{Social Constraints}
+Explicit branching can improve navigation but adds cognitive effort. The design therefore preserves familiar chat interaction and treats branching as optional.
+
+\subsection{Sustainability in Environmental and Societal Context}
+The project supports SDG~4 through structured learning, SDG~9 through conversational-system innovation and SDG~12 through responsible computational-resource use.
+
+\section{Project Management}
+
+\subsection{Timeline and Work Breakdown}
+\begin{longtable}{p{0.16\textwidth}p{0.26\textwidth}p{0.48\textwidth}}
+\caption{Project timeline and work breakdown.}\label{tab:annexA_timeline}\\
+\toprule
+\textbf{Phase} & \textbf{Primary Activity} & \textbf{Deliverable} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Phase} & \textbf{Primary Activity} & \textbf{Deliverable} \\
+\midrule
+\endhead
+1 & Problem study & Research gap and objectives. \\
+2 & Architecture design & Tree, memory and branch workflow. \\
+3 & Implementation & Interface, backend and memory pipeline. \\
+4 & Evaluation design & VBRI, baseline and metrics. \\
+5 & Experiments & Model-buffer runs and logs. \\
+6 & Documentation & Analysis, thesis and defense material. \\
+\botrule
+\end{longtable}
+
+\subsection{Resource and Budget Management}
+The prototype used open-source software, existing hardware and available academic or free-tier compute; recorded additional direct expenditure was BDT 0.
+
+\begin{table}[H]
+\centering
+\caption{Resource and direct-cost budget for the research prototype.}
+\label{tab:annexA_budget}
+\small
+\begin{tabular}{p{0.30\textwidth}p{0.22\textwidth}p{0.38\textwidth}}
+\toprule
+\textbf{Resource} & \textbf{Direct Cost} & \textbf{Management Decision} \\
+\midrule
+Open-source software & BDT 0 & Used existing frameworks and libraries. \\
+Experiment compute & BDT 0 additional & Used available Kaggle and API access. \\
+Hardware and storage & BDT 0 additional & Used existing equipment. \\
+Data and version control & BDT 0 & Used public data and GitHub. \\
+\midrule
+\textbf{Recorded additional direct expenditure} & \textbf{BDT 0} & Existing resources supported the prototype. \\
+\botrule
+\end{tabular}
+\end{table}
+
+\subsection{Risk Management}
+\begin{longtable}{p{0.25\textwidth}p{0.18\textwidth}p{0.47\textwidth}}
+\caption{Major project risks and mitigation measures.}\label{tab:annexA_risks}\\
+\toprule
+\textbf{Risk} & \textbf{Impact} & \textbf{Mitigation} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Risk} & \textbf{Impact} & \textbf{Mitigation} \\
+\midrule
+\endhead
+Model or context-limit failure & High & Test buffers and record errors. \\
+Cross-run state leakage & High & Clear state between runs. \\
+Retrieval miscalibration & Medium & Report probe RAG decisions. \\
+Dataset inconsistency & High & Validate nodes, order and annotations. \\
+Metric misinterpretation & Medium & Separate isolation and semantic recall. \\
+Sensitive-context inheritance & High & Expose inheritance and support deletion. \\
+\botrule
+\end{longtable}
+
+\subsection{Team Roles and Collaboration}
+\begin{table}[H]
+\centering
+\caption{Team roles and collaborative responsibilities.}
+\label{tab:annexA_team_roles}
+\small
+\begin{tabular}{p{0.26\textwidth}p{0.64\textwidth}}
+\toprule
+\textbf{Team Member} & \textbf{Role and Responsibilities} \\
+\midrule
+MD Mehedi Hasan Moon & First author; architecture integration, experiments, analysis and thesis preparation. \\
+Kabbo Sarker Surjo & Implementation, testing, validation and review. \\
+Ariful Islam Khan & Interface testing, result checking and review. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Shared source control, logs and review supported collaboration.
+
+\section{Addressed Knowledge Profile Attributes}
+\begin{longtable}{p{0.12\textwidth}p{0.18\textwidth}p{0.60\textwidth}}
+\caption{Mapping of Knowledge and Attitude Profile attributes.}\label{tab:annexA_wk}\\
+\toprule
+\textbf{Attribute} & \textbf{Relevance} & \textbf{Evidence} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Attribute} & \textbf{Relevance} & \textbf{Evidence} \\
+\midrule
+\endhead
+WK1 & Limited & Considers societal implications. \\
+WK2 & High & Uses statistics, vectors and quantitative metrics. \\
+WK3 & High & Applies data structures and software design. \\
+WK4 & High & Uses LLM inference, RAG and dialogue evaluation. \\
+WK5 & Medium & Considers token, compute and deployment cost. \\
+WK6 & High & Applies web, GPU, database and testing tools. \\
+WK7 & Medium & Addresses privacy, reliability and accessibility. \\
+WK8 & High & Evaluates a novel conversation architecture. \\
+WK9 & Medium & Considers ethics, inclusion and user control. \\
+\botrule
+\end{longtable}
+
+\section{Addressed Complex Engineering Problems}
+The project addresses the following complex engineering characteristics.
+
+\begin{longtable}{p{0.12\textwidth}p{0.78\textwidth}}
+\caption{Mapping of Complex Engineering Problem attributes.}\label{tab:annexA_wp}\\
+\toprule
+\textbf{Attribute} & \textbf{Justification} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Attribute} & \textbf{Justification} \\
+\midrule
+\endhead
+WP1 & Requires advanced LLM, retrieval and evaluation knowledge. \\
+WP2 & Balances isolation, recall, usability, cost and privacy. \\
+WP3 & Requires an original architecture and benchmark. \\
+WP4 & Addresses an uncommon nested-chat problem. \\
+WP5 & Operates without a complete established standard. \\
+WP6 & Serves users, researchers, developers and operators. \\
+WP7 & Integrates interdependent interface, memory, retrieval and inference components. \\
+\botrule
+\end{longtable}
+
+\section{Addressed Complex Engineering Activities}
+\begin{longtable}{p{0.12\textwidth}p{0.78\textwidth}}
+\caption{Mapping of Complex Engineering Activity attributes.}\label{tab:annexA_ea}\\
+\toprule
+\textbf{Attribute} & \textbf{Justification} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Attribute} & \textbf{Justification} \\
+\midrule
+\endhead
+EA1 & Uses data, GPU compute, APIs, databases and version control. \\
+EA2 & Resolves interactions among isolation, memory, retrieval, latency and cost. \\
+EA3 & Applies trees and memory to user-controlled nested chat. \\
+EA4 & Affects privacy, reliability, accessibility and resource use. \\
+EA5 & Extends linear chat through a new interaction and memory architecture. \\
+\botrule
+\end{longtable}
